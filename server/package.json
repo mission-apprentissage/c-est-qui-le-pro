@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "repository": "https://github.com/mission-apprentissage/c-est-qui-le-pro.git",
   "private": false,
   "module": "src/index.js",
