@@ -30,7 +30,7 @@ jobs:
         run: yarn npm:release
         env:
           HUSKY: 0
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL }}
   # back-merge:
@@ -46,7 +46,7 @@ jobs:
   #         type: now
   #         from_branch: main
   #         target_branch: develop
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         github_token: ${{ secrets.GH_TOKEN }}
   ciserver:
     needs: release
     if: "!startsWith(github.event.head_commit.message, 'chore(release')"
