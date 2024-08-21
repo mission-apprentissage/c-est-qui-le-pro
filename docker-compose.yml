@@ -26,6 +26,7 @@ services:
       - LOGLEVEL=warn
       - NGINX_ALWAYS_TLS_REDIRECT=false
       - ALLOWED_METHODS=GET HEAD POST OPTIONS PUT DELETE
+      - IS_LOCALHOST=0
 
   ui:
     image: accompagnateur_ui

@@ -24,6 +24,7 @@ ARG EXPOSITION_API_BASE_URL
 ARG NEXT_PUBLIC_API_BASE_URL
 ARG NEXT_PUBLIC_EXPOSITION_WIDGET_HASH
 ARG NEXT_PUBLIC_EXPOSITION_API_BASE_URL
+ARG NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL
 ARG NEXT_PUBLIC_SIRIUS_API_BASE_URL
 ARG BASE_PATH
 
@@ -53,7 +54,7 @@ RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
 COPY --from=builder-production /app/next.config.js ./
-COPY --from=builder-production /app/public ./public
+# COPY --from=builder-production /app/public ./public
 COPY --from=builder-production /app/package.json ./package.json
 
 # Automatically leverage output traces to reduce image size

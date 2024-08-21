@@ -1,8 +1,6 @@
 import { assert } from "chai";
 import { startServer } from "#tests/utils/testUtils.js";
-import { insertCFD } from "#tests/utils/fakeData.js";
 import { metrics } from "#src/common/db/collections/collections.js";
-import config from "#src/config.js";
 
 describe("metricsMiddleware", () => {
   it("vérifie que l'on remonte les codes de certifications dans les queries", async () => {

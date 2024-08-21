@@ -57,8 +57,9 @@ export async function importIndicateurPoursuite() {
           ...(formationStats.code_certification_type === "mef11"
             ? {
                 mef11: formationStats.code_certification,
+                voie: "scolaire",
               }
-            : { cfd: formationStats.code_certification }),
+            : { cfd: formationStats.code_certification, voie: "apprentissage" }),
         });
 
         if (!formation) {

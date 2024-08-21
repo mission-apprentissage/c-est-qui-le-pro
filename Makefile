@@ -1,6 +1,7 @@
 
 install:
 	yarn install --frozen-lockfile
+	yarn prepare
 	yarn --cwd server install --frozen-lockfile
 	yarn --cwd ui install --frozen-lockfile
 
