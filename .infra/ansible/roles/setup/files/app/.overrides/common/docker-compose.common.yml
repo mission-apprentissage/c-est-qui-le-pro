@@ -19,7 +19,7 @@ services:
       - /opt/accompagnateur/data/server:/data
     environment:
       - EXPOSITION_API_USERNAME={{ vault.EXPOSITION_API_USERNAME }}
-      - EXPOSITION_API_PASSWORD={{ vault.EXPOSITION_PASSWORD}}
+      - EXPOSITION_API_PASSWORD={{ vault.EXPOSITION_API_PASSWORD}}
 
   mongodb:
     volumes:
