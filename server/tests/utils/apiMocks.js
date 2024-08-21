@@ -1,5 +1,4 @@
 import nock from "nock"; // eslint-disable-line node/no-unpublished-import
-import { generateCodeCertification } from "./testUtils.js";
 import { DataGouvApi } from "#src/services/dataGouv/DataGouvApi.js";
 import { CatalogueApprentissageApi } from "#src/services/catalogueApprentissage/CatalogueApprentissageApi.js";
 import * as Fixtures from "#tests/utils/fixtures.js";
