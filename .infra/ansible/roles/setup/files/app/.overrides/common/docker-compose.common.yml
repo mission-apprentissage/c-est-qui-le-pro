@@ -40,7 +40,7 @@ services:
       - EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
       - NEXT_PUBLIC_API_BASE_URL=/api
       - NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL=/api
-      - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo4mlv41wzw8
+      - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo3im03r8sun
       - NEXT_PUBLIC_EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
       - NEXT_PUBLIC_SIRIUS_API_BASE_URL=https://sirius.inserjeunes.beta.gouv.fr
     build:
@@ -49,6 +49,6 @@ services:
         - EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
         - NEXT_PUBLIC_API_BASE_URL=/api
         - NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL=/api
-        - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo4mlv41wzw8
+        - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo3im03r8sun
         - NEXT_PUBLIC_EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
         - NEXT_PUBLIC_SIRIUS_API_BASE_URL=https://sirius.inserjeunes.beta.gouv.fr
