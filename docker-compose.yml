@@ -1,0 +1,77 @@
+services:
+  reverse_proxy:
+    image: accompagnateur_reverse_proxy
+    container_name: accompagnateur_reverse_proxy
+    build:
+      context: reverse_proxy
+    mem_limit: 256m
+    restart: unless-stopped
+    ports:
+      - 80:80
+    networks:
+      - accompagnateur_network
+    depends_on:
+      - server
+      - ui
+    environment:
+      - PARANOIA=1
+      - ANOMALY_INBOUND=5
+      - ANOMALY_OUTBOUND=4
+      - DNS_SERVER=127.0.0.11
+      - PROXY=1
+      - PROXY_TIMEOUT=300
+      - TIMEOUT=300
+      - ACCESSLOG=/data/access.log
+      - ERRORLOG=/data/error.log
+      - LOGLEVEL=warn
+      - NGINX_ALWAYS_TLS_REDIRECT=false
+      - ALLOWED_METHODS=GET HEAD POST OPTIONS PUT DELETE
+
+  ui:
+    image: accompagnateur_ui
+    container_name: accompagnateur_ui
+    build:
+      context: ui
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - accompagnateur_network
+    depends_on:
+      - server
+
+  server:
+    image: accompagnateur_server
+    container_name: accompagnateur_server
+    build:
+      context: server
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - accompagnateur_network
+    depends_on:
+      - mongodb
+    environment:
+      - ACCOMPAGNATEUR_MONGODB_URI=mongodb://mongodb:27017/accompagnateur?retryWrites=true&w=majority
+      - ACCOMPAGNATEUR_LOG_DESTINATIONS=stdout,mongodb
+
+  mongodb:
+    image: mongo:5.0.6-focal
+    container_name: accompagnateur_mongodb
+    mem_limit: 2g
+    restart: unless-stopped
+    networks:
+      - accompagnateur_network
+
+  metabase:
+    image: metabase/metabase:v0.48.6
+    container_name: accompagnateur_metabase
+    mem_limit: 2g
+    depends_on:
+      - mongodb
+    restart: always
+    networks:
+      - accompagnateur_network
+
+networks:
+  accompagnateur_network:
+    name: accompagnateur_network

@@ -1,0 +1,190 @@
+import { faker } from "@faker-js/faker"; // eslint-disable-line node/no-unpublished-import
+import { merge } from "lodash-es";
+import { bcn, metrics, bcnMef, acceEtablissements, CAFormations } from "#src/common/db/collections/collections.js";
+import { ObjectId } from "mongodb";
+
+export function createCodeFormationDiplome() {
+  return faker.helpers.replaceSymbols("4#######");
+}
+
+export function createCodeRome() {
+  return faker.helpers.replaceSymbols("A####");
+}
+
+export function insertCFD(custom = {}) {
+  return bcn().insertOne(
+    merge(
+      {},
+      {
+        type: "cfd",
+        code_certification: createCodeFormationDiplome(),
+        code_formation_diplome: createCodeFormationDiplome(),
+        libelle: "BAC PRO BATIMENT",
+        libelle_long: "BAC PRO BATIMENT",
+        diplome: { code: "4", libelle: "BAC" },
+        date_ouverture: new Date(),
+        ancien_diplome: [],
+        nouveau_diplome: [],
+        _meta: { date_import: new Date(), created_on: new Date(), updated_on: new Date() },
+      },
+      custom
+    )
+  );
+}
+
+export function insertMEF(custom = {}) {
+  return bcn().insertOne(
+    merge(
+      {},
+      {
+        type: "mef",
+        code_certification: faker.helpers.replaceSymbols("###########"),
+        code_formation_diplome: createCodeFormationDiplome(),
+        date_fermeture: new Date("2022-08-30T22:00:00.000Z"),
+        diplome: { code: "4", libelle: "BAC" },
+        libelle: "BAC PRO",
+        libelle_long: "BAC PRO BATIMENT",
+        date_ouverture: new Date(),
+        ancien_diplome: [],
+        nouveau_diplome: [],
+        _meta: { date_import: new Date(), created_on: new Date(), updated_on: new Date() },
+      },
+      custom
+    )
+  );
+}
+
+export function insertAcceEtablissement(custom = {}) {
+  return acceEtablissements().insertOne(
+    merge(
+      {},
+      {
+        numero_uai: faker.helpers.replaceSymbols("########"),
+        academie: "10",
+        academie_libe: "Lyon",
+        adresse_uai: "15 AVENUE SAINT EXUPERY",
+        appariement: "SIMILAIRE",
+        appellation_officielle: "Lycée professionnel",
+        boite_postale_uai: "BP",
+        categorie_financiere: "4",
+        categorie_financiere_libe: "4",
+        categorie_juridique: "200",
+        categorie_juridique_libe: "Etablissement public local d'enseignement (EPLE)",
+        code_postal_uai: "69001",
+        commune: "69001",
+        commune_libe: "Lyon",
+        contrat_etablissement: "99",
+        contrat_etablissement_libe: "Sans objet",
+        coordonnee_x: "1.1",
+        coordonnee_y: "1.1",
+        denomination_principale: "LYCEE PROFESSIONNEL",
+        departement_insee_3: "069",
+        departement_insee_3_libe: "Rhône",
+        etat_etablissement: "1",
+        etat_etablissement_libe: "Ouvert",
+        etat_sirad_uai: "1",
+        hebergement_etablissement: "22",
+        hebergement_etablissement_libe: "Avec internat et demi-pension",
+        localisation: "LOCALISATION",
+        localite_acheminement_uai: "LOCALITE UAI",
+        mel_uai: "email@email.fr",
+        ministere_tutelle: "06",
+        ministere_tutelle_libe: "ministère de l'éducation nationale",
+        nature_uai: "320",
+        nature_uai_libe: "Lycée professionnel",
+        niveau_uai: "1",
+        niveau_uai_libe: "UAI célibataire",
+        numero_siren_siret_uai: "19000000000000",
+        numero_telecopieur_uai: "01 02 03 04 05",
+        numero_telephone_uai: "01 02 03 04 05",
+        patronyme_uai: "PATRONYME",
+        pays: "100",
+        pays_libe: "France",
+        secteur_public_prive: "PU",
+        secteur_public_prive_libe: "Public",
+        sigle_uai: "LP",
+        situation_comptable: "3",
+        situation_comptable_libe: "Rattaché à une agence comptable",
+        source: "IGN",
+        type_uai: "LP",
+        type_uai_libe: "Lycées professionnels",
+        date_derniere_mise_a_jour: new Date(),
+        date_fermeture: new Date(),
+        date_geolocalisation: new Date(),
+        date_ouverture: new Date(),
+        _meta: { date_import: new Date(), created_on: new Date(), updated_on: new Date() },
+      },
+      custom
+    )
+  );
+}
+
+export function insertBCNMEF(custom = {}) {
+  const mef_stat_11 = custom?.mef_stat_11 || faker.helpers.replaceSymbols("###########");
+  return bcnMef().insertOne(
+    merge(
+      {},
+      {
+        mef_stat_11: mef_stat_11,
+        mef: faker.helpers.replaceSymbols("##########"),
+        dispositif_formation: faker.helpers.replaceSymbols("###"),
+        formation_diplome: createCodeFormationDiplome(),
+        duree_dispositif: "0",
+        annee_dispositif: "0",
+
+        libelle_court: "BAC PRO",
+        libelle_long: "BAC PRO BATIMENT",
+
+        date_ouverture: new Date(),
+        date_fermeture: new Date(),
+
+        statut_mef: "4",
+        nb_option_obligatoire: "1",
+        nb_option_facultatif: "1",
+        renforcement_langue: "N",
+        duree_projet: "1",
+        duree_stage: "1",
+        horaire: "N",
+        mef_inscription_scolarite: "N",
+        mef_stat_9: mef_stat_11.substr(0, 9),
+
+        date_intervention: new Date(),
+        libelle_edition: "libelle edition",
+        commentaire: "commentaire",
+        _meta: { date_import: new Date(), created_on: new Date(), updated_on: new Date() },
+      },
+      custom
+    )
+  );
+}
+
+export function insertMetrics(custom = {}) {
+  return metrics().insertOne(
+    merge(
+      {},
+      {
+        time: new Date(),
+        consumer: "localhost",
+        url: "/api/",
+      },
+      custom
+    )
+  );
+}
+
+export function insertCAFormation(custom = {}) {
+  return CAFormations().insertOne(
+    merge(
+      {},
+      {
+        id: new ObjectId(),
+        cfd: createCodeFormationDiplome(),
+        uai_formation: faker.helpers.replaceSymbols("########"),
+        etablissement_formateur_uai: faker.helpers.replaceSymbols("########"),
+        etablissement_gestionnaire_uai: faker.helpers.replaceSymbols("########"),
+        _meta: { date_import: new Date(), created_on: new Date(), updated_on: new Date() },
+      },
+      custom
+    )
+  );
+}

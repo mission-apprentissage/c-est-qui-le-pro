@@ -1,0 +1,74 @@
+- name: Stoppe tous les conteneurs applicatifs
+  shell: "bash /opt/accompagnateur/stop-app.sh"
+
+- name: "Clone du repository (branche : {{ git_revision }})"
+  git:
+    repo: "https://github.com/mission-apprentissage/c-est-qui-le-pro.git"
+    version: "{{ git_revision }}"
+    force: yes
+    accept_hostkey: yes
+    dest: /opt/accompagnateur/repository
+
+- name: Création des répertoires 'overrides'
+  file:
+    path: "/opt/accompagnateur/.overrides/{{ item.path }}/"
+    state: directory
+  with_filetree:
+    - app/.overrides/common/
+    - app/.overrides/{{ env_type }}/
+  when: item.state == 'directory'
+
+- name: Copie des fichiers 'overrides'
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "/opt/accompagnateur/.overrides/{{ item.path }}"
+  with_filetree:
+    - app/.overrides/common/
+    - app/.overrides/{{ env_type }}/
+  when: item.state == 'file'
+
+- name: Root only pour tous les répertoires applicatifs
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: root
+    group: root
+    mode: 770
+  with_items:
+    - "/opt/accompagnateur/tools"
+    - "/opt/accompagnateur/repository"
+    - "/opt/accompagnateur/data"
+    - "/opt/accompagnateur/backups"
+    - "/opt/accompagnateur/.overrides"
+
+- name: Ensure metabase container can write in its directory
+  file:
+    path: /opt/accompagnateur/data/metabase
+    owner: 2000
+    group: 2000
+    state: directory
+
+- name: Add cron to rotate nginx files
+  ansible.builtin.cron:
+    name: "rotate_nginx_log_files"
+    minute: "0"
+    hour: "1"
+    job: "bash /opt/accompagnateur/tools/rotate-nginx-log-files.sh >> /var/log/cron.log 2>&1"
+
+- name: Add cron to reload app automatically
+  when: env_type == "recette" and monitor == "true"
+  ansible.builtin.cron:
+    name: "reload-app"
+    minute: "*/1"
+    hour: 8-20
+    weekday: 1-5
+    job: "bash /opt/accompagnateur/reload-app.sh >> /var/log/cron.log 2>&1"
+
+# Disable by default, enable after app deployment
+- name: Add cron to monitor the app and restart it automatically
+  when: monitor == "true"
+  ansible.builtin.cron:
+    name: "monitor-app"
+    minute: "*/5"
+    disabled: true
+    job: "bash /opt/accompagnateur/monitor-app.sh {{dns_name}} >> /var/log/cron.log 2>&1"

@@ -1,0 +1,32 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.20.2
+
+      - run: make ci
+
+      - run: make test
+
+      # codecov server
+      - name: Upload Server coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./server/.coverage
+          name: codecov-server
+          verbose: true
+
+      # codecov ui
+      - name: Upload UI coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./ui/coverage
+          name: codecov-ui
+          verbose: true

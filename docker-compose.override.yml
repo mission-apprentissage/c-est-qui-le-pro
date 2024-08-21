@@ -1,0 +1,57 @@
+# Override containers for local / dev environnement
+services:
+  reverse_proxy:
+    environment:
+      - IS_LOCALHOST=1
+    volumes:
+      - accompagnateur_nginx_data:/data:z
+      - ./reverse_proxy/dev/includes:/etc/nginx/templates/includes/env
+
+  ui:
+    build:
+      dockerfile: ./Dockerfile.dev
+    mem_limit: 1g
+    stdin_open: true
+    volumes:
+      - accompagnateur_ui_data:/data:z
+      - /app/node_modules
+      - ./ui:/app:z
+  server:
+    command: ["yarn", "debug"]
+    ports:
+      - "127.0.0.1:9229:9229" # Allows remote debugging
+    volumes:
+      - accompagnateur_server_data:/data:z
+      - ./server/src:/app/src:z
+    environment:
+      - ACCOMPAGNATEUR_ENV=dev
+      - ACCOMPAGNATEUR_LOG_LEVEL=debug
+  mongodb:
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - accompagnateur_mongodb_data:/data:z
+
+  metabase:
+    volumes:
+      - accompagnateur_metabase_data:/data:z
+    environment:
+      - MB_DB_FILE=/data/metabase.db
+      - MB_SITE_URL=http://localhost/metabase
+
+volumes:
+  accompagnateur_mongodb_data:
+    driver: local
+    name: accompagnateur_mongodb_data
+  accompagnateur_nginx_data:
+    driver: local
+    name: accompagnateur_nginx_data
+  accompagnateur_server_data:
+    driver: local
+    name: accompagnateur_server_data
+  accompagnateur_ui_data:
+    driver: local
+    name: accompagnateur_ui_data
+  accompagnateur_metabase_data:
+    driver: local
+    name: accompagnateur_metabase_data

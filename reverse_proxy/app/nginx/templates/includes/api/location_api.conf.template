@@ -1,0 +1,15 @@
+location / {
+    include conf.d/headers.conf;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+
+    set $upstream http://server:5000;
+    rewrite ^/(.*) /api/$1 break;
+    include includes/proxy.conf;
+}
+
+location /api {
+    include conf.d/headers.conf;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    set $upstream http://server:5000;
+    include includes/proxy.conf;
+}
