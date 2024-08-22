@@ -1,6 +1,6 @@
 import env from "env-var";
 import path from "path";
-import { getDirname } from "#src/common/utils/esmUtils.js";
+import { getDirname } from "./common/utils/esmUtils.js";
 
 const config = {
   env: env.get("ACCOMPAGNATEUR_ENV").default("local").asString(),

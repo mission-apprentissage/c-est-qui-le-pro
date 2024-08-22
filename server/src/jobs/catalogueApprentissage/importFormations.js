@@ -101,7 +101,6 @@ export async function importFormations(options = {}) {
     return null; //ignore chunk
   }
 
-  console.log("TOTOTO");
   await oleoduc(
     Readable.from([
       await caApi

@@ -1,15 +1,16 @@
 FROM node:18-alpine
 
 #Install and cache node_modules
-COPY package.json yarn.lock /tmp/
-RUN cd /tmp && \
-    yarn install --frozen-lockfile && \
-    mkdir -p /app && \
-    mv /tmp/node_modules /app/
+WORKDIR /base
+COPY package.json .
+COPY yarn.lock .
+COPY server/package.json server/
+RUN yarn install --frozen-lockfile
 
-COPY ./ /app
-WORKDIR /app
+COPY ./server server
+RUN yarn workspace server build
 
+WORKDIR /base/server
 VOLUME /data
 EXPOSE 5000
 CMD ["yarn", "start"]

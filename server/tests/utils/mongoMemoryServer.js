@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server"; // eslint-disable-line node/no-unpublished-import
-import { connectToMongodb, getDatabase } from "#src/common/db/mongodb.js";
+import { connectToMongodb, getDatabase } from "../../src/common/db/mongodb.js";
 import * as MigrateMongo from "migrate-mongo";
 
 let mongodHolder;

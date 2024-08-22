@@ -32,7 +32,8 @@ services:
     image: accompagnateur_ui
     container_name: accompagnateur_ui
     build:
-      context: ui
+      context: ./
+      dockerfile: ./ui/Dockerfile
     mem_limit: 1g
     restart: unless-stopped
     networks:
@@ -44,7 +45,8 @@ services:
     image: accompagnateur_server
     container_name: accompagnateur_server
     build:
-      context: server
+      context: ./
+      dockerfile: ./server/Dockerfile
     mem_limit: 1g
     restart: unless-stopped
     networks:

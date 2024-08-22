@@ -2,9 +2,16 @@ import * as turf from "@turf/turf";
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
 import config from "#src/config.js";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
-import geotoolbox from "../../../node_modules/geotoolbox/dist/index.min.js";
-// import fs from "fs";
-// import { getDirname } from "#src/common/utils/esmUtils.js";
+import { require } from "#src/common/utils/esmUtils.js";
+import path from "path";
+import resolvePackagePath from "resolve-package-path";
+
+// Fix issue with geotoolbox CommonJS module
+const { findUpPackagePath } = resolvePackagePath;
+const geotoolbox = require(path.join(
+  findUpPackagePath(import.meta.url),
+  "../../node_modules/geotoolbox/dist/index.min.js"
+));
 
 class GraphHopperApi extends RateLimitedApi {
   constructor(options = {}) {

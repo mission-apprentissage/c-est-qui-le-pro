@@ -5,14 +5,17 @@ FROM node:18-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json .
+COPY yarn.lock .
+COPY ui/package.json ui/
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM node:18-alpine AS builder-production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY --from=deps /app/ui/node_modules ./ui/node_modules
+COPY ./ui ui
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
@@ -38,7 +41,7 @@ ENV NEXT_PUBLIC_EXPOSITION_API_BASE_URL $NEXT_PUBLIC_EXPOSITION_API_BASE_URL
 ENV NEXT_PUBLIC_SIRIUS_API_BASE_URL $NEXT_PUBLIC_SIRIUS_API_BASE_URL
 ENV BASE_PATH $BASE_PATH
 
-RUN yarn build
+RUN yarn workspace ui build
 
 # Production image, copy all the files and run next
 FROM node:18-alpine AS runner
@@ -53,14 +56,14 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder-production /app/next.config.js ./
-# COPY --from=builder-production /app/public ./public
-COPY --from=builder-production /app/package.json ./package.json
+COPY --from=builder-production /app/ui/next.config.js ./ui
+# COPY --from=builder-production /app/ui/public ./ui/public
+COPY --from=builder-production /app/ui/package.json ./ui/package.json
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder-production --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder-production --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/standalone ./ui/
+COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/static ./ui/.next/static
 
 
 USER nextjs
@@ -68,4 +71,6 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
+WORKDIR /app/ui
+
 CMD ["node", "server.js"]

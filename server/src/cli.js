@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { program as cli } from "commander";
+import { Command } from "commander";
 import { runScript } from "./common/runScript.js";
 import { importBCN } from "./jobs/bcn/importBCN.js";
 import { importBCNMEF } from "./jobs/bcn/importBCNMEF.js";
@@ -16,6 +16,8 @@ import { importIndicateurEntree } from "./jobs/formations/importIndicateurEntree
 import { computeFormationTag } from "./jobs/formations/tag/computeFormationTag.js";
 import { importIndicateurPoursuite } from "./jobs/formations/importIndicateurPoursuite.js";
 import { importIdeoFichesFormations } from "./jobs/formations/importIdeoFichesFormations.js";
+
+const cli = new Command();
 
 async function importBCNCommand() {
   const statsBCN = await importBCN();

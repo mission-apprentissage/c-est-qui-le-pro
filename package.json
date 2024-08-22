@@ -4,6 +4,10 @@
   "description": "[InserJeunes] Accompagnateur",
   "repository": "https://github.com/mission-apprentissage/c-est-qui-le-pro.git",
   "private": true,
+  "workspaces": [
+    "server",
+    "ui"
+  ],
   "author": "InserJeunes",
   "license": "MIT",
   "scripts": {

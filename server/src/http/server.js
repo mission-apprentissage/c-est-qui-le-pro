@@ -9,7 +9,7 @@ import { tryCatch } from "./middlewares/tryCatchMiddleware.js";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
 import { dbCollection } from "#src/common/db/mongodb.js";
 import formationsRoutes from "./routes/formationsRoutes.js";
-import { packageJson } from "#src/common/utils/esmUtils.js";
+import packageJson from "../../package.json";
 
 export default async () => {
   const app = express();

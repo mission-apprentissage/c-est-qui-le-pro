@@ -27,6 +27,7 @@ export default {
     // https://jestjs.io/docs/webpack#handling-static-assets
     "^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp|svg|ico)$/i": `<rootDir>/.jest/__mocks__/fileMock.js`,
     "\\.svg$": "identity-obj-proxy",
+    "^(.+\\.svg)(\\?\\w+)$": "identity-obj-proxy",
 
     // Handle module aliases
     "^#/(.*)$": "<rootDir>/$1",
