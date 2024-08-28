@@ -16,6 +16,7 @@ import { importIndicateurEntree } from "./jobs/formations/importIndicateurEntree
 import { computeFormationTag } from "./jobs/formations/tag/computeFormationTag.js";
 import { importIndicateurPoursuite } from "./jobs/formations/importIndicateurPoursuite.js";
 import { importIdeoFichesFormations } from "./jobs/formations/importIdeoFichesFormations.js";
+import { splitIsochrones } from "./jobs/isochrones/splitIsochrones.ts";
 
 const cli = new Command();
 
@@ -128,6 +129,37 @@ cli
         importCatalogueApprentissageStats,
         importFormationEtablissementStats,
       };
+    });
+  });
+
+cli
+  .command("splitIsochrones")
+  .description(
+    `Simplifie et découpe un ensemble d'isochrones correspondant à plusieurs durées en utilisant PostGIS\n` +
+      `Le dossier d'entrée contenant les isochrones doit avoir la structure suivante :\n` +
+      `folder/[duration]/[name].json\n` +
+      `Example : \n folder/5400/0010001W.json \n folder/3600/0010001W.json`
+  )
+  .requiredOption("-d, --db <db>", "URI de connexion PostgreSQL (nécessite PostGIS activé)")
+  .requiredOption("-i, --input <input>", "Dossier contenant les isochrones")
+  .requiredOption("-o, --output <output>", "Dossier de sortie")
+  .requiredOption(
+    "-k, --key <key>",
+    "Geometry key path (lodash path format). \n Exemple pour Graphhopper : polygons[0].geometry"
+  )
+  .requiredOption(
+    "-b, --buckets",
+    "Liste des durées des différents buckets en ordre décroissant (séparés par des virgules)",
+    "5400,3600,2700,1800,900"
+  )
+  .action((options) => {
+    const { input, output, buckets, key, db } = options;
+    return splitIsochrones({
+      input,
+      output,
+      key,
+      buckets: buckets.split(",").map((b) => parseInt(b)),
+      connectionString: db,
     });
   });
 
