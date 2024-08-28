@@ -3,7 +3,7 @@
 db.getSiblingDB("admin").createUser({
   user: "accompagnateur",
   pwd: "{{ vault.ACCOMPAGNATEUR_MONGODB_USER_PASSWORD }}",
-  roles: [{ role: "readWrite", db: "cerfa" }],
+  roles: [{ role: "readWrite", db: "accompagnateur" }],
 });
 
 db.getSiblingDB("admin").createUser({
