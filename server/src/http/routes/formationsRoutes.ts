@@ -42,7 +42,7 @@ export default () => {
       }
 
       addJsonHeaders(res);
-      res.send(formation);
+      res.send(stripNull(formation));
     })
   );
 

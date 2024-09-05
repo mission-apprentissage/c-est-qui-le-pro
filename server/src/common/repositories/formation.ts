@@ -1,7 +1,7 @@
 import { SqlRepository } from "./base.js";
 import { kdb as defaultKdb, kyselyChainFn } from "../db/db";
 import { DB } from "../db/schema.js";
-import { AnyAliasedColumn, expressionBuilder, ExpressionBuilder, Kysely, SelectQueryBuilder, sql } from "kysely";
+import { AnyAliasedColumn, ExpressionBuilder, SelectQueryBuilder, sql } from "kysely";
 
 export class FormationRepository extends SqlRepository<DB, "formation"> {
   constructor(kdb = defaultKdb) {
@@ -26,8 +26,8 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
   }
 
   _base() {
-    return <T extends SelectQueryBuilder<DB, keyof DB, {}>>(eb: T) => {
-      return eb.selectAll().leftJoinLateral(
+    return <T extends SelectQueryBuilder<DB, "formation", {}>>(eb: T) => {
+      return eb.leftJoinLateral(
         (eb) =>
           eb
             .selectFrom("formationDomaine")
@@ -55,6 +55,7 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     const formation = await this.kdb
       .selectFrom("formation")
       .$call(this._base())
+      .selectAll()
       .where("cfd", "=", cfd)
       .where("voie", "=", voie)
       .where(({ eb }) => {
@@ -65,12 +66,12 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     return formation;
   }
 
-  getKeyAlias(eb) {
+  getKeyAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
     return [...super.getKeyAlias(eb)];
   }
 
-  getKeyRelationAlias() {
-    return [`domaine as ${this.tableName}.domaine`] as AnyAliasedColumn<DB, keyof DB>[];
+  getKeyRelationAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
+    return [`domaine as ${this.tableName}.domaine` as AnyAliasedColumn<DB, T>];
   }
 }
 

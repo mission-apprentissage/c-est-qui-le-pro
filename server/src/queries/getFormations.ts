@@ -4,9 +4,9 @@ import moment from "#src/common/utils/dateUtils.js";
 import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb, kyselyChainFn } from "#src/common/db/db.js";
-import { sql } from "kysely";
+import { SelectQueryBuilder, sql } from "kysely";
 import EtablissementRepository from "#src/common/repositories/etablissement";
-import { Etablissement, Formation, FormationEtablissement } from "#src/common/db/schema.js";
+import { DB, Etablissement, Formation, FormationEtablissement } from "#src/common/db/schema.js";
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 
@@ -30,14 +30,15 @@ export function getRouteDate() {
   return moment().startOf("isoWeek").add(1, "week").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
 }
 
-async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }) {
+async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude, precomputed = false }) {
   const bufferPrecision = 0.001; // ~100m
   const simplifyPrecision = 0.0001; // ~10m
   let isochroneBuckets = null;
 
-  const buildSubQueryIsochrone = (query, bucket) => {
+  const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", {}>, bucket) => {
     return query
       .select(sql<number>`${bucket.time}::integer`.as("time"))
+      .select("id as bucketId")
       .select("uai")
       .where("hasFormation", "=", true)
       .where(({ eb }) =>
@@ -89,7 +90,13 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }) {
   return {
     query: kdb
       .selectFrom(
-        kdb.selectFrom(queryIsochrone).selectAll().distinctOn("uai").orderBy("uai").orderBy("time").as("buckets")
+        kdb
+          .selectFrom(queryIsochrone.as("buckets"))
+          .selectAll()
+          .distinctOn("uai")
+          .orderBy("uai")
+          .orderBy("time")
+          .as("buckets")
       )
       .selectAll()
       .orderBy("time")
@@ -111,6 +118,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
       eb
         .selectFrom("etablissement")
         .$call(EtablissementRepository._base())
+        .selectAll()
         .select((eb) => distanceQuery(eb).as("distance"))
         .where("hasFormation", "=", true)
         .as("etablissement")
@@ -134,7 +142,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
     query: queryEtablissement
       .$if(!!queryIsochrones, (qb) =>
         qb
-          .innerJoin(queryIsochrones.query, (join) => join.onRef("etablissement.uai", "=", "buckets.uai"))
+          .innerJoin(queryIsochrones.query, (join) => join.onRef("etablissement.id", "=", "buckets.bucketId"))
           .select("buckets.time as accessTime")
           .orderBy("buckets.time")
       )
@@ -151,7 +159,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
 }
 
 async function buildFiltersFormationSQL({ cfds, domaine }) {
-  let queryFormation = kdb.selectFrom("formation").$call(FormationRepository._base());
+  let queryFormation = kdb.selectFrom("formation").$call(FormationRepository._base()).selectAll();
 
   if (cfds.length > 0) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
@@ -172,7 +180,8 @@ async function buildFiltersFormationSQL({ cfds, domaine }) {
           .groupBy("formationId")
           .as("domaineFilter")
       )
-      .innerJoin(queryFormation.as("formation"), "formation.id", "domaineFilter.formationId"),
+      .innerJoin(queryFormation.as("formation"), "formation.id", "domaineFilter.formationId")
+      .selectAll(),
   };
 }
 

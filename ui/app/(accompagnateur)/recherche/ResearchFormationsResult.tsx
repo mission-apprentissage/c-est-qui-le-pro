@@ -30,12 +30,13 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
         if (!params) {
           return;
         }
-        const { address, distance, time } = params;
+        const { address, distance, time, domaine } = params;
 
         updateParams({
           address,
           distance,
           time,
+          domaine,
           tag: selectedTag === selected ? undefined : selectedTag,
         });
       }}

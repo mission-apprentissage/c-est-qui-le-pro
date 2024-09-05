@@ -37,9 +37,8 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
   }
 
   _base() {
-    return <T extends SelectQueryBuilder<DB, keyof DB, {}>>(eb: T) => {
+    return <T extends SelectQueryBuilder<DB, "etablissement", {}>>(eb: T) => {
       return eb
-        .selectAll()
         .select((eb) => this.customFields(eb))
         .leftJoinLateral(
           (eb) =>
@@ -68,6 +67,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
     const etablissement = await this.kdb
       .selectFrom("etablissement")
       .$call(this._base())
+      .selectAll()
       .where("uai", "=", uai)
       .executeTakeFirst();
     return etablissement;

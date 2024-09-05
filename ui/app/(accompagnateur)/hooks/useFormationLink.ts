@@ -20,6 +20,8 @@ export const useFormationLink = ({
     return null;
   }
 
-  const key = `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif}-${formationDetail.etablissement.uai}-${formationDetail.formation.voie}`;
+  const key = `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
+    formationDetail.etablissement.uai
+  }-${formationDetail.formation.voie}`;
   return `/details/${key}?latitude=${latitudeParams || ""}&longitude=${longitudeParams || ""}&${getUrlParams()}`;
 };

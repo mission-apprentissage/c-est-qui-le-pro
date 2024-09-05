@@ -30,32 +30,33 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
     );
   }
 
-  //type test = { [k: keyof DB["formationEtablissement"]]: boolean };
-
   async first(
     query: QueryFormationEtablissement = {},
     etablissementQuery: QueryEtablissement = {},
     formationQuery: QueryFormation = {}
   ) {
     const result = await this.kdb
-      .selectFrom(this.tableName)
+      .selectFrom("formationEtablissement")
       .select((eb) => this.getKeyAlias(eb))
       .select((eb) => [...EtablissementRepository.getKeyAlias(eb), ...EtablissementRepository.getKeyRelationAlias()])
-      .select((eb) => [...FormationRepository.getKeyAlias(eb), ...FormationRepository.getKeyRelationAlias()])
       .innerJoinLateral(
         (eb) =>
           eb
-            .selectFrom("formation")
-            .$call(FormationRepository._base())
+            .selectFrom(eb.selectFrom("formation").$call(FormationRepository._base()).selectAll().as("formation"))
+            .selectAll()
             .whereRef("formationEtablissement.formationId", "=", "formation.id")
             .as("formation"),
         (join) => join.on(sql`true`)
       )
+      .select((eb) => [...FormationRepository.getKeyAlias(eb), ...FormationRepository.getKeyRelationAlias(eb)])
+
       .innerJoinLateral(
         (eb) =>
           eb
-            .selectFrom("etablissement")
-            .$call(EtablissementRepository._base())
+            .selectFrom(
+              eb.selectFrom("etablissement").$call(EtablissementRepository._base()).selectAll().as("etablissement")
+            )
+            .selectAll()
             .whereRef("formationEtablissement.etablissementId", "=", "etablissement.id")
             .as("etablissement"),
         (join) => join.on(sql`true`)

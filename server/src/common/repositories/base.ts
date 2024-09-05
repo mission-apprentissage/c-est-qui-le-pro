@@ -48,10 +48,10 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return queryCond.returningAll().execute();
   }
 
-  getKeyAlias(eb) {
+  getKeyAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
     const keys = Object.keys(this.fields) as Array<keyof typeof this.fields>;
     return keys.map(
-      (k) => `${this.tableName}.${k.toString()} as ${this.tableName}.${k.toString()}` as AnyAliasedColumn<DB, keyof DB>
+      (k) => `${this.tableName}.${k.toString()} as ${this.tableName}.${k.toString()}` as AnyAliasedColumn<DB, T>
     );
   }
 
