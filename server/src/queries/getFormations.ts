@@ -30,10 +30,49 @@ export function getRouteDate() {
   return moment().startOf("isoWeek").add(1, "week").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
 }
 
-async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude, precomputed = false }) {
+async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, precomputed = false) {
+  const buckets = [7200, 5400, 3600, 2700, 1800, 900];
   const bufferPrecision = 0.001; // ~100m
   const simplifyPrecision = 0.0001; // ~10m
   let isochroneBuckets = null;
+
+  if (precomputed) {
+    return {
+      query: kdb
+        .selectFrom(
+          kdb
+            .selectFrom("etablissementIsochrone")
+            .where(({ eb }) =>
+              eb(
+                kyselyChainFn(eb, [
+                  {
+                    fn: "ST_Within",
+                    args: [
+                      kyselyChainFn(eb, [
+                        { fn: "ST_Point", args: [sql`${longitude}`, sql`${latitude}`] },
+                        { fn: "ST_SetSRID", args: [sql`4326`] },
+                      ]),
+                      "geom",
+                    ],
+                  },
+                ]),
+                "=",
+                true
+              )
+            )
+            .selectAll()
+            .select("bucket as time")
+            .distinctOn("etablissementId")
+            .orderBy("etablissementId")
+            .orderBy("bucket")
+            .as("etablissementIsochrone")
+        )
+        .select("etablissementId as bucketId")
+        .select("time")
+        .orderBy("time")
+        .as("buckets"),
+    };
+  }
 
   const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", {}>, bucket) => {
     return query
@@ -59,7 +98,6 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude, precomp
       );
   };
 
-  const buckets = [7200, 5400, 3600, 2700, 1800, 900];
   const graphHopperApi = new GraphHopperApi();
   try {
     const graphHopperParameter = {
@@ -98,7 +136,8 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude, precomp
           .orderBy("time")
           .as("buckets")
       )
-      .selectAll()
+      .select("time")
+      .select("bucketId")
       .orderBy("time")
       .as("buckets"),
   };
@@ -136,7 +175,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
     };
   }
 
-  const queryIsochrones = timeLimit ? await buildIsochronesQuerySQL({ timeLimit, latitude, longitude }) : null;
+  const queryIsochrones = timeLimit ? await buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, true) : null;
 
   return {
     query: queryEtablissement

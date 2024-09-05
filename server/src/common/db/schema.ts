@@ -45,6 +45,15 @@ export interface Etablissement {
   url: string | null;
 }
 
+export interface EtablissementIsochrone {
+  bucket: number;
+  createdAt: Generated<Timestamp>;
+  etablissementId: string;
+  geom: string;
+  id: Generated<string>;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface EtablissementJPODate {
   createdAt: Generated<Timestamp>;
   details: string | null;
@@ -171,6 +180,7 @@ export interface SpatialRefSys {
 export interface DB {
   domaine: Domaine;
   etablissement: Etablissement;
+  etablissementIsochrone: EtablissementIsochrone;
   etablissementJPODate: EtablissementJPODate;
   formation: Formation;
   formationDomaine: FormationDomaine;
