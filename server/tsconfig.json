@@ -25,7 +25,9 @@
     "baseUrl": ".",
     "paths": {
       "#src/*.js": ["./src/*.js"],
-      "#tests/*.js": ["./tests/*.js"]
+      "#tests/*.js": ["./tests/*.js"],
+      "#src/*": ["./src/*"],
+      "#tests/*": ["./tests/*"]
     }
   }
 }

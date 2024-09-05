@@ -1,5 +1,5 @@
 import { omitBy } from "lodash-es";
-import { logger } from "#src/common/logger.js";
+import { logger } from "#src/common/logger.ts";
 
 function errorLevel(req, res, error) {
   const statusCode = res.statusCode;

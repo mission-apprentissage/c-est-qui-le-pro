@@ -41,7 +41,7 @@
     "material-react-table": "^1.14.0",
     "mockdate": "^3.0.5",
     "moment": "^2.29.4",
-    "next": "^14.3.0-canary.87",
+    "next": "14.2.7",
     "next-plausible": "^3.11.3",
     "next-scroll-restorer": "^0.9.7",
     "notion-client": "^6.16.0",
@@ -65,6 +65,9 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@faker-js/faker": "^8.0.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",

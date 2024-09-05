@@ -1,6 +1,6 @@
 import axios from "axios";
 import asyncRetry from "async-retry";
-import { getLoggerWithContext } from "#src/common/logger.js";
+import { getLoggerWithContext } from "#src/common/logger.ts";
 const logger = getLoggerWithContext("http");
 
 async function _fetch(url, options = {}) {

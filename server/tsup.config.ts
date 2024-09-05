@@ -19,5 +19,5 @@ export default defineConfig({
   watch: isDev ? ["src" /*, "../shared"*/] : false,
   ignoreWatch: ["public/**/*"],
   entryPoints: ["src/index.ts"],
-  onSuccess: isDev ? "yarn run start --inspect" : undefined,
+  onSuccess: isDev ? "yarn run start::dev --inspect" : undefined,
 });

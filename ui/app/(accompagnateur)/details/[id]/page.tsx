@@ -12,7 +12,7 @@ import { formation } from "#/app/queries/formation/query";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
 import { notFound, useSearchParams } from "next/navigation";
-import { Formation } from "#/types/formation";
+import { FormationDetail } from "#/types/formation";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
 import PortesOuvertesHeader from "./PortesOuvertesHeader";
@@ -29,7 +29,8 @@ import Title from "#/app/(accompagnateur)/components/Title";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { capitalize } from "lodash-es";
 
-function FormationDetails({ formation: { formation, etablissement } }: { formation: Formation }) {
+function FormationDetails({ formationDetail }: { formationDetail: FormationDetail }) {
+  const { formationEtablissement, formation, etablissement } = formationDetail;
   const searchParams = useSearchParams();
   const longitude = searchParams.get("longitude");
   const latitude = searchParams.get("latitude");
@@ -78,8 +79,10 @@ function FormationDetails({ formation: { formation, etablissement } }: { formati
             <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v"), marginBottom: fr.spacing("3v") }}>
               <Stack spacing={1} direction={"row"}>
                 {etablissement.statut && <TagStatut square>{etablissement.statut.toUpperCase()}</TagStatut>}
-                {formation.duree && <TagDuree square>{`En ${formation.duree}`.toUpperCase()}</TagDuree>}
-                <TagApprentissage formationDetail={formation} />
+                {formationEtablissement.duree && (
+                  <TagDuree square>{`En ${formationEtablissement.duree}`.toUpperCase()}</TagDuree>
+                )}
+                <TagApprentissage formation={formation} />
               </Stack>
             </Grid>
             <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("5v") }}>
@@ -113,7 +116,7 @@ function FormationDetails({ formation: { formation, etablissement } }: { formati
               <Grid container>
                 <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("5v") }}>
                   <FormationRoute etablissement={etablissement} latitude={latitude} longitude={longitude} />
-                  <FormationDisponible formation={formation} />
+                  <FormationDisponible formationDetail={formationDetail} />
                 </Grid>
                 <Grid item xs={12} md={6} sx={{ marginTop: { xs: fr.spacing("3v"), md: 0 } }}>
                   <Divider
@@ -160,7 +163,7 @@ function FormationDetails({ formation: { formation, etablissement } }: { formati
           `}
         >
           <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
-          <FormationResume etablissement={etablissement} formation={formation} />
+          <FormationResume formationDetail={formationDetail} />
           <Divider
             variant="middle"
             style={{
@@ -216,7 +219,7 @@ function FormationDetails({ formation: { formation, etablissement } }: { formati
                       <Link
                         style={{ color: "var(--blue-france-sun-113-625)" }}
                         target="_blank"
-                        href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisep?.identifiant}`}
+                        href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
                       >
                         En savoir plus, sur le site de l&apos;Onisep
                       </Link>
@@ -270,7 +273,7 @@ function ResearchFormationResult({ id }: { id: string }) {
       <Title
         pageTitle={`Détails de la formation ${data.formation.libelle} dans l'établissement ${data.etablissement.libelle}`}
       />
-      <FormationDetails formation={data} />
+      <FormationDetails formationDetail={data} />
     </>
   );
 }

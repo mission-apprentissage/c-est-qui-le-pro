@@ -54,8 +54,8 @@ services:
     depends_on:
       - mongodb
     environment:
-      - ACCOMPAGNATEUR_MONGODB_URI=mongodb://mongodb:27017/accompagnateur?retryWrites=true&w=majority
-      - ACCOMPAGNATEUR_LOG_DESTINATIONS=stdout,mongodb
+      - ACCOMPAGNATEUR_LOG_DESTINATIONS=stdout,sql
+      - ACCOMPAGNATEUR_SQL_LOG_LEVEL=error
 
   mongodb:
     image: mongo:5.0.6-focal

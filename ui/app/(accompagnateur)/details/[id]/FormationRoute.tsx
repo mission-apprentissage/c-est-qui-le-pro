@@ -18,35 +18,28 @@ export default function FormationRoute({
   longitude?: string | null;
   latitude?: string | null;
 }) {
-  const address =
-    etablissement.address.street + ", " + etablissement.address.postCode + " " + etablissement.address.city;
+  const address = etablissement.addressStreet + ", " + etablissement.addressPostCode + " " + etablissement.addressCity;
 
   const distance = useMemo(() => {
-    if (!latitude || !longitude) {
+    if (!latitude || !longitude || etablissement.latitude === undefined || etablissement.longitude === undefined) {
       return null;
     }
 
     return getDistance(
       { latitude: parseFloat(latitude), longitude: parseFloat(longitude) },
       {
-        latitude: etablissement.coordinate.coordinates[1],
-        longitude: etablissement.coordinate.coordinates[0],
+        latitude: etablissement.latitude,
+        longitude: etablissement.longitude,
       },
       0.01
     );
-  }, [longitude, latitude, etablissement.coordinate.coordinates[1], etablissement.coordinate.coordinates[0]]);
+  }, [longitude, latitude, etablissement.latitude, etablissement.longitude]);
 
   const { isLoading, isError, data } = useQuery({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: 0,
-    queryKey: [
-      "formation",
-      latitude,
-      longitude,
-      etablissement.coordinate.coordinates[1],
-      etablissement.coordinate.coordinates[0],
-    ],
+    queryKey: ["formation", latitude, longitude, etablissement.latitude, etablissement.longitude],
     queryFn: ({ signal }) => {
       if (!latitude || !longitude) {
         return null;
@@ -56,8 +49,8 @@ export default function FormationRoute({
         {
           latitudeA: latitude,
           longitudeA: longitude,
-          latitudeB: etablissement.coordinate.coordinates[1],
-          longitudeB: etablissement.coordinate.coordinates[0],
+          latitudeB: (etablissement.latitude ?? "").toString(),
+          longitudeB: (etablissement.longitude ?? "").toString(),
         },
         { signal }
       );

@@ -11,13 +11,12 @@ moment.locale("fr");
 export function formatPortesOuvertes(etablissement: Etablissement) {
   // TODO: remove after review
   MockDate.set("2024-01-01");
-  const journeesPortesOuvertes = etablissement.journeesPortesOuvertes;
-  if (!journeesPortesOuvertes) {
+  if (!etablissement.JPODetails && !etablissement.JPODates) {
     return null;
   }
 
   // Only details
-  if (!journeesPortesOuvertes.dates || journeesPortesOuvertes.dates.length === 0) {
+  if (!etablissement.JPODates || etablissement.JPODates.length === 0) {
     return {
       ended: false,
       str: `En savoir plus sur les journées portes ouvertes`,
@@ -31,8 +30,12 @@ export function formatPortesOuvertes(etablissement: Etablissement) {
   let first = true;
   const currentDate = new Date();
 
-  for (const key in journeesPortesOuvertes.dates) {
-    const date = journeesPortesOuvertes.dates[key];
+  for (const key in etablissement.JPODates) {
+    const date = etablissement.JPODates[key];
+
+    if (!date.from || !date.to) {
+      continue;
+    }
 
     if (date.from > currentDate || date.to > currentDate) {
       ended = false;

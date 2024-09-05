@@ -45,7 +45,24 @@ export default {
   transform: {
     // Use babel-jest to transpile tests with the next/babel preset
     // https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object
-    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+    // Issue with next/babel config in Jest 29 and next 14
+    //"^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+    "^.+\\.(js|jsx|ts|tsx)$": [
+      "babel-jest",
+      {
+        presets: [
+          "@babel/preset-env",
+          [
+            "@babel/preset-react",
+            {
+              runtime: "automatic",
+            },
+          ],
+          "@babel/preset-typescript",
+        ],
+        plugins: ["@emotion/babel-plugin"],
+      },
+    ],
     ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|ico)$": "<rootDir>/.jest/__mocks__/fileTransformer.js",
   },
   transformIgnorePatterns: [

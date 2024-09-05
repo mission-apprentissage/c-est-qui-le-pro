@@ -1,4 +1,4 @@
-import { metricsMiddleware } from "./metricsMiddleware.js";
+import { metricsMiddleware } from "./metricsMiddleware.ts";
 
 export function tryCatch(callback) {
   return async (req, res, next) => {

@@ -1,7 +1,7 @@
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
 import config from "#src/config.js";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
-import { getLoggerWithContext } from "#src/common/logger.js";
+import { getLoggerWithContext } from "#src/common/logger.ts";
 
 const logger = getLoggerWithContext("api/exposition");
 

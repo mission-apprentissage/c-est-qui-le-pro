@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Formation } from "#/types/formation";
+import { FormationDetail } from "#/types/formation";
 import "moment/locale/fr";
 import { TagPortesOuvertes } from "../components/PortesOuvertes";
 import Card from "#/app/components/Card";
@@ -25,7 +25,7 @@ function formatAccessTime(time: number) {
 export default function FormationCard({
   latitude,
   longitude,
-  formation,
+  formationDetail,
   selected,
   onMouseEnter,
   onMouseLeave,
@@ -33,15 +33,15 @@ export default function FormationCard({
 }: {
   latitude: number;
   longitude: number;
-  formation: Formation;
+  formationDetail: FormationDetail;
   selected: boolean;
   onMouseEnter?: Function;
   onMouseLeave?: Function;
   tabIndex: number;
 }) {
-  const { formation: formationDetail, etablissement } = formation;
+  const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
-    formation: formationDetail,
+    formationDetail: formationDetail,
     longitude: longitude.toString(),
     latitude: latitude.toString(),
   });
@@ -57,13 +57,18 @@ export default function FormationCard({
       linkTarget="_blank"
       tabIndex={tabIndex}
     >
-      <Stack spacing={1} style={{ marginBottom: formationDetail.tags.length > 0 ? fr.spacing("3v") : 0 }}>
-        <FormationTags tags={formationDetail.tags} />
+      <Stack
+        spacing={1}
+        style={{
+          marginBottom: formationEtablissement.tags && formationEtablissement.tags.length > 0 ? fr.spacing("3v") : 0,
+        }}
+      >
+        <FormationTags tags={formationEtablissement.tags || []} />
       </Stack>
-      <LabelApprentissage formationDetail={formationDetail} />
+      <LabelApprentissage formation={formation} />
 
       <Typography variant="subtitle2" style={{ lineHeight: "28px" }}>
-        {capitalize(formationDetail.libelle)}
+        {capitalize(formation.libelle ?? "")}
       </Typography>
 
       <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px", marginBottom: fr.spacing("5v") }}>
@@ -78,10 +83,12 @@ export default function FormationCard({
               {formatAccessTime(etablissement.accessTime)}
             </Typography>
           ) : (
-            <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
-              <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
-              {(etablissement.distance / 1000).toFixed(2)} km
-            </Typography>
+            etablissement.distance && (
+              <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
+                <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
+                {(etablissement.distance / 1000).toFixed(2)} km
+              </Typography>
+            )
           )}
         </Grid>
         <Grid item xs={2}></Grid>

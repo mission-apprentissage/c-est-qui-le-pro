@@ -11,20 +11,26 @@ import useGetFormations from "#/app/(accompagnateur)/hooks/useGetFormations";
 import { useFormationLink } from "#/app/(accompagnateur)/hooks/useFormationLink";
 import Link from "#/app/components/Link";
 
-export default function FormationDisponible({ formation }: { formation: FormationDetail }) {
+export default function FormationDisponible({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
+  const { formation, etablissement, formationEtablissement } = formationDetail;
+
   const { isLoading, formations } = useGetFormations({
     cfds: [formation.cfd],
-    uais: [formation.uai],
+    uais: [etablissement.uai],
   });
   const formationAutreVoie =
     formation.voie === FormationVoie.SCOLAIRE ? FormationVoie.APPRENTISSAGE : FormationVoie.SCOLAIRE;
 
   const autreFormation = useMemo(
-    () => formations.find(({ formation: f }) => f.voie === formationAutreVoie && f.duree == formation.duree),
+    () =>
+      formations.find(
+        ({ formationEtablissement: fe, formation: f }) =>
+          f.voie === formationAutreVoie && fe.duree == formationEtablissement.duree
+      ),
     [formations, formation, formationAutreVoie]
   );
-  const formationLink = useFormationLink({ formation: autreFormation?.formation });
+  const formationLink = useFormationLink({ formationDetail: autreFormation });
 
   if (isLoading) {
     return <Loader />;

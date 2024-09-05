@@ -1,12 +1,14 @@
 import fs from "fs";
 import { filterData, oleoduc, writeData, transformData } from "oleoduc";
 import { Readable } from "stream";
-import { get, flow } from "lodash-es";
-import { getLoggerWithContext } from "#src/common/logger.js";
+import { get } from "lodash-es";
 
-import { ExpressionWrapper, Kysely, PostgresDialect, RawBuilder, sql } from "kysely";
+import { Kysely, PostgresDialect, sql } from "kysely";
 import pg from "pg";
 import path from "path";
+
+import { getLoggerWithContext } from "#src/common/logger.js";
+import { kyselyChainFn } from "#src/common/db/db";
 
 const logger = getLoggerWithContext("isochrones");
 
@@ -26,16 +28,6 @@ async function getGeometry(input, bucket, file, key) {
   return { bucket, geometry };
 }
 
-function kyselyChainFn(
-  eb,
-  fns: { fn: string; args: (ExpressionWrapper<unknown, never, any> | string)[] }[],
-  val: RawBuilder<unknown> | string
-) {
-  return fns.reduce((acc, { fn, args }) => {
-    return eb.fn(fn, [acc, ...args]);
-  }, val);
-}
-
 export async function splitIsochrones({
   input,
   output,
@@ -52,8 +44,6 @@ export async function splitIsochrones({
   const bufferPrecision = 0.001; // ~100m
   const simplifyPrecision = 0.0001; // ~10m
   const divideMaxVertices = 2048;
-
-  console.log(input, output, buckets, key, connectionString);
 
   const files = (await fs.promises.readdir(path.join(input, buckets[0].toString()))).filter((s) => s.match(/\.json/));
   await createOutputFolder(output, buckets);

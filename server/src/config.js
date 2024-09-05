@@ -11,11 +11,15 @@ const config = {
     destinations: env.get("ACCOMPAGNATEUR_LOG_DESTINATIONS").default("stdout").asArray(),
   },
   slackWebhookUrl: env.get("ACCOMPAGNATEUR_SLACK_WEBHOOK_URL").asString(),
-  mongodb: {
+  pgsql: {
     uri: env
-      .get("ACCOMPAGNATEUR_MONGODB_URI")
-      .default("mongodb://127.0.0.1:27017/accompagnateur?retryWrites=true&w=majority")
+      .get("ACCOMPAGNATEUR_POSTGRES_URI")
+      .default("postgres://postgres:password@127.0.0.1:5432/postgres")
       .asString(),
+    ca: env.get("ACCOMPAGNATEUR_POSTGRES_CA").asString(),
+  },
+  sql: {
+    logLevel: env.get("ACCOMPAGNATEUR_SQL_LOG_LEVEL").asArray(),
   },
   graphHopper: {
     api: {

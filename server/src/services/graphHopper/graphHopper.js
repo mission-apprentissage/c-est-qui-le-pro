@@ -102,6 +102,17 @@ class GraphHopperApi extends RateLimitedApi {
     return buffered;
   }
 
+  async fetchIsochronePTBucketsRaw({ point, departureTime = new Date(), reverse_flow = false, buckets = [1800] }) {
+    const times = buckets.sort((a, b) => b - a);
+    const geometries = await Promise.all(
+      times.map(async (time) => {
+        const geometry = await this.fetchIsochrone({ point, departureTime, timeLimit: time, reverse_flow });
+        return { time, geometry: geometry.polygons[0].geometry };
+      })
+    );
+    return geometries;
+  }
+
   async fetchIsochronePTBuckets({ point, departureTime = new Date(), reverse_flow = false, buckets = [1800] }) {
     // GraphHopper does not support buckets for public transportation
     // We request the isochrone API with different duration
