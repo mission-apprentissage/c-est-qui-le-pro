@@ -15,6 +15,8 @@ FROM node:18-alpine AS builder-production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/ui/node_modules ./ui/node_modules
+COPY --from=deps /app/package.json ./package.json
+COPY --from=deps /app/yarn.lock ./yarn.lock
 COPY ./ui ui
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -56,13 +58,14 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-COPY --from=builder-production /app/ui/next.config.js ./ui
+COPY --from=builder-production /app/ui/next.config.js ./ui/next.config.js
 # COPY --from=builder-production /app/ui/public ./ui/public
 COPY --from=builder-production /app/ui/package.json ./ui/package.json
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/standalone ./ui/
+COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/standalone/ ./ui/
+COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/standalone/ui/ ./ui/
 COPY --from=builder-production --chown=nextjs:nodejs /app/ui/.next/static ./ui/.next/static
 
 
