@@ -16,7 +16,7 @@ export default function SearchHeader() {
         >
           <SearchFormationHomeForm
             url={"/recherche"}
-            defaultValues={{ address: null, distance: 10, time: 90 }}
+            defaultValues={{ address: null, distance: 0, time: 90 }}
             bordered
           />
         </Grid>

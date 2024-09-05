@@ -10,7 +10,7 @@ export default function DistanceField({
   },
   error,
 }: any) {
-  const options = ["1", "5", "10"];
+  const options = ["0", "1", "5", "10"];
 
   return (
     <>
