@@ -18,7 +18,7 @@ function reload_containers() {
 
 function verify_app() {
   if wget --timeout 15 -O - -q -t 4 ${URL} |
-    jq --exit-status '.healthcheck.mongodb == true' >/dev/null; then
+    jq --exit-status '.healthcheck.sql == true' >/dev/null; then
     true
   else
     false
