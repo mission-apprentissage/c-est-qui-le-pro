@@ -229,10 +229,7 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
                     <li>
                       ③ Consultez les{" "}
                       <b>
-                        <a
-                          target="_blank"
-                          href="https://www.education.gouv.fr/les-aides-financieres-au-lycee-7511#:~:text=Au%20lyc%C3%A9e%2C%20votre%20enfant%20peut,enfant%20est%20votre%20principal%20interlocuteur."
-                        >
+                        <a target="_blank" href="https://www.education.gouv.fr/les-aides-financieres-au-lycee-7511">
                           allocations de rentrée scolaire
                         </a>
                       </b>
