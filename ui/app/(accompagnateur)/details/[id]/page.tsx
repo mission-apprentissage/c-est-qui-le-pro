@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { css } from "@emotion/react";
 import { Box, Stack, useTheme } from "@mui/material";
-import HtmlReactParser from "html-react-parser";
-import TruncateMarkup from "react-truncate-markup";
+import { Highlight } from "@codegouvfr/react-dsfr/Highlight";
 import { useQuery } from "@tanstack/react-query";
 import { Typography, Grid } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
@@ -182,17 +181,21 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
           >
             {formation.description && (
               <Grid item xs={12}>
-                <FormationDescription description={formation.description} title={"La formation"}>
-                  <Box style={{ marginTop: "2rem", marginBottom: "1.5rem" }}>
-                    <Link
-                      style={{ color: "var(--blue-france-sun-113-625)" }}
-                      target="_blank"
-                      href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
-                    >
-                      En savoir plus, sur le site de l&apos;Onisep
-                    </Link>
-                  </Box>
-                </FormationDescription>
+                <FormationDescription
+                  description={formation.description}
+                  title={"La formation"}
+                  childrenBox={
+                    <Box style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+                      <Link
+                        style={{ color: "var(--blue-france-sun-113-625)" }}
+                        target="_blank"
+                        href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
+                      >
+                        En savoir plus, sur le site de l&apos;Onisep
+                      </Link>
+                    </Box>
+                  }
+                ></FormationDescription>
                 {formation.voie === "apprentissage" && (
                   <Box style={{ marginTop: fr.spacing("10v") }}>
                     <WidgetSiriusEtablissement etablissement={etablissement} fallbackComponent={<></>} />
@@ -201,17 +204,31 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
               </Grid>
             )}
 
-            {formation.descriptionAcces && (
-              <Grid item xs={12} style={{ marginTop: fr.spacing("5v") }}>
-                <FormationDescription
-                  description={formation.descriptionAcces}
-                  title={"L'admission"}
-                ></FormationDescription>
-              </Grid>
-            )}
+            <Grid item xs={12}>
+              <FormationDescription description={formation.descriptionAcces} title={"L'admission"}>
+                <Box style={{ marginTop: "2rem" }}>
+                  <Typography variant="h3" style={{ marginBottom: "1rem" }}>
+                    Ai-je le droit à une aide ?
+                  </Typography>
+                  <ul style={{ listStyleType: "none", paddingLeft: 0, margin: 0 }}>
+                    <li>① Rapprochez-vous de l’assistant.e social.e du collège</li>
+                    <li>② Consultez les bourses de lycées</li>
+                    <li>③ Consultez les allocations de rentrée scolaire</li>
+                  </ul>
+                  <Highlight style={{ marginLeft: 0, marginTop: "2rem" }}>
+                    Des questions sur les demandes de bourse de collège ?<br />
+                    <b>Une plateforme d&#39;assistance nationale est mise à votre disposition.</b>
+                    <br />
+                    <b>Par téléphone : 0 809 54 06 06 (prix d&#39;un appel local)</b>
+                    <br />
+                    <b>Du lundi au vendredi de 8h à 20h</b>
+                  </Highlight>
+                </Box>
+              </FormationDescription>
+            </Grid>
 
             {formation.descriptionPoursuiteEtudes && (
-              <Grid item xs={12} style={{ marginTop: fr.spacing("5v") }}>
+              <Grid item xs={12}>
                 <FormationDescription
                   description={formation.descriptionPoursuiteEtudes}
                   title={"La poursuite d'études"}
@@ -219,7 +236,7 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
               </Grid>
             )}
 
-            <Grid item xs={12} style={{ marginTop: fr.spacing("5v") }}>
+            <Grid item xs={12}>
               <Card type="details" title="L’accès à l’emploi">
                 <Typography variant="h3">Que deviennent les élèves après ce CAP ?</Typography>
                 <WidgetInserJeunes etablissement={etablissement} formation={formation} />
