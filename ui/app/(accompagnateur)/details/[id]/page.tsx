@@ -28,6 +28,7 @@ import Link from "#/app/components/Link";
 import Title from "#/app/(accompagnateur)/components/Title";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { capitalize } from "lodash-es";
+import FormationDescription from "./FormationDescription";
 
 function FormationDetails({ formationDetail }: { formationDetail: FormationDetail }) {
   const { formationEtablissement, formation, etablissement } = formationDetail;
@@ -39,8 +40,6 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
 
   const refHeader = React.useRef<HTMLElement>(null);
   const stickyHeaderSize = useSize(refHeader);
-
-  const [descriptionLine, setDescriptionLine] = useState(6);
 
   return (
     <Container style={{ marginTop: fr.spacing("5v") }} maxWidth={"xl"}>
@@ -183,55 +182,40 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
           >
             {formation.description && (
               <Grid item xs={12}>
-                <Card type="details" title="La formation">
-                  <Box
-                    style={{
-                      border: "1px solid #DDDDDD",
-                      padding: "1rem",
-                      paddingBottom: "1.5rem",
-                      paddingTop: "1.5rem",
-                    }}
-                  >
-                    <TruncateMarkup
-                      lineHeight={24}
-                      lines={descriptionLine}
-                      tokenize={"words"}
-                      ellipsis={
-                        <>
-                          {"..."}
-                          <div style={{ marginTop: "-1.5rem" }}>
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setDescriptionLine(1000);
-                              }}
-                            >
-                              Voir plus
-                            </a>
-                          </div>
-                        </>
-                      }
+                <FormationDescription description={formation.description} title={"La formation"}>
+                  <Box style={{ marginTop: "2rem", marginBottom: "1.5rem" }}>
+                    <Link
+                      style={{ color: "var(--blue-france-sun-113-625)" }}
+                      target="_blank"
+                      href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
                     >
-                      <div>{HtmlReactParser(formation.description)}</div>
-                    </TruncateMarkup>
-                    <Box style={{ marginTop: "2rem" }}>
-                      <Link
-                        style={{ color: "var(--blue-france-sun-113-625)" }}
-                        target="_blank"
-                        href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
-                      >
-                        En savoir plus, sur le site de l&apos;Onisep
-                      </Link>
-                    </Box>
+                      En savoir plus, sur le site de l&apos;Onisep
+                    </Link>
                   </Box>
-                </Card>
-
+                </FormationDescription>
                 {formation.voie === "apprentissage" && (
                   <Box style={{ marginTop: fr.spacing("10v") }}>
                     <WidgetSiriusEtablissement etablissement={etablissement} fallbackComponent={<></>} />
                   </Box>
                 )}
+              </Grid>
+            )}
+
+            {formation.descriptionAcces && (
+              <Grid item xs={12} style={{ marginTop: fr.spacing("5v") }}>
+                <FormationDescription
+                  description={formation.descriptionAcces}
+                  title={"L'admission"}
+                ></FormationDescription>
+              </Grid>
+            )}
+
+            {formation.descriptionPoursuiteEtudes && (
+              <Grid item xs={12} style={{ marginTop: fr.spacing("5v") }}>
+                <FormationDescription
+                  description={formation.descriptionPoursuiteEtudes}
+                  title={"La poursuite d'études"}
+                ></FormationDescription>
               </Grid>
             )}
 

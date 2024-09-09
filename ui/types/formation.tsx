@@ -71,6 +71,8 @@ export type Formation = {
   cfd: string;
   libelle?: string;
   description?: string;
+  descriptionAcces?: string;
+  descriptionPoursuiteEtudes?: string;
   onisepIdentifiant?: string;
   voie: FormationVoie;
   codeDispositif?: string;

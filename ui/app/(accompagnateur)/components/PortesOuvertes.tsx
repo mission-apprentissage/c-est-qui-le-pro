@@ -4,13 +4,10 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { Etablissement } from "#/types/formation";
 import moment from "moment";
 import "moment/locale/fr";
-import MockDate from "mockdate";
 
 moment.locale("fr");
 
 export function formatPortesOuvertes(etablissement: Etablissement) {
-  // TODO: remove after review
-  MockDate.set("2024-01-01");
   if (!etablissement.JPODetails && !etablissement.JPODates) {
     return null;
   }
@@ -57,7 +54,6 @@ export function formatPortesOuvertes(etablissement: Etablissement) {
     }
   }
 
-  MockDate.reset();
   return {
     ended,
     str: ended ? `Portes ouvertes déjà passées` : `${strPortesOuvertes}`,

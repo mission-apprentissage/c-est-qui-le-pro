@@ -72,6 +72,8 @@ export interface Formation {
   codeRncp: string | null;
   createdAt: Generated<Timestamp>;
   description: string | null;
+  descriptionAcces: string | null;
+  descriptionPoursuiteEtudes: string | null;
   id: Generated<string>;
   libelle: string | null;
   mef11: string | null;

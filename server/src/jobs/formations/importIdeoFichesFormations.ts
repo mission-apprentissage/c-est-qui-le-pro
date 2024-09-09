@@ -3,6 +3,7 @@ import { getLoggerWithContext } from "#src/common/logger.js";
 import { streamIdeoFichesFormations } from "#src/services/onisep/fichesFormations.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
 import { kdb } from "#src/common/db/db";
+import { omitNil } from "#src/common/utils/objectUtils";
 
 const logger = getLoggerWithContext("import");
 
@@ -45,11 +46,16 @@ export async function importIdeoFichesFormations() {
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
   const cleanDescription = (text) => {
-    return text.replaceAll(/<p>[\s]+<\/p>/g, "");
+    if (!text) {
+      return null;
+    }
+
+    return text.replaceAll(/<p>[\s]+<\/p>/g, "").replaceAll(/^\s+|\s+$/g, "");
   };
+
   await oleoduc(
     await streamIdeoFichesFormations(),
-    filterData((data) => data.code_scolarite && data.descriptif_format_court),
+    filterData((data) => data.code_scolarite),
     transformData(async (formation) => {
       const cfds = await cfdsParentAndChildren(formation.code_scolarite);
       return { cfds, formation };
@@ -59,10 +65,14 @@ export async function importIdeoFichesFormations() {
         try {
           const result = await kdb
             .updateTable("formation")
-            .set({
-              description: cleanDescription(formation.descriptif_format_court),
-              onisepIdentifiant: formation.identifiant,
-            })
+            .set(
+              omitNil({
+                description: cleanDescription(formation.descriptif_format_court),
+                descriptionAcces: cleanDescription(formation.descriptif_acces),
+                descriptionPoursuiteEtudes: cleanDescription(formation.descriptif_poursuite_etudes),
+                onisepIdentifiant: formation.identifiant,
+              })
+            )
             .where("cfd", "in", cfds)
             .returning("id")
             .execute();

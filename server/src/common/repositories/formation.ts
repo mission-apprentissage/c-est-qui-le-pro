@@ -14,6 +14,8 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
         codeRncp: null,
         createdAt: null,
         description: null,
+        descriptionAcces: null,
+        descriptionPoursuiteEtudes: null,
         id: null,
         libelle: null,
         mef11: null,
