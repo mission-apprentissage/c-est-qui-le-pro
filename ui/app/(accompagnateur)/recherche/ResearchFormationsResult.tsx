@@ -79,7 +79,19 @@ export default function ResearchFormationsResult({
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
   if (isLoading) {
-    return <Loader withMargin />;
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection={"column"}
+        sx={{ height: "100vh", padding: { md: "2rem", xs: "1rem" }, paddingTop: { md: "5rem", xs: "5rem" } }}
+      >
+        <Loader withMargin />
+        <Typography variant="h6" textAlign={"center"}>
+          Nous recherchons toutes les formations autour de toi...
+        </Typography>
+      </Box>
+    );
   }
 
   return (
