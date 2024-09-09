@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { mapValues } from "lodash-es";
-import { formatArrayParameters } from "./formatters.js";
+import { formatArrayParameters } from "./formatters.ts";
 
 const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^(?:CFD:)?([0-9]{8})$/;

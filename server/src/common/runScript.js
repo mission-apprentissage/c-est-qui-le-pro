@@ -1,7 +1,6 @@
-import { closeMongodbConnection, connectToMongodb } from "./db/mongodb.js";
 import prettyMilliseconds from "pretty-ms";
 import { isEmpty } from "lodash-es";
-import { getLoggerWithContext } from "./logger.js";
+import { getLoggerWithContext } from "./logger.ts";
 
 const logger = getLoggerWithContext("script");
 
@@ -36,14 +35,6 @@ const exit = async (scriptError) => {
     logger.error(scriptError.constructor.name === "EnvVarError" ? scriptError.message : scriptError);
     process.exitCode = 1;
   }
-
-  setTimeout(() => {
-    //Waiting logger to flush all logs (MongoDB)
-    closeMongodbConnection().catch((e) => {
-      console.error(e);
-      process.exitCode = 1;
-    });
-  }, 250);
 };
 
 const wrapTimer = async (cb) => {
@@ -57,7 +48,6 @@ async function runScript(job, options = { withTimer: true }) {
   const withTimer = options.withTimer ?? true;
   try {
     const cb = async () => {
-      await connectToMongodb();
       return await job();
     };
 

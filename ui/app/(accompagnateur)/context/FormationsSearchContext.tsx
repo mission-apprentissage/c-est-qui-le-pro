@@ -27,7 +27,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
   const searchParams = useSearchParams();
   const params = searchParamsToObject(
     searchParams,
-    { address: null, distance: 10, time: null, tag: null, domaine: null },
+    { address: null, distance: 0, time: null, tag: null, domaine: null },
     schemaFormation
   );
 

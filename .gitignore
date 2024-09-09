@@ -109,3 +109,8 @@ dist
 trajectoires-pro.Rproj
 .Rhistory
 .Rdata
+
+server/data/isochrones/
+server/data/isochrones_output/
+
+tmp/

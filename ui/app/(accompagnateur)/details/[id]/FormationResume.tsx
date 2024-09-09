@@ -4,7 +4,7 @@ import React from "react";
 import { Typography, Grid, Stack } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
-import { Etablissement, FormationDetail } from "#/types/formation";
+import { FormationDetail, FormationEtablissement } from "#/types/formation";
 import Tag from "#/app/components/Tag";
 import {
   THRESHOLD_TAUX_PRESSION,
@@ -36,8 +36,8 @@ function FormationResumeBlock({
   );
 }
 
-function FormationResumeBlockAdmission({ formation }: { formation: FormationDetail }) {
-  const tauxPression = formation?.indicateurEntree?.tauxPression;
+function FormationResumeBlockAdmission({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+  const tauxPression = formationEtablissement?.indicateurEntree?.tauxPression;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -81,8 +81,8 @@ function FormationResumeBlockAdmission({ formation }: { formation: FormationDeta
   );
 }
 
-function FormationResumeBlockEmploi({ formation }: { formation: FormationDetail }) {
-  const tauxPression = formation?.indicateurPoursuite?.taux_en_emploi_6_mois;
+function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+  const tauxPression = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -126,8 +126,8 @@ function FormationResumeBlockEmploi({ formation }: { formation: FormationDetail 
   );
 }
 
-function FormationResumeBlockEtude({ formation }: { formation: FormationDetail }) {
-  const tauxPression = formation?.indicateurPoursuite?.taux_en_formation;
+function FormationResumeBlockEtude({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+  const tauxPression = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -172,11 +172,9 @@ function FormationResumeBlockEtude({ formation }: { formation: FormationDetail }
 }
 
 export default function FormationResume({
-  formation,
-  etablissement,
+  formationDetail: { formation, formationEtablissement },
 }: {
-  formation: FormationDetail;
-  etablissement: Etablissement;
+  formationDetail: FormationDetail;
 }) {
   const theme = useTheme();
 
@@ -210,13 +208,13 @@ export default function FormationResume({
           </FormationResumeBlock>
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockAdmission formation={formation} />
+          <FormationResumeBlockAdmission formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEmploi formation={formation} />
+          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEtude formation={formation} />
+          <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
         </Grid>
       </Grid>
     </Container>

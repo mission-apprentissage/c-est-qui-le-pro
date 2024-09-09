@@ -3,11 +3,11 @@ import { useSearchParams } from "next/navigation";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
 
 export const useFormationLink = ({
-  formation,
+  formationDetail,
   longitude,
   latitude,
 }: {
-  formation?: FormationDetail;
+  formationDetail?: FormationDetail;
   longitude?: string;
   latitude?: string;
 }) => {
@@ -16,10 +16,12 @@ export const useFormationLink = ({
   const latitudeParams = latitude ?? searchParams.get("latitude");
   const { getUrlParams } = useFormationsSearch();
 
-  if (!formation) {
+  if (!formationDetail) {
     return null;
   }
 
-  const key = `${formation.cfd}-${formation.codeDispositif}-${formation.uai}-${formation.voie}`;
+  const key = `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
+    formationDetail.etablissement.uai
+  }-${formationDetail.formation.voie}`;
   return `/details/${key}?latitude=${latitudeParams || ""}&longitude=${longitudeParams || ""}&${getUrlParams()}`;
 };

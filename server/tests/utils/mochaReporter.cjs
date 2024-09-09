@@ -2,7 +2,7 @@
 // https://mochajs.org/#nodejs-native-esm-support
 const util = require("util");
 const Mocha = require("mocha");
-const chalk = require("chalk");
+const chalk = require("chalk-legacy");
 const { Base, Spec } = Mocha.reporters;
 const { inherits } = require("util");
 const prettyMilliseconds = require("pretty-ms");

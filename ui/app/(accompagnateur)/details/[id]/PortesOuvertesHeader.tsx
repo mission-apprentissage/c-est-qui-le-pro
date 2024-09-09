@@ -12,8 +12,8 @@ import Link from "#/app/components/Link";
 const PortesOuvertesHeader = ({ etablissement }: { etablissement: Etablissement }) => {
   const theme = useTheme();
   const strPortesOuvertes = useMemo(() => formatPortesOuvertes(etablissement), [etablissement]);
-  const url = etablissement?.onisep?.id
-    ? `https://www.onisep.fr/http/redirection/etablissement/slug/${etablissement.onisep.id}#events`
+  const url = etablissement?.onisepId
+    ? `https://www.onisep.fr/http/redirection/etablissement/slug/${etablissement.onisepId}#events`
     : null;
 
   const title = strPortesOuvertes ? (

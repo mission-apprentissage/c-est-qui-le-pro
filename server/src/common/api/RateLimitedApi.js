@@ -1,6 +1,6 @@
 import { RateLimiter } from "./RateLimiter.js";
 import { ApiError } from "./ApiError.js";
-import { getLoggerWithContext } from "#src/common/logger.js";
+import { getLoggerWithContext } from "#src/common/logger.ts";
 
 const logger = getLoggerWithContext("api");
 

@@ -2,9 +2,16 @@ import * as turf from "@turf/turf";
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
 import config from "#src/config.js";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
-import geotoolbox from "../../../node_modules/geotoolbox/dist/index.min.js";
-// import fs from "fs";
-// import { getDirname } from "#src/common/utils/esmUtils.js";
+import { require } from "#src/common/utils/esmUtils.js";
+import path from "path";
+import resolvePackagePath from "resolve-package-path";
+
+// Fix issue with geotoolbox CommonJS module
+const { findUpPackagePath } = resolvePackagePath;
+const geotoolbox = require(path.join(
+  findUpPackagePath(import.meta.url),
+  "../../node_modules/geotoolbox/dist/index.min.js"
+));
 
 class GraphHopperApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -93,6 +100,17 @@ class GraphHopperApi extends RateLimitedApi {
   buffer(geometry, distance = 0.1) {
     const buffered = turf.buffer(geometry, distance, { units: "kilometers" });
     return buffered;
+  }
+
+  async fetchIsochronePTBucketsRaw({ point, departureTime = new Date(), reverse_flow = false, buckets = [1800] }) {
+    const times = buckets.sort((a, b) => b - a);
+    const geometries = await Promise.all(
+      times.map(async (time) => {
+        const geometry = await this.fetchIsochrone({ point, departureTime, timeLimit: time, reverse_flow });
+        return { time, geometry: geometry.polygons[0].geometry };
+      })
+    );
+    return geometries;
   }
 
   async fetchIsochronePTBuckets({ point, departureTime = new Date(), reverse_flow = false, buckets = [1800] }) {

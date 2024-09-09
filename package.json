@@ -4,6 +4,10 @@
   "description": "[InserJeunes] Accompagnateur",
   "repository": "https://github.com/mission-apprentissage/c-est-qui-le-pro.git",
   "private": true,
+  "workspaces": [
+    "server",
+    "ui"
+  ],
   "author": "InserJeunes",
   "license": "MIT",
   "scripts": {
@@ -18,6 +22,7 @@
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "husky": "^8.0.3",
+    "prettier": "2.6.2",
     "semantic-release": "19.0.2",
     "semantic-release-slack-bot": "3.5.2"
   },

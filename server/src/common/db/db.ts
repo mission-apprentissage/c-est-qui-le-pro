@@ -1,0 +1,92 @@
+import {
+  Kysely,
+  PostgresDialect,
+  ExpressionWrapper,
+  RawBuilder,
+  AnyColumn,
+  OnConflictDatabase,
+  OnConflictTables,
+} from "kysely";
+import pg from "pg";
+import Cursor from "pg-cursor";
+import { DB } from "./schema";
+import config from "#src/config.js";
+import { logger } from "#src/common/logger.js";
+import { InsertExpression } from "kysely/dist/cjs/parser/insert-values-parser";
+import { UpdateObjectExpression } from "kysely/dist/cjs/parser/update-set-parser";
+
+const { Pool, types } = pg;
+
+//Convert numeric to number
+types.setTypeParser(types.builtins.NUMERIC, function (val) {
+  return parseFloat(val);
+});
+
+export const pool = new Pool({
+  connectionString: config.pgsql.uri,
+  ssl: config.pgsql.ca ? { rejectUnauthorized: false, ca: config.pgsql.ca } : undefined,
+});
+
+pool.on("error", (error) => {
+  try {
+    console.error("lost connection with DB!");
+    logger.error("pg pool lost connexion with database", { error });
+    // eslint-disable-next-line no-empty
+  } catch (e) {}
+});
+
+export const kdb = new Kysely<DB>({
+  dialect: new PostgresDialect({ pool, cursor: Cursor }),
+  log: (event) => {
+    if (config.sql.logLevel.includes(event.level)) {
+      console.log(`\n====================================\n`);
+      console.log(replaceQueryPlaceholders(event.query.sql, event.query.parameters as string[]));
+      console.log({
+        parameters: event.query.parameters.map((p, index) => `$${index + 1} = ${p}`).join(", "),
+      });
+      console.log({ duration: event.queryDurationMillis });
+    }
+  },
+});
+
+function replaceQueryPlaceholders(query: string, values: string[]): string {
+  let modifiedQuery = query;
+
+  // Replace each placeholder with the corresponding value from the array
+  values.forEach((value, index) => {
+    // The placeholder in the query will be like $1, $2, etc.
+    const placeholder = `$${index + 1}`;
+    modifiedQuery = modifiedQuery.replace(placeholder, `'${value}'`);
+  });
+
+  return modifiedQuery;
+}
+
+export function kyselyChainFn<T extends keyof DB>(
+  eb,
+  fns: { fn: string; args: (ExpressionWrapper<unknown, never, any> | string | RawBuilder<unknown>)[] }[],
+  val: RawBuilder<unknown> | string | undefined = undefined
+): ExpressionWrapper<DB, T, unknown> {
+  return fns.reduce((acc, { fn, args }) => {
+    return eb.fn(fn, [...(acc !== undefined ? [acc] : []), ...args]);
+  }, val);
+}
+
+export async function upsert<DB, T extends keyof DB & string>(
+  kdb: Kysely<DB>,
+  table: T,
+  keys: AnyColumn<DB, T>[],
+  data: InsertExpression<DB, T>,
+  onConflictData: UpdateObjectExpression<OnConflictDatabase<DB, T>, OnConflictTables<T>, OnConflictTables<T>> = null,
+  returningKeys: AnyColumn<DB, T>[] = null
+) {
+  const withReturning = (query, returningKeys) => (returningKeys ? query.returning(returningKeys) : query);
+  const withConflictData = (query, keys, data) =>
+    data
+      ? query.onConflict((oc) => oc.columns(keys).doUpdateSet(onConflictData))
+      : query.onConflict((oc) => oc.columns(keys).doNothing());
+
+  let query = withConflictData(withReturning(kdb.insertInto(table).values(data), returningKeys), keys, onConflictData);
+
+  return query.executeTakeFirst();
+}

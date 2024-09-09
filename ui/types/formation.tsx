@@ -58,16 +58,30 @@ type IndicateurPoursuite = {
   taux_autres_6_mois?: number;
 };
 
-export type FormationDetail = {
-  voie: FormationVoie;
-  tags: FormationTag[];
+export type FormationEtablissement = {
+  id: string;
+  duree?: string;
+  tags?: FormationTag[] | null;
   indicateurEntree?: IndicateurEntree;
   indicateurPoursuite?: IndicateurPoursuite;
-} & Record<string, any>;
+};
+
+export type Formation = {
+  id: string;
+  cfd: string;
+  libelle?: string;
+  description?: string;
+  onisepIdentifiant?: string;
+  voie: FormationVoie;
+  codeDispositif?: string;
+  mef11?: string;
+  codeDiplome?: string;
+  codeRncp?: string;
+};
 
 type JourneesPortesOuverteDate = {
-  from: Date;
-  to: Date;
+  from?: Date;
+  to?: Date;
   details?: string;
   fullDay?: boolean;
 };
@@ -78,21 +92,43 @@ export type JourneesPortesOuverte = {
 };
 
 export type Etablissement = {
+  id: string;
+  statut?: string;
+  url?: string;
+  libelle?: string;
+  uai: string;
+  onisepId?: string;
   journeesPortesOuvertes?: JourneesPortesOuverte;
-} & Record<string, any>;
 
-export type Formation = {
-  formation: FormationDetail;
+  JPODates?: JourneesPortesOuverteDate[] | null;
+  JPODetails?: string | null;
+
+  addressStreet?: string;
+  addressPostCode?: string;
+  addressCity?: string;
+  latitude?: number;
+  longitude?: number;
+  accessTime?: number;
+  distance?: number;
+};
+
+export type FormationDetail = {
+  formationEtablissement: FormationEtablissement;
+  formation: Formation;
   etablissement: Etablissement;
 };
 
-export const formationSchema: yup.ObjectSchema<Formation> = yup.object({
-  formation: yup
+export const formationDetailSchema: yup.ObjectSchema<FormationDetail> = yup.object({
+  formationEtablissement: yup
     .object()
     .concat(
       yup.object().shape({
-        voie: yup.string().oneOf(Object.values(FormationVoie)).required(),
-        tags: yup.array(yup.string().oneOf(Object.values(FormationTag)).required()).default([]),
+        id: yup.string().required(),
+        duree: yup.string(),
+        tags: yup
+          .array(yup.string().oneOf(Object.values(FormationTag)).required())
+          .nullable()
+          .default([]),
         indicateurEntree: yup
           .object({
             rentreeScolaire: yup.string().required(),
@@ -112,29 +148,33 @@ export const formationSchema: yup.ObjectSchema<Formation> = yup.object({
       })
     )
     .required(),
+  formation: yup.object().concat(
+    yup.object().shape({
+      id: yup.string().required(),
+      cfd: yup.string().required(),
+      libelle: yup.string(),
+      voie: yup.string().oneOf(Object.values(FormationVoie)).required(),
+    })
+  ),
   etablissement: yup
     .object()
     .concat(
       yup.object().shape({
-        journeesPortesOuvertes: yup
-          .object({
-            dates: yup.array().of(
-              yup.object({
-                from: yup
-                  .date()
-                  .transform((value) => new Date(value))
-                  .required(),
-                to: yup
-                  .date()
-                  .transform((value) => new Date(value))
-                  .required(),
-                details: yup.string(),
-                fullDay: yup.boolean(),
-              })
-            ),
-            details: yup.string(),
-          })
-          .default(undefined),
+        id: yup.string().required(),
+        uai: yup.string().required(),
+        JPODates: yup
+          .array()
+          .of(
+            yup.object({
+              from: yup.date().transform((value) => new Date(value)),
+              to: yup.date().transform((value) => new Date(value)),
+              details: yup.string(),
+              fullDay: yup.boolean(),
+            })
+          )
+          .nullable()
+          .default(null),
+        JPODetails: yup.string().nullable().default(null),
       })
     )
     .required(),

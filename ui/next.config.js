@@ -3,12 +3,10 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   experimental: {
-    appDir: true,
-  },
-  output: "standalone",
-  experimental: {
+    forceSwcTransforms: true,
     scrollRestoration: true,
   },
+  output: "standalone",
   basePath: process.env.BASE_PATH || "",
   webpack: (config) => {
     config.module.rules.push({

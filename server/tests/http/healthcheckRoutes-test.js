@@ -8,7 +8,8 @@ describe("healthcheckRoutes", () => {
     const response = await httpClient.get("/api");
 
     assert.strictEqual(response.status, 200);
-    assert.strictEqual(response.data.healthcheck.mongodb, true);
+    // We don't have a testing postgres for now
+    assert.strictEqual(response.data.healthcheck.sql, false);
     assert.ok(response.data.env);
     assert.ok(response.data.version);
   });

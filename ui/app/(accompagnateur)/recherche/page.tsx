@@ -18,7 +18,7 @@ import OptionsCarousel from "#/app/components/form/OptionsCarousel";
 
 function ResearchFormationsParameter() {
   const { params, updateParams } = useFormationsSearch();
-  const { address, distance = 10, time = 15, tag, domaine } = params ?? {};
+  const { address, distance = 0, time = 15, tag, domaine } = params ?? {};
 
   const {
     data: coordinate,

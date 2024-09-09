@@ -1,12 +1,12 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import Tag from "#/app/components/Tag";
-import { FormationDetail } from "#/types/formation";
+import { Formation } from "#/types/formation";
 import "moment/locale/fr";
 
-export function TagApprentissage({ formationDetail }: { formationDetail: FormationDetail }) {
+export function TagApprentissage({ formation }: { formation: Formation }) {
   return (
-    formationDetail.voie === "apprentissage" && (
+    formation.voie === "apprentissage" && (
       <Tag
         variant="yellow"
         square
@@ -20,9 +20,9 @@ export function TagApprentissage({ formationDetail }: { formationDetail: Formati
   );
 }
 
-export function LabelApprentissage({ formationDetail }: { formationDetail: FormationDetail }) {
+export function LabelApprentissage({ formation }: { formation: Formation }) {
   return (
-    formationDetail.voie === "apprentissage" && (
+    formation.voie === "apprentissage" && (
       <Typography
         style={{
           fontSize: "16px",

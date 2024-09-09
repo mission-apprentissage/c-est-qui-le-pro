@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { Etablissement, FormationDetail } from "#/types/formation";
+import { Etablissement, Formation } from "#/types/formation";
 
 export default function WidgetInserJeunes({
   etablissement,
   formation,
 }: {
   etablissement: Etablissement;
-  formation: FormationDetail;
+  formation: Formation;
 }) {
   const WIDGET_HASH = process.env.NEXT_PUBLIC_EXPOSITION_WIDGET_HASH;
   const API_URL = process.env.NEXT_PUBLIC_EXPOSITION_API_BASE_URL || "";

@@ -9,7 +9,7 @@ services:
 
   ui:
     build:
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./ui/Dockerfile.dev
     mem_limit: 1g
     stdin_open: true
     volumes:
@@ -17,7 +17,7 @@ services:
       - /app/node_modules
       - ./ui:/app:z
   server:
-    command: ["yarn", "debug"]
+    command: ["yarn", "dev"]
     ports:
       - "127.0.0.1:9229:9229" # Allows remote debugging
     volumes:
@@ -32,6 +32,26 @@ services:
     volumes:
       - accompagnateur_mongodb_data:/data:z
 
+  postgres:
+    image: postgis/postgis:16-3.4
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=512MB"
+      - "-c"
+      - "work_mem=32MB"
+    shm_size: 1g
+    container_name: accompagnateur_postgres
+    restart: unless-stopped
+    networks:
+      - accompagnateur_network
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - accompagnateur_postgres_data:/var/lib/postgresql/data:z
+
   metabase:
     volumes:
       - accompagnateur_metabase_data:/data:z
@@ -43,6 +63,9 @@ volumes:
   accompagnateur_mongodb_data:
     driver: local
     name: accompagnateur_mongodb_data
+  accompagnateur_postgres_data:
+    driver: local
+    name: accompagnateur_postgres_data
   accompagnateur_nginx_data:
     driver: local
     name: accompagnateur_nginx_data

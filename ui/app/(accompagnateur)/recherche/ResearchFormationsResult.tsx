@@ -10,7 +10,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "./FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { Formation, FormationTag, FormationDomaine } from "#/types/formation";
+import { Formation, FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
 import { Box, Stack, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
@@ -30,12 +30,13 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
         if (!params) {
           return;
         }
-        const { address, distance, time } = params;
+        const { address, distance, time, domaine } = params;
 
         updateParams({
           address,
           distance,
           time,
+          domaine,
           tag: selectedTag === selected ? undefined : selectedTag,
         });
       }}
@@ -61,7 +62,7 @@ export default function ResearchFormationsResult({
   page: number;
 }) {
   const theme = useTheme();
-  const [selected, setSelected] = useState<null | Formation>(null);
+  const [selected, setSelected] = useState<null | FormationDetail>(null);
 
   const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements } = useGetFormations({
     latitude,
@@ -170,21 +171,21 @@ export default function ResearchFormationsResult({
             </InformationCard>
           ) : (
             <Grid container spacing={2}>
-              {formations.map((formation, index) => {
-                const formationDetail = formation.formation;
-                const isSelected = selected ? selected.formation._id === formationDetail._id : false;
-                const key = `${formationDetail.cfd}-${formationDetail.codeDispositif}-${formationDetail.uai}-${formationDetail.voie}`;
+              {formations.map((formationDetail, index) => {
+                const { formation, formationEtablissement, etablissement } = formationDetail;
+                const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
+                const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
                 return (
                   <Grid item sm={12} lg={6} xl={4} key={key} ref={formationsRef[index]}>
                     <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
                       <FormationCard
                         selected={isSelected}
                         onMouseEnter={() => {
-                          setSelected(formation);
+                          setSelected(formationDetail);
                         }}
                         latitude={latitude}
                         longitude={longitude}
-                        formation={formation}
+                        formationDetail={formationDetail}
                         tabIndex={index}
                       />
                     </Box>

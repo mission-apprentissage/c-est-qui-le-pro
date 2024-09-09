@@ -7,7 +7,7 @@ import {
   LeafletSelectedEtablissementIcon,
   FitBound,
 } from "#/app/components/Map";
-import { Etablissement, Formation } from "#/types/formation";
+import { Etablissement, FormationDetail } from "#/types/formation";
 import { FeatureGroup, Marker } from "react-leaflet";
 import EtablissementCard from "./EtablissementCard";
 import DynamicPopup from "./DynamicPopup";
@@ -25,7 +25,7 @@ export default function FormationsMap({
   latitude: number;
   longitude: number;
   etablissements: any[];
-  selected?: Formation | null;
+  selected?: FormationDetail | null;
   onMarkerClick?: (etablissement: Etablissement) => void;
 }) {
   const groupRef = useRef<L.FeatureGroup>(null);
@@ -35,15 +35,18 @@ export default function FormationsMap({
       <FeatureGroup ref={groupRef}>
         {etablissements.map((etablissement: Etablissement) => {
           const key = `marker_${etablissement.uai}`;
-          const coordinate = etablissement.coordinate.coordinates;
           const isSelected = selected?.etablissement.uai === etablissement.uai;
+
+          if (!etablissement.latitude || !etablissement.longitude) {
+            return null;
+          }
 
           return (
             <Marker
               icon={isSelected ? LeafletSelectedEtablissementIcon : LeafletEtablissementIcon}
               zIndexOffset={isSelected ? 10500 : 0}
               key={key}
-              position={[coordinate[1], coordinate[0]]}
+              position={[etablissement.latitude, etablissement.longitude]}
               bubblingMouseEvents={false}
               eventHandlers={{
                 click: (e) => {
