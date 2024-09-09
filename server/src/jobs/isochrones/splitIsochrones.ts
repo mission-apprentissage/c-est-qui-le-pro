@@ -56,7 +56,6 @@ export async function splitIsochrones({
   const db = new Kysely({ dialect });
 
   await oleoduc(
-    //Readable.from(files.slice(0, 1)),
     Readable.from(files),
     // Verify file for each buckets
     transformData(async (file) => {
@@ -70,64 +69,64 @@ export async function splitIsochrones({
       }
     }),
     filterData((d) => d),
-    transformData(async ({ uai, data }) => {
-      const result = await db
-        .selectFrom((eb) => {
-          return db
-            .selectNoFrom((eb) => {
-              return data.map(({ geometry, bucket }) => {
-                return kyselyChainFn(
-                  eb,
-                  [
-                    { fn: "ST_GeomFromGeoJSON", args: [] },
-                    { fn: "ST_Buffer", args: [eb.val(bufferPrecision)] },
-                    { fn: "ST_Simplify", args: [eb.val(simplifyPrecision), eb.val(true)] },
-                    { fn: "ST_MakeValid", args: [eb.val("method=structure")] },
-                  ],
-                  sql`${geometry}`
-                ).as(bucket.toString());
-              });
-            })
-            .as("buckets");
-        })
-        .select(({ eb, fn }) => {
-          return data.map(({ bucket }, index) => {
-            return kyselyChainFn(
-              eb,
-              [
-                ...(index < data.length - 1
-                  ? [
-                      {
-                        fn: "ST_Difference",
-                        args: [`buckets.${data[index + 1].bucket}`],
-                      },
-                    ]
-                  : []),
-                { fn: "ST_Subdivide", args: [eb.val(divideMaxVertices)] },
-                { fn: "ST_AsGeoJSON", args: [] },
-              ],
-              `buckets.${bucket}`
-            ).as(bucket.toString());
-          });
-        })
-        .execute();
-      return { result, uai };
-    }),
-    writeData(
-      async ({ result, uai }) => {
-        for (const index in result) {
-          const r = result[index];
-          for (const bucket of Object.keys(r)) {
-            if (!r[bucket]) {
-              continue;
-            }
-            await fs.promises.writeFile(path.join(output, bucket, `${uai}_${index.padStart(4, "0")}.json`), r[bucket]);
-          }
-        }
-        logger.info(`Découpage et simplification de ${uai} fini.`);
+    transformData(
+      async ({ uai, data }) => {
+        const result = await db
+          .selectFrom((eb) => {
+            return db
+              .selectNoFrom((eb) => {
+                return data.map(({ geometry, bucket }) => {
+                  return kyselyChainFn(
+                    eb,
+                    [
+                      { fn: "ST_GeomFromGeoJSON", args: [] },
+                      { fn: "ST_Buffer", args: [eb.val(bufferPrecision)] },
+                      { fn: "ST_Simplify", args: [eb.val(simplifyPrecision), eb.val(true)] },
+                      { fn: "ST_MakeValid", args: [eb.val("method=structure")] },
+                    ],
+                    sql`${geometry}`
+                  ).as(bucket.toString());
+                });
+              })
+              .as("buckets");
+          })
+          .select(({ eb, fn }) => {
+            return data.map(({ bucket }, index) => {
+              return kyselyChainFn(
+                eb,
+                [
+                  ...(index < data.length - 1
+                    ? [
+                        {
+                          fn: "ST_Difference",
+                          args: [`buckets.${data[index + 1].bucket}`],
+                        },
+                      ]
+                    : []),
+                  { fn: "ST_Subdivide", args: [eb.val(divideMaxVertices)] },
+                  { fn: "ST_AsGeoJSON", args: [] },
+                ],
+                `buckets.${bucket}`
+              ).as(bucket.toString());
+            });
+          })
+          .execute();
+        return { result, uai };
       },
       { parallel: 10 }
-    )
+    ),
+    writeData(async ({ result, uai }) => {
+      for (const index in result) {
+        const r = result[index];
+        for (const bucket of Object.keys(r)) {
+          if (!r[bucket]) {
+            continue;
+          }
+          await fs.promises.writeFile(path.join(output, bucket, `${uai}_${index.padStart(4, "0")}.json`), r[bucket]);
+        }
+      }
+      logger.info(`Découpage et simplification de ${uai} fini.`);
+    })
   );
 
   await db.destroy();

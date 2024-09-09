@@ -104,7 +104,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
       point: `${latitude},${longitude}`,
       departureTime: getRouteDate(),
       buckets: buckets.filter((b) => b <= timeLimit),
-      reverse_flow: true,
+      reverse_flow: false,
     };
 
     isochroneBuckets = await Cache.getOrSet(JSON.stringify(graphHopperParameter), () =>

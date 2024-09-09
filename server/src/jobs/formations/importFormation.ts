@@ -59,14 +59,50 @@ async function importFromBcnAndOnisep() {
     filterData(({ data }) => {
       return !isNil(data?.diplome?.code) ? ["3", "4"].includes(data.diplome.code) : false;
     }),
+    // Keep only last year mef when type is mef
+    filterData(async ({ data }) => {
+      const { type, code_certification } = data;
+      if (type !== "mef") {
+        return true;
+      }
+
+      const bcnMef = (
+        await RawDataRepository.first(RawDataType.BCN_MEF, {
+          mef_stat_11: code_certification,
+        })
+      )?.data as RawData[RawDataType.BCN_MEF];
+
+      // Keep mef not foud
+      if (!bcnMef) {
+        return true;
+      }
+
+      const bcnMefLastYear = (
+        await RawDataRepository.first(RawDataType.BCN_MEF, {
+          formation_diplome: bcnMef.formation_diplome,
+          dispositif_formation: bcnMef.dispositif_formation,
+          annee_dispositif: bcnMef.duree_dispositif,
+        })
+      )?.data as RawData[RawDataType.BCN_MEF];
+
+      // Keep last year mef not foud
+      if (!bcnMefLastYear) {
+        return true;
+      }
+
+      return bcnMefLastYear.mef_stat_11 == code_certification;
+    }),
     writeData(
       async ({ data: bcn }) => {
         const { code_formation_diplome, type, code_certification, libelle_long } = bcn;
 
         const bcnMef =
           type === "mef"
-            ? ((await RawDataRepository.first(RawDataType.BCN_MEF, { mef_stat_11: code_certification }))
-                ?.data as RawData[RawDataType.BCN_MEF])
+            ? ((
+                await RawDataRepository.first(RawDataType.BCN_MEF, {
+                  mef_stat_11: code_certification,
+                })
+              )?.data as RawData[RawDataType.BCN_MEF])
             : null;
 
         const formationInitiale = await getFormationInitialeWithContinuum(bcn);
