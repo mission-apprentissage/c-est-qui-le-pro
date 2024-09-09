@@ -22,7 +22,7 @@ function formatAccessTime(time: number) {
   return <>À moins de {(time / 60).toFixed(0)} minutes</>;
 }
 
-export default function FormationCard({
+export default React.memo(function FormationCard({
   latitude,
   longitude,
   formationDetail,
@@ -97,4 +97,4 @@ export default function FormationCard({
       <TagPortesOuvertes etablissement={etablissement} />
     </Card>
   );
-}
+});
