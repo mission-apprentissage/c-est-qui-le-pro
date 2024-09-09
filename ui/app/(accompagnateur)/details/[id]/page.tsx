@@ -67,7 +67,7 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
           xs={12}
           css={css`
             ${theme.breakpoints.up("md")} {
-              top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + ${fr.spacing("3v")})` : 0};
+              top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 1.5rem)` : 0};
               position: sticky;
             }
             background-color: #fff;
