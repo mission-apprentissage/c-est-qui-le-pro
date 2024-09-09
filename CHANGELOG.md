@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.0.0...v1.1.0) (2024-09-09)
+
+
+### Features
+
+* typescript et précalcule des isochrones ([#4](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/4)) ([f4fda5d](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f4fda5d4f4d33f4b1899a1d88cfc7a9c2e8c6a18))
+
 # 1.0.0 (2024-08-21)
 
 
