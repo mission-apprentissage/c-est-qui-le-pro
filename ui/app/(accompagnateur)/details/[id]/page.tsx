@@ -211,9 +211,26 @@ function FormationDetails({ formationDetail }: { formationDetail: FormationDetai
                     Ai-je le droit à une aide ?
                   </Typography>
                   <ul style={{ listStyleType: "none", paddingLeft: 0, margin: 0 }}>
-                    <li>① Rapprochez-vous de l’assistant.e social.e du collège</li>
-                    <li>② Consultez les bourses de lycées</li>
-                    <li>③ Consultez les allocations de rentrée scolaire</li>
+                    <li>
+                      ① Rapprochez-vous de <b>l’assistant.e social.e du collège</b>
+                    </li>
+                    <li>
+                      ② Consultez les{" "}
+                      <b>
+                        {" "}
+                        <a href="https://www.education.gouv.fr/les-bourses-de-college-et-de-lycee-326728">
+                          bourses de lycées
+                        </a>
+                      </b>
+                    </li>
+                    <li>
+                      ③ Consultez les{" "}
+                      <b>
+                        <a href="https://www.education.gouv.fr/les-aides-financieres-au-lycee-7511#:~:text=Au%20lyc%C3%A9e%2C%20votre%20enfant%20peut,enfant%20est%20votre%20principal%20interlocuteur.">
+                          allocations de rentrée scolaire
+                        </a>
+                      </b>
+                    </li>
                   </ul>
                   <Highlight style={{ marginLeft: 0, marginTop: "2rem" }}>
                     Des questions sur les demandes de bourse de collège ?<br />
