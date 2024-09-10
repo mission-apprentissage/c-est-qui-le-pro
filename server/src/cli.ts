@@ -113,6 +113,13 @@ cli
   });
 
 cli
+  .command("computeTags")
+  .description("Calcule les tags de formations")
+  .action(() => {
+    runScript(computeFormationTag);
+  });
+
+cli
   .command("importAll")
   .description("Effectue toute les taches d'importations et de calculs des données")
   .action(() => {
