@@ -15,15 +15,14 @@ const logger = getLoggerWithContext("import");
 
 const COMPUTE_FORMATION_TAG = {
   inserjeunes: {
-    tags: [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT, FORMATION_TAG.POUR_CONTINUER_DES_ETUDES],
+    tags: [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT],
     compute: async (
       formation,
-      { thresholdEnEmploi, thresholdEnEtude } = {
+      { thresholdEnEmploi } = {
         thresholdEnEmploi: THRESHOLD_EN_EMPLOI[0],
-        thresholdEnEtude: THRESHOLD_EN_ETUDE[0],
       }
     ) => {
-      return computeInserJeunesTag(formation, { thresholdEnEmploi, thresholdEnEtude });
+      return computeInserJeunesTag(formation, { thresholdEnEmploi });
     },
   },
   indicateurEntree: {

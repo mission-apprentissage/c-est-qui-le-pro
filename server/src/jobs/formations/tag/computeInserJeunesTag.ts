@@ -7,13 +7,12 @@ const logger = getLoggerWithContext("import");
 
 export async function computeInserJeunesTag(
   formationEtablissement,
-  { thresholdEnEmploi = null, thresholdEnEtude = null } = {
+  { thresholdEnEmploi = null } = {
     thresholdEnEmploi: null,
-    thresholdEnEtude: null,
   }
 ) {
-  if (isNil(thresholdEnEmploi) || isNil(thresholdEnEtude)) {
-    logger.error("Seuil en emploi ou en étude non défini");
+  if (isNil(thresholdEnEmploi)) {
+    logger.error("Seuil en emploi  non défini");
     return null;
   }
 
@@ -33,6 +32,5 @@ export async function computeInserJeunesTag(
     ...(indicateurPoursuite.taux_en_emploi_6_mois >= thresholdEnEmploi
       ? [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT]
       : []),
-    ...(indicateurPoursuite.taux_en_formation >= thresholdEnEtude ? [FORMATION_TAG.POUR_CONTINUER_DES_ETUDES] : []),
   ];
 }
