@@ -27,29 +27,52 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     );
   }
 
-  _base() {
+  _base({ withPoursuite } = { withPoursuite: false }) {
     return <T extends SelectQueryBuilder<DB, "formation", {}>>(eb: T) => {
-      return eb.leftJoinLateral(
-        (eb) =>
-          eb
-            .selectFrom("formationDomaine")
-            .innerJoin("domaine", "domaine.id", "formationDomaine.domaineId")
-            .select((eb) => {
-              return [
-                kyselyChainFn(
-                  eb,
-                  [
-                    { fn: "to_jsonb", args: [] },
-                    { fn: "json_agg", args: [] },
-                  ],
-                  sql`domaine.*`
-                ).as("domaine"),
-              ];
-            })
-            .whereRef("formation.id", "=", "formationDomaine.formationId")
-            .as("domaine"),
-        (join) => join.on(sql`true`)
-      );
+      return eb
+        .leftJoinLateral(
+          (eb) =>
+            eb
+              .selectFrom("formationDomaine")
+              .innerJoin("domaine", "domaine.id", "formationDomaine.domaineId")
+              .select((eb) => {
+                return [
+                  kyselyChainFn(
+                    eb,
+                    [
+                      { fn: "to_jsonb", args: [] },
+                      { fn: "json_agg", args: [] },
+                    ],
+                    sql`domaine.*`
+                  ).as("domaine"),
+                ];
+              })
+              .whereRef("formation.id", "=", "formationDomaine.formationId")
+              .as("domaine"),
+          (join) => join.on(sql`true`)
+        )
+        .$if(withPoursuite, (eb) =>
+          eb.leftJoinLateral(
+            (eb) =>
+              eb
+                .selectFrom("formationPoursuite")
+                .select((eb) => {
+                  return [
+                    kyselyChainFn(
+                      eb,
+                      [
+                        { fn: "to_jsonb", args: [] },
+                        { fn: "json_agg", args: [] },
+                      ],
+                      sql`"formationPoursuite".*`
+                    ).as("formationPoursuite"),
+                  ];
+                })
+                .whereRef("formation.id", "=", "formationPoursuite.formationId")
+                .as("formationPoursuite"),
+            (join) => join.on(sql`true`)
+          )
+        );
     };
   }
 
@@ -73,7 +96,10 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
   }
 
   getKeyRelationAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
-    return [`domaine as ${this.tableName}.domaine` as AnyAliasedColumn<DB, T>];
+    return [
+      `domaine as ${this.tableName}.domaine` as AnyAliasedColumn<DB, T>,
+      `formationPoursuite as ${this.tableName}.formationPoursuite` as AnyAliasedColumn<DB, T>,
+    ];
   }
 }
 

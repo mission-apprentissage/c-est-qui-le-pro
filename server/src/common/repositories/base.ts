@@ -79,7 +79,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     });
   }
 
-  _base() {
+  _base(options: any) {
     throw new Error("Base repository not implemented for this repository");
   }
 }

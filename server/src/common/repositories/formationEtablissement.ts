@@ -42,7 +42,13 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       .innerJoinLateral(
         (eb) =>
           eb
-            .selectFrom(eb.selectFrom("formation").$call(FormationRepository._base()).selectAll().as("formation"))
+            .selectFrom(
+              eb
+                .selectFrom("formation")
+                .$call(FormationRepository._base({ withPoursuite: true }))
+                .selectAll()
+                .as("formation")
+            )
             .selectAll()
             .whereRef("formationEtablissement.formationId", "=", "formation.id")
             .as("formation"),

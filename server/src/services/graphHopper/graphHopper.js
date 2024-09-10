@@ -1,6 +1,6 @@
 import * as turf from "@turf/turf";
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
-import config from "#src/config.js";
+import config from "#src/config.ts";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
 import { require } from "#src/common/utils/esmUtils.js";
 import path from "path";
@@ -116,38 +116,7 @@ class GraphHopperApi extends RateLimitedApi {
   async fetchIsochronePTBuckets({ point, departureTime = new Date(), reverse_flow = false, buckets = [1800] }) {
     // GraphHopper does not support buckets for public transportation
     // We request the isochrone API with different duration
-
-    //const timePart = timeLimit / buckets;
-
     const times = buckets.sort((a, b) => b - a);
-    //  new Array(buckets)
-    //   .fill(0)
-    //   .map((v, index) => (index + 1) * timePart)
-    //   .reverse();
-    // const geometries = [];
-    // for (const time of times) {
-    //   // if (time === 3600) {
-    //   //   const geometry = JSON.parse(fs.readFileSync(getDirname(import.meta.url) + "/a.json"));
-    //   //   geometries.push({
-    //   //     time,
-    //   //     feature: geometry.polygons[0],
-    //   //   });
-    //   // }
-
-    //   // if (time === 1800) {
-    //   //   const geometry = JSON.parse(fs.readFileSync(getDirname(import.meta.url) + "/b.json"));
-    //   //   geometries.push({
-    //   //     time,
-    //   //     feature: geometry.polygons[0],
-    //   //   });
-    //   // }
-    //   const geometry = await this.fetchIsochrone({ point, departureTime, timeLimit: time, reverse_flow });
-    //   geometries.push({
-    //     time,
-    //     feature: geometry.polygons[0],
-    //   });
-    // }
-
     const geometries = await Promise.all(
       times.map(async (time) => {
         const geometry = await this.fetchIsochrone({ point, departureTime, timeLimit: time, reverse_flow });
@@ -163,32 +132,11 @@ class GraphHopperApi extends RateLimitedApi {
 
         return {
           ...value,
-          //feature: turf.simplify(value.feature, options),
-          //feature: this.buffer(value.feature),
-          // feature: await geotoolbox.union(
-          //   await geotoolbox.buffer(value.feature, { dist: 0.1, quadsegs: 2, merge: true })
-          // ),
+
           feature: await geotoolbox.buffer(value.feature, { dist: 0.1, quadsegs: 2, merge: true }),
         };
       })
     );
-
-    // geometriesBuffer = await Promise.all(
-    //   geometriesBuffer.map(async (value, index) => {
-    //     if (!geometriesBuffer[index + 1]) {
-    //       return value;
-    //     }
-
-    //     return {
-    //       ...value,
-    //       feature: await geotoolbox.clip(value.feature, {
-    //         buffer: 0,
-    //         reverse: true,
-    //         clip: geometriesBuffer[index + 1].feature,
-    //       }),
-    //     };
-    //   })
-    // );
 
     const geometriesDiff = geometriesBuffer.map((value) => {
       //convert featureCollection (not support in geo query in mongodb) to geometryCollection

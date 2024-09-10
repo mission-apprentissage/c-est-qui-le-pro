@@ -58,6 +58,12 @@ type IndicateurPoursuite = {
   taux_autres_6_mois?: number;
 };
 
+type FormationPoursuite = {
+  type?: string;
+  libelle: string;
+  onisepId?: string;
+};
+
 export type FormationEtablissement = {
   id: string;
   duree?: string;
@@ -79,6 +85,7 @@ export type Formation = {
   mef11?: string;
   codeDiplome?: string;
   codeRncp?: string;
+  formationPoursuite?: FormationPoursuite[];
 };
 
 type JourneesPortesOuverteDate = {

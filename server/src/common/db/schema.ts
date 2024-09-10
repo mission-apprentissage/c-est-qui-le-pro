@@ -100,6 +100,15 @@ export interface FormationEtablissement {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface FormationPoursuite {
+  createdAt: Generated<Timestamp>;
+  formationId: string;
+  libelle: string;
+  onisepId: string | null;
+  type: string | null;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface GeographyColumns {
   coord_dimension: number | null;
   f_geography_column: string | null;
@@ -187,6 +196,7 @@ export interface DB {
   formation: Formation;
   formationDomaine: FormationDomaine;
   formationEtablissement: FormationEtablissement;
+  formationPoursuite: FormationPoursuite;
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   indicateurEntree: IndicateurEntree;

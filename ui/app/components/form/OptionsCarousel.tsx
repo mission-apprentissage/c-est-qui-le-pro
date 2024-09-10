@@ -71,25 +71,22 @@ export default function OptionsCarousel<T>({
     setCurrentIndex(index);
   }, []);
 
-  const handleScroll = useCallback(
-    (event: React.UIEvent<HTMLElement>) => {
-      const target = event.target as HTMLElement;
-      if (!target) {
-        return;
-      }
+  const handleScroll = useCallback((event: React.UIEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement;
+    if (!target) {
+      return;
+    }
 
-      const { scrollLeft, scrollWidth, offsetWidth } = target;
-      setIsScrollMax(scrollLeft === 0 ? -1 : scrollLeft + offsetWidth === scrollWidth ? 1 : 0);
-    },
-    [refContainer]
-  );
+    const { scrollLeft, scrollWidth, offsetWidth } = target;
+    setIsScrollMax(scrollLeft === 0 ? -1 : scrollLeft + offsetWidth === scrollWidth ? 1 : 0);
+  }, []);
 
   useEffect(() => {
     if (!isLoaded) {
       scollToCb(currentIndex);
       setIsLoaded(true);
     }
-  }, [currentIndex, isLoaded]);
+  }, [currentIndex, isLoaded, scollToCb]);
 
   return (
     <Box style={{ display: "flex", position: "relative" }}>

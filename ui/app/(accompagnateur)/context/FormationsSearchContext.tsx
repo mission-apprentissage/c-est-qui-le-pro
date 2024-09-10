@@ -41,7 +41,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
       const urlSearchParams = paramsToString(params);
       router.push(`?${urlSearchParams}`);
     },
-    [router, params]
+    [router]
   );
 
   return (

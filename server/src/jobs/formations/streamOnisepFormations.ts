@@ -1,6 +1,7 @@
 import { transformData, compose, filterData, transformIntoStream } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
+import { urlOnisepToId } from "#src/services/onisep/utils";
 import { formatDuree } from "./importFormationEtablissement.js";
 import { Readable } from "stream";
 
@@ -94,7 +95,7 @@ export async function streamOnisepFormations({ stats }) {
       stats.total++;
 
       const urlOnisep = data.data.for_url_et_id_onisep;
-      const idOnisep = urlOnisep.match(/FOR\.[0-9]+/)[0];
+      const idOnisep = urlOnisepToId(urlOnisep);
 
       const cfd = await getCfd(idOnisep, urlOnisep);
       if (!cfd) {

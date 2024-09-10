@@ -9,6 +9,7 @@ import EtablissementRepository from "#src/common/repositories/etablissement";
 import { DB, Etablissement, Formation, FormationEtablissement } from "#src/common/db/schema.js";
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
+import config from "#src/config";
 
 const logger = getLoggerWithContext("query");
 
@@ -27,6 +28,9 @@ export function buildFilterTag(eb, tag) {
 }
 
 export function getRouteDate() {
+  if (config.features.graphhopper.useStaticDate) {
+    return moment("2024-09-09").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
+  }
   return moment().startOf("isoWeek").add(1, "week").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
 }
 

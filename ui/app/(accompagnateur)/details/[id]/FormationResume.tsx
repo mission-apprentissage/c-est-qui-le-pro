@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React from "react";
-import { Typography, Grid, Stack } from "#/app/components/MaterialUINext";
+import { useCallback } from "react";
+import { Typography, Grid, Stack, Box } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail, FormationEtablissement } from "#/types/formation";
@@ -13,26 +13,67 @@ import {
 } from "#/app/(accompagnateur)/constants/constants";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
+
 function FormationResumeBlock({
   title,
   icon,
   children,
+  anchor,
 }: {
   title: string;
   icon: FrCxArg;
   children?: JSX.Element | JSX.Element[];
+  anchor?: string;
 }) {
+  const { push } = useRouter();
+  const anchorCb = useCallback(() => {
+    if (!anchor) {
+      return;
+    }
+    push("#" + anchor, { scroll: false });
+  }, [anchor, push]);
+
   return (
-    <>
-      <Typography variant={"body1"} style={{ marginBottom: fr.spacing("4v") }}>
-        <i className={fr.cx(icon)} style={{ marginRight: fr.spacing("1w") }} />
-        {title}
-      </Typography>
+    <Box
+      onClick={anchorCb}
+      css={
+        anchor
+          ? css`
+              cursor: pointer;
+              :hover .resumeUnderline {
+                display: block;
+              }
+            `
+          : null
+      }
+    >
+      <Box
+        css={css`
+          display: inline-block;
+          margin-bottom: 0.8rem;
+        `}
+      >
+        <Typography variant={"body1"}>
+          <i className={fr.cx(icon)} style={{ marginRight: fr.spacing("1w") }} />
+          {title}
+        </Typography>
+        {anchor && (
+          <Box
+            className="resumeUnderline"
+            css={css`
+              display: none;
+              border-top: 3px solid black;
+              margin-top: 0.25rem;
+            `}
+          ></Box>
+        )}
+      </Box>
 
       <Stack direction={{ sm: "column", md: "column" }} spacing={{ xs: fr.spacing("2v"), sm: fr.spacing("2v") }}>
         {children}
       </Stack>
-    </>
+    </Box>
   );
 }
 
@@ -48,7 +89,7 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-line"}>
+    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-line"} anchor="l-admission">
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -93,7 +134,7 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'accès à l'emploi"} icon={"ri-briefcase-4-line"}>
+    <FormationResumeBlock title={"L'accès à l'emploi"} icon={"ri-briefcase-4-line"} anchor="acces-emploi">
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -138,7 +179,7 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
       : "hard";
 
   return (
-    <FormationResumeBlock title={"La poursuite d'études"} icon={"ri-sun-line"}>
+    <FormationResumeBlock title={"La poursuite d'études"} icon={"ri-sun-line"} anchor={"poursuite-etudes"}>
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -190,7 +231,7 @@ export default function FormationResume({
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"}>
+          <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"} anchor="la-formation">
             {formation.voie === "scolaire" ? (
               <Tag square variant="purple-light">
                 Surtout en classe

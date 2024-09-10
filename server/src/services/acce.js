@@ -2,7 +2,7 @@ import { compose } from "oleoduc";
 import iconv from "iconv-lite";
 import { parseCsv } from "#src/common/utils/csvUtils.js";
 import { createReadStream } from "fs";
-import config from "#src/config.js";
+import config from "#src/config.ts";
 
 export function etablissements(filePath = null) {
   const stream = compose(

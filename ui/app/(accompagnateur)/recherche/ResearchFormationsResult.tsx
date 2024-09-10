@@ -2,7 +2,7 @@
 "use client";
 import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { css } from "@emotion/react";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useInView } from "react-intersection-observer";
 import { Typography, Grid } from "../../components/MaterialUINext";
 import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
@@ -61,12 +61,12 @@ function FormationResult({
   setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
   index: number;
 }) {
-  const { formation, formationEtablissement, etablissement } = formationDetail;
+  const { formationEtablissement } = formationDetail;
   const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
 
   const cb = useCallback(() => {
     setSelected(formationDetail);
-  }, [formationDetail]);
+  }, [formationDetail, setSelected]);
 
   return (
     <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
@@ -103,6 +103,7 @@ export default function ResearchFormationsResult({
 }) {
   const theme = useTheme();
   const [selected, setSelected] = useState<null | FormationDetail>(null);
+  const { ref: refInView, inView } = useInView();
 
   const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements } = useGetFormations({
     latitude,
@@ -114,7 +115,11 @@ export default function ResearchFormationsResult({
     domaine,
   });
 
-  useBottomScrollListener(fetchNextPage);
+  React.useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView]);
 
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
@@ -244,6 +249,7 @@ export default function ResearchFormationsResult({
           )}
         </Grid>
       </Grid>
+      <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
     </>
   );

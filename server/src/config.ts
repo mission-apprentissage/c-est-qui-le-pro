@@ -11,6 +11,12 @@ const config = {
     destinations: env.get("ACCOMPAGNATEUR_LOG_DESTINATIONS").default("stdout").asArray(),
   },
   slackWebhookUrl: env.get("ACCOMPAGNATEUR_SLACK_WEBHOOK_URL").asString(),
+  features: {
+    graphhopper: {
+      // Use static date for now
+      useStaticDate: true,
+    },
+  },
   pgsql: {
     uri: env
       .get("ACCOMPAGNATEUR_POSTGRES_URI")
