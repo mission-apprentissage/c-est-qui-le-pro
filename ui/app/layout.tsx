@@ -1,4 +1,3 @@
-import PlausibleProvider from "next-plausible";
 import RootLayout from "./components/RootLayout";
 import Layout from "./components/Layout";
 import Header from "#/app/components/Header";
@@ -14,14 +13,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
     <RootLayout>
       <>
         <Title />
-        <Layout
-          header={
-            <PlausibleProvider domain={process.env.NEXT_PUBLIC_DOMAIN || ""} trackOutboundLinks={true} hash={true}>
-              <Header title={title} tagline={tagline} />
-            </PlausibleProvider>
-          }
-          title={title}
-        >
+        <Layout header={<Header title={title} tagline={tagline} />} title={title}>
           <>
             {children}
             <ConsentBannerAndConsentManagement />
