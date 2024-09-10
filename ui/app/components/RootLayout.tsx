@@ -41,7 +41,7 @@ export default function RootLayout({ title, children }: { title?: string; childr
         <PlausibleProvider
           domain={process.env.NEXT_PUBLIC_DOMAIN || ""}
           trackOutboundLinks={true}
-          hash={true}
+          taggedEvents={true}
         ></PlausibleProvider>
       </head>
       <body

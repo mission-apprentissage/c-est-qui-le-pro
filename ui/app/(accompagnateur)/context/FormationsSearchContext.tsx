@@ -1,8 +1,9 @@
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { FormationDomaine, FormationTag } from "#/types/formation";
+import { usePlausible } from "next-plausible";
 import { useRouter, useSearchParams } from "next/navigation";
-import { createContext, useContext, useCallback } from "react";
+import { createContext, useContext, useCallback, useEffect } from "react";
 
 type FormationsSearchParams = {
   address: string;
@@ -23,6 +24,7 @@ const FormationsSearchContext = createContext<{
 });
 
 const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) => {
+  const plausible = usePlausible();
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = searchParamsToObject(
@@ -30,6 +32,14 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
     { address: null, distance: 0, time: null, tag: null, domaine: null },
     schemaFormation
   );
+
+  useEffect(() => {
+    plausible("recherche", {
+      props: {
+        ...params,
+      },
+    });
+  }, [searchParams]);
 
   const getUrlParams = useCallback(() => {
     const urlSearchParams = paramsToString(params);
