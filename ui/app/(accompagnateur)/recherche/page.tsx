@@ -20,11 +20,7 @@ function ResearchFormationsParameter() {
   const { params, updateParams } = useFormationsSearch();
   const { address, distance = 0, time = 15, tag, domaine } = params ?? {};
 
-  const {
-    data: coordinate,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: 0,
@@ -40,9 +36,13 @@ function ResearchFormationsParameter() {
         throw new ErrorAddressInvalid();
       }
 
-      return addressCoordinate.features[0].geometry.coordinates;
+      return {
+        coordinate: addressCoordinate.features[0].geometry.coordinates,
+        city: addressCoordinate.features[0].properties.city,
+      };
     },
   });
+  const { coordinate, city } = data || {};
 
   if (!params) {
     return null;
@@ -110,6 +110,7 @@ function ResearchFormationsParameter() {
         <ResearchFormationsResult
           longitude={coordinate[0]}
           latitude={coordinate[1]}
+          city={city}
           distance={distance * 1000}
           time={time * 60}
           tag={tag}

@@ -87,6 +87,7 @@ function FormationResult({
 export default function ResearchFormationsResult({
   latitude,
   longitude,
+  city,
   distance,
   time,
   tag,
@@ -95,6 +96,7 @@ export default function ResearchFormationsResult({
 }: {
   latitude: number;
   longitude: number;
+  city: string;
   distance: number;
   time: number;
   tag?: FormationTag | null;
@@ -105,7 +107,7 @@ export default function ResearchFormationsResult({
   const [selected, setSelected] = useState<null | FormationDetail>(null);
   const { ref: refInView, inView } = useInView();
 
-  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements } = useGetFormations({
+  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
     latitude,
     longitude,
     distance,
@@ -228,6 +230,12 @@ export default function ResearchFormationsResult({
             </InformationCard>
           ) : (
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6">
+                  {city} : {pagination?.total} formations
+                </Typography>
+              </Grid>
+
               {formations.map((formationDetail, index) => {
                 const { formation, formationEtablissement, etablissement } = formationDetail;
                 const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
