@@ -15,6 +15,7 @@ import { capitalize } from "lodash-es";
 import { FormationDomaine } from "#/types/formation";
 import { FORMATION_DOMAINE } from "#/app/services/formation";
 import OptionsCarousel from "#/app/components/form/OptionsCarousel";
+import { myPosition } from "#/app/components/form/AddressField";
 
 function ResearchFormationsParameter() {
   const { params, updateParams } = useFormationsSearch();
@@ -38,7 +39,7 @@ function ResearchFormationsParameter() {
 
       return {
         coordinate: addressCoordinate.features[0].geometry.coordinates,
-        city: addressCoordinate.features[0].properties.city,
+        city: address === myPosition ? myPosition : addressCoordinate.features[0].properties.city,
       };
     },
   });
