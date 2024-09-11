@@ -252,10 +252,10 @@ export default function FormationResume({
           <FormationResumeBlockAdmission formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
         </Grid>
       </Grid>
     </Container>
