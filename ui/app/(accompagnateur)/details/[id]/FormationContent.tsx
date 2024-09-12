@@ -36,7 +36,7 @@ export default function FormationContent({ formationDetail }: { formationDetail:
   useScrollToLocation();
 
   return (
-    <Container style={{ marginTop: fr.spacing("5v") }} maxWidth={"xl"}>
+    <Container style={{ marginTop: fr.spacing("5v"), marginBottom: "9.375rem" }} maxWidth={"xl"}>
       <Grid container>
         <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
         <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>

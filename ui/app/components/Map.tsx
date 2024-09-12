@@ -36,7 +36,7 @@ export const LeafletSelectedEtablissementIcon = new DivIcon({
   iconSize: [58, 64],
   iconAnchor: [29, 64],
   popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-grey leaflet-icon-selected",
+  className: "custom-leaflet-icon color-orange leaflet-icon-selected",
   html: renderToString(<EtablissementIcon />),
 });
 

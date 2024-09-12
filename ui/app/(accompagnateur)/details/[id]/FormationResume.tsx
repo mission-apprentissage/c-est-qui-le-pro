@@ -42,7 +42,7 @@ function FormationResumeBlock({
           ? css`
               cursor: pointer;
               :hover .resumeUnderline {
-                display: block;
+                opacity: 100;
               }
             `
           : null
@@ -62,9 +62,9 @@ function FormationResumeBlock({
           <Box
             className="resumeUnderline"
             css={css`
-              display: none;
               border-top: 3px solid black;
               margin-top: 0.25rem;
+              opacity: 0;
             `}
           ></Box>
         )}
@@ -89,12 +89,17 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-line"} anchor="l-admission">
+    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-check-line"} anchor="l-admission">
       <>
         {admissionLevel === "easy" && (
-          <Tag square level="easy">
-            Facile
-          </Tag>
+          <>
+            <Tag square level="easy">
+              Facile
+            </Tag>
+            <Tag square level="easy">
+              Nombreuses places
+            </Tag>
+          </>
         )}
       </>
       <>
@@ -114,7 +119,7 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
       <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
-            Difficulté d’intégration inconnue
+            Difficulté d&apos;admission inconnue
           </Tag>
         )}
       </>

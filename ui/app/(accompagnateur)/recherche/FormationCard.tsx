@@ -78,13 +78,13 @@ export default React.memo(function FormationCard({
       <Grid container>
         <Grid item xs={10}>
           {etablissement.accessTime ? (
-            <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
+            <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
               <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
               {formatAccessTime(etablissement.accessTime)}
             </Typography>
           ) : (
             etablissement.distance && (
-              <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
+              <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                 <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
                 {(etablissement.distance / 1000).toFixed(2)} km
               </Typography>

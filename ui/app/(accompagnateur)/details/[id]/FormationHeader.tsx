@@ -11,7 +11,7 @@ import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
 import PortesOuvertesHeader from "./PortesOuvertesHeader";
 import FormationResume from "./FormationResume";
-import { TagStatut, TagDuree } from "#/app/components/Tag";
+import { TagStatutPublic, TagStatutPrive, TagDuree } from "#/app/components/Tag";
 import { useSize } from "#/app/(accompagnateur)/hooks/useSize";
 import { modalMinistage } from "#/app/(accompagnateur)/components/DialogMinistage";
 import FormationRoute from "./FormationRoute";
@@ -43,6 +43,20 @@ export default function FormationHeader({
       <Grid item xs={12}>
         <PortesOuvertesHeader etablissement={etablissement} />
       </Grid>
+      <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v"), marginBottom: fr.spacing("3v") }}>
+        <Stack spacing={1} direction={"row"}>
+          {etablissement.statut &&
+            (etablissement.statut === "public" ? (
+              <TagStatutPublic square>{etablissement.statut.toUpperCase()}</TagStatutPublic>
+            ) : (
+              <TagStatutPrive square>{etablissement.statut.toUpperCase()}</TagStatutPrive>
+            ))}
+          {formationEtablissement.duree && (
+            <TagDuree square>{`En ${formationEtablissement.duree}`.toUpperCase()}</TagDuree>
+          )}
+          <TagApprentissage formation={formation} />
+        </Stack>
+      </Grid>
       <Grid
         item
         xs={12}
@@ -71,15 +85,6 @@ export default function FormationHeader({
         `}
       >
         <Grid container>
-          <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v"), marginBottom: fr.spacing("3v") }}>
-            <Stack spacing={1} direction={"row"}>
-              {etablissement.statut && <TagStatut square>{etablissement.statut.toUpperCase()}</TagStatut>}
-              {formationEtablissement.duree && (
-                <TagDuree square>{`En ${formationEtablissement.duree}`.toUpperCase()}</TagDuree>
-              )}
-              <TagApprentissage formation={formation} />
-            </Stack>
-          </Grid>
           <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("5v") }}>
             <Typography
               variant="h5"
@@ -135,7 +140,10 @@ export default function FormationHeader({
                     }
                   `}
                 >
-                  <Typography variant="subtitle2" style={{ color: "var(--blue-france-sun-113-625-hover)" }}>
+                  <Typography
+                    variant="subtitle2"
+                    style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
+                  >
                     <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
                     Découvrir la formation lors d’un mini-stage ⓘ
                   </Typography>

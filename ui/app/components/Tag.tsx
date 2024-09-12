@@ -51,9 +51,15 @@ const TagStyled = styled(Tag, {
   }
 `;
 
-export const TagStatut = styled(TagStyled)`
+export const TagStatutPublic = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--blue-france-sun-113-625);
+  font-weight: 700;
+`;
+
+export const TagStatutPrive = styled(TagStyled)`
+  background-color: #feebcb;
+  color: #7b341e;
   font-weight: 700;
 `;
 
