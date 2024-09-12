@@ -43,7 +43,7 @@ export default function FormationHeader({
       <Grid item xs={12}>
         <PortesOuvertesHeader etablissement={etablissement} />
       </Grid>
-      <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v"), marginBottom: fr.spacing("3v") }}>
+      <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v") }}>
         <Stack spacing={1} direction={"row"}>
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
@@ -68,7 +68,7 @@ export default function FormationHeader({
         `}
         style={{ paddingLeft: fr.spacing("5v") }}
       >
-        <Typography ref={refHeader} variant="h1" style={{ marginBottom: fr.spacing("6v") }}>
+        <Typography ref={refHeader} variant="h1" style={{ marginBottom: fr.spacing("6v"), marginTop: "0.75rem" }}>
           {capitalize(formation.libelle)}
         </Typography>
       </Grid>
