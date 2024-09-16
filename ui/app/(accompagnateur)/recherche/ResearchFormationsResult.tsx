@@ -232,7 +232,7 @@ export default function ResearchFormationsResult({
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography variant="h6">
-                  {city} : {pagination?.total} formations
+                  Proche de {city} : {pagination?.total} formations
                 </Typography>
               </Grid>
 
