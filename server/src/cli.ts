@@ -72,6 +72,7 @@ async function importFormationEtablissementCommand() {
   const importIdeoFichesFormationsStats = await importIdeoFichesFormations();
   const importRCOStats = await importRCO();
   const importFormationEtablissementStats = await importFormationEtablissement();
+  const importRCOStats = await importRCO();
   const importIndicateurEntreeStats = await importIndicateurEntree();
   const importIndicateurPoursuiteStats = await importIndicateurPoursuite();
   const computeFormationTagStats = await computeFormationTag();
