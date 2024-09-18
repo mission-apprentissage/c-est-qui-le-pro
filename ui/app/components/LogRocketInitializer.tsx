@@ -1,10 +1,14 @@
 "use client";
 import { useEffect } from "react";
 import LogRocket from "logrocket";
+import { useConsent } from "./ConsentManagement";
 
 export function LogRocketInitializer() {
+  const { finalityConsent } = useConsent();
+
   useEffect(() => {
-    process.env.NEXT_PUBLIC_LOGROCKET &&
+    finalityConsent?.analytics &&
+      process.env.NEXT_PUBLIC_LOGROCKET &&
       LogRocket.init(process.env.NEXT_PUBLIC_LOGROCKET, {
         network: {
           requestSanitizer: (request) => {
@@ -34,6 +38,6 @@ export function LogRocketInitializer() {
           },
         },
       });
-  });
+  }, [finalityConsent]);
   return null;
 }
