@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { Typography, Grid, Stack, Box } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail, FormationEtablissement } from "#/types/formation";
+import { Formation, FormationDetail, FormationEtablissement } from "#/types/formation";
 import Tag from "#/app/components/Tag";
 import {
   THRESHOLD_TAUX_PRESSION,
@@ -77,7 +77,13 @@ function FormationResumeBlock({
   );
 }
 
-function FormationResumeBlockAdmission({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+function FormationResumeBlockAdmission({
+  formationEtablissement,
+  formation,
+}: {
+  formationEtablissement: FormationEtablissement;
+  formation: Formation;
+}) {
   const tauxPression = formationEtablissement?.indicateurEntree?.tauxPression;
   const admissionLevel =
     tauxPression === undefined
@@ -117,11 +123,16 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
         )}
       </>
       <>
-        {admissionLevel === "unknow" && (
-          <Tag square level="unknow">
-            Difficulté d&apos;admission inconnue
-          </Tag>
-        )}
+        {admissionLevel === "unknow" &&
+          (formation.voie === "scolaire" ? (
+            <Tag square level="unknow">
+              Difficulté d&apos;intégration indisponible
+            </Tag>
+          ) : (
+            <Tag square level="unknow">
+              Nécessite de trouver une entreprise
+            </Tag>
+          ))}
       </>
     </FormationResumeBlock>
   );
@@ -164,7 +175,7 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
       <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
-            Taux d’emploi inconnu
+            Taux d’emploi indisponible
           </Tag>
         )}
       </>
@@ -209,7 +220,7 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
       <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
-            Taux de poursuite d’études inconnu
+            Taux de poursuite d’études indisponible
           </Tag>
         )}
       </>
@@ -238,23 +249,28 @@ export default function FormationResume({
         <Grid item xs={12} md={3}>
           <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"} anchor="la-formation">
             {formation.voie === "scolaire" ? (
-              <Tag square variant="purple-light">
-                Surtout en classe
-              </Tag>
+              <>
+                <Tag square variant="purple-light">
+                  En classe et en atelier
+                </Tag>
+                <Tag square variant="purple-light">
+                  Stage
+                </Tag>
+              </>
             ) : (
               <>
                 <Tag square variant="purple-light">
-                  Surtout en entreprise
+                  En entreprise et en classe
                 </Tag>
                 <Tag square variant="purple-light">
-                  Rémunérée
+                  Salariat
                 </Tag>
               </>
             )}
           </FormationResumeBlock>
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockAdmission formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockAdmission formation={formation} formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
