@@ -1,14 +1,13 @@
 import { SqlRepository } from "./base.js";
-import { kdb as defaultKdb } from "../db/db";
+import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 
-export class LogRepository extends SqlRepository<DB, "log"> {
+export class RomeRepository extends SqlRepository<DB, "rome"> {
   constructor(kdb = defaultKdb) {
     super(
-      "log",
+      "rome",
       {
-        id: null,
-        data: null,
+        rome: null,
         createdAt: null,
         updatedAt: null,
       },
@@ -17,4 +16,4 @@ export class LogRepository extends SqlRepository<DB, "log"> {
   }
 }
 
-export default new LogRepository();
+export default new RomeRepository();

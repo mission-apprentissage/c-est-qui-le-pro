@@ -26,7 +26,7 @@ export async function importACCEEtablissements(options = { acceFile: null }) {
         stats.total++;
 
         try {
-          await RawDataRepository.insert(
+          await RawDataRepository.insertRaw(
             RawDataType.ACCE,
             omitNil({
               ...data,

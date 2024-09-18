@@ -77,7 +77,7 @@ export default function FormationHeader({
         xs={12}
         css={css`
           ${theme.breakpoints.up("md")} {
-            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 1.5rem)` : 0};
+            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2rem)` : 0};
             position: sticky;
           }
           background-color: #fff;
@@ -91,7 +91,17 @@ export default function FormationHeader({
               style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}
             >
               {etablissement.url ? (
-                <Link style={{ backgroundImage: "none" }} noIcon target="_blank" href={etablissement.url}>
+                <Link
+                  css={css`
+                    background-image: none;
+                    &[href]:hover {
+                      background-color: ${fr.colors.decisions.background.alt.grey.default};
+                    }
+                  `}
+                  noIcon
+                  target="_blank"
+                  href={etablissement.url}
+                >
                   {etablissement.libelle}
                   <i
                     className={"fr-icon--sm " + fr.cx("ri-external-link-fill")}

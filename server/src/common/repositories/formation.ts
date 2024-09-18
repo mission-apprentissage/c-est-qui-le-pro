@@ -27,8 +27,8 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     );
   }
 
-  _base({ withPoursuite } = { withPoursuite: false }) {
-    return <T extends SelectQueryBuilder<DB, "formation", {}>>(eb: T) => {
+  _base({ withMetier, withPoursuite } = { withMetier: false, withPoursuite: false }) {
+    return <T extends SelectQueryBuilder<DB, "formation", object>>(eb: T) => {
       return eb
         .leftJoinLateral(
           (eb) =>
@@ -72,6 +72,29 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
                 .as("formationPoursuite"),
             (join) => join.on(sql`true`)
           )
+        )
+        .$if(withMetier, (eb) =>
+          eb.leftJoinLateral(
+            (eb) =>
+              eb
+                .selectFrom("romeMetier")
+                .innerJoin("formationRome", "romeMetier.rome", "formationRome.rome")
+                .select((eb) => {
+                  return [
+                    kyselyChainFn(
+                      eb,
+                      [
+                        { fn: "to_jsonb", args: [] },
+                        { fn: "json_agg", args: [] },
+                      ],
+                      sql`"romeMetier".*`
+                    ).as("metier"),
+                  ];
+                })
+                .whereRef("formation.id", "=", "formationRome.formationId")
+                .as("metier"),
+            (join) => join.on(sql`true`)
+          )
         );
     };
   }
@@ -95,10 +118,11 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     return [...super.getKeyAlias(eb)];
   }
 
-  getKeyRelationAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
+  getKeyRelationAlias<T extends keyof DB>(_eb: ExpressionBuilder<DB, T>) {
     return [
       `domaine as ${this.tableName}.domaine` as AnyAliasedColumn<DB, T>,
       `formationPoursuite as ${this.tableName}.formationPoursuite` as AnyAliasedColumn<DB, T>,
+      `metier as ${this.tableName}.metier` as AnyAliasedColumn<DB, T>,
     ];
   }
 }

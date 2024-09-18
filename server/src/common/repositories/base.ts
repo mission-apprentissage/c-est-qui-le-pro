@@ -4,6 +4,8 @@ import { UpdateObjectExpression } from "kysely/dist/cjs/parser/update-set-parser
 import { ExtractTableAlias } from "kysely/dist/cjs/parser/table-parser";
 import { upsert } from "../db/db";
 import { InsertExpression } from "kysely/dist/cjs/parser/insert-values-parser";
+import { Readable } from "stream";
+import { compose, transformData } from "oleoduc";
 import { Entries } from "../utils/tsUtils";
 
 export class Repository {}
@@ -11,22 +13,46 @@ export class Repository {}
 export class SqlRepository<DB, F extends keyof DB> extends Repository {
   fields: DB[F];
   kdb: Kysely<DB>;
-  tableName: keyof DB & string;
-  constructor(tableName: keyof DB & string, fields: DB[F], kdb) {
+  tableName: F & string;
+  constructor(tableName: F & string, fields: DB[F], kdb) {
     super();
     this.kdb = kdb;
     this.tableName = tableName;
     this.fields = fields;
   }
 
+  async insert(data: InsertExpression<DB, F & string>) {
+    return this.kdb.insertInto(this.tableName).values(data).returningAll().execute();
+  }
+
+  async remove(where: Partial<DB[F]>) {
+    const query = this.kdb.deleteFrom(this.tableName);
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+    return queryCond.returningAll().execute();
+  }
+
+  async find(where: Partial<DB[F]>, returnStream = true) {
+    const query = this.kdb.selectFrom(this.tableName).selectAll();
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+
+    if (!returnStream) {
+      return queryCond.execute();
+    }
+
+    return compose(Readable.from(queryCond.stream()));
+  }
+
+  async first(where: Partial<DB[F]>) {
+    const query = this.kdb.selectFrom(this.tableName).selectAll();
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+
+    return queryCond.limit(1).executeTakeFirst();
+  }
+
   async upsert(
     keys: AnyColumn<DB, F>[],
-    data: InsertExpression<DB, keyof DB & string>,
-    onConflictData: UpdateObjectExpression<
-      OnConflictDatabase<DB, keyof DB & string>,
-      OnConflictTables<keyof DB & string>,
-      OnConflictTables<keyof DB & string>
-    > = null,
+    data: InsertExpression<DB, F & string>,
+    onConflictData: UpdateObjectExpression<OnConflictDatabase<DB, F>, OnConflictTables<F>, OnConflictTables<F>> = null,
     returningKeys: AnyColumn<DB, F>[] = null
   ) {
     return upsert(this.kdb, this.tableName, keys, data, onConflictData, returningKeys);
@@ -38,8 +64,8 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
       .set(
         data as unknown as UpdateObjectExpression<
           DB,
-          ExtractTableAlias<DB, keyof DB & string>,
-          ExtractTableAlias<DB, keyof DB & string>
+          ExtractTableAlias<DB, F & string>,
+          ExtractTableAlias<DB, F & string>
         >
       );
 
@@ -48,7 +74,22 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return queryCond.returningAll().execute();
   }
 
-  getKeyAlias<T extends keyof DB>(eb: ExpressionBuilder<DB, T>) {
+  async getAll(returnStream = true) {
+    const query = this.kdb.selectFrom(this.tableName).select((eb) => this.getKeyAlias(eb));
+
+    if (!returnStream) {
+      return (await query.execute()).map((result) => this.getColumnWithoutAlias(this.tableName, result));
+    }
+
+    return compose(
+      Readable.from(query.stream()),
+      transformData((result) => {
+        return this.getColumnWithoutAlias(this.tableName, result);
+      })
+    );
+  }
+
+  getKeyAlias<T extends keyof DB>(_eb: ExpressionBuilder<DB, T>) {
     const keys = Object.keys(this.fields) as Array<keyof typeof this.fields>;
     return keys.map(
       (k) => `${this.tableName}.${k.toString()} as ${this.tableName}.${k.toString()}` as AnyAliasedColumn<DB, T>
@@ -79,7 +120,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     });
   }
 
-  _base(options: any) {
+  _base(_options: any) {
     throw new Error("Base repository not implemented for this repository");
   }
 }

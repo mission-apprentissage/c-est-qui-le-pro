@@ -76,9 +76,12 @@ export async function importEtablissements() {
     // Ajout des données de l'onisep
     transformData(
       async ({ data, formated }) => {
-        const onisepEtab = await RawDataRepository.first(RawDataType.ONISEP_ideoStructuresEnseignementSecondaire, {
-          data: { code_uai: formated.uai },
-        });
+        const onisepEtab = await RawDataRepository.firstForType(
+          RawDataType.ONISEP_ideoStructuresEnseignementSecondaire,
+          {
+            data: { code_uai: formated.uai },
+          }
+        );
 
         const onisepFormated = {};
         let jPO = null;
@@ -106,7 +109,7 @@ export async function importEtablissements() {
           jPO = parseJourneesPortesOuvertes(onisepEtabData.data.journees_portes_ouvertes);
 
           // Some data are only available on ideo formation (TODO: demander à l'Onisep d'ajouter ces data dans l'idéo structure)
-          const onisepFormation = await RawDataRepository.first(
+          const onisepFormation = await RawDataRepository.firstForType(
             RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee,
             {
               data: { ens_code_uai: formated.uai },

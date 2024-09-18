@@ -8,7 +8,7 @@ import { Readable } from "stream";
 const logger = getLoggerWithContext("import");
 
 async function getCfd(idOnisep, urlOnisep) {
-  const formationInitiale = await RawDataRepository.first(RawDataType.ONISEP_ideoFormationsInitiales, {
+  const formationInitiale = await RawDataRepository.firstForType(RawDataType.ONISEP_ideoFormationsInitiales, {
     data: { url_et_id_onisep: urlOnisep },
   });
 
@@ -45,7 +45,7 @@ function getDuree(data) {
 }
 
 async function getBcn(cfd, duree) {
-  const bcn = (await RawDataRepository.first(RawDataType.BCN, { code_certification: cfd }))?.data;
+  const bcn = (await RawDataRepository.firstForType(RawDataType.BCN, { code_certification: cfd }))?.data;
   const bcnMef = (await RawDataRepository.search(RawDataType.BCN_MEF, { formation_diplome: cfd }, false)).map(
     ({ data }) => data
   );

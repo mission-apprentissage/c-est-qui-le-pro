@@ -109,6 +109,13 @@ export interface FormationPoursuite {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface FormationRome {
+  createdAt: Generated<Timestamp>;
+  formationId: string;
+  rome: string;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface GeographyColumns {
   coord_dimension: number | null;
   f_geography_column: string | null;
@@ -180,12 +187,37 @@ export interface RawData {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface Rome {
+  createdAt: Generated<Timestamp>;
+  rome: string;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface RomeMetier {
+  createdAt: Generated<Timestamp>;
+  franceTravailLink: string | null;
+  id: Generated<string>;
+  libelle: string;
+  onisepLibelle: string | null;
+  onisepLink: string | null;
+  rome: string;
+  transitionDemographique: boolean;
+  transitionEcologique: boolean;
+  transitionEcologiqueDetaillee: string | null;
+  transitionNumerique: boolean;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface SpatialRefSys {
   auth_name: string | null;
   auth_srid: number | null;
   proj4text: string | null;
   srid: number;
   srtext: string | null;
+}
+
+export interface Test {
+  test: string | null;
 }
 
 export interface DB {
@@ -197,6 +229,7 @@ export interface DB {
   formationDomaine: FormationDomaine;
   formationEtablissement: FormationEtablissement;
   formationPoursuite: FormationPoursuite;
+  formationRome: FormationRome;
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   indicateurEntree: IndicateurEntree;
@@ -204,5 +237,8 @@ export interface DB {
   log: Log;
   metric: Metric;
   rawData: RawData;
+  rome: Rome;
+  romeMetier: RomeMetier;
   spatial_ref_sys: SpatialRefSys;
+  test: Test;
 }

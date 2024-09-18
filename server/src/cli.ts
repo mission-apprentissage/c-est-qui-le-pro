@@ -16,8 +16,12 @@ import { importIndicateurEntree } from "./jobs/formations/importIndicateurEntree
 import { computeFormationTag } from "./jobs/formations/tag/computeFormationTag";
 import { importIndicateurPoursuite } from "./jobs/formations/importIndicateurPoursuite";
 import { importIdeoFichesFormations } from "./jobs/formations/importIdeoFichesFormations";
+import { importRCO } from "./jobs/formations/importRCO";
 import { splitIsochrones } from "./jobs/isochrones/splitIsochrones";
 import { importIsochrones } from "./jobs/isochrones/importIsochrones.js";
+import { importCertifInfo } from "./jobs/rco/importRCO.js";
+import { importRome } from "./jobs/rome/importRome.js";
+import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
 
 const cli = new Command();
 
@@ -37,6 +41,13 @@ async function importBCNCommand() {
   };
 }
 
+async function importRomeCommand() {
+  return {
+    importRome: await importRome(),
+    importRomeMetier: await importRomeMetier(),
+  };
+}
+
 async function importOnisepCommand() {
   return {
     importTablePassage: await importOnisep("tablePassageCodesCertifications", ["certif_info_ci_identifiant"]),
@@ -49,10 +60,18 @@ async function importOnisepCommand() {
   };
 }
 
+async function importRCOCommand() {
+  return {
+    importCertifInfo: await importCertifInfo("certifInfo"),
+    importCertificationRome: await importCertifInfo("certificationRome"),
+  };
+}
+
 async function importFormationEtablissementCommand() {
   const importFormationStats = await importFormation();
   const importIdeoFichesFormationsStats = await importIdeoFichesFormations();
   const importFormationEtablissementStats = await importFormationEtablissement();
+  const importRCOStats = await importRCO();
   const importIndicateurEntreeStats = await importIndicateurEntree();
   const importIndicateurPoursuiteStats = await importIndicateurPoursuite();
   const computeFormationTagStats = await computeFormationTag();
@@ -61,6 +80,7 @@ async function importFormationEtablissementCommand() {
     importFormationStats,
     importIdeoFichesFormationsStats,
     importFormationEtablissementStats,
+    importRCOStats,
     importIndicateurEntreeStats,
     importIndicateurPoursuiteStats,
     computeFormationTagStats,
@@ -85,10 +105,24 @@ cli
   });
 
 cli
+  .command("importRome")
+  .description("Importe les données des ROMEs")
+  .action(() => {
+    runScript(importRomeCommand);
+  });
+
+cli
   .command("importOnisep")
   .description("Importe les données de l'onisep")
   .action(() => {
     runScript(importOnisepCommand);
+  });
+
+cli
+  .command("importRCO")
+  .description("Importe les données du réseau des Carif-Oref")
+  .action(() => {
+    runScript(importRCOCommand);
   });
 
 cli
@@ -125,17 +159,21 @@ cli
   .action(() => {
     runScript(async () => {
       const importBCNStats = await importBCNCommand();
+      const importRomeStats = await importRomeCommand();
       const importOnisepStats = await importOnisepCommand();
       const importEtablissementsStats = await importEtablissementCommand();
       const importCatalogueApprentissageStats = await importCAFormations();
       const importFormationEtablissementStats = await importFormationEtablissementCommand();
+      const importRCOStats = await importRCOCommand();
 
       return {
         importBCNStats,
+        importRomeStats,
         importOnisepStats,
         importEtablissementsStats,
         importCatalogueApprentissageStats,
         importFormationEtablissementStats,
+        importRCOStats,
       };
     });
   });

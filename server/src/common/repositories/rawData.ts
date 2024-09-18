@@ -1,4 +1,4 @@
-import flat from "flat";
+import { flatten } from "flat";
 import { SqlRepository } from "./base.js";
 import { kdb as defaultKdb } from "../db/db";
 import { DB } from "../db/schema.js";
@@ -17,6 +17,9 @@ export enum RawDataType {
 
   BCN = "BCN",
   BCN_MEF = "BCN_MEF",
+
+  RCO_certifInfo = "RCO_certifInfo",
+  RCO_certificationRome = "RCO_certificationRome",
 }
 export interface RawData {
   [RawDataType.CatalogueApprentissage]: any;
@@ -27,6 +30,8 @@ export interface RawData {
   [RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee]: any;
   [RawDataType.ONISEP_ideoStructuresEnseignementSecondaire]: any;
   [RawDataType.ONISEP_ideoFormationsInitiales]: any;
+  [RawDataType.RCO_certifInfo]: any;
+  [RawDataType.RCO_certificationRome]: any;
 }
 
 export class RawDataRepository extends SqlRepository<DB, "rawData"> {
@@ -45,10 +50,13 @@ export class RawDataRepository extends SqlRepository<DB, "rawData"> {
   }
 
   async deleteAll(type: RawDataType) {
+    if (!type) {
+      throw new Error("Invalid type");
+    }
     return this.kdb.deleteFrom("rawData").where("type", "=", type).returningAll().execute();
   }
 
-  async insert<T extends RawDataType>(type: T, data: RawData[T]) {
+  async insertRaw<T extends RawDataType>(type: T, data: RawData[T]) {
     return this.kdb
       .insertInto("rawData")
       .values({
@@ -60,7 +68,7 @@ export class RawDataRepository extends SqlRepository<DB, "rawData"> {
   }
 
   _createJsonFilter(query, filters) {
-    const filtersArray = flat.flatten(filters);
+    const filtersArray = flatten(filters);
 
     for (const [key, value] of Object.entries(filtersArray)) {
       const keyPart = key.split(".");
@@ -86,7 +94,7 @@ export class RawDataRepository extends SqlRepository<DB, "rawData"> {
     return compose(Readable.from(query.stream()));
   }
 
-  async first<T extends RawDataType>(type: T, filters: Partial<RawData[T]> = {}) {
+  async firstForType<T extends RawDataType>(type: T, filters: Partial<RawData[T]> = {}) {
     let query = this.kdb.selectFrom("rawData").selectAll().where("type", "=", type);
     query = this._createJsonFilter(query, filters);
     return query.limit(1).executeTakeFirst();

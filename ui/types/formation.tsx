@@ -71,6 +71,22 @@ export type FormationEtablissement = {
   indicateurPoursuite?: IndicateurPoursuite;
 };
 
+export type MetierTransitionType = "transitionNumerique" | "transitionEcologique" | "transitionDemographique";
+
+export type Metier = {
+  id: string;
+  rome: string;
+  libelle: string;
+  onisepLink?: string;
+  onisepLibelle?: string;
+  franceTravailLibelle?: string;
+  franceTravailLink?: string;
+  transitionNumerique: boolean;
+  transitionEcologique: boolean;
+  transitionEcologiqueDetaillee?: string;
+  transitionDemographique: boolean;
+};
+
 export type Formation = {
   id: string;
   cfd: string;
@@ -85,6 +101,7 @@ export type Formation = {
   codeDiplome?: string;
   codeRncp?: string;
   formationPoursuite?: FormationPoursuite[];
+  metier?: Metier[];
 };
 
 type JourneesPortesOuverteDate = {

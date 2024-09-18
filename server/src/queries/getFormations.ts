@@ -78,7 +78,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
     };
   }
 
-  const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", {}>, bucket) => {
+  const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", object>, bucket) => {
     return query
       .select(sql<number>`${bucket.time}::integer`.as("time"))
       .select("id as bucketId")
@@ -114,7 +114,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
     isochroneBuckets = await Cache.getOrSet(JSON.stringify(graphHopperParameter), () =>
       graphHopperApi.fetchIsochronePTBucketsRaw(graphHopperParameter)
     );
-  } catch (err) {
+  } catch (_err) {
     return null;
   }
 
@@ -232,9 +232,9 @@ export async function getFormationsSQL(
   { filtersEtablissement = {}, filtersFormation = {}, tag = null, millesime },
   pagination = { page: 1, limit: 100 }
 ) {
-  let page = pagination.page || 1;
-  let limit = pagination.limit || 100;
-  let skip = (page - 1) * limit;
+  const page = pagination.page || 1;
+  const limit = pagination.limit || 100;
+  const skip = (page - 1) * limit;
 
   // GET ISOCHRONES BUCKETS
   const queryEtablissement = await buildFiltersEtablissementSQL(filtersEtablissement as any);

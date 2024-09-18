@@ -37,7 +37,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
   }
 
   _base() {
-    return <T extends SelectQueryBuilder<DB, "etablissement", {}>>(eb: T) => {
+    return <T extends SelectQueryBuilder<DB, "etablissement", object>>(eb: T) => {
       return eb
         .select((eb) => this.customFields(eb))
         .leftJoinLateral(

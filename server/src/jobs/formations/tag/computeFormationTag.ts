@@ -6,7 +6,6 @@ import {
   FORMATION_TAG,
   THRESHOLD_TAUX_PRESSION,
   THRESHOLD_EN_EMPLOI,
-  THRESHOLD_EN_ETUDE,
 } from "#src/common/constants/formationEtablissement.js";
 import { computeInserJeunesTag } from "./computeInserJeunesTag.js";
 import { computeIndicateurEntree } from "./computeIndicateurEntree.js";

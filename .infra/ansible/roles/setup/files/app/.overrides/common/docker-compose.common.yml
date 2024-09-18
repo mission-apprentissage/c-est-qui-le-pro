@@ -20,6 +20,11 @@ services:
     environment:
       - EXPOSITION_API_USERNAME={{ vault.EXPOSITION_API_USERNAME }}
       - EXPOSITION_API_PASSWORD={{ vault.EXPOSITION_API_PASSWORD}}
+      - RCO_BUCKET_ENDPOINT={{ vault.RCO_BUCKET_ENDPOINT }}
+      - RCO_BUCKET_REGION={{ vault.RCO_BUCKET_REGION }}
+      - RCO_BUCKET_ACCESS_KEY={{ vault.RCO_BUCKET_ACCESS_KEY }}
+      - RCO_BUCKET_SECRET_KEY={{ vault.RCO_BUCKET_SECRET_KEY }}
+      - RCO_BUCKET_NAME={{ vault.RCO_BUCKET_NAME }}
 
   mongodb:
     volumes:

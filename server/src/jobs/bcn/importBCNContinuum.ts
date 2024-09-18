@@ -8,7 +8,9 @@ import RawDataRepository, { RawData, RawDataType } from "#src/common/repositorie
 const logger = getLoggerWithContext("import");
 
 async function updateDiplomeList(data) {
-  const bcnData = await RawDataRepository.first(RawDataType.BCN, { code_certification: data.code_certification });
+  const bcnData = await RawDataRepository.firstForType(RawDataType.BCN, {
+    code_certification: data.code_certification,
+  });
   if (bcnData) {
     const bcnDataData = bcnData.data as RawData[RawDataType.BCN];
     await RawDataRepository.updateBy(
@@ -28,7 +30,7 @@ async function updateDiplomeList(data) {
 
   if (data.ancien_diplome?.length > 0) {
     for (const ancien_diplome of data.ancien_diplome) {
-      const bcnOld = await RawDataRepository.first(RawDataType.BCN, {
+      const bcnOld = await RawDataRepository.firstForType(RawDataType.BCN, {
         code_certification: ancien_diplome,
       });
 
@@ -51,7 +53,7 @@ async function updateDiplomeList(data) {
 
   if (data.nouveau_diplome?.length > 0) {
     for (const nouveau_diplome of data.nouveau_diplome) {
-      const bcnNew = await RawDataRepository.first(RawDataType.BCN, {
+      const bcnNew = await RawDataRepository.firstForType(RawDataType.BCN, {
         code_certification: nouveau_diplome,
       });
 

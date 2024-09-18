@@ -39,7 +39,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
         ...params,
       },
     });
-  }, [searchParams]);
+  }, [plausible, searchParams, params]);
 
   const getUrlParams = useCallback(() => {
     const urlSearchParams = paramsToString(params);

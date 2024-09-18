@@ -12,7 +12,7 @@ const customJoi = Joi.extend(
     type: "arrayOf",
     base: joi.array(),
     // eslint-disable-next-line no-unused-vars
-    coerce(value, helpers) {
+    coerce(value) {
       return { value: formatArrayParameters(value) };
     },
   }),
