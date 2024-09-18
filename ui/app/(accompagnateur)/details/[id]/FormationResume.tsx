@@ -251,10 +251,10 @@ export default function FormationResume({
             {formation.voie === "scolaire" ? (
               <>
                 <Tag square variant="purple-light">
-                  En classe et en atelier
+                  En classe et en ateliers
                 </Tag>
                 <Tag square variant="purple-light">
-                  Stage
+                  Stages
                 </Tag>
               </>
             ) : (
