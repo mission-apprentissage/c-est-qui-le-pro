@@ -13,9 +13,9 @@ export const {
       title: "Analyse",
       description: "Nous utilisons des cookies pour mesurer l’audience de notre site et améliorer son contenu.",
     },
-    personalization: {
-      title: "Personnalisation",
-      description: "Nous utilisons des cookies pour vous proposer des contenus adaptés à vos centres d’intérêts.",
-    },
+    // personalization: {
+    //   title: "Personnalisation",
+    //   description: "Nous utilisons des cookies pour vous proposer des contenus adaptés à vos centres d’intérêts.",
+    // },
   }),
 });
