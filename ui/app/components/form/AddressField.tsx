@@ -146,6 +146,7 @@ export default function AddressField({
 
   return (
     <div
+      data-private
       style={{
         width: "100%",
         borderRadius: "5px",
