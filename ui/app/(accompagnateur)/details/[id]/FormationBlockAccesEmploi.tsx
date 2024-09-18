@@ -11,7 +11,7 @@ import Tag from "#/app/components/Tag";
 function TagTransition({ metier, type }: { metier: Metier; type: MetierTransitionType }) {
   return (
     metier[type] && (
-      <Tag square variant="blue" style={{ padding: "0.375rem" }}>
+      <Tag square variant="blue" style={{ padding: "0.375rem", marginBottom: "0.5rem" }}>
         <Typography variant="body3" style={{ fontWeight: 700 }}>
           {METIER_TRANSITION[type].label.toUpperCase()}
         </Typography>
