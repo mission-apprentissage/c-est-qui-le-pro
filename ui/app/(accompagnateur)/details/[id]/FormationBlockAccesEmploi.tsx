@@ -1,8 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import { useCallback, useMemo, useState } from "react";
+import { fr } from "@codegouvfr/react-dsfr";
+import { css } from "@emotion/react";
 import Card from "#/app/components/Card";
+import { capitalize } from "lodash-es";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
 import { Etablissement, Formation, Metier, MetierTransitionType } from "#/types/formation";
-import { capitalize } from "lodash-es";
 import WidgetInserJeunes from "../../components/WidgetInserJeunes";
 import Button from "#/app/components/Button";
 import { METIER_TRANSITION, sortMetier } from "#/app/services/metier";
@@ -13,6 +16,15 @@ function TagTransition({ metier, type }: { metier: Metier; type: MetierTransitio
     metier[type] && (
       <Tag square variant="blue" style={{ padding: "0.375rem", marginBottom: "0.5rem" }}>
         <Typography variant="body3" style={{ fontWeight: 700 }}>
+          <i
+            className={fr.cx(METIER_TRANSITION[type].icon)}
+            css={css`
+              &::before {
+                --icon-size: 1rem;
+              }
+              margin-right: 0.25rem;
+            `}
+          ></i>
           {METIER_TRANSITION[type].label.toUpperCase()}
         </Typography>
       </Tag>
@@ -41,7 +53,15 @@ function FormationMetier({ formation }: { formation: Formation }) {
               return (
                 <Grid key={metier.id} item xs={6}>
                   <Card
-                    style={{ height: "100%", borderRadius: 0, padding: "1.5rem" }}
+                    style={{
+                      height: "100%",
+                      borderRadius: 0,
+                      padding: "1.5rem",
+                      display: "flex",
+                      alignItems: "flex-start",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
                     link={
                       metier.onisepLink
                         ? metier.onisepLink

@@ -1,14 +1,23 @@
-import { Metier } from "#/types/formation";
+import { Metier, MetierTransitionType } from "#/types/formation";
+import { FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 
-export const METIER_TRANSITION = {
+export const METIER_TRANSITION: {
+  [key in MetierTransitionType]: {
+    label: string;
+    icon: FrIconClassName | RiIconClassName;
+  };
+} = {
   transitionEcologique: {
     label: "Transition écologique",
+    icon: "ri-seedling-line",
   },
   transitionDemographique: {
     label: "Transition démographique",
+    icon: "ri-parent-line",
   },
   transitionNumerique: {
     label: "Transition numérique",
+    icon: "ri-gamepad-line",
   },
 };
 
