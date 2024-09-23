@@ -42,7 +42,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
     return <Loader withMargin />;
   }
 
-  if (isError || !data) {
+  if (isError || !data || data.length === 0) {
     return;
   }
 
