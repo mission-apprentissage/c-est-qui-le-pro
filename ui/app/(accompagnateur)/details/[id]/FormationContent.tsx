@@ -15,6 +15,7 @@ import FormationHeader from "./FormationHeader";
 import FormationBlockAdmission from "./FormationBlockAdmission";
 import FormationBlockFormation from "./FormationBlockFormation";
 import FormationBlockAccesEmploi from "./FormationBlockAccesEmploi";
+import FormationSimilare from "./FormationSimilaire";
 
 export default function FormationContent({ formationDetail }: { formationDetail: FormationDetail }) {
   const { formation, etablissement } = formationDetail;
@@ -36,51 +37,54 @@ export default function FormationContent({ formationDetail }: { formationDetail:
   useScrollToLocation();
 
   return (
-    <Container style={{ marginTop: fr.spacing("5v"), marginBottom: "9.375rem" }} maxWidth={"xl"}>
-      <Grid container>
-        <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
-        <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>
-          <Grid
-            container
-            style={{
-              maxWidth: "800px",
-              paddingLeft: fr.spacing("8v"),
-              paddingRight: fr.spacing("8v"),
-              paddingTop: fr.spacing("10v"),
-            }}
-          >
-            <FormationBlockFormation
-              formation={formation}
-              etablissement={etablissement}
-              id="la-formation"
-              css={cssAnchor}
-              style={{ marginBottom: "2rem" }}
-            ></FormationBlockFormation>
+    <>
+      <Container style={{ marginTop: fr.spacing("5v"), marginBottom: "9.375rem" }} maxWidth={"xl"}>
+        <Grid container>
+          <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
+          <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>
+            <Grid
+              container
+              style={{
+                maxWidth: "800px",
+                paddingLeft: fr.spacing("8v"),
+                paddingRight: fr.spacing("8v"),
+                paddingTop: fr.spacing("10v"),
+              }}
+            >
+              <FormationBlockFormation
+                formation={formation}
+                etablissement={etablissement}
+                id="la-formation"
+                css={cssAnchor}
+                style={{ marginBottom: "2rem" }}
+              ></FormationBlockFormation>
 
-            <FormationBlockAdmission
-              formation={formation}
-              id="l-admission"
-              css={cssAnchor}
-              style={{ marginBottom: "2rem" }}
-            />
+              <FormationBlockAdmission
+                formation={formation}
+                id="l-admission"
+                css={cssAnchor}
+                style={{ marginBottom: "2rem" }}
+              />
 
-            <FormationBlockPoursuite
-              formation={formation}
-              id="poursuite-etudes"
-              css={cssAnchor}
-              style={{ marginBottom: "2rem" }}
-            />
+              <FormationBlockPoursuite
+                formation={formation}
+                id="poursuite-etudes"
+                css={cssAnchor}
+                style={{ marginBottom: "2rem" }}
+              />
 
-            <FormationBlockAccesEmploi
-              formation={formation}
-              etablissement={etablissement}
-              id="acces-emploi"
-              css={cssAnchor}
-            ></FormationBlockAccesEmploi>
+              <FormationBlockAccesEmploi
+                formation={formation}
+                etablissement={etablissement}
+                id="acces-emploi"
+                css={cssAnchor}
+              ></FormationBlockAccesEmploi>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <DialogMinistage />
-    </Container>
+        <DialogMinistage />
+      </Container>
+      <FormationSimilare formationDetail={formationDetail} />
+    </>
   );
 }

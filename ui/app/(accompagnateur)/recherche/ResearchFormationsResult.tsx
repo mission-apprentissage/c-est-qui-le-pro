@@ -10,8 +10,8 @@ import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "./FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { Formation, FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
-import { Box, Stack, useTheme } from "@mui/material";
+import { FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
+import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
@@ -104,6 +104,7 @@ export default function ResearchFormationsResult({
   page: number;
 }) {
   const theme = useTheme();
+  const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
   const { ref: refInView, inView } = useInView();
 
@@ -162,26 +163,29 @@ export default function ResearchFormationsResult({
             ${theme.breakpoints.down("md")} {
               height: 40vh;
               z-index: 600;
+              display: none;
             }
           `}
         >
-          <FormationsMap
-            selected={selected}
-            longitude={longitude}
-            latitude={latitude}
-            etablissements={etablissements}
-            onMarkerClick={(etablissement) => {
-              const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
-              if (formationIndex === -1) {
-                return;
-              }
+          {!isDownSm && (
+            <FormationsMap
+              selected={selected}
+              longitude={longitude}
+              latitude={latitude}
+              etablissements={etablissements}
+              onMarkerClick={(etablissement) => {
+                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
+                if (formationIndex === -1) {
+                  return;
+                }
 
-              const formation = formations[formationIndex];
-              //const formationRef = formationsRef[formationIndex];
-              setSelected(formation);
-              //formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}
-          />
+                const formation = formations[formationIndex];
+                //const formationRef = formationsRef[formationIndex];
+                setSelected(formation);
+                //formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            />
+          )}
         </Grid>
 
         <Grid

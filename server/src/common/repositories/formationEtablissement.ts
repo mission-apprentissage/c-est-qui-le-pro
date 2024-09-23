@@ -69,7 +69,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       )
       .where(({ eb, and }) =>
         and([
-          ...this._createWhere(eb, query),
+          ...this._createWhere(eb, query, "formationEtablissement"),
           ...EtablissementRepository._createWhere(eb, etablissementQuery, "etablissement"),
           ...FormationRepository._createWhere(eb, formationQuery, "formation"),
         ])

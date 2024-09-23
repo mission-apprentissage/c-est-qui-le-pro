@@ -30,6 +30,9 @@ export default React.memo(function FormationCard({
   onMouseEnter,
   onMouseLeave,
   tabIndex,
+  withJPO = true,
+  withDuration = true,
+  style = undefined,
 }: {
   latitude: number;
   longitude: number;
@@ -38,6 +41,9 @@ export default React.memo(function FormationCard({
   onMouseEnter?: Function;
   onMouseLeave?: Function;
   tabIndex: number;
+  withJPO?: boolean;
+  withDuration?: boolean;
+  style?: React.CSSProperties;
 }) {
   const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
@@ -56,6 +62,7 @@ export default React.memo(function FormationCard({
       link={formationLink}
       linkTarget="_blank"
       tabIndex={tabIndex}
+      style={style}
     >
       <Stack
         spacing={1}
@@ -75,26 +82,28 @@ export default React.memo(function FormationCard({
         {etablissement.libelle}
       </Typography>
 
-      <Grid container>
-        <Grid item xs={10}>
-          {etablissement.accessTime ? (
-            <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-              <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
-              {formatAccessTime(etablissement.accessTime)}
-            </Typography>
-          ) : (
-            etablissement.distance && (
+      {withDuration && (
+        <Grid container>
+          <Grid item xs={10}>
+            {etablissement.accessTime ? (
               <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-                <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
-                {(etablissement.distance / 1000).toFixed(2)} km
+                <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
+                {formatAccessTime(etablissement.accessTime)}
               </Typography>
-            )
-          )}
+            ) : (
+              etablissement.distance && (
+                <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
+                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
+                  {(etablissement.distance / 1000).toFixed(2)} km
+                </Typography>
+              )
+            )}
+          </Grid>
+          <Grid item xs={2}></Grid>
         </Grid>
-        <Grid item xs={2}></Grid>
-      </Grid>
+      )}
 
-      <TagPortesOuvertes etablissement={etablissement} />
+      {withJPO && <TagPortesOuvertes etablissement={etablissement} />}
     </Card>
   );
 });

@@ -8,11 +8,7 @@ import RawDataRepository, { RawDataType } from "#src/common/repositories/rawData
 
 const logger = getLoggerWithContext("import");
 
-export async function importOnisep(
-  type,
-  keys = [],
-  options = { limitPerPage: null, onisepApi: null, onisepApiOptions: null }
-) {
+export async function importOnisep(type, options = { limitPerPage: null, onisepApi: null, onisepApiOptions: null }) {
   const dataset = config.onisep.datasets[type];
   if (!dataset) {
     logger.error(`Le dataset pour le type ${type} n'existe pas`);
@@ -59,17 +55,15 @@ export async function importOnisep(
     writeData(
       async (data) => {
         stats.total++;
-
-        const key = keys.map((k) => data[k]).join("-");
         const millesime = new Date().getFullYear().toString();
 
         try {
           await RawDataRepository.insertRaw(RawDataType[`ONISEP_${type}`], { millesime, data });
 
-          logger.info(`Nouvelle donnée ${type}/${key} ajoutée`);
+          logger.info(`Nouvelle donnée ${type} ajoutée`);
           stats.created++;
         } catch (e) {
-          logger.error(e, `Impossible d'ajouter la donnée ${type}/${key}`);
+          logger.error(e, `Impossible d'ajouter la donnée ${type}`);
           stats.failed++;
         }
       },

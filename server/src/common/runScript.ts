@@ -1,6 +1,6 @@
 import prettyMilliseconds from "pretty-ms";
 import { isEmpty } from "lodash-es";
-import { getLoggerWithContext } from "./logger.ts";
+import { getLoggerWithContext } from "./logger";
 
 const logger = getLoggerWithContext("script");
 
@@ -52,10 +52,21 @@ async function runScript(job, options = { withTimer: true }) {
     };
 
     withTimer ? await wrapTimer(cb) : await cb();
-    await exit();
+    await exit(null);
   } catch (e) {
     await exit(e);
   }
 }
 
-export { runScript };
+async function runJobs(jobs: { name: string; job: (...args: any) => any }[], filterJob: string = null) {
+  const result = {};
+  for (const job of jobs) {
+    if (filterJob && job.name !== filterJob) {
+      continue;
+    }
+    result[job.name] = await job.job();
+  }
+  return result;
+}
+
+export { runScript, runJobs };

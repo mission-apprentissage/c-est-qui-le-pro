@@ -10,6 +10,7 @@ import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
 import FormationEtablissement from "#src/common/repositories/formationEtablissement";
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import { stripNull } from "../utils/formatters";
+import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 
 export default () => {
   const router = express.Router();
@@ -85,6 +86,38 @@ export default () => {
       );
       addJsonHeaders(res);
       res.send(stripNull(results.results));
+    })
+  );
+
+  router.get(
+    "/api/formationsSimilaire",
+    tryCatch(async (req, res) => {
+      const { longitude, latitude, formationEtablissementId } = await validate(
+        { ...req.query, ...req.params },
+        {
+          longitude: Joi.number().min(-180).max(180).required(),
+          latitude: Joi.number().min(-90).max(90).required(),
+          formationEtablissementId: Joi.string().required(),
+        }
+      );
+
+      const year = new Date().getFullYear();
+      const millesime = [(year - 1).toString(), year.toString()];
+
+      const formationEtablissement = await FormationEtablissement.firstWithData({
+        id: formationEtablissementId,
+      });
+      if (!formationEtablissement) {
+        throw Boom.notFound();
+      }
+
+      const results = await getFormationsSimilaire({
+        formationId: formationEtablissement.formation.id,
+        filtersEtablissement: { latitude, longitude, timeLimit: 3600 },
+        millesime,
+      });
+      addJsonHeaders(res);
+      res.send(stripNull(results.results?.formations || []));
     })
   );
 

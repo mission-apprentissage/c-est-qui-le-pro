@@ -41,7 +41,7 @@ export async function importRomeMetier(options = { romeMetierFile: null }) {
         stats.total++;
 
         try {
-          await RomeMetierRepository.upsert(["rome", "libelle"], data);
+          await RomeMetierRepository.upsert(["rome", "libelle"], data, data);
 
           logger.info(`Nouveau métier ${data.rome}/${data.libelle} ajoutée`);
           stats.created++;
