@@ -1,7 +1,7 @@
 import assert from "assert";
 import path from "path";
 import streamToArray from "stream-to-array";
-import config from "#src/config.js";
+import config from "#src/config.ts";
 import { getDirname } from "#src/common/utils/esmUtils.js";
 import * as ACCE from "#src/services/acce.js";
 

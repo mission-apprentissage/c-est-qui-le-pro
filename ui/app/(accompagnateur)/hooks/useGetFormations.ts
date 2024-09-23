@@ -83,6 +83,7 @@ export default function useGetFormations({
     hasNextPage && !isFetchingNextPage && !isFetching ? queryFetchNextPage() : null;
   }, [hasNextPage, isFetchingNextPage, isFetching, queryFetchNextPage]);
 
+  const pagination = useMemo(() => (data ? data.pages[0].pagination : null), [data]);
   const formations = useMemo(() => (data ? data.pages.flatMap((page) => page.formations) : []), [data]);
 
   const etablissements = useMemo(() => {
@@ -93,5 +94,5 @@ export default function useGetFormations({
     return Object.values(etablissements);
   }, [formations]);
 
-  return { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements };
+  return { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination };
 }

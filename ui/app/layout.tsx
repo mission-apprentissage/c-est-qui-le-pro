@@ -1,11 +1,11 @@
-import RootLayout from "../components/RootLayout";
-import Layout from "../components/Layout";
+import RootLayout from "./components/RootLayout";
+import Layout from "./components/Layout";
 import Header from "#/app/components/Header";
-import { title, tagline } from "./constants/constants";
-import "./style.scss";
-import Title from "./components/Title";
-import Footer from "../components/Footer";
-import Link from "../components/Link";
+import { title, tagline } from "./(accompagnateur)/constants/constants";
+import "./(accompagnateur)/style.scss";
+import Title from "./(accompagnateur)/components/Title";
+import Footer from "./components/Footer";
+import Link from "./components/Link";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (

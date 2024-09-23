@@ -36,7 +36,7 @@ export const LeafletSelectedEtablissementIcon = new DivIcon({
   iconSize: [58, 64],
   iconAnchor: [29, 64],
   popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-grey leaflet-icon-selected",
+  className: "custom-leaflet-icon color-orange leaflet-icon-selected",
   html: renderToString(<EtablissementIcon />),
 });
 
@@ -68,10 +68,11 @@ function TileLayer() {
 }
 
 const RecenterAutomatically = ({ position }: { position: LatLngTuple }) => {
+  const [lat, lng] = position;
   const map = useMap();
   useEffect(() => {
-    map.setView(position);
-  }, [map, position[0], position[1]]);
+    map.setView([lat, lng]);
+  }, [map, lat, lng]);
   return null;
 };
 
@@ -108,7 +109,7 @@ export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup> }) 
         setIsLoading(false);
       }
     }
-  }, []);
+  }, [groupRef, isLoading]);
 
   useEffect(() => {
     if (isLoading || !groupRef?.current) {
@@ -117,7 +118,7 @@ export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup> }) 
 
     const bounds = groupRef.current.getBounds();
     map.fitBounds(bounds);
-  }, [isLoading]);
+  }, [isLoading, groupRef, map]);
   return null;
 }
 

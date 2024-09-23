@@ -8,7 +8,7 @@ export default function useSearchHistory(maxItems = 20) {
     (search: string) => {
       saveHistoryStorage([search, ...historyStorage.filter((h) => h !== search)].slice(0, maxItems));
     },
-    [saveHistoryStorage]
+    [saveHistoryStorage, historyStorage, maxItems]
   );
 
   return { history: historyStorage, push };

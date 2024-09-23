@@ -10,21 +10,18 @@ import Loader from "#/app/components/Loader";
 import ErrorUserGeolocation from "../errors/ErrorUserGeolocation";
 import ErrorAddressInvalid from "../errors/ErrorAddressInvalid";
 import UserGeolocatioDenied from "../components/UserGeolocatioDenied";
-import { Grid } from "#/app/components/MaterialUINext";
+import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
 import { capitalize } from "lodash-es";
 import { FormationDomaine } from "#/types/formation";
 import { FORMATION_DOMAINE } from "#/app/services/formation";
 import OptionsCarousel from "#/app/components/form/OptionsCarousel";
+import { myPosition } from "#/app/components/form/AddressField";
 
 function ResearchFormationsParameter() {
   const { params, updateParams } = useFormationsSearch();
   const { address, distance = 0, time = 15, tag, domaine } = params ?? {};
 
-  const {
-    data: coordinate,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: 0,
@@ -40,9 +37,13 @@ function ResearchFormationsParameter() {
         throw new ErrorAddressInvalid();
       }
 
-      return addressCoordinate.features[0].geometry.coordinates;
+      return {
+        coordinate: addressCoordinate.features[0].geometry.coordinates,
+        city: address === myPosition ? myPosition : addressCoordinate.features[0].properties.city,
+      };
     },
   });
+  const { coordinate, city } = data || {};
 
   if (!params) {
     return null;
@@ -53,8 +54,21 @@ function ResearchFormationsParameter() {
   }
 
   if (isLoading) {
-    return <Loader withMargin />;
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection={"column"}
+        sx={{ height: "100vh", padding: { md: "2rem", xs: "1rem" }, paddingTop: { md: "5rem", xs: "5rem" } }}
+      >
+        <Loader withMargin />
+        <Typography variant="h6" textAlign={"center"}>
+          Nous recherchons toutes les formations autour de toi...
+        </Typography>
+      </Box>
+    );
   }
+
   return (
     <>
       <Grid container spacing={0}>
@@ -97,6 +111,7 @@ function ResearchFormationsParameter() {
         <ResearchFormationsResult
           longitude={coordinate[0]}
           latitude={coordinate[1]}
+          city={city}
           distance={distance * 1000}
           time={time * 60}
           tag={tag}

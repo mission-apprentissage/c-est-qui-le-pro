@@ -5,7 +5,6 @@ export const CFD_PATTERN = /^[0-9A-Z]{8}$/;
 
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
-  POUR_CONTINUER_DES_ETUDES = "pour_continuer_des_etudes",
   ADMISSION_FACILE = "admission_facile",
 }
 
@@ -58,6 +57,12 @@ type IndicateurPoursuite = {
   taux_autres_6_mois?: number;
 };
 
+type FormationPoursuite = {
+  type?: string;
+  libelle: string;
+  onisepId?: string;
+};
+
 export type FormationEtablissement = {
   id: string;
   duree?: string;
@@ -66,17 +71,37 @@ export type FormationEtablissement = {
   indicateurPoursuite?: IndicateurPoursuite;
 };
 
+export type MetierTransitionType = "transitionNumerique" | "transitionEcologique" | "transitionDemographique";
+
+export type Metier = {
+  id: string;
+  rome: string;
+  libelle: string;
+  onisepLink?: string;
+  onisepLibelle?: string;
+  franceTravailLibelle?: string;
+  franceTravailLink?: string;
+  transitionNumerique: boolean;
+  transitionEcologique: boolean;
+  transitionEcologiqueDetaillee?: string;
+  transitionDemographique: boolean;
+};
+
 export type Formation = {
   id: string;
   cfd: string;
   libelle?: string;
   description?: string;
+  descriptionAcces?: string;
+  descriptionPoursuiteEtudes?: string;
   onisepIdentifiant?: string;
   voie: FormationVoie;
   codeDispositif?: string;
   mef11?: string;
   codeDiplome?: string;
   codeRncp?: string;
+  formationPoursuite?: FormationPoursuite[];
+  metier?: Metier[];
 };
 
 type JourneesPortesOuverteDate = {

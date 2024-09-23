@@ -58,7 +58,7 @@ export async function importBCNMEF(options = {}) {
         stats.total++;
 
         try {
-          await RawDataRepository.insert(RawDataType.BCN_MEF, omitNil(data));
+          await RawDataRepository.insertRaw(RawDataType.BCN_MEF, omitNil(data));
 
           logger.info(`Nouveau code ${data.mef_stat_11} ajouté`);
           stats.created++;

@@ -22,7 +22,7 @@ function formatAccessTime(time: number) {
   return <>À moins de {(time / 60).toFixed(0)} minutes</>;
 }
 
-export default function FormationCard({
+export default React.memo(function FormationCard({
   latitude,
   longitude,
   formationDetail,
@@ -78,13 +78,13 @@ export default function FormationCard({
       <Grid container>
         <Grid item xs={10}>
           {etablissement.accessTime ? (
-            <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
+            <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
               <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
               {formatAccessTime(etablissement.accessTime)}
             </Typography>
           ) : (
             etablissement.distance && (
-              <Typography variant="subtitle2" color={"var(--blue-france-sun-113-625)"}>
+              <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                 <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
                 {(etablissement.distance / 1000).toFixed(2)} km
               </Typography>
@@ -97,4 +97,4 @@ export default function FormationCard({
       <TagPortesOuvertes etablissement={etablissement} />
     </Card>
   );
-}
+});

@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React from "react";
-import { Typography, Grid, Stack } from "#/app/components/MaterialUINext";
+import { useCallback } from "react";
+import { Typography, Grid, Stack, Box } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail, FormationEtablissement } from "#/types/formation";
+import { Formation, FormationDetail, FormationEtablissement } from "#/types/formation";
 import Tag from "#/app/components/Tag";
 import {
   THRESHOLD_TAUX_PRESSION,
@@ -13,30 +13,77 @@ import {
 } from "#/app/(accompagnateur)/constants/constants";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
+
 function FormationResumeBlock({
   title,
   icon,
   children,
+  anchor,
 }: {
   title: string;
   icon: FrCxArg;
   children?: JSX.Element | JSX.Element[];
+  anchor?: string;
 }) {
+  const { push } = useRouter();
+  const anchorCb = useCallback(() => {
+    if (!anchor) {
+      return;
+    }
+    push("#" + anchor, { scroll: false });
+  }, [anchor, push]);
+
   return (
-    <>
-      <Typography variant={"body1"} style={{ marginBottom: fr.spacing("4v") }}>
-        <i className={fr.cx(icon)} style={{ marginRight: fr.spacing("1w") }} />
-        {title}
-      </Typography>
+    <Box
+      onClick={anchorCb}
+      css={
+        anchor
+          ? css`
+              cursor: pointer;
+              :hover .resumeUnderline {
+                opacity: 100;
+              }
+            `
+          : null
+      }
+    >
+      <Box
+        css={css`
+          display: inline-block;
+          margin-bottom: 0.8rem;
+        `}
+      >
+        <Typography variant={"body1"}>
+          <i className={fr.cx(icon)} style={{ marginRight: fr.spacing("1w") }} />
+          {title}
+        </Typography>
+        {anchor && (
+          <Box
+            className="resumeUnderline"
+            css={css`
+              border-top: 3px solid black;
+              margin-top: 0.25rem;
+              opacity: 0;
+            `}
+          ></Box>
+        )}
+      </Box>
 
       <Stack direction={{ sm: "column", md: "column" }} spacing={{ xs: fr.spacing("2v"), sm: fr.spacing("2v") }}>
         {children}
       </Stack>
-    </>
+    </Box>
   );
 }
 
-function FormationResumeBlockAdmission({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+function FormationResumeBlockAdmission({
+  formationEtablissement,
+  formation,
+}: {
+  formationEtablissement: FormationEtablissement;
+  formation: Formation;
+}) {
   const tauxPression = formationEtablissement?.indicateurEntree?.tauxPression;
   const admissionLevel =
     tauxPression === undefined
@@ -48,12 +95,17 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-line"}>
+    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-check-line"} anchor="l-admission">
       <>
         {admissionLevel === "easy" && (
-          <Tag square level="easy">
-            Facile
-          </Tag>
+          <>
+            <Tag square level="easy">
+              Facile
+            </Tag>
+            <Tag square level="easy">
+              Nombreuses places
+            </Tag>
+          </>
         )}
       </>
       <>
@@ -71,11 +123,16 @@ function FormationResumeBlockAdmission({ formationEtablissement }: { formationEt
         )}
       </>
       <>
-        {admissionLevel === "unknow" && (
-          <Tag square level="unknow">
-            Difficulté d’intégration inconnue
-          </Tag>
-        )}
+        {admissionLevel === "unknow" &&
+          (formation.voie === "scolaire" ? (
+            <Tag square level="unknow">
+              Difficulté d&apos;intégration indisponible
+            </Tag>
+          ) : (
+            <Tag square level="unknow">
+              Nécessite de trouver une entreprise
+            </Tag>
+          ))}
       </>
     </FormationResumeBlock>
   );
@@ -93,7 +150,7 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'accès à l'emploi"} icon={"ri-briefcase-4-line"}>
+    <FormationResumeBlock title={"L'accès à l'emploi"} icon={"ri-briefcase-4-line"} anchor="acces-emploi">
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -118,7 +175,7 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
       <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
-            Taux d’emploi inconnu
+            Taux d’emploi indisponible
           </Tag>
         )}
       </>
@@ -138,7 +195,7 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
       : "hard";
 
   return (
-    <FormationResumeBlock title={"La poursuite d'études"} icon={"ri-sun-line"}>
+    <FormationResumeBlock title={"La poursuite d'études"} icon={"ri-sun-line"} anchor={"poursuite-etudes"}>
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -163,7 +220,7 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
       <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
-            Taux de poursuite d’études inconnu
+            Taux de poursuite d’études indisponible
           </Tag>
         )}
       </>
@@ -190,31 +247,36 @@ export default function FormationResume({
     >
       <Grid container spacing={2}>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"}>
+          <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"} anchor="la-formation">
             {formation.voie === "scolaire" ? (
-              <Tag square variant="purple-light">
-                Surtout en classe
-              </Tag>
+              <>
+                <Tag square variant="purple-light">
+                  En classe et en ateliers
+                </Tag>
+                <Tag square variant="purple-light">
+                  Stages
+                </Tag>
+              </>
             ) : (
               <>
                 <Tag square variant="purple-light">
-                  Surtout en entreprise
+                  En entreprise et en classe
                 </Tag>
                 <Tag square variant="purple-light">
-                  Rémunérée
+                  Salariat
                 </Tag>
               </>
             )}
           </FormationResumeBlock>
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockAdmission formationEtablissement={formationEtablissement} />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockAdmission formation={formation} formationEtablissement={formationEtablissement} />
         </Grid>
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
         </Grid>
       </Grid>
     </Container>

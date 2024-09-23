@@ -5,7 +5,7 @@ import Tag, { TagProps as DSFRBTagProps } from "@codegouvfr/react-dsfr/Tag";
 type Level = "unknow" | "easy" | "average" | "hard";
 
 export type TagProps = {
-  variant?: "button-white" | "yellow" | "grey" | "purple-light";
+  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue";
   level?: Level;
   square?: boolean;
 } & DSFRBTagProps;
@@ -40,6 +40,9 @@ const TagStyled = styled(Tag, {
           return `color: #3A3A3A;`;
         case "purple-light":
           return `background-color: #F5F5FE;`;
+        case "blue":
+          return `background-color: var(--info-975-75);
+           color: var(--info-425-625);`;
         default:
           return "";
       }
@@ -51,9 +54,15 @@ const TagStyled = styled(Tag, {
   }
 `;
 
-export const TagStatut = styled(TagStyled)`
+export const TagStatutPublic = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--blue-france-sun-113-625);
+  font-weight: 700;
+`;
+
+export const TagStatutPrive = styled(TagStyled)`
+  background-color: #feebcb;
+  color: #7b341e;
   font-weight: 700;
 `;
 

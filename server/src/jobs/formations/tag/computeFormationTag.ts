@@ -6,7 +6,6 @@ import {
   FORMATION_TAG,
   THRESHOLD_TAUX_PRESSION,
   THRESHOLD_EN_EMPLOI,
-  THRESHOLD_EN_ETUDE,
 } from "#src/common/constants/formationEtablissement.js";
 import { computeInserJeunesTag } from "./computeInserJeunesTag.js";
 import { computeIndicateurEntree } from "./computeIndicateurEntree.js";
@@ -15,15 +14,14 @@ const logger = getLoggerWithContext("import");
 
 const COMPUTE_FORMATION_TAG = {
   inserjeunes: {
-    tags: [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT, FORMATION_TAG.POUR_CONTINUER_DES_ETUDES],
+    tags: [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT],
     compute: async (
       formation,
-      { thresholdEnEmploi, thresholdEnEtude } = {
+      { thresholdEnEmploi } = {
         thresholdEnEmploi: THRESHOLD_EN_EMPLOI[0],
-        thresholdEnEtude: THRESHOLD_EN_ETUDE[0],
       }
     ) => {
-      return computeInserJeunesTag(formation, { thresholdEnEmploi, thresholdEnEtude });
+      return computeInserJeunesTag(formation, { thresholdEnEmploi });
     },
   },
   indicateurEntree: {

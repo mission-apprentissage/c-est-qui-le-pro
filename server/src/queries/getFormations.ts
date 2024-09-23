@@ -9,6 +9,7 @@ import EtablissementRepository from "#src/common/repositories/etablissement";
 import { DB, Etablissement, Formation, FormationEtablissement } from "#src/common/db/schema.js";
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
+import config from "#src/config";
 
 const logger = getLoggerWithContext("query");
 
@@ -27,6 +28,9 @@ export function buildFilterTag(eb, tag) {
 }
 
 export function getRouteDate() {
+  if (config.features.graphhopper.useStaticDate) {
+    return moment("2024-09-09").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
+  }
   return moment().startOf("isoWeek").add(1, "week").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
 }
 
@@ -74,7 +78,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
     };
   }
 
-  const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", {}>, bucket) => {
+  const buildSubQueryIsochrone = (query: SelectQueryBuilder<DB, "etablissement", object>, bucket) => {
     return query
       .select(sql<number>`${bucket.time}::integer`.as("time"))
       .select("id as bucketId")
@@ -110,7 +114,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
     isochroneBuckets = await Cache.getOrSet(JSON.stringify(graphHopperParameter), () =>
       graphHopperApi.fetchIsochronePTBucketsRaw(graphHopperParameter)
     );
-  } catch (err) {
+  } catch (_err) {
     return null;
   }
 
@@ -228,9 +232,9 @@ export async function getFormationsSQL(
   { filtersEtablissement = {}, filtersFormation = {}, tag = null, millesime },
   pagination = { page: 1, limit: 100 }
 ) {
-  let page = pagination.page || 1;
-  let limit = pagination.limit || 100;
-  let skip = (page - 1) * limit;
+  const page = pagination.page || 1;
+  const limit = pagination.limit || 100;
+  const skip = (page - 1) * limit;
 
   // GET ISOCHRONES BUCKETS
   const queryEtablissement = await buildFiltersEtablissementSQL(filtersEtablissement as any);

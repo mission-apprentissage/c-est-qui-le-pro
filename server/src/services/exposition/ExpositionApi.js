@@ -1,5 +1,5 @@
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
-import config from "#src/config.js";
+import config from "#src/config.ts";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
 import { getLoggerWithContext } from "#src/common/logger.ts";
 

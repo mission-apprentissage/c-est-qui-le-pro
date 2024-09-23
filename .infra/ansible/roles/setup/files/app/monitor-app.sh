@@ -17,12 +17,16 @@ function reload_containers() {
 }
 
 function verify_app() {
-  if wget --timeout 15 -O - -q -t 4 ${URL} |
-    jq --exit-status '.healthcheck.sql == true' >/dev/null; then
-    true
-  else
-    false
-  fi
+  for i in 1 2 3 4 5; do
+
+    if wget --timeout 15 -O - -q -t 1 ${URL} |
+      jq --exit-status '.healthcheck.sql == true' >/dev/null; then
+      return 0
+    fi
+    sleep 30
+  done
+
+  false
 }
 
 if verify_app; then

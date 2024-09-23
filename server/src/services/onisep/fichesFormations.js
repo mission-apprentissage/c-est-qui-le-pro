@@ -1,17 +1,23 @@
 import unzipper from "unzipper";
 import { compose, transformIntoStream } from "oleoduc";
-import { cloneDeep, set, get } from "lodash-es";
-import config from "#src/config.js";
+import AutoDetectDecoderStream from "autodetect-decoder-stream";
 import XmlParser from "node-xml-stream";
 import nodeStream from "stream";
+import { XMLParser as FastXMLParser } from "fast-xml-parser";
+
+import config from "#src/config.ts";
 import { fetchStreamWithRetry } from "#src/common/utils/httpUtils.js";
 
 function transformXmlFormationToStream() {
   const xmlParser = new XmlParser();
+  const fastParser = new FastXMLParser({
+    numberParseOptions: {
+      skipLike: /.*/,
+    },
+  });
 
-  let formation = {};
-  let currentKey = "";
   let insideFormation = false;
+  let buffer = "";
 
   const transformXml = new nodeStream.Duplex({
     objectMode: true,
@@ -27,7 +33,7 @@ function transformXmlFormationToStream() {
 
   xmlParser.on("opentag", (name) => {
     if (insideFormation && name[name.length - 1] !== "/") {
-      currentKey = [...currentKey, name];
+      buffer += "<" + name + ">";
     }
 
     if (name === "formation") {
@@ -38,23 +44,21 @@ function transformXmlFormationToStream() {
   xmlParser.on("closetag", (name) => {
     if (name === "formation") {
       insideFormation = false;
-      transformXml.push(cloneDeep(formation));
-      formation = {};
+      transformXml.push(fastParser.parse(buffer));
+      buffer = "";
     }
 
     if (insideFormation) {
-      currentKey = currentKey.slice(0, -1);
+      buffer += "</" + name + ">";
     }
   });
 
   xmlParser.on("text", (text) => {
-    if (!get(formation, currentKey)) {
-      set(formation, currentKey, text);
-    }
+    buffer += text;
   });
 
   xmlParser.on("cdata", (cdata) => {
-    set(formation, currentKey, cdata);
+    buffer += "<![CDATA[" + cdata + "]]";
   });
 
   xmlParser.on("error", (err) => {
@@ -77,6 +81,7 @@ export async function streamIdeoFichesFormations(options = {}) {
     transformIntoStream(async (entry) => {
       return entry;
     }),
+    new AutoDetectDecoderStream(),
     transformXmlFormationToStream()
   );
 }

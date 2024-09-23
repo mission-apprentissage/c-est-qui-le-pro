@@ -74,6 +74,12 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
   ) : (
     <Popper
       {...props}
+      modifiers={[
+        {
+          name: "flip",
+          enabled: false,
+        },
+      ]}
       placement="bottom-start"
       sx={{
         marginTop: "18px !important",

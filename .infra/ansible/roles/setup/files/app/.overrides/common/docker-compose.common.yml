@@ -20,6 +20,11 @@ services:
     environment:
       - EXPOSITION_API_USERNAME={{ vault.EXPOSITION_API_USERNAME }}
       - EXPOSITION_API_PASSWORD={{ vault.EXPOSITION_API_PASSWORD}}
+      - RCO_BUCKET_ENDPOINT={{ vault.RCO_BUCKET_ENDPOINT }}
+      - RCO_BUCKET_REGION={{ vault.RCO_BUCKET_REGION }}
+      - RCO_BUCKET_ACCESS_KEY={{ vault.RCO_BUCKET_ACCESS_KEY }}
+      - RCO_BUCKET_SECRET_KEY={{ vault.RCO_BUCKET_SECRET_KEY }}
+      - RCO_BUCKET_NAME={{ vault.RCO_BUCKET_NAME }}
 
   mongodb:
     volumes:
@@ -38,6 +43,7 @@ services:
     environment:
       - METABASE_SECRET_KEY={{ vault.METABASE_SECRET_KEY }}
       - EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
+      - NEXT_PUBLIC_DOMAIN={{dns_name}}
       - NEXT_PUBLIC_API_BASE_URL=/api
       - NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL=/api
       - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo3im03r8sun
@@ -47,6 +53,7 @@ services:
       args:
         - METABASE_SECRET_KEY={{ vault.METABASE_SECRET_KEY }}
         - EXPOSITION_API_BASE_URL=https://api.exposition.inserjeunes.beta.gouv.fr
+        - NEXT_PUBLIC_DOMAIN={{dns_name}}
         - NEXT_PUBLIC_API_BASE_URL=/api
         - NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL=/api
         - NEXT_PUBLIC_EXPOSITION_WIDGET_HASH=405gzo3im03r8sun

@@ -132,7 +132,7 @@ export async function importFormations(
         stats.total++;
 
         try {
-          await RawDataRepository.insert(RawDataType.CatalogueApprentissage, dataToImport);
+          await RawDataRepository.insertRaw(RawDataType.CatalogueApprentissage, dataToImport);
 
           logger.info(`Nouvelle formation ${data.uai_formation}/${data.cfd} ajoutée`);
           stats.created++;

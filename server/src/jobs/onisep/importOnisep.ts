@@ -64,7 +64,7 @@ export async function importOnisep(
         const millesime = new Date().getFullYear().toString();
 
         try {
-          await RawDataRepository.insert(RawDataType[`ONISEP_${type}`], { millesime, data });
+          await RawDataRepository.insertRaw(RawDataType[`ONISEP_${type}`], { millesime, data });
 
           logger.info(`Nouvelle donnée ${type}/${key} ajoutée`);
           stats.created++;

@@ -74,7 +74,7 @@ async function importFromStream(stream, stats = { total: 0, created: 0, updated:
         }
 
         try {
-          const exists = await RawDataRepository.first(RawDataType.BCN, {
+          const exists = await RawDataRepository.firstForType(RawDataType.BCN, {
             code_certification: data.code_certification,
           });
 
@@ -84,7 +84,7 @@ async function importFromStream(stream, stats = { total: 0, created: 0, updated:
             });
             logger.info(`Code ${data.code_certification} mis à jour`);
           } else {
-            await RawDataRepository.insert(RawDataType.BCN, omitNil(data));
+            await RawDataRepository.insertRaw(RawDataType.BCN, omitNil(data));
             logger.info(`Nouveau code ${data.code_certification} ajouté`);
           }
 

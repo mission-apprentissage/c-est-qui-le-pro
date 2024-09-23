@@ -3,22 +3,8 @@ import { fr } from "@codegouvfr/react-dsfr";
 import Button from "@codegouvfr/react-dsfr/Button";
 import { Box, Grid, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
-import { ReadonlyURLSearchParams, usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function Error({ error, reset }: { error: Error; reset: () => void }) {
-  const [originalUrl, setOriginalUrl] = useState<{ pathname: string; searchParams: ReadonlyURLSearchParams } | null>(
-    null
-  );
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    if (originalUrl) {
-      reset();
-    }
-    setOriginalUrl({ pathname, searchParams });
-  }, [pathname, searchParams]);
-
+export default function Error() {
   return (
     <Container>
       <Grid container direction="row" justifyContent="center" alignItems="center">

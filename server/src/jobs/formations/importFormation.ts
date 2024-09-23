@@ -27,7 +27,7 @@ function formatDomaine(formationInitiale) {
 async function getFormationInitialeWithContinuum(bcn) {
   const { code_formation_diplome } = bcn;
 
-  const formationInitiale = await RawDataRepository.first(RawDataType.ONISEP_ideoFormationsInitiales, {
+  const formationInitiale = await RawDataRepository.firstForType(RawDataType.ONISEP_ideoFormationsInitiales, {
     data: { code_scolarite: code_formation_diplome },
   });
 
@@ -35,14 +35,16 @@ async function getFormationInitialeWithContinuum(bcn) {
     return formationInitiale.data as RawData[RawDataType.ONISEP_ideoFormationsInitiales];
   }
 
-  const bcnCfdResult = await RawDataRepository.first(RawDataType.BCN, { code_certification: code_formation_diplome });
+  const bcnCfdResult = await RawDataRepository.firstForType(RawDataType.BCN, {
+    code_certification: code_formation_diplome,
+  });
   const bcnCfd = bcnCfdResult?.data as RawData[RawDataType.BCN];
 
   if (!bcnCfd || !bcnCfd.nouveau_diplome || bcnCfd.nouveau_diplome.length !== 1) {
     return null;
   }
 
-  const formationInitialeNew = await RawDataRepository.first(RawDataType.ONISEP_ideoFormationsInitiales, {
+  const formationInitialeNew = await RawDataRepository.firstForType(RawDataType.ONISEP_ideoFormationsInitiales, {
     data: { code_scolarite: bcnCfd.nouveau_diplome[0] },
   });
 
@@ -67,7 +69,7 @@ async function importFromBcnAndOnisep() {
       }
 
       const bcnMef = (
-        await RawDataRepository.first(RawDataType.BCN_MEF, {
+        await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
           mef_stat_11: code_certification,
         })
       )?.data as RawData[RawDataType.BCN_MEF];
@@ -78,7 +80,7 @@ async function importFromBcnAndOnisep() {
       }
 
       const bcnMefLastYear = (
-        await RawDataRepository.first(RawDataType.BCN_MEF, {
+        await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
           formation_diplome: bcnMef.formation_diplome,
           dispositif_formation: bcnMef.dispositif_formation,
           annee_dispositif: bcnMef.duree_dispositif,
@@ -99,7 +101,7 @@ async function importFromBcnAndOnisep() {
         const bcnMef =
           type === "mef"
             ? ((
-                await RawDataRepository.first(RawDataType.BCN_MEF, {
+                await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
                   mef_stat_11: code_certification,
                 })
               )?.data as RawData[RawDataType.BCN_MEF])

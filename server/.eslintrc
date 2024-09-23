@@ -2,13 +2,16 @@
   "root": true,
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:node/recommended-module",
     "plugin:prettier/recommended",
     "plugin:import/recommended"
   ],
-  "plugins": ["mocha", "import"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "mocha", "import"],
   "settings": {
     "import/resolver": {
+      "typescript": {},
       "eslint-import-resolver-custom-alias": {
         "alias": {
           "#src": "./src",
@@ -30,7 +33,18 @@
     "mocha/no-skipped-tests": "error",
     "mocha/no-exclusive-tests": "error",
     "node/no-missing-import": 0,
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ]
   },
   "overrides": [
     {

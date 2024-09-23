@@ -30,7 +30,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
     );
   }
 
-  async first(
+  async firstWithData(
     query: QueryFormationEtablissement = {},
     etablissementQuery: QueryEtablissement = {},
     formationQuery: QueryFormation = {}
@@ -42,7 +42,13 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       .innerJoinLateral(
         (eb) =>
           eb
-            .selectFrom(eb.selectFrom("formation").$call(FormationRepository._base()).selectAll().as("formation"))
+            .selectFrom(
+              eb
+                .selectFrom("formation")
+                .$call(FormationRepository._base({ withMetier: true, withPoursuite: true }))
+                .selectAll()
+                .as("formation")
+            )
             .selectAll()
             .whereRef("formationEtablissement.formationId", "=", "formation.id")
             .as("formation"),
@@ -82,7 +88,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
   }
 
   async getFromMef({ uai, mef11 }) {
-    const formationEtablissement = await this.first({}, { uai }, { mef11 });
+    const formationEtablissement = await this.firstWithData({}, { uai }, { mef11 });
 
     if (!formationEtablissement) {
       return null;
@@ -92,7 +98,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
   }
 
   async getFromCfd({ uai, cfd, codeDispositif, voie }, withIndicateur = false) {
-    const formationEtablissement = await this.first({}, { uai }, { cfd, codeDispositif, voie });
+    let formationEtablissement = await this.firstWithData({}, { uai }, { cfd, codeDispositif, voie });
 
     if (!formationEtablissement) {
       return null;
@@ -115,7 +121,9 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         .limit(1)
         .executeTakeFirst();
 
-      return merge(formationEtablissement, { formationEtablissement: { indicateurEntree, indicateurPoursuite } });
+      formationEtablissement = merge(formationEtablissement, {
+        formationEtablissement: { indicateurEntree, indicateurPoursuite },
+      });
     }
 
     return formationEtablissement;

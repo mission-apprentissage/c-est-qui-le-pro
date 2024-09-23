@@ -28,7 +28,7 @@ export default function FormationDisponible({ formationDetail }: { formationDeta
         ({ formationEtablissement: fe, formation: f }) =>
           f.voie === formationAutreVoie && fe.duree == formationEtablissement.duree
       ),
-    [formations, formation, formationAutreVoie]
+    [formations, formationAutreVoie, formationEtablissement.duree]
   );
   const formationLink = useFormationLink({ formationDetail: autreFormation });
 

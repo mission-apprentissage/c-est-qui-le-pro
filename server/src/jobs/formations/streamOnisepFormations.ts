@@ -1,13 +1,14 @@
 import { transformData, compose, filterData, transformIntoStream } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
+import { urlOnisepToId } from "#src/services/onisep/utils";
 import { formatDuree } from "./importFormationEtablissement.js";
 import { Readable } from "stream";
 
 const logger = getLoggerWithContext("import");
 
 async function getCfd(idOnisep, urlOnisep) {
-  const formationInitiale = await RawDataRepository.first(RawDataType.ONISEP_ideoFormationsInitiales, {
+  const formationInitiale = await RawDataRepository.firstForType(RawDataType.ONISEP_ideoFormationsInitiales, {
     data: { url_et_id_onisep: urlOnisep },
   });
 
@@ -44,7 +45,7 @@ function getDuree(data) {
 }
 
 async function getBcn(cfd, duree) {
-  const bcn = (await RawDataRepository.first(RawDataType.BCN, { code_certification: cfd }))?.data;
+  const bcn = (await RawDataRepository.firstForType(RawDataType.BCN, { code_certification: cfd }))?.data;
   const bcnMef = (await RawDataRepository.search(RawDataType.BCN_MEF, { formation_diplome: cfd }, false)).map(
     ({ data }) => data
   );
@@ -94,7 +95,7 @@ export async function streamOnisepFormations({ stats }) {
       stats.total++;
 
       const urlOnisep = data.data.for_url_et_id_onisep;
-      const idOnisep = urlOnisep.match(/FOR\.[0-9]+/)[0];
+      const idOnisep = urlOnisepToId(urlOnisep);
 
       const cfd = await getCfd(idOnisep, urlOnisep);
       if (!cfd) {

@@ -11,6 +11,12 @@ const config = {
     destinations: env.get("ACCOMPAGNATEUR_LOG_DESTINATIONS").default("stdout").asArray(),
   },
   slackWebhookUrl: env.get("ACCOMPAGNATEUR_SLACK_WEBHOOK_URL").asString(),
+  features: {
+    graphhopper: {
+      // Use static date for now
+      useStaticDate: true,
+    },
+  },
   pgsql: {
     uri: env
       .get("ACCOMPAGNATEUR_POSTGRES_URI")
@@ -81,6 +87,27 @@ const config = {
         "../data/orion/",
         "etablissement_export_rentree_2023.csv"
       ),
+    },
+  },
+  rome: {
+    files: {
+      // https://www.data.gouv.fr/fr/datasets/repertoire-operationnel-des-metiers-et-des-emplois-rome/
+      rome: path.join(getDirname(import.meta.url), "..", "data", "rome", "rome.csv"),
+      // Manually generated
+      romeMetier: path.join(getDirname(import.meta.url), "..", "data", "rome", "romeMetier.csv"),
+    },
+  },
+  rco: {
+    bucket: {
+      endpoint: env.get("RCO_BUCKET_ENDPOINT").asString(),
+      region: env.get("RCO_BUCKET_REGION").asString(),
+      accessKey: env.get("RCO_BUCKET_ACCESS_KEY").asString(),
+      secretKey: env.get("RCO_BUCKET_SECRET_KEY").asString(),
+      name: env.get("RCO_BUCKET_NAME").asString(),
+    },
+    file: {
+      certifInfo: "inserJeune-certifinfo.csv",
+      certificationRome: "inserJeune-certification-rome.csv",
     },
   },
 };

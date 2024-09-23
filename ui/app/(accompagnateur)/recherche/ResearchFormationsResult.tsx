@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { css } from "@emotion/react";
-import { useBottomScrollListener } from "react-bottom-scroll-listener";
+import { useInView } from "react-intersection-observer";
 import { Typography, Grid } from "../../components/MaterialUINext";
 import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
@@ -44,9 +44,50 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
   );
 }
 
+function FormationResult({
+  formationRef,
+  formationDetail,
+  latitude,
+  longitude,
+  selected,
+  setSelected,
+  index,
+}: {
+  formationRef: React.RefObject<HTMLDivElement>;
+  formationDetail: FormationDetail;
+  latitude: number;
+  longitude: number;
+  selected: FormationDetail | null;
+  setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
+  index: number;
+}) {
+  const { formationEtablissement } = formationDetail;
+  const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
+
+  const cb = useCallback(() => {
+    setSelected(formationDetail);
+  }, [formationDetail, setSelected]);
+
+  return (
+    <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
+      <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
+        <FormationCard
+          selected={isSelected}
+          onMouseEnter={cb}
+          latitude={latitude}
+          longitude={longitude}
+          formationDetail={formationDetail}
+          tabIndex={index}
+        />
+      </Box>
+    </Grid>
+  );
+}
+
 export default function ResearchFormationsResult({
   latitude,
   longitude,
+  city,
   distance,
   time,
   tag,
@@ -55,6 +96,7 @@ export default function ResearchFormationsResult({
 }: {
   latitude: number;
   longitude: number;
+  city: string;
   distance: number;
   time: number;
   tag?: FormationTag | null;
@@ -63,8 +105,9 @@ export default function ResearchFormationsResult({
 }) {
   const theme = useTheme();
   const [selected, setSelected] = useState<null | FormationDetail>(null);
+  const { ref: refInView, inView } = useInView();
 
-  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements } = useGetFormations({
+  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
     latitude,
     longitude,
     distance,
@@ -74,12 +117,28 @@ export default function ResearchFormationsResult({
     domaine,
   });
 
-  useBottomScrollListener(fetchNextPage);
+  React.useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView]);
 
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
   if (isLoading) {
-    return <Loader withMargin />;
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection={"column"}
+        sx={{ height: "100vh", padding: { md: "2rem", xs: "1rem" }, paddingTop: { md: "5rem", xs: "5rem" } }}
+      >
+        <Loader withMargin />
+        <Typography variant="h6" textAlign={"center"}>
+          Nous recherchons toutes les formations autour de toi...
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -171,31 +230,34 @@ export default function ResearchFormationsResult({
             </InformationCard>
           ) : (
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6">
+                  Proche de {city} : {pagination?.total} formations
+                </Typography>
+              </Grid>
+
               {formations.map((formationDetail, index) => {
                 const { formation, formationEtablissement, etablissement } = formationDetail;
-                const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
                 const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
                 return (
-                  <Grid item sm={12} lg={6} xl={4} key={key} ref={formationsRef[index]}>
-                    <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
-                      <FormationCard
-                        selected={isSelected}
-                        onMouseEnter={() => {
-                          setSelected(formationDetail);
-                        }}
-                        latitude={latitude}
-                        longitude={longitude}
-                        formationDetail={formationDetail}
-                        tabIndex={index}
-                      />
-                    </Box>
-                  </Grid>
+                  <FormationResult
+                    key={key}
+                    latitude={latitude}
+                    longitude={longitude}
+                    formationRef={formationsRef[index]}
+                    setSelected={setSelected}
+                    selected={selected}
+                    formationDetail={formationDetail}
+                    index={index}
+                  />
                 );
               })}
             </Grid>
           )}
         </Grid>
       </Grid>
+      <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
     </>
   );

@@ -255,19 +255,22 @@ export const Footer = memo(
                   {...homeLinkProps}
                   className={cx(fr.cx("fr-footer__brand-link"), classes.brandLink, homeLinkProps.className)}
                 >
-                  <img
-                    className={cx(fr.cx("fr-footer__logo"), classes.operatorLogo)}
-                    style={(() => {
-                      switch (operatorLogo.orientation) {
-                        case "vertical":
-                          return { width: "3.5rem" };
-                        case "horizontal":
-                          return { maxWidth: "9.0625rem" };
-                      }
-                    })()}
-                    src={operatorLogo.imgUrl}
-                    alt={operatorLogo.alt}
-                  />
+                  {
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      className={cx(fr.cx("fr-footer__logo"), classes.operatorLogo)}
+                      style={(() => {
+                        switch (operatorLogo.orientation) {
+                          case "vertical":
+                            return { width: "3.5rem" };
+                          case "horizontal":
+                            return { maxWidth: "9.0625rem" };
+                        }
+                      })()}
+                      src={operatorLogo.imgUrl}
+                      alt={operatorLogo.alt}
+                    />
+                  }
                 </Link>
               )}
             </div>
@@ -299,6 +302,7 @@ export const Footer = memo(
                   <div className={cx(fr.cx("fr-footer__partners-main"), classes.partnersMain)}>
                     {(() => {
                       const children = (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           alt={mainPartnersLogo.alt}
                           style={{ height: "5.625rem" }} // should not be hardcoded. Can conflict with ContentSecurityPolicy when "unsafe-inline" is not allowed
@@ -329,6 +333,7 @@ export const Footer = memo(
                     <ul>
                       {subPartnersLogos.map((logo, i) => {
                         const children = (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             alt={logo.alt}
                             src={logo.imgUrl}

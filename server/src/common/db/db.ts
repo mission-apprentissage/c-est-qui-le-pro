@@ -31,8 +31,10 @@ pool.on("error", (error) => {
   try {
     console.error("lost connection with DB!");
     logger.error("pg pool lost connexion with database", { error });
-    // eslint-disable-next-line no-empty
-  } catch (e) {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    // Do not crash if we can't log
+  }
 });
 
 export const kdb = new Kysely<DB>({
@@ -72,11 +74,11 @@ export function kyselyChainFn<T extends keyof DB>(
   }, val);
 }
 
-export async function upsert<DB, T extends keyof DB & string>(
+export async function upsert<DB, T extends keyof DB>(
   kdb: Kysely<DB>,
-  table: T,
+  table: T & string,
   keys: AnyColumn<DB, T>[],
-  data: InsertExpression<DB, T>,
+  data: InsertExpression<DB, T & string>,
   onConflictData: UpdateObjectExpression<OnConflictDatabase<DB, T>, OnConflictTables<T>, OnConflictTables<T>> = null,
   returningKeys: AnyColumn<DB, T>[] = null
 ) {
@@ -86,7 +88,11 @@ export async function upsert<DB, T extends keyof DB & string>(
       ? query.onConflict((oc) => oc.columns(keys).doUpdateSet(onConflictData))
       : query.onConflict((oc) => oc.columns(keys).doNothing());
 
-  let query = withConflictData(withReturning(kdb.insertInto(table).values(data), returningKeys), keys, onConflictData);
+  const query = withConflictData(
+    withReturning(kdb.insertInto(table).values(data), returningKeys),
+    keys,
+    onConflictData
+  );
 
   return query.executeTakeFirst();
 }

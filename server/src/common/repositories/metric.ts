@@ -1,7 +1,6 @@
 import { SqlRepository } from "./base.js";
 import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
-import { InsertExpression } from "kysely/dist/cjs/parser/insert-values-parser.js";
 
 export class MetricRepository extends SqlRepository<DB, "metric"> {
   constructor(kdb = defaultKdb) {
@@ -21,10 +20,6 @@ export class MetricRepository extends SqlRepository<DB, "metric"> {
       },
       kdb
     );
-  }
-
-  async insert(data: InsertExpression<DB, "metric">) {
-    return this.kdb.insertInto("metric").values(data).returningAll().execute();
   }
 }
 

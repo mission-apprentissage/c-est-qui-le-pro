@@ -72,7 +72,7 @@ export async function splitIsochrones({
     transformData(
       async ({ uai, data }) => {
         const result = await db
-          .selectFrom((eb) => {
+          .selectFrom(() => {
             return db
               .selectNoFrom((eb) => {
                 return data.map(({ geometry, bucket }) => {
@@ -90,7 +90,7 @@ export async function splitIsochrones({
               })
               .as("buckets");
           })
-          .select(({ eb, fn }) => {
+          .select(({ eb }) => {
             return data.map(({ bucket }, index) => {
               return kyselyChainFn(
                 eb,

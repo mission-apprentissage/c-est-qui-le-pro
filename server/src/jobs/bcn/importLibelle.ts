@@ -13,7 +13,7 @@ async function getOldLibelle(diplome) {
   const currentLibelle = cleanLibelle(diplome.libelle_long);
   let previous = diplome;
   while (previous.ancien_diplome.length === 1) {
-    const previousRequest = await RawDataRepository.first(RawDataType.BCN, {
+    const previousRequest = await RawDataRepository.firstForType(RawDataType.BCN, {
       code_certification: previous.ancien_diplome[0],
     });
 
@@ -42,7 +42,8 @@ export async function importLibelle() {
       const { data } = result;
       const diplomeCfd =
         data.type === "mef"
-          ? (await RawDataRepository.first(RawDataType.BCN, { code_certification: data.code_formation_diplome }))?.data
+          ? (await RawDataRepository.firstForType(RawDataType.BCN, { code_certification: data.code_formation_diplome }))
+              ?.data
           : data;
 
       const newData = {
