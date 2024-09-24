@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.2.0...v1.3.0) (2024-09-24)
+
+
+### Features
+
+* analyses ([#6](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/6)) ([add79e5](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/add79e58f589c517aa57ce52b6235e0321e8ed1c))
+
 # [1.2.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.1.0...v1.2.0) (2024-09-23)
 
 
