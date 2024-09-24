@@ -3,11 +3,11 @@ import { Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail } from "#/types/formation";
 import "moment/locale/fr";
-import { TagPortesOuvertes } from "../components/PortesOuvertes";
+import { TagPortesOuvertes } from "./PortesOuvertes";
 import Card from "#/app/components/Card";
-import FormationTags from "../components/FormationTags";
+import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
-import { LabelApprentissage } from "../components/Apprentissage";
+import { LabelApprentissage } from "./Apprentissage";
 import { capitalize } from "lodash-es";
 
 function formatAccessTime(time: number) {
@@ -78,8 +78,11 @@ export default React.memo(function FormationCard({
         {capitalize(formation.libelle ?? "")}
       </Typography>
 
-      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px", marginBottom: fr.spacing("5v") }}>
+      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
         {etablissement.libelle}
+      </Typography>
+      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px", marginBottom: fr.spacing("5v") }}>
+        {etablissement.addressCity}
       </Typography>
 
       {withDuration && (

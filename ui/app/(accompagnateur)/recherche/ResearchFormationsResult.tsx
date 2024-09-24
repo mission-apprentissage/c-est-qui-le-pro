@@ -7,7 +7,7 @@ import { Typography, Grid } from "../../components/MaterialUINext";
 import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
-import FormationCard from "./FormationCard";
+import FormationCard from "../components/FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
 import { FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";

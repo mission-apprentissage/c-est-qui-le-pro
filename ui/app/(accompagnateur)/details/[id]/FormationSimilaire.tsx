@@ -4,7 +4,7 @@ import { FormationDetail } from "#/types/formation";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryLocation } from "../../hooks/useQueryLocation";
 import Loader from "#/app/components/Loader";
-import FormationCard from "../../recherche/FormationCard";
+import FormationCard from "../../components/FormationCard";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import useMediaQuery from "@mui/material/useMediaQuery";
