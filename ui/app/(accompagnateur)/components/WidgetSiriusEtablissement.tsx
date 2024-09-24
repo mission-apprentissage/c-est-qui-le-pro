@@ -13,7 +13,7 @@ export default function WidgetSiriusEtablissement({
   const API_URL = process.env.NEXT_PUBLIC_SIRIUS_API_BASE_URL || "https://sirius.inserjeunes.beta.gouv.fr";
 
   const ref = useRef<HTMLDivElement>(null);
-  const widgetCode = `<iframe style="width: 100%;" src="${API_URL}/iframes/etablissement?uai=${etablissement.uai}"
+  const widgetCode = `<iframe style="width: 100%; height: 0px;" src="${API_URL}/iframes/etablissement?uai=${etablissement.uai}"
    scrolling="no" frameBorder="0"></iframe>`;
 
   useEffect(() => {
