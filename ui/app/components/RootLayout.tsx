@@ -3,11 +3,11 @@ import { getHtmlAttributes } from "@codegouvfr/react-dsfr/next-appdir/getHtmlAtt
 import StartDsfr from "#/app/StartDsfr";
 import { defaultColorScheme } from "#/app/defaultColorScheme";
 import Link from "next/link";
-import PlausibleProvider from "next-plausible";
+import { LogRocketInitializer } from "./LogRocketInitializer";
+import { Plausible } from "./Plausible";
 
 export default function RootLayout({ title, children }: { title?: string; children: JSX.Element }) {
   const lang = "fr";
-
   return (
     <html
       {...getHtmlAttributes({ defaultColorScheme, lang })}
@@ -38,11 +38,8 @@ export default function RootLayout({ title, children }: { title?: string; childr
             // //"Spectral-ExtraBold"
           ]}
         />
-        <PlausibleProvider
-          domain={process.env.NEXT_PUBLIC_DOMAIN || ""}
-          trackOutboundLinks={true}
-          taggedEvents={true}
-        ></PlausibleProvider>
+        <Plausible />
+        <LogRocketInitializer />
       </head>
       <body
         style={{

@@ -38,6 +38,7 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lodash-es": "^4.17.21",
+    "logrocket": "^9.0.0",
     "material-react-table": "^1.14.0",
     "mockdate": "^3.0.5",
     "moment": "^2.29.4",

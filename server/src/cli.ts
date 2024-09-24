@@ -70,8 +70,8 @@ async function importRCOCommand() {
 async function importFormationEtablissementCommand() {
   const importFormationStats = await importFormation();
   const importIdeoFichesFormationsStats = await importIdeoFichesFormations();
-  const importFormationEtablissementStats = await importFormationEtablissement();
   const importRCOStats = await importRCO();
+  const importFormationEtablissementStats = await importFormationEtablissement();
   const importIndicateurEntreeStats = await importIndicateurEntree();
   const importIndicateurPoursuiteStats = await importIndicateurPoursuite();
   const computeFormationTagStats = await computeFormationTag();

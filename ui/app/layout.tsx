@@ -6,6 +6,7 @@ import "./(accompagnateur)/style.scss";
 import Title from "./(accompagnateur)/components/Title";
 import Footer from "./components/Footer";
 import Link from "./components/Link";
+import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
@@ -15,6 +16,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
         <Layout header={<Header title={title} tagline={tagline} />} title={title}>
           <>
             {children}
+            <ConsentBannerAndConsentManagement />
             <Footer
               brandTop={
                 <>

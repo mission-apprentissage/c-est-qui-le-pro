@@ -29,7 +29,7 @@ export default function FormationBlockPoursuite({
       {formation.formationPoursuite && (
         <Container style={{ marginTop: "2rem" }}>
           <Typography variant="h3" style={{ marginBottom: "1rem" }}>
-            Quels études sont envisageables après ?
+            Quelles études sont envisageables après la formation ?
           </Typography>
           <Grid container spacing={"1.25rem"}>
             {formation.formationPoursuite.slice(0, nbrDisplay).map((formationPoursuite, index) => {
