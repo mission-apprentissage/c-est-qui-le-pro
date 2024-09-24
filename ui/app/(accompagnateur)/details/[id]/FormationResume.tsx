@@ -111,14 +111,14 @@ function FormationResumeBlockAdmission({
       <>
         {admissionLevel === "average" && (
           <Tag square level="average">
-            Peu facile
+            Moyennement difficile
           </Tag>
         )}
       </>
       <>
         {admissionLevel === "hard" && (
           <Tag square level="hard">
-            Très sélective
+            Difficile
           </Tag>
         )}
       </>

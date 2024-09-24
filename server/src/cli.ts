@@ -23,6 +23,7 @@ import { importCertifInfo } from "./jobs/rco/importRCO.js";
 import { importRome } from "./jobs/rome/importRome.js";
 import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
 import { importFormationSimilaire } from "./jobs/formations/importFormationSimilaire";
+import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
 
 const cli = new Command();
 
@@ -54,6 +55,7 @@ const RCOJobs = [
 const formationEtablissementJobs = [
   { name: "feFormation", job: importFormation },
   { name: "feIdeoFichesFormations", job: importIdeoFichesFormations },
+  { name: "feFichesFormationsTmp", job: importFichesFormationsTmp },
   { name: "feRCO", job: importRCO },
   { name: "feFE", job: importFormationEtablissement },
   { name: "feIndicateurEntree", job: importIndicateurEntree },
