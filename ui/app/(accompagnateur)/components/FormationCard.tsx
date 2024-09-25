@@ -8,7 +8,7 @@ import Card from "#/app/components/Card";
 import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
-import { capitalize } from "lodash-es";
+import { formatLibelle } from "#/app/utils/formation";
 
 function formatAccessTime(time: number) {
   if (time >= 3600) {
@@ -75,7 +75,7 @@ export default React.memo(function FormationCard({
       <LabelApprentissage formation={formation} />
 
       <Typography variant="subtitle2" style={{ lineHeight: "28px" }}>
-        {capitalize(formation.libelle ?? "")}
+        {formatLibelle(formation.libelle)}
       </Typography>
 
       <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>

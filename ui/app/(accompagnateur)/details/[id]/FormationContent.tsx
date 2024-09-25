@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Grid } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -37,10 +37,11 @@ export default function FormationContent({ formationDetail }: { formationDetail:
   useScrollToLocation();
 
   return (
-    <>
-      <Container style={{ marginTop: fr.spacing("5v"), marginBottom: "9.375rem" }} maxWidth={"xl"}>
+    <Box style={{ marginTop: fr.spacing("5v") }}>
+      <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
+
+      <Container style={{ marginBottom: "9.375rem" }} maxWidth={"xl"}>
         <Grid container>
-          <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
           <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>
             <Grid
               container
@@ -60,7 +61,7 @@ export default function FormationContent({ formationDetail }: { formationDetail:
               ></FormationBlockFormation>
 
               <FormationBlockAdmission
-                formation={formation}
+                formationDetail={formationDetail}
                 id="l-admission"
                 css={cssAnchor}
                 style={{ marginBottom: "2rem" }}
@@ -85,6 +86,6 @@ export default function FormationContent({ formationDetail }: { formationDetail:
         <DialogMinistage />
       </Container>
       <FormationSimilare formationDetail={formationDetail} />
-    </>
+    </Box>
   );
 }

@@ -5,7 +5,7 @@ export const CFD_PATTERN = /^[0-9A-Z]{8}$/;
 
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
-  ADMISSION_FACILE = "admission_facile",
+  FAIBLE_TAUX_PRESSION = "faible_taux_pression",
 }
 
 // TODO : fetch domaine from API

@@ -111,41 +111,59 @@ export async function getFormationsSimilaire(
       kdb
         .selectFrom(
           kdb
-            .selectFrom("formationSimilaire")
-            .where("formationId", "=", formationId)
-            .select("similarityOrder")
-            .innerJoin(
-              (eb) =>
-                eb
-                  .selectFrom("formationEtablissement")
-                  .select((eb) => eb.fn("row_to_json", [sql`formation`]).as("formation"))
-                  .select((eb) => eb.fn("row_to_json", [sql`"formationEtablissement"`]).as("formationEtablissement"))
-                  .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
-                  .select("formationEtablissement.id as id")
-                  .where("millesime", "&&", [millesime])
-                  .innerJoin(
-                    queryEtablissement.query.as("etablissement"),
-                    "formationEtablissement.etablissementId",
-                    "etablissement.id"
-                  )
-                  .select("etablissement.order as order")
-                  .innerJoin(queryFormation.query.as("formation"), "formationEtablissement.formationId", "formation.id")
-                  .select("formationEtablissement.formationId as formationIdBase")
-                  .as("results"),
-              (join) => join.onRef("formationSimilaire.formationRelatedId", "=", "results.formationIdBase")
+            .selectFrom(
+              kdb
+                .selectFrom("formationSimilaire")
+                .where("formationId", "=", formationId)
+                .select("similarityOrder")
+                .innerJoin(
+                  (eb) =>
+                    eb
+                      .selectFrom("formationEtablissement")
+                      .select((eb) => eb.fn("row_to_json", [sql`formation`]).as("formation"))
+                      .select((eb) =>
+                        eb.fn("row_to_json", [sql`"formationEtablissement"`]).as("formationEtablissement")
+                      )
+                      .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
+                      .select("formationEtablissement.id as id")
+                      .where("millesime", "&&", [millesime])
+                      .innerJoin(
+                        queryEtablissement.query.as("etablissement"),
+                        "formationEtablissement.etablissementId",
+                        "etablissement.id"
+                      )
+                      .select("etablissement.order as order")
+                      .innerJoin(
+                        queryFormation.query.as("formation"),
+                        "formationEtablissement.formationId",
+                        "formation.id"
+                      )
+                      .select("formationEtablissement.formationId as formationIdBase")
+                      .select("cfd")
+                      .as("results"),
+                  (join) => join.onRef("formationSimilaire.formationRelatedId", "=", "results.formationIdBase")
+                )
+                .selectAll("results")
+                .orderBy("similarityOrder")
+                .as("results")
             )
-            .selectAll("results")
-            .orderBy("similarityOrder")
-            .as("results")
+            .leftJoin("indicateurPoursuite", "formationEtablissementId", "results.id")
+            .distinctOn("results.cfd")
+            .select(sql`COUNT(*) OVER ()`.as("total"))
+            .select("results.formationEtablissement")
+            .select("results.formation")
+            .select("results.etablissement")
+            .select("similarityOrder")
+            .select("order")
+            .select("results.id")
+            .orderBy("results.cfd")
+            .orderBy((eb) => eb.fn.coalesce("indicateurPoursuite.taux_autres_6_mois", sql.val(100)))
+            .as("formations")
         )
-        .select(sql`COUNT(*) OVER ()`.as("total"))
-        .select("results.formationEtablissement")
-        .select("results.formation")
-        .select("results.etablissement")
-        .select("similarityOrder")
-        .select("order")
-        .select("id")
         .limit(limit)
+        .selectAll()
+        .orderBy("similarityOrder")
+        .orderBy("order")
         .as("formations")
     )
     .select((eb) =>

@@ -7,9 +7,9 @@ import Link from "#/app/components/Link";
 import Card from "#/app/components/Card";
 import { fr } from "@codegouvfr/react-dsfr";
 import Container from "#/app/components/Container";
-import { capitalize } from "lodash-es";
 import { useCallback, useState } from "react";
 import Button from "#/app/components/Button";
+import { formatLibelle } from "#/app/utils/formation";
 
 export default function FormationBlockPoursuite({
   formation,
@@ -49,10 +49,10 @@ export default function FormationBlockPoursuite({
                           target="_blank"
                           href={`https://www.onisep.fr/http/redirection/formation/slug/${formationPoursuite.onisepId}`}
                         >
-                          {capitalize(formationPoursuite.libelle)}
+                          {formatLibelle(formationPoursuite.libelle)}
                         </Link>
                       ) : (
-                        capitalize(formationPoursuite.libelle)
+                        formatLibelle(formationPoursuite.libelle)
                       )}
                     </Typography>
                   </Box>

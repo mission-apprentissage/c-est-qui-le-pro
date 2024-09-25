@@ -79,7 +79,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
         {lineToDisplay * eltByLine < data.length && (
           <Grid item xs={12}>
             <Button priority="tertiary no outline" onClick={() => setLineToDisplay(lineToDisplay + 1)}>
-              Voir plus de formation{" "}
+              Voir plus de formations{" "}
               <i
                 className={fr.cx("fr-icon-arrow-down-line")}
                 css={css`

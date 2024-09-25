@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { css } from "@emotion/react";
-import { Box, Stack, useTheme } from "@mui/material";
+import { Box, BoxProps, Stack, useTheme } from "@mui/material";
 import { Typography, Grid } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
@@ -18,7 +18,14 @@ import FormationRoute from "./FormationRoute";
 import FormationDisponible from "./FormationDisponible";
 import Link from "#/app/components/Link";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
-import { capitalize } from "lodash-es";
+import { formatLibelle } from "#/app/utils/formation";
+import styled from "@emotion/styled";
+
+const BoxContainer = styled(Box)<BoxProps>`
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+`;
 
 export default function FormationHeader({
   formationDetail,
@@ -40,10 +47,20 @@ export default function FormationHeader({
 
   return (
     <>
-      <Grid item xs={12}>
+      <BoxContainer
+        maxWidth={"xl"}
+        css={css`
+          padding-left: ${fr.spacing("10v")};
+        `}
+      >
         <PortesOuvertesHeader etablissement={etablissement} />
-      </Grid>
-      <Grid item xs={12} style={{ paddingLeft: fr.spacing("5v") }}>
+      </BoxContainer>
+      <BoxContainer
+        maxWidth={"xl"}
+        css={css`
+          padding-left: ${fr.spacing("10v")};
+        `}
+      >
         <Stack spacing={1} direction={"row"}>
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
@@ -56,36 +73,41 @@ export default function FormationHeader({
           )}
           <TagApprentissage formation={formation} />
         </Stack>
-      </Grid>
-      <Grid
-        item
-        xs={12}
+      </BoxContainer>
+      <BoxContainer
         css={css`
           top: 0;
           position: sticky;
           background-color: #fff;
           z-index: 100;
+          display: flex;
         `}
-        style={{ paddingLeft: fr.spacing("5v") }}
       >
-        <Typography ref={refHeader} variant="h1" style={{ marginBottom: fr.spacing("6v"), marginTop: "0.75rem" }}>
-          {capitalize(formation.libelle)}
-        </Typography>
-      </Grid>
-      <Grid
-        item
-        xs={12}
+        <BoxContainer
+          maxWidth={"xl"}
+          css={css`
+            padding-left: 2.5rem;
+          `}
+        >
+          <Typography ref={refHeader} variant="h1" style={{ marginBottom: fr.spacing("6v"), marginTop: "0.75rem" }}>
+            {formatLibelle(formation.libelle)}
+          </Typography>
+        </BoxContainer>
+      </BoxContainer>
+      <BoxContainer
+        maxWidth={"xl"}
         css={css`
           ${theme.breakpoints.up("md")} {
-            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2rem)` : 0};
+            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2.2rem)` : 0};
             position: sticky;
           }
           background-color: #fff;
           z-index: 99;
+          display: flex;
         `}
       >
         <Grid container>
-          <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("5v") }}>
+          <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("10v") }}>
             <Typography
               variant="h5"
               style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}
@@ -124,7 +146,7 @@ export default function FormationHeader({
             `}
           >
             <Grid container>
-              <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("5v") }}>
+              <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("10v") }}>
                 <FormationRoute etablissement={etablissement} latitude={latitude} longitude={longitude} />
                 <FormationDisponible formationDetail={formationDetail} />
               </Grid>
@@ -162,30 +184,36 @@ export default function FormationHeader({
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        item
-        md={12}
+      </BoxContainer>
+
+      <BoxContainer
         css={css`
           ${theme.breakpoints.up("md")} {
             position: sticky;
-            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + ${fr.spacing("3v")})` : 0};
+            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2rem)` : 0};
             z-index: 100;
           }
           background-color: #fff;
         `}
       >
-        <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
-        <Box ref={refResume}>
-          <FormationResume formationDetail={formationDetail} />
-        </Box>
-        <Divider
-          variant="middle"
-          style={{
-            marginBottom: 0,
-          }}
-        />
-      </Grid>
+        <BoxContainer
+          maxWidth={"xl"}
+          css={css`
+            padding-left: 1.25rem;
+          `}
+        >
+          <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
+          <Box ref={refResume}>
+            <FormationResume formationDetail={formationDetail} />
+          </Box>
+          <Divider
+            variant="middle"
+            style={{
+              marginBottom: 0,
+            }}
+          />
+        </BoxContainer>
+      </BoxContainer>
     </>
   );
 }

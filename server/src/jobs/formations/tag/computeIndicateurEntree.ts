@@ -34,5 +34,5 @@ export async function computeIndicateurEntree(
     return [];
   }
 
-  return [FORMATION_TAG.ADMISSION_FACILE];
+  return [FORMATION_TAG.FAIBLE_TAUX_PRESSION];
 }

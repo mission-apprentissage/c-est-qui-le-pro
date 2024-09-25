@@ -7,6 +7,7 @@ import RawDataRepository, { RawData, RawDataType } from "#src/common/repositorie
 import { kdb, upsert } from "#src/common/db/db";
 import { isNil } from "lodash-es";
 import { urlOnisepToId } from "#src/services/onisep/utils.js";
+import { formatLibelle } from "#src/common/utils/formatUtils.js";
 
 const logger = getLoggerWithContext("import");
 
@@ -115,7 +116,7 @@ async function importFromBcnAndOnisep() {
           codeDispositif: bcnMef ? bcnMef.dispositif_formation : null,
           codeDiplome: bcn.diplome.code,
           mef11: bcnMef ? code_certification : null,
-          libelle: formationInitiale ? formationInitiale.data.libelle_formation_principal : libelle_long,
+          libelle: formatLibelle(formationInitiale ? formationInitiale.data.libelle_formation_principal : libelle_long),
           codeRncp: formationInitiale ? formationInitiale.data.code_rncp : null,
           onisepIdentifiant: formationInitiale ? urlOnisepToId(formationInitiale.data.url_et_id_onisep) : null,
         };

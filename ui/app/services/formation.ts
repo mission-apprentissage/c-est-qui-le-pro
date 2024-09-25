@@ -11,8 +11,8 @@ export const FORMATION_TAG: { tag: FormationTag; libelle: string; color: string;
   },
 
   {
-    tag: FormationTag.ADMISSION_FACILE,
-    libelle: "ADMISSION FACILE",
+    tag: FormationTag.FAIBLE_TAUX_PRESSION,
+    libelle: "FAIBLE TAUX DE PRESSION",
     color: "var(--info-425-625)",
     bgColor: "var(--info-975-75)",
     icon: "ri-door-open-fill",

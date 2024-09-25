@@ -74,6 +74,8 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
           rentreeScolaire: data["RS"],
           capacite: formatInt(data["Capacité"]),
           premiersVoeux: formatInt(data["Nb de premiers voeux"]),
+          // TODO: mieux gérer les spécialités
+          // Il y a les capacités uniquement pour la deuxième année
           effectifs: formatInt(data["Année 1"]),
           tauxPression: formatFloat(data["Tx de pression"]),
         };
