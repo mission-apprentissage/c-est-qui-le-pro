@@ -44,45 +44,45 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
   );
 }
 
-function FormationResult({
-  formationRef,
-  formationDetail,
-  latitude,
-  longitude,
-  selected,
-  setSelected,
-  index,
-}: {
-  formationRef: React.RefObject<HTMLDivElement>;
-  formationDetail: FormationDetail;
-  latitude: number;
-  longitude: number;
-  selected: FormationDetail | null;
-  setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
-  index: number;
-}) {
-  const { formationEtablissement } = formationDetail;
-  const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
+const FormationResult = React.memo(
+  ({
+    formationRef,
+    formationDetail,
+    latitude,
+    longitude,
+    isSelected,
+    setSelected,
+    index,
+  }: {
+    formationRef: React.RefObject<HTMLDivElement>;
+    formationDetail: FormationDetail;
+    latitude: number;
+    longitude: number;
+    isSelected: boolean;
+    setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
+    index: number;
+  }) => {
+    const cb = useCallback(() => {
+      setSelected(formationDetail);
+    }, [formationDetail, setSelected]);
 
-  const cb = useCallback(() => {
-    setSelected(formationDetail);
-  }, [formationDetail, setSelected]);
-
-  return (
-    <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
-      <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
-        <FormationCard
-          selected={isSelected}
-          onMouseEnter={cb}
-          latitude={latitude}
-          longitude={longitude}
-          formationDetail={formationDetail}
-          tabIndex={index}
-        />
-      </Box>
-    </Grid>
-  );
-}
+    return (
+      <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
+        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
+          <FormationCard
+            selected={isSelected}
+            onMouseEnter={cb}
+            latitude={latitude}
+            longitude={longitude}
+            formationDetail={formationDetail}
+            tabIndex={index}
+          />
+        </Box>
+      </Grid>
+    );
+  }
+);
+FormationResult.displayName = "FormationResult";
 
 export default function ResearchFormationsResult({
   latitude,
@@ -251,7 +251,7 @@ export default function ResearchFormationsResult({
                     longitude={longitude}
                     formationRef={formationsRef[index]}
                     setSelected={setSelected}
-                    selected={selected}
+                    isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
                     formationDetail={formationDetail}
                     index={index}
                   />

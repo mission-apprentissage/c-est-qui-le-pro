@@ -48,6 +48,7 @@ type IndicateurEntree = {
   capacite?: number;
   premiersVoeux?: number;
   tauxPression?: number;
+  effectifs?: number;
 };
 
 type IndicateurPoursuite = {
