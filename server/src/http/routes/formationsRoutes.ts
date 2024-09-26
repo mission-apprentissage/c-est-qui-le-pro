@@ -113,7 +113,7 @@ export default () => {
 
       const results = await getFormationsSimilaire({
         formationId: formationEtablissement.formation.id,
-        filtersEtablissement: { latitude, longitude, timeLimit: 3600 },
+        filtersEtablissement: { latitude, longitude, timeLimit: 5400 },
         millesime,
       });
       addJsonHeaders(res);

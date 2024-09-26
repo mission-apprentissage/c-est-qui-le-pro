@@ -40,7 +40,7 @@ export default function FormationContent({ formationDetail }: { formationDetail:
     <Box style={{ marginTop: fr.spacing("5v") }}>
       <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
 
-      <Container style={{ marginBottom: "9.375rem" }} maxWidth={"xl"}>
+      <Container maxWidth={"xl"}>
         <Grid container>
           <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>
             <Grid
