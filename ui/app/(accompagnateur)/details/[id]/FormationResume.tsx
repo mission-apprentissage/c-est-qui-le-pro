@@ -100,7 +100,7 @@ function FormationResumeBlockAdmission({
         {admissionLevel === "easy" && (
           <>
             <Tag square level="easy">
-              Faible taux de pression
+              Taux de pression faible
             </Tag>
             <Tag square level="easy">
               Nombreuses places
@@ -111,7 +111,7 @@ function FormationResumeBlockAdmission({
       <>
         {admissionLevel === "average" && (
           <Tag square level="average">
-            Taux de pression moyen
+            Taux de pression modéré
           </Tag>
         )}
       </>
