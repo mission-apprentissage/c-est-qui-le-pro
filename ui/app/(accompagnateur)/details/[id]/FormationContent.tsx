@@ -29,9 +29,9 @@ export default function FormationContent({ formationDetail }: { formationDetail:
 
   const cssAnchor = css`
     ${theme.breakpoints.up("md")} {
-      scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + ${stickyResumeSize?.height || 0}px + 1rem);
+      scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + ${stickyResumeSize?.height || 0}px + 3rem);
     }
-    scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + 1rem);
+    scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + 3rem);
   `;
 
   useScrollToLocation();

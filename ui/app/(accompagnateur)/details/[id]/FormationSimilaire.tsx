@@ -54,7 +54,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
 
       <Grid container spacing={4}>
         {data.slice(0, eltByLine * lineToDisplay).map((formationDetail, index) => (
-          <Grow in={true} unmountOnExit key={index}>
+          <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
             <Grid item xs={12 / eltByLine}>
               <FormationCard
                 formationDetail={formationDetail}
