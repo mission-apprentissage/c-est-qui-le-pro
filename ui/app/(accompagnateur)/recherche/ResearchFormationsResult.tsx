@@ -148,46 +148,7 @@ export default function ResearchFormationsResult({
         <ClientSideScrollRestorer />
       </Suspense>
 
-      <Grid container spacing={0} direction="row-reverse">
-        <Grid
-          item
-          sm={12}
-          md={4}
-          lg={4}
-          xl={4}
-          css={css`
-            width: 100%;
-            top: 0;
-            position: sticky;
-            height: 100vh;
-            ${theme.breakpoints.down("md")} {
-              height: 40vh;
-              z-index: 600;
-              display: none;
-            }
-          `}
-        >
-          {!isDownSm && (
-            <FormationsMap
-              selected={selected}
-              longitude={longitude}
-              latitude={latitude}
-              etablissements={etablissements}
-              onMarkerClick={(etablissement) => {
-                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
-                if (formationIndex === -1) {
-                  return;
-                }
-
-                const formation = formations[formationIndex];
-                const formationRef = formationsRef[formationIndex];
-                setSelected(formation);
-                formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
-              }}
-            />
-          )}
-        </Grid>
-
+      <Grid container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
         <Grid
           item
           md={8}
@@ -258,6 +219,46 @@ export default function ResearchFormationsResult({
                 );
               })}
             </Grid>
+          )}
+        </Grid>
+
+        <Grid
+          item
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
+          css={css`
+            width: 100%;
+            top: 0;
+            position: sticky;
+            height: 100vh;
+            ${theme.breakpoints.down("md")} {
+              height: 40vh;
+              z-index: 600;
+              flex-basis: auto;
+              display: none;
+            }
+          `}
+        >
+          {!isDownSm && (
+            <FormationsMap
+              selected={selected}
+              longitude={longitude}
+              latitude={latitude}
+              etablissements={etablissements}
+              onMarkerClick={(etablissement) => {
+                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
+                if (formationIndex === -1) {
+                  return;
+                }
+
+                const formation = formations[formationIndex];
+                const formationRef = formationsRef[formationIndex];
+                setSelected(formation);
+                formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            />
           )}
         </Grid>
       </Grid>
