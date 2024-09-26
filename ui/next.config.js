@@ -24,6 +24,9 @@ const nextConfig = {
       transform: "@mui/icons-material/{{member}}",
     },
   },
+  compiler: {
+    removeConsole: false,
+  },
 };
 
 module.exports = nextConfig;
