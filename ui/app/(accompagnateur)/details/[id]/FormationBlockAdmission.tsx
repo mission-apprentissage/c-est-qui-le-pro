@@ -44,7 +44,7 @@ function FormationBlockAdmissionScolaire({
 
   return (
     <Box style={{ marginTop: "2rem" }}>
-      <Typography variant="h3" style={{ marginBottom: "2rem" }}>
+      <Typography variant="h3" style={{ marginBottom: "1rem" }}>
         Est-ce facile d’y rentrer ?
       </Typography>
       <Box>
@@ -128,6 +128,7 @@ function FormationBlockAdmissionScolaire({
           </Grid>
         </Grid>
       </Box>
+      <Divider variant="middle" style={{ marginLeft: 0, marginRight: 0, marginTop: "2rem", marginBottom: "2rem" }} />
     </Box>
   );
 }
