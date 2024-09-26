@@ -10,11 +10,12 @@ export type TagProps = {
   active?: boolean;
   level?: Level;
   square?: boolean;
+  bold?: boolean;
 } & DSFRBTagProps;
 
 // TODO: fix css order
 const TagStyled = styled(Tag, {
-  shouldForwardProp: (prop) => !["variant", "square", "level", "active"].includes(prop),
+  shouldForwardProp: (prop) => !["variant", "square", "level", "active", "bold"].includes(prop),
 })<TagProps>`
   &,
   &.fr-tag {
@@ -29,7 +30,6 @@ const TagStyled = styled(Tag, {
           return `
           background-color: var(--grey-1000-50);
           color: var(--blue-france-sun-113-625);
-          font-weight: 700;
           border: 1px solid #ECECFE;
           
           &:not(:disabled):hover {
@@ -48,8 +48,6 @@ const TagStyled = styled(Tag, {
         case "filter":
           return `
           background-color: var(--grey-1000-50);
-          color: var(--blue-france-sun-113-625);
-          font-weight: 700;
           padding-top: 0.5rem;
           padding-bottom: 0.5rem;
           padding-left: 1rem;
@@ -82,25 +80,24 @@ const TagStyled = styled(Tag, {
     ${({ square }) => {
       return square ? `border-radius: 4px;` : "";
     }}
+
+    ${({ bold }) => (bold ? "font-weight: 700;" : "")}
   }
 `;
 
 export const TagStatutPublic = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--blue-france-sun-113-625);
-  font-weight: 700;
 `;
 
 export const TagStatutPrive = styled(TagStyled)`
   background-color: #feebcb;
   color: #7b341e;
-  font-weight: 700;
 `;
 
 export const TagDuree = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--info-425-625);
-  font-weight: 700;
 `;
 
 export default TagStyled;

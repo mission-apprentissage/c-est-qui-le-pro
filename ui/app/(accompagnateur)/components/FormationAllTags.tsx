@@ -18,6 +18,7 @@ function FilterTag({
   return (
     <Tag
       variant="filter"
+      bold
       active={selected === tagElt.tag}
       nativeButtonProps={{
         onClick: function () {

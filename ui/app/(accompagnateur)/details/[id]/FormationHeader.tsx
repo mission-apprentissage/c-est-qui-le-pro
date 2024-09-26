@@ -64,12 +64,18 @@ export default function FormationHeader({
         <Stack spacing={1} direction={"row"}>
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
-              <TagStatutPublic square>{etablissement.statut.toUpperCase()}</TagStatutPublic>
+              <TagStatutPublic square bold>
+                {etablissement.statut.toUpperCase()}
+              </TagStatutPublic>
             ) : (
-              <TagStatutPrive square>{etablissement.statut.toUpperCase()}</TagStatutPrive>
+              <TagStatutPrive square bold>
+                {etablissement.statut.toUpperCase()}
+              </TagStatutPrive>
             ))}
           {formationEtablissement.duree && (
-            <TagDuree square>{`En ${formationEtablissement.duree}`.toUpperCase()}</TagDuree>
+            <TagDuree bold square>
+              {`En ${formationEtablissement.duree}`.toUpperCase()}
+            </TagDuree>
           )}
           <TagApprentissage formation={formation} />
         </Stack>

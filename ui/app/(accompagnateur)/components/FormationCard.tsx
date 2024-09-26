@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail } from "#/types/formation";
 import "moment/locale/fr";
@@ -9,6 +9,8 @@ import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
 import { formatLibelle } from "#/app/utils/formation";
+import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
+import { capitalize } from "lodash-es";
 
 function formatAccessTime(time: number) {
   if (time >= 3600) {
@@ -81,12 +83,21 @@ export default React.memo(function FormationCard({
       <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
         {etablissement.libelle}
       </Typography>
-      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px", marginBottom: fr.spacing("5v") }}>
+      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
         {etablissement.addressCity}
       </Typography>
+      {etablissement.statut && (
+        <Box style={{ marginTop: "0.75rem" }}>
+          {etablissement.statut === "public" ? (
+            <TagStatutPublic>{capitalize(etablissement.statut)}</TagStatutPublic>
+          ) : (
+            <TagStatutPrive>{capitalize(etablissement.statut)}</TagStatutPrive>
+          )}
+        </Box>
+      )}
 
       {withDuration && (
-        <Grid container>
+        <Grid container style={{ marginTop: fr.spacing("5v") }}>
           <Grid item xs={10}>
             {etablissement.accessTime ? (
               <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
