@@ -102,7 +102,7 @@ export default function FormationBlockAccesEmploi({
 } & React.ComponentProps<typeof Card>) {
   return (
     <Card type="details" title="L’accès à l’emploi" {...cardProps}>
-      <Typography variant="h3">Que deviennent les élèves après cette formation ?</Typography>
+      <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
       <WidgetInserJeunes etablissement={etablissement} formation={formation} />
 
       <FormationMetier formation={formation} />

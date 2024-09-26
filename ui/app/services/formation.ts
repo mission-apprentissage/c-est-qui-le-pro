@@ -1,13 +1,22 @@
 import { FormationDomaine, FormationTag } from "#/types/formation";
+import CalendarIcon from "#/app/components/icon/CalendarIcon";
 import { FrCxArg, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
+import MoneyIcon from "../components/icon/MoneyIcon";
 
-export const FORMATION_TAG: { tag: FormationTag; libelle: string; color: string; bgColor: string; icon: FrCxArg }[] = [
+export type FormationTagType = {
+  tag: FormationTag;
+  libelle: string;
+  color: string;
+  bgColor: string;
+  icon: (() => JSX.Element) | FrCxArg;
+};
+export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
     libelle: "POUR TRAVAILLER RAPIDEMENT",
     color: "#18753c",
     bgColor: "var(--success-975-75)",
-    icon: "ri-briefcase-4-fill",
+    icon: MoneyIcon,
   },
 
   {
@@ -15,7 +24,7 @@ export const FORMATION_TAG: { tag: FormationTag; libelle: string; color: string;
     libelle: "TAUX DE PRESSION FAIBLE",
     color: "var(--info-425-625)",
     bgColor: "var(--info-975-75)",
-    icon: "ri-door-open-fill",
+    icon: CalendarIcon,
   },
 ];
 

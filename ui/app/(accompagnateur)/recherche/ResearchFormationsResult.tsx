@@ -180,9 +180,9 @@ export default function ResearchFormationsResult({
                 }
 
                 const formation = formations[formationIndex];
-                //const formationRef = formationsRef[formationIndex];
+                const formationRef = formationsRef[formationIndex];
                 setSelected(formation);
-                //formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
+                formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             />
           )}
