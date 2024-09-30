@@ -27,6 +27,7 @@ export interface Domaine {
 }
 
 export interface Etablissement {
+  academie: string | null;
   addressCedex: string | null;
   addressCity: string | null;
   addressPostCode: string | null;

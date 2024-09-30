@@ -8,6 +8,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
     super(
       "etablissement",
       {
+        academie: null,
         addressCedex: null,
         addressCity: null,
         addressPostCode: null,

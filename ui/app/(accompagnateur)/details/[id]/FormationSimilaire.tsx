@@ -12,6 +12,7 @@ import { Grow, Theme } from "@mui/material";
 import { useState } from "react";
 import { css } from "@emotion/react";
 import Button from "#/app/components/Button";
+import Container from "#/app/components/Container";
 
 export default function FormationSimilare({ formationDetail }: { formationDetail: FormationDetail }) {
   const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
@@ -22,7 +23,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
   const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
   const latitude = location.latitude ?? formationDetail.etablissement.latitude ?? 0;
 
-  const eltByLine = isSm ? 2 : isMd ? 3 : isLg ? 4 : 5;
+  const eltByLine = isSm ? 1 : isMd ? 3 : isLg ? 4 : 4;
   const [lineToDisplay, setLineToDisplay] = useState(1);
 
   const { isLoading, isError, data } = useQuery({
@@ -48,51 +49,53 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
 
   return (
     <Box style={{ backgroundColor: fr.colors.decisions.artwork.decorative.blueFrance.default, padding: "2rem" }}>
-      <Typography variant="h3" style={{ marginBottom: "1.25rem" }}>
-        Ces formations pourraient t’intéresser
-      </Typography>
+      <Container maxWidth={"xl"}>
+        <Typography variant="h3" style={{ marginBottom: "1.25rem" }}>
+          Ces formations pourraient t’intéresser
+        </Typography>
 
-      <Grid container spacing={4}>
-        {data.slice(0, eltByLine * lineToDisplay).map((formationDetail, index) => (
-          <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
-            <Grid item xs={12 / eltByLine}>
-              <FormationCard
-                formationDetail={formationDetail}
-                latitude={latitude}
-                longitude={longitude}
-                selected={false}
-                tabIndex={index}
-                withDuration={false}
-                withJPO={false}
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  backgroundColor: "white",
-                }}
-              />
+        <Grid container spacing={4}>
+          {data.slice(0, eltByLine * lineToDisplay).map((formationDetail, index) => (
+            <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
+              <Grid item xs={12 / eltByLine}>
+                <FormationCard
+                  formationDetail={formationDetail}
+                  latitude={latitude}
+                  longitude={longitude}
+                  selected={false}
+                  tabIndex={index}
+                  withDuration={false}
+                  withJPO={false}
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    backgroundColor: "white",
+                  }}
+                />
+              </Grid>
+            </Grow>
+          ))}
+
+          {lineToDisplay * eltByLine < data.length && (
+            <Grid item xs={12}>
+              <Button priority="tertiary no outline" onClick={() => setLineToDisplay(lineToDisplay + 1)}>
+                Voir plus de formations{" "}
+                <i
+                  className={fr.cx("fr-icon-arrow-down-line")}
+                  css={css`
+                    &::before {
+                      --icon-size: 1.5rem;
+                    }
+                    margin-right: 0.25rem;
+                  `}
+                ></i>
+              </Button>
             </Grid>
-          </Grow>
-        ))}
-
-        {lineToDisplay * eltByLine < data.length && (
-          <Grid item xs={12}>
-            <Button priority="tertiary no outline" onClick={() => setLineToDisplay(lineToDisplay + 1)}>
-              Voir plus de formations{" "}
-              <i
-                className={fr.cx("fr-icon-arrow-down-line")}
-                css={css`
-                  &::before {
-                    --icon-size: 1.5rem;
-                  }
-                  margin-right: 0.25rem;
-                `}
-              ></i>
-            </Button>
-          </Grid>
-        )}
-      </Grid>
+          )}
+        </Grid>
+      </Container>
     </Box>
   );
 }

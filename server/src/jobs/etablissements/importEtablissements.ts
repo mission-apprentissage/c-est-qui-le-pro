@@ -59,6 +59,7 @@ export async function importEtablissements() {
           addressPostCode: data.code_postal_uai,
           addressCity: data.commune_libe,
           addressCedex: /cedex/i.test(data.localite_acheminement_uai),
+          academie: data.academie,
         },
       };
     }),

@@ -133,6 +133,7 @@ export async function getFormationsSimilaire(
                         "etablissement.id"
                       )
                       .select("etablissement.order as order")
+                      .select("etablissement.statut as etablissementStatut")
                       .innerJoin(
                         queryFormation.query.as("formation"),
                         "formationEtablissement.formationId",
@@ -157,6 +158,7 @@ export async function getFormationsSimilaire(
             .select("order")
             .select("results.id")
             .orderBy("results.cfd")
+            .orderBy("results.etablissementStatut", "desc")
             .orderBy((eb) => eb.fn.coalesce("indicateurPoursuite.taux_autres_6_mois", sql.val(100)))
             .as("formations")
         )

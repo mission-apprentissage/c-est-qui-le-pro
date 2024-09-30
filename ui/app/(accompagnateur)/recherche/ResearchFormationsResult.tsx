@@ -156,7 +156,7 @@ export default function ResearchFormationsResult({
           xl={8}
           sm={12}
           css={css`
-            padding: 1.75rem;
+            padding: 1.5rem;
             z-index: 500;
             width: 100%;
             ${theme.breakpoints.up("lg")} {
@@ -164,7 +164,7 @@ export default function ResearchFormationsResult({
             }
           `}
         >
-          <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: fr.spacing("5v") }}>
+          <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
             <FormationsFilterTag selected={tag} />
           </Stack>
 
