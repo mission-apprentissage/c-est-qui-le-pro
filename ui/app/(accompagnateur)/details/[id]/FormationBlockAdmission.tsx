@@ -82,13 +82,13 @@ function FormationBlockAdmissionScolaire({
       <Box sx={{ width: "300px", marginLeft: { sm: "0", md: "2rem" }, marginTop: "1rem" }}>
         <Grid container columnSpacing={4} rowSpacing={2}>
           <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
-            Vœux
+            Vœux n°1
           </Grid>
           <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
             Places
           </Grid>
           <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
-            Élèves
+            Élèves à la rentrée
           </Grid>
           <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
             <Box
