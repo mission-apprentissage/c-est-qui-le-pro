@@ -141,14 +141,21 @@ function FormationBlockAdmissionVoeux({ formationDetail }: { formationDetail: Fo
           Est-ce facile d’y rentrer ?
         </Typography>
         <Box style={{ marginBottom: "1rem" }}>
-          En alternance, le plus compliqué, c&apos;est bien souvent de trouver une entreprise pour signer un contrat.
+          En alternance, le plus compliqué est bien souvent de trouver une entreprise pour signer un contrat.
           <br />
-          <br /> Mais pas de panique, il y a beaucoup d&apos;interlocuteurs et de ressources pour t&apos;aider dans
-          cette recherche.
+          <br /> Mais pas de panique ! Il y a beaucoup d&apos;interlocuteurs et de ressources pour aider dans cette
+          recherche.
           <br />
-          <br /> Tu peux par exemple <b>te faire aider par ton futur lycée ou CFA</b> (centre de formation
-          d&apos;apprentis) ou par une mission locale. Tu peux aussi consulter les offres de contrat en alternance des
-          entreprises qui recrutent sur le site <b>La bonne alternance</b>.
+          <ul>
+            <li>
+              Il est par exemple possible de <b>se faire aider par son futur lycée ou CFA</b> (centre de formation
+              d&apos;apprentis) ou par une mission locale.
+            </li>
+            <li>
+              Le site <b>La bonne alternance</b> permet de consulter des offres de contrat en alternance des entreprises
+              qui recrutent.
+            </li>
+          </ul>
         </Box>
         <Link
           style={{ backgroundImage: "none" }}
