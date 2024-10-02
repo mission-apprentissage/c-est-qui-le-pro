@@ -8,14 +8,21 @@ import { notFound } from "next/navigation";
 import Title from "#/app/(accompagnateur)/components/Title";
 import FormationContent from "./FormationContent";
 
-function FormationResult({ id }: { id: string }) {
+function FormationResult({ id, latitude, longitude }: { id: string; latitude?: string; longitude?: string }) {
   const { isLoading, isError, data } = useQuery({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: 0,
-    queryKey: ["formation", id],
+    queryKey: ["formation", id, latitude, longitude],
     queryFn: ({ signal }) => {
-      return formation({ id: id }, { signal });
+      return formation(
+        {
+          id: id,
+          latitude: latitude ? parseFloat(latitude) : undefined,
+          longitude: longitude ? parseFloat(longitude) : undefined,
+        },
+        { signal }
+      );
     },
   });
 
@@ -37,11 +44,17 @@ function FormationResult({ id }: { id: string }) {
   );
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { latitude?: string; longitude?: string };
+}) {
   return (
     <>
       <Suspense>
-        <FormationResult id={params.id} />
+        <FormationResult id={params.id} latitude={searchParams.latitude} longitude={searchParams.longitude} />
       </Suspense>
     </>
   );

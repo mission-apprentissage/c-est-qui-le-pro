@@ -6,7 +6,18 @@ const API_BASE_URL = "https://api-adresse.data.gouv.fr";
 export async function fetchAddress(
   address: string,
   { signal }: { signal: AbortSignal | undefined } = { signal: undefined }
-): Promise<any> {
+): Promise<{
+  features: {
+    properties: {
+      city: string;
+      postcode: string;
+      [key: string]: any;
+    };
+    geometry: {
+      coordinates: [number, number];
+    };
+  }[];
+} | null> {
   if (!address || address.trim().length < 3) {
     return null;
   }
@@ -19,9 +30,15 @@ export async function fetchAddress(
           async (position) => {
             const { latitude, longitude } = position.coords;
 
+            const reverse = await fetchReverse(latitude, longitude);
             resolve({
               features: [
                 {
+                  ...(reverse?.features && reverse?.features.length > 0
+                    ? {
+                        properties: reverse?.features[0].properties,
+                      }
+                    : { properties: { postcode: null } }),
                   geometry: {
                     coordinates: [longitude, latitude],
                   },

@@ -11,6 +11,8 @@ import FormationEtablissement from "#src/common/repositories/formationEtablissem
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import { stripNull } from "../utils/formatters";
 import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
+import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
+import { merge } from "lodash-es";
 
 export default () => {
   const router = express.Router();
@@ -18,11 +20,13 @@ export default () => {
   router.get(
     "/api/formation/:cfd-:codeDispositif?-:uai-:voie",
     tryCatch(async (req, res) => {
-      const { cfd, codeDispositif, uai, voie } = await validate(
+      const { cfd, codeDispositif, uai, voie, longitude, latitude } = await validate(
         { ...req.params, ...req.query },
         {
           cfd: Joi.string().required(),
           codeDispositif: Joi.string().allow(null, "").default(null),
+          longitude: Joi.number().min(-180).max(180).default(null),
+          latitude: Joi.number().min(-90).max(90).default(null),
           ...validators.uai(),
           voie: Joi.string().valid("scolaire", "apprentissage").required(),
         }
@@ -42,15 +46,20 @@ export default () => {
         throw Boom.notFound();
       }
 
+      const accessTime =
+        latitude && longitude
+          ? await EtablissementIsochroneRepository.bucketFromCoordinate(formation.etablissement.id, latitude, longitude)
+          : null;
+
       addJsonHeaders(res);
-      res.send(stripNull(formation));
+      res.send(stripNull(merge(formation, { etablissement: { accessTime } })));
     })
   );
 
   router.get(
     "/api/formations",
     tryCatch(async (req, res) => {
-      const { longitude, latitude, distance, timeLimit, tag, uais, cfds, domaine, page, items_par_page } =
+      const { longitude, latitude, distance, timeLimit, tag, uais, cfds, domaine, academie, page, items_par_page } =
         await validate(
           { ...req.query, ...req.params },
           {
@@ -65,6 +74,7 @@ export default () => {
             ...validators.uais(),
             ...validators.cfds(),
             domaine: Joi.string().empty("").default(null),
+            academie: Joi.string().empty("").default(null),
             ...validators.pagination({ items_par_page: 100 }),
           }
         );
@@ -74,7 +84,7 @@ export default () => {
 
       const results = await getFormationsSQL(
         {
-          filtersEtablissement: { timeLimit, distance, latitude, longitude, uais },
+          filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
           filtersFormation: { cfds, domaine },
           tag,
           millesime,

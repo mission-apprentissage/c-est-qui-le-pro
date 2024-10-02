@@ -37,13 +37,17 @@ function ResearchFormationsParameter() {
         throw new ErrorAddressInvalid();
       }
 
+      const coordinate = addressCoordinate.features[0].geometry.coordinates;
+
       return {
-        coordinate: addressCoordinate.features[0].geometry.coordinates,
+        coordinate,
+        longitude: coordinate[0],
+        latitude: coordinate[1],
         city: address === myPosition ? myPosition : addressCoordinate.features[0].properties.city,
+        postcode: addressCoordinate.features[0].properties.postcode,
       };
     },
   });
-  const { coordinate, city } = data || {};
 
   if (!params) {
     return null;
@@ -107,11 +111,9 @@ function ResearchFormationsParameter() {
           />
         </Grid>
       </Grid>
-      {coordinate && (
+      {data && (
         <ResearchFormationsResult
-          longitude={coordinate[0]}
-          latitude={coordinate[1]}
-          city={city}
+          location={data}
           distance={distance * 1000}
           time={time * 60}
           tag={tag}

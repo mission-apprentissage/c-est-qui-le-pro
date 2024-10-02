@@ -15,6 +15,8 @@ import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
+import { isNil } from "lodash-es";
+import { UserLocation } from "#/types/userLocation";
 
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
@@ -85,18 +87,14 @@ const FormationResult = React.memo(
 FormationResult.displayName = "FormationResult";
 
 export default function ResearchFormationsResult({
-  latitude,
-  longitude,
-  city,
+  location,
   distance,
   time,
   tag,
   domaine,
   page = 1,
 }: {
-  latitude: number;
-  longitude: number;
-  city: string;
+  location: UserLocation;
   distance: number;
   time: number;
   tag?: FormationTag | null;
@@ -109,13 +107,14 @@ export default function ResearchFormationsResult({
   const { ref: refInView, inView } = useInView();
 
   const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
-    latitude,
-    longitude,
+    latitude: location.latitude,
+    longitude: location.longitude,
     distance,
     time,
     tag,
     page,
     domaine,
+    postcode: location.postcode,
   });
 
   React.useEffect(() => {
@@ -125,6 +124,8 @@ export default function ResearchFormationsResult({
   }, [fetchNextPage, inView]);
 
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
+  const formationsIsochrone = useMemo(() => formations.filter((f) => !isNil(f.etablissement.accessTime)), [formations]);
+  const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
 
   if (isLoading) {
     return (
@@ -194,31 +195,63 @@ export default function ResearchFormationsResult({
               <Typography>Bonne recherche !</Typography>
             </InformationCard>
           ) : (
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h6">
-                  Proche de {city} : {pagination?.total} formations
-                </Typography>
+            <>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="h6">
+                    À pied ou en transports en commun : {pagination?.totalIsochrone} formations
+                  </Typography>
+                </Grid>
+
+                {formationsIsochrone.map((formationDetail, index) => {
+                  const { formation, formationEtablissement, etablissement } = formationDetail;
+                  const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+                  return (
+                    <FormationResult
+                      key={key}
+                      latitude={location.latitude}
+                      longitude={location.longitude}
+                      formationRef={formationsRef[index]}
+                      setSelected={setSelected}
+                      isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                      formationDetail={formationDetail}
+                      index={index}
+                    />
+                  );
+                })}
               </Grid>
 
-              {formations.map((formationDetail, index) => {
-                const { formation, formationEtablissement, etablissement } = formationDetail;
-                const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+              {formationsCar.length > 0 && (
+                <Grid container spacing={2} style={{ marginTop: "2rem" }}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6">
+                      Un peu plus loin dans l&apos;académie, en voiture :{" "}
+                      {pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0} formations
+                    </Typography>
+                  </Grid>
 
-                return (
-                  <FormationResult
-                    key={key}
-                    latitude={latitude}
-                    longitude={longitude}
-                    formationRef={formationsRef[index]}
-                    setSelected={setSelected}
-                    isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
-                    formationDetail={formationDetail}
-                    index={index}
-                  />
-                );
-              })}
-            </Grid>
+                  {formationsCar.map((formationDetail, index) => {
+                    const mainIndex = formationsIsochrone.length + index;
+                    const { formation, formationEtablissement, etablissement } = formationDetail;
+                    const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+                    return (
+                      <FormationResult
+                        key={key}
+                        latitude={location.latitude}
+                        longitude={location.longitude}
+                        formationRef={formationsRef[mainIndex]}
+                        setSelected={setSelected}
+                        isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                        formationDetail={formationDetail}
+                        index={mainIndex}
+                      />
+                    );
+                  })}
+                </Grid>
+              )}
+            </>
           )}
         </Grid>
 
@@ -244,8 +277,8 @@ export default function ResearchFormationsResult({
           {!isDownSm && (
             <FormationsMap
               selected={selected}
-              longitude={longitude}
-              latitude={latitude}
+              longitude={location.longitude}
+              latitude={location.latitude}
               etablissements={etablissements}
               onMarkerClick={(etablissement) => {
                 const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
