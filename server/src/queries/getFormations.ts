@@ -174,9 +174,8 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
 
   if (latitude === null || longitude === null) {
     return {
-      query: queryEtablissement
-        .select(sql<string>`ROW_NUMBER() OVER (ORDER BY etablissement.id)`.as("order"))
-        .select(sql.val(null).as("accessTime")),
+      query: queryEtablissement.select(sql.val(null).as("accessTime")),
+      order: sql.raw(['"etablissementId"', "id"].filter((d) => d).join(",")),
     };
   }
 
@@ -190,23 +189,22 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
           .select("buckets.time as accessTime")
           .orderBy("buckets.time")
       )
-      .$if(!queryIsochrones, (qb) => qb.select(sql.val(null).as("accessTime")))
+      .$if(!queryIsochrones, (qb) => qb.select(sql.val(null).as("accessTime")).select(sql.val(null)))
       .where((eb) =>
         eb.or([eb("academie", "=", academie), ...(queryIsochrones ? [eb("buckets.time", "is not", null)] : [])])
       )
-      .$if(distance || (timeLimit && !queryIsochrones), (qb) => qb.where("etablissement.distance", "<", distance))
-      .select(
-        sql<string>`ROW_NUMBER() OVER (ORDER BY  ${sql.raw(
-          [
-            queryIsochrones ? 'buckets."time"' : null,
-            "case when buckets.time is not null then etablissement.statut else null end DESC",
-            "etablissement.distance",
-            "etablissement.id",
-          ]
-            .filter((d) => d)
-            .join(",")
-        )})`.as("order")
-      ),
+      .$if(distance || (timeLimit && !queryIsochrones), (qb) => qb.where("etablissement.distance", "<", distance)),
+    order: sql.raw(
+      [
+        queryIsochrones ? '"accessTime"' : null,
+        queryIsochrones ? 'case when "accessTime" is not null then statut else null end DESC' : null,
+        "distance",
+        '"etablissementId"',
+        "id",
+      ]
+        .filter((d) => d)
+        .join(",")
+    ),
   };
 }
 
@@ -267,17 +265,21 @@ export async function getFormationsSQL(
               "formationEtablissement.etablissementId",
               "etablissement.id"
             )
-            .select("etablissement.order as order")
             .select("etablissement.accessTime as accessTime")
+            .select("etablissement.statut as statut")
+            .select("etablissement.distance as distance")
+            .select("etablissement.id as etablissementId")
             .innerJoin(queryFormation.query.as("formation"), "formationEtablissement.formationId", "formation.id")
             .as("results")
         )
         .select(sql`COUNT("accessTime") OVER ()`.as("totalIsochrone"))
         .select(sql`COUNT(*) OVER ()`.as("total"))
+        .select(sql<string>`ROW_NUMBER() OVER (ORDER BY  ${queryEtablissement.order})`.as("order"))
         .selectAll()
         .limit(limit)
         .offset(skip)
-        .orderBy("order")
+        .orderBy(queryEtablissement.order)
+        //.orderBy("order")
         .as("formations")
     )
     .select((eb) =>
@@ -295,7 +297,7 @@ export async function getFormationsSQL(
         formations: eb.fn.coalesce(
           sql<
             { formation: Formation; etablissement: Etablissement; formationEtablissement: FormationEtablissement }[]
-          >`json_agg(to_jsonb(formations.*) - 'total' - 'id' - 'order' ORDER BY formations.order, formations.id)`,
+          >`json_agg(to_jsonb(formations.*) - 'total' - 'id' - 'order' - 'statut' - 'distance' - 'etablissementId' - 'totalIsochrone' ORDER BY formations.order, formations.id)`,
           sql.val("[]")
         ),
       }).as("results")
