@@ -44,10 +44,10 @@ function FormationBlockAdmissionScolaire({
 
   return (
     <Box style={{ marginTop: "2rem" }}>
-      <Typography variant="h3" style={{ marginBottom: "1rem" }}>
+      <Typography variant="h3" style={{ marginBottom: "1.5rem" }}>
         Est-ce facile d’y rentrer ?
       </Typography>
-      <Box>
+      <Box style={{ fontWeight: "500" }}>
         <>
           {admissionLevel === "easy" && (
             <Box>
@@ -79,8 +79,8 @@ function FormationBlockAdmissionScolaire({
           )}
         </>
       </Box>
-      <Box sx={{ width: "300px", marginLeft: { sm: "0", md: "2rem" }, marginTop: "1rem" }}>
-        <Grid container columnSpacing={4} rowSpacing={2}>
+      <Box sx={{ width: "300px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
+        <Grid container columnSpacing={3} rowSpacing={20}>
           <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
             Vœux n°1
           </Grid>

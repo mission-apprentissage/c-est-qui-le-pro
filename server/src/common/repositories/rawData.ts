@@ -20,6 +20,8 @@ export enum RawDataType {
 
   RCO_certifInfo = "RCO_certifInfo",
   RCO_certificationRome = "RCO_certificationRome",
+
+  EXPOSITION_regionales = "EXPOSITION_regionales",
 }
 export interface RawData {
   [RawDataType.CatalogueApprentissage]: any;
@@ -32,6 +34,7 @@ export interface RawData {
   [RawDataType.ONISEP_ideoFormationsInitiales]: any;
   [RawDataType.RCO_certifInfo]: any;
   [RawDataType.RCO_certificationRome]: any;
+  [RawDataType.EXPOSITION_regionales]: any;
 }
 
 export class RawDataRepository extends SqlRepository<DB, "rawData"> {

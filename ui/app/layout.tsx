@@ -14,7 +14,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
       <>
         <Title />
         <Layout header={<Header title={title} tagline={tagline} />} title={title}>
-          <>
+          <div>
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer
@@ -50,7 +50,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 },
               ]}
             />
-          </>
+          </div>
         </Layout>
       </>
     </RootLayout>

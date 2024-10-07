@@ -17,6 +17,7 @@ import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
 import { isNil } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
+import { pluralize } from "#/app/utils/stringUtils";
 
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
@@ -127,6 +128,9 @@ export default function ResearchFormationsResult({
   const formationsIsochrone = useMemo(() => formations.filter((f) => !isNil(f.etablissement.accessTime)), [formations]);
   const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
 
+  const totalIsochrone = useMemo(() => pagination?.totalIsochrone || 0, [pagination]);
+  const totalCar = useMemo(() => (pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0), [pagination]);
+
   if (isLoading) {
     return (
       <Box
@@ -199,7 +203,7 @@ export default function ResearchFormationsResult({
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography variant="h6">
-                    À pied ou en transports en commun : {pagination?.totalIsochrone} formations
+                    À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
                   </Typography>
                 </Grid>
 
@@ -226,8 +230,7 @@ export default function ResearchFormationsResult({
                 <Grid container spacing={2} style={{ marginTop: "2rem" }}>
                   <Grid item xs={12}>
                     <Typography variant="h6">
-                      Un peu plus loin dans l&apos;académie, en voiture :{" "}
-                      {pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0} formations
+                      Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
                     </Typography>
                   </Grid>
 

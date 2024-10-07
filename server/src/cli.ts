@@ -24,6 +24,7 @@ import { importRome } from "./jobs/rome/importRome.js";
 import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
 import { importFormationSimilaire } from "./jobs/formations/importFormationSimilaire";
 import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
+import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndicateurPoursuiteRegionale";
 
 const cli = new Command();
 
@@ -59,6 +60,7 @@ const formationEtablissementJobs = [
   { name: "feRCO", job: importRCO },
   { name: "feFE", job: importFormationEtablissement },
   { name: "feIndicateurEntree", job: importIndicateurEntree },
+  { name: "feIndicateurPoursuiteRegionale", job: importIndicateurPoursuiteRegionale },
   { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },
   { name: "feFormationTag", job: computeFormationTag },
   { name: "feFormationSimilaire", job: importFormationSimilaire },

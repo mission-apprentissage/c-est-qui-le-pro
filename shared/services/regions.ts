@@ -292,8 +292,17 @@ export function findRegionByCode(code: string) {
   return REGIONS.find((region) => region.code === code) || null;
 }
 
-export function findAcademieByPostcode(postcode: string) {
-  const departementCode = postcode.match(/^(97|98)/) ? postcode.substring(0, 3) : postcode.substring(0, 2);
+export function codePostalToDepartement(postcode: string): string {
+  return postcode.match(/^(97|98)/) ? postcode.substring(0, 3) : postcode.substring(0, 2);
+}
+
+export function findRegionByCodePostal(postcode: string) {
+  const departement = codePostalToDepartement(postcode);
+  return REGIONS.find((region) => region.departements.find((d) => d.code == departement)) || null;
+}
+
+export function findAcademieByPostcode(postcode: string): string | null {
+  const departementCode = codePostalToDepartement(postcode);
 
   for (const region of REGIONS) {
     for (const departement of region.departements) {

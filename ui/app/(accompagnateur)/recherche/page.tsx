@@ -127,7 +127,7 @@ function ResearchFormationsParameter() {
 
 export default function Page() {
   return (
-    <>
+    <div>
       <Title pageTitle="Recherche de formations" />
       <Suspense>
         <SearchHeader />
@@ -135,6 +135,6 @@ export default function Page() {
           <ResearchFormationsParameter />
         </FormationsSearchProvider>
       </Suspense>
-    </>
+    </div>
   );
 }
