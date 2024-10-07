@@ -82,8 +82,8 @@ const { MuiDsfrThemeProvider } = createMuiDsfrThemeProvider({
             fontWeight: 700,
           },
           subtitle3: {
-            fontSize: "1.125rem",
-            lineHeight: "1.75rem",
+            fontSize: "1rem",
+            lineHeight: "1rem",
           },
           subtitle4: {
             fontSize: "1rem",
