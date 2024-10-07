@@ -27,7 +27,7 @@ function FormationBlockAdmissionScolaire({
       ? "average"
       : "hard";
   const maxSize = 158;
-  const minSize = 78;
+  const minSize = 84;
   const max = Math.max(premiersVoeux || 0, capacite || 0, effectifs || 0);
 
   const baseStyle = {
