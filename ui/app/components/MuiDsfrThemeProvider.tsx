@@ -11,12 +11,14 @@ declare module "@mui/material/styles" {
 
   interface TypographyVariantsOptions {
     h1_main?: React.CSSProperties;
+    subtitle3?: React.CSSProperties;
     subtitle4?: React.CSSProperties;
     body3?: React.CSSProperties;
   }
 
   interface TypographyVariants {
     h1_main: React.CSSProperties;
+    subtitle3: React.CSSProperties;
     subtitle4: React.CSSProperties;
     body3: React.CSSProperties;
   }
@@ -25,12 +27,14 @@ declare module "@mui/material/styles" {
 declare module "@mui/material" {
   interface TypographyPropsVariantOverrides {
     h1_main: true;
+    subtitle3: true;
     subtitle4: true;
     body3: true;
   }
 
   interface TypographyClasses {
     h1_main: string;
+    subtitle3: string;
     subtitle4: string;
     body3: string;
   }
@@ -78,7 +82,8 @@ const { MuiDsfrThemeProvider } = createMuiDsfrThemeProvider({
             fontWeight: 700,
           },
           subtitle3: {
-            fontSize: 18,
+            fontSize: "1.125rem",
+            lineHeight: "1.75rem",
           },
           subtitle4: {
             fontSize: "1rem",

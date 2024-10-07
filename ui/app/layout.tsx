@@ -7,6 +7,7 @@ import Title from "./(accompagnateur)/components/Title";
 import Footer from "./components/Footer";
 import Link from "./components/Link";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
+import ConstructionHeader from "./(accompagnateur)/components/ConstructionHeader";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
@@ -15,6 +16,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
         <Title />
         <Layout header={<Header title={title} tagline={tagline} />} title={title}>
           <div>
+            <ConstructionHeader />
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer
