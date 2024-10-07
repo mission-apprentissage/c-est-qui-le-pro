@@ -2,8 +2,7 @@
 "use client";
 import { fr } from "@codegouvfr/react-dsfr";
 import { css } from "@emotion/react";
-import { useLocalStorage } from "usehooks-ts";
-import Button from "#/app/components/Button";
+import { useSessionStorage } from "usehooks-ts";
 import MailSendIcon from "#/app/components/icon/MailSendIcon";
 import Link from "#/app/components/Link";
 import { Box, Typography } from "#/app/components/MaterialUINext";
@@ -11,7 +10,7 @@ import { useEffect, useState } from "react";
 
 export default function ConstructionHeader() {
   const [isClient, setIsClient] = useState(false);
-  const [displayConstructionHeader, saveDisplayConstructionHeader] = useLocalStorage<boolean>(
+  const [displayConstructionHeader, saveDisplayConstructionHeader] = useSessionStorage<boolean>(
     "displayConstructionHeader",
     true
   );
@@ -51,23 +50,23 @@ export default function ConstructionHeader() {
                 Bonjour, ce service est en cours d’expérimentation et de construction en Bretagne et en Île-de-France.
                 <br /> Vous pouvez{" "}
                 <Link
+                  noIcon
+                  target="_blank"
                   style={{ color: fr.colors.decisions.text.title.blueFrance.default, backgroundImage: "none" }}
-                  href="/documentation"
+                  href="/documentation/cbb52155b2bb43d1af3e28bd632d83a7"
                 >
                   consulter notre documentation
                 </Link>{" "}
-                pour tout savoir du projet.
+                ou encore{" "}
+                <Link
+                  noIcon
+                  href="mailto:contact@inserjeunes.beta.gouv.fr"
+                  style={{ color: fr.colors.decisions.text.title.blueFrance.default, backgroundImage: "none" }}
+                >
+                  <MailSendIcon style={{ verticalAlign: "text-top", marginLeft: "0.25rem", marginRight: "0.5rem" }} />
+                  Rejoindre l’expérimentation !
+                </Link>
               </Typography>
-            </Box>
-            <Box style={{ marginTop: "0.5rem" }}>
-              <Link href="mailto:contact@inserjeunes.beta.gouv.fr">
-                <Button style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem" }}>
-                  <Box style={{ display: "flex", alignItems: "center" }}>
-                    <MailSendIcon style={{ marginRight: "0.5rem", width: "1rem", height: "1rem" }} />
-                    Rejoindre l’expérimentation !
-                  </Box>
-                </Button>
-              </Link>
             </Box>
           </Box>
         </Box>

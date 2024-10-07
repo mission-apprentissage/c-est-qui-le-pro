@@ -51,6 +51,12 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                   url: "beta.gouv.fr",
                 },
               ]}
+              bottomItems={[
+                {
+                  text: "Documentation",
+                  linkProps: { href: "/documentation", target: "_blank" },
+                },
+              ]}
             />
           </div>
         </Layout>
