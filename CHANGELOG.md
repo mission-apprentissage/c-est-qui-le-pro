@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.3.0...v1.4.0) (2024-10-08)
+
+
+### Features
+
+* formations similaire ([#7](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/7)) ([f4f1016](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f4f1016e761c7853885d31446605568416e6a313))
+
 # [1.3.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.2.0...v1.3.0) (2024-09-24)
 
 
