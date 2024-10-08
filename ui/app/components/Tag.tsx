@@ -1,18 +1,21 @@
 "use client";
 import styled from "@emotion/styled";
 import Tag, { TagProps as DSFRBTagProps } from "@codegouvfr/react-dsfr/Tag";
+import { fr } from "@codegouvfr/react-dsfr";
 
 type Level = "unknow" | "easy" | "average" | "hard";
 
 export type TagProps = {
-  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue";
+  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue" | "filter";
+  active?: boolean;
   level?: Level;
   square?: boolean;
+  bold?: boolean;
 } & DSFRBTagProps;
 
 // TODO: fix css order
 const TagStyled = styled(Tag, {
-  shouldForwardProp: (prop) => !["variant", "square", "level"].includes(prop),
+  shouldForwardProp: (prop) => !["variant", "square", "level", "active", "bold"].includes(prop),
 })<TagProps>`
   &,
   &.fr-tag {
@@ -21,13 +24,12 @@ const TagStyled = styled(Tag, {
       return level ? `background-color: ${colors[level]}` : "";
     }}
 
-    ${({ variant }) => {
+    ${({ variant, active }) => {
       switch (variant) {
         case "button-white":
           return `
           background-color: var(--grey-1000-50);
           color: var(--blue-france-sun-113-625);
-          font-weight: 700;
           border: 1px solid #ECECFE;
           
           &:not(:disabled):hover {
@@ -43,6 +45,33 @@ const TagStyled = styled(Tag, {
         case "blue":
           return `background-color: var(--info-975-75);
            color: var(--info-425-625);`;
+        case "filter":
+          return `
+          background-color: var(--grey-1000-50);
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+          padding-left: 1rem;
+          padding-right: 1rem;
+          color: ${fr.colors.decisions.text.default.grey.default};
+          
+          &:not(:disabled):hover {
+            background-color: ${fr.colors.decisions.background.contrast.info.default};
+            color: ${fr.colors.decisions.text.title.blueFrance.default};
+          }
+            
+          ${
+            active
+              ? `
+              background-color: ${fr.colors.decisions.background.actionLow.blueFrance.default};
+              color: ${fr.colors.decisions.text.title.blueFrance.default};`
+              : ""
+          }
+
+           &:not(:disabled):active {
+            background-color: ${fr.colors.decisions.background.actionLow.blueFrance.default};
+            color: ${fr.colors.decisions.text.title.blueFrance.default};
+          }
+            `;
         default:
           return "";
       }
@@ -51,25 +80,24 @@ const TagStyled = styled(Tag, {
     ${({ square }) => {
       return square ? `border-radius: 4px;` : "";
     }}
+
+    ${({ bold }) => (bold ? "font-weight: 700;" : "")}
   }
 `;
 
 export const TagStatutPublic = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--blue-france-sun-113-625);
-  font-weight: 700;
 `;
 
 export const TagStatutPrive = styled(TagStyled)`
   background-color: #feebcb;
   color: #7b341e;
-  font-weight: 700;
 `;
 
 export const TagDuree = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--info-425-625);
-  font-weight: 700;
 `;
 
 export default TagStyled;

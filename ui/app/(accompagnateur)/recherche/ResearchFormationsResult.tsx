@@ -7,11 +7,11 @@ import { Typography, Grid } from "../../components/MaterialUINext";
 import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
-import FormationCard from "./FormationCard";
+import FormationCard from "../components/FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { Formation, FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
-import { Box, Stack, useTheme } from "@mui/material";
+import { FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
+import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
@@ -44,45 +44,45 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
   );
 }
 
-function FormationResult({
-  formationRef,
-  formationDetail,
-  latitude,
-  longitude,
-  selected,
-  setSelected,
-  index,
-}: {
-  formationRef: React.RefObject<HTMLDivElement>;
-  formationDetail: FormationDetail;
-  latitude: number;
-  longitude: number;
-  selected: FormationDetail | null;
-  setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
-  index: number;
-}) {
-  const { formationEtablissement } = formationDetail;
-  const isSelected = selected ? selected.formationEtablissement.id === formationEtablissement.id : false;
+const FormationResult = React.memo(
+  ({
+    formationRef,
+    formationDetail,
+    latitude,
+    longitude,
+    isSelected,
+    setSelected,
+    index,
+  }: {
+    formationRef: React.RefObject<HTMLDivElement>;
+    formationDetail: FormationDetail;
+    latitude: number;
+    longitude: number;
+    isSelected: boolean;
+    setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
+    index: number;
+  }) => {
+    const cb = useCallback(() => {
+      setSelected(formationDetail);
+    }, [formationDetail, setSelected]);
 
-  const cb = useCallback(() => {
-    setSelected(formationDetail);
-  }, [formationDetail, setSelected]);
-
-  return (
-    <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
-      <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
-        <FormationCard
-          selected={isSelected}
-          onMouseEnter={cb}
-          latitude={latitude}
-          longitude={longitude}
-          formationDetail={formationDetail}
-          tabIndex={index}
-        />
-      </Box>
-    </Grid>
-  );
-}
+    return (
+      <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
+        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
+          <FormationCard
+            selected={isSelected}
+            onMouseEnter={cb}
+            latitude={latitude}
+            longitude={longitude}
+            formationDetail={formationDetail}
+            tabIndex={index}
+          />
+        </Box>
+      </Grid>
+    );
+  }
+);
+FormationResult.displayName = "FormationResult";
 
 export default function ResearchFormationsResult({
   latitude,
@@ -104,6 +104,7 @@ export default function ResearchFormationsResult({
   page: number;
 }) {
   const theme = useTheme();
+  const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
   const { ref: refInView, inView } = useInView();
 
@@ -147,43 +148,7 @@ export default function ResearchFormationsResult({
         <ClientSideScrollRestorer />
       </Suspense>
 
-      <Grid container spacing={0} direction="row-reverse">
-        <Grid
-          item
-          sm={12}
-          md={4}
-          lg={4}
-          xl={4}
-          css={css`
-            width: 100%;
-            top: 0;
-            position: sticky;
-            height: 100vh;
-            ${theme.breakpoints.down("md")} {
-              height: 40vh;
-              z-index: 600;
-            }
-          `}
-        >
-          <FormationsMap
-            selected={selected}
-            longitude={longitude}
-            latitude={latitude}
-            etablissements={etablissements}
-            onMarkerClick={(etablissement) => {
-              const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
-              if (formationIndex === -1) {
-                return;
-              }
-
-              const formation = formations[formationIndex];
-              //const formationRef = formationsRef[formationIndex];
-              setSelected(formation);
-              //formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}
-          />
-        </Grid>
-
+      <Grid container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
         <Grid
           item
           md={8}
@@ -191,7 +156,7 @@ export default function ResearchFormationsResult({
           xl={8}
           sm={12}
           css={css`
-            padding: 1.75rem;
+            padding: 1.5rem;
             z-index: 500;
             width: 100%;
             ${theme.breakpoints.up("lg")} {
@@ -199,7 +164,7 @@ export default function ResearchFormationsResult({
             }
           `}
         >
-          <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: fr.spacing("5v") }}>
+          <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
             <FormationsFilterTag selected={tag} />
           </Stack>
 
@@ -247,13 +212,53 @@ export default function ResearchFormationsResult({
                     longitude={longitude}
                     formationRef={formationsRef[index]}
                     setSelected={setSelected}
-                    selected={selected}
+                    isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
                     formationDetail={formationDetail}
                     index={index}
                   />
                 );
               })}
             </Grid>
+          )}
+        </Grid>
+
+        <Grid
+          item
+          sm={12}
+          md={4}
+          lg={4}
+          xl={4}
+          css={css`
+            width: 100%;
+            top: 0;
+            position: sticky;
+            height: 100vh;
+            ${theme.breakpoints.down("md")} {
+              height: 40vh;
+              z-index: 600;
+              flex-basis: auto;
+              display: none;
+            }
+          `}
+        >
+          {!isDownSm && (
+            <FormationsMap
+              selected={selected}
+              longitude={longitude}
+              latitude={latitude}
+              etablissements={etablissements}
+              onMarkerClick={(etablissement) => {
+                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
+                if (formationIndex === -1) {
+                  return;
+                }
+
+                const formation = formations[formationIndex];
+                const formationRef = formationsRef[formationIndex];
+                setSelected(formation);
+                formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            />
           )}
         </Grid>
       </Grid>

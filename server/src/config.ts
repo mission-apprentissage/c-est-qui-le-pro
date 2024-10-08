@@ -110,6 +110,11 @@ const config = {
       certificationRome: "inserJeune-certification-rome.csv",
     },
   },
+  formation: {
+    files: {
+      formationSimilaire: path.join(getDirname(import.meta.url), "..", "data", "formationSimilaire.json"),
+    },
+  },
 };
 
 export default config;

@@ -7,6 +7,7 @@ import { parseJourneesPortesOuvertes } from "#src/services/onisep/etablissement.
 import { get } from "lodash-es";
 import { kdb, kyselyChainFn, upsert } from "#src/common/db/db";
 import { sql } from "kysely";
+import { formatUrl } from "#src/common/utils/formatUtils.js";
 
 const logger = getLoggerWithContext("import");
 
@@ -30,18 +31,6 @@ function formatStatutEtablissement(statut) {
       logger.error(`Statut d'établissement "${statut}" inconnu`);
       return { statut: null, statutDetail: null };
   }
-}
-
-function formatUrl(url) {
-  if (!url) {
-    return null;
-  }
-
-  const urlTrimed = url.trim();
-  if (!urlTrimed.match(/^http(s)?:\/\//)) {
-    return "https://" + urlTrimed;
-  }
-  return urlTrimed;
 }
 
 export async function importEtablissements() {
@@ -70,6 +59,7 @@ export async function importEtablissements() {
           addressPostCode: data.code_postal_uai,
           addressCity: data.commune_libe,
           addressCedex: /cedex/i.test(data.localite_acheminement_uai),
+          academie: data.academie,
         },
       };
     }),

@@ -10,6 +10,7 @@ export function LogRocketInitializer() {
     finalityConsent?.analytics &&
       process.env.NEXT_PUBLIC_LOGROCKET &&
       LogRocket.init(process.env.NEXT_PUBLIC_LOGROCKET, {
+        shouldCaptureIP: false,
         network: {
           requestSanitizer: (request) => {
             // Remove address request

@@ -27,6 +27,7 @@ export interface Domaine {
 }
 
 export interface Etablissement {
+  academie: string | null;
   addressCedex: string | null;
   addressCity: string | null;
   addressPostCode: string | null;
@@ -116,6 +117,14 @@ export interface FormationRome {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface FormationSimilaire {
+  createdAt: Generated<Timestamp>;
+  formationId: string;
+  formationRelatedId: string;
+  similarityOrder: number;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface GeographyColumns {
   coord_dimension: number | null;
   f_geography_column: string | null;
@@ -195,6 +204,7 @@ export interface Rome {
 
 export interface RomeMetier {
   createdAt: Generated<Timestamp>;
+  franceTravailLibelle: string | null;
   franceTravailLink: string | null;
   id: Generated<string>;
   libelle: string;
@@ -230,6 +240,7 @@ export interface DB {
   formationEtablissement: FormationEtablissement;
   formationPoursuite: FormationPoursuite;
   formationRome: FormationRome;
+  formationSimilaire: FormationSimilaire;
   geography_columns: GeographyColumns;
   geometry_columns: GeometryColumns;
   indicateurEntree: IndicateurEntree;

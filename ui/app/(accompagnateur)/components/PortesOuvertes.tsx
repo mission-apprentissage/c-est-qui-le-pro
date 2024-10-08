@@ -67,7 +67,11 @@ export function TagPortesOuvertes({ etablissement }: { etablissement: Etablissem
   }
 
   return (
-    <Tag style={{ marginTop: fr.spacing("5v") }} variant={strPortesOuvertes.ended ? "grey" : "button-white"}>
+    <Tag
+      bold={strPortesOuvertes.ended ? false : true}
+      style={{ marginTop: fr.spacing("5v") }}
+      variant={strPortesOuvertes.ended ? "grey" : "button-white"}
+    >
       {strPortesOuvertes.str}
     </Tag>
   );

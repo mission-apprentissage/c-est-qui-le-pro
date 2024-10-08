@@ -32,7 +32,7 @@ export default function FormationDescription({
             ellipsis={
               <>
                 {"..."}
-                <div style={{}}>
+                <div style={{ marginBottom: "1.5rem" }}>
                   <a
                     href="#"
                     onClick={(e) => {

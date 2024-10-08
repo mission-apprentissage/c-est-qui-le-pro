@@ -1,4 +1,4 @@
-import { oleoduc, writeData, transformData, compose, filterData } from "oleoduc";
+import { oleoduc, writeData, transformData, compose, filterData, flattenArray } from "oleoduc";
 import { isNil } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { parseCsv } from "#src/common/utils/csvUtils.js";
@@ -6,6 +6,7 @@ import { createReadStream } from "fs";
 import config from "#src/config.js";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
 import { kdb, upsert } from "#src/common/db/db";
+import { cfdsParentAndChildren } from "#src/queries/cfdsParentAndChildren.js";
 
 const logger = getLoggerWithContext("import");
 
@@ -44,6 +45,16 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
 
   await oleoduc(
     parseExportOrion(exportEtablissementsOrionFilePath),
+    // Continuum
+    transformData(async (data) => {
+      const cfds = await cfdsParentAndChildren(data["Code formation diplôme"]);
+
+      return cfds.map((cfd) => ({
+        ...data,
+        "Code formation diplôme": cfd,
+      }));
+    }),
+    flattenArray(),
     transformData(async (data) => {
       const cfd = data["Code formation diplôme"];
       const uai = data["UAI"];
@@ -57,7 +68,7 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
       });
 
       if (!formationEtablissement) {
-        logger.error(`Aucune formation pour le CFD : ${cfd}, Code dispositif: ${codeDispositif}, UAI: ${uai}`);
+        logger.debug(`Aucune formation pour le CFD : ${cfd}, Code dispositif: ${codeDispositif}, UAI: ${uai}`);
         return null;
       }
 
@@ -74,6 +85,8 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
           rentreeScolaire: data["RS"],
           capacite: formatInt(data["Capacité"]),
           premiersVoeux: formatInt(data["Nb de premiers voeux"]),
+          // TODO: mieux gérer les spécialités
+          // Il y a les capacités uniquement pour la deuxième année
           effectifs: formatInt(data["Année 1"]),
           tauxPression: formatFloat(data["Tx de pression"]),
         };

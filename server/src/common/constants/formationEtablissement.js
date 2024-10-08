@@ -1,6 +1,6 @@
 export const FORMATION_TAG = {
   POUR_TRAVAILLER_RAPIDEMENT: "pour_travailler_rapidement",
-  ADMISSION_FACILE: "admission_facile",
+  FAIBLE_TAUX_PRESSION: "faible_taux_pression",
 };
 
 export const THRESHOLD_TAUX_PRESSION = [1, 1.27];

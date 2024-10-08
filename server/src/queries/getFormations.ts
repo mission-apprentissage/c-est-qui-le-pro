@@ -192,11 +192,17 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
       .$if(distance || (timeLimit && !queryIsochrones), (qb) => qb.where("etablissement.distance", "<", distance))
       .select(
         sql<string>`ROW_NUMBER() OVER (ORDER BY  ${sql.raw(
-          [queryIsochrones ? "buckets.time" : null, "etablissement.distance", "etablissement.id"]
+          [
+            queryIsochrones ? "buckets.time" : null,
+            "etablissement.statut DESC",
+            "etablissement.distance",
+            "etablissement.id",
+          ]
             .filter((d) => d)
             .join(",")
         )})`.as("order")
       )
+      .orderBy("etablissement.statut", "desc")
       .orderBy("etablissement.distance"),
   };
 }

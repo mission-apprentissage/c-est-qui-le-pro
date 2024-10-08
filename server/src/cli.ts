@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Command } from "commander";
-import { runScript } from "./common/runScript.js";
+import { runScript, runJobs } from "./common/runScript";
 import { importBCN } from "./jobs/bcn/importBCN";
 import { importBCNMEF } from "./jobs/bcn/importBCNMEF";
 import { importBCNContinuum } from "./jobs/bcn/importBCNContinuum";
@@ -22,149 +22,118 @@ import { importIsochrones } from "./jobs/isochrones/importIsochrones.js";
 import { importCertifInfo } from "./jobs/rco/importRCO.js";
 import { importRome } from "./jobs/rome/importRome.js";
 import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
+import { importFormationSimilaire } from "./jobs/formations/importFormationSimilaire";
+import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
 
 const cli = new Command();
 
-async function importBCNCommand() {
-  const statsBCN = await importBCN();
-  const statsMef = await importBCNMEF();
-  const statsContinuum = await importBCNContinuum();
-  const statsMefContinuum = await computeBCNMEFContinuum();
-  const statsBCNLibelle = await importLibelle();
+const BCNJobs = [
+  { name: "BCN", job: importBCN },
+  { name: "BCNMEF", job: importBCNMEF },
+  { name: "BCNContinuum", job: importBCNContinuum },
+  { name: "BCNContinuumMEF", job: computeBCNMEFContinuum },
+  { name: "BCNLibelle", job: importLibelle },
+];
 
-  return {
-    statsBCN,
-    statsMef,
-    statsContinuum,
-    statsMefContinuum,
-    statsBCNLibelle,
-  };
-}
+const romeJobs = [
+  { name: "rome", job: importRome },
+  { name: "romeMetier", job: importRomeMetier },
+];
 
-async function importRomeCommand() {
-  return {
-    importRome: await importRome(),
-    importRomeMetier: await importRomeMetier(),
-  };
-}
+const onisepJobs = [
+  { name: "onisepTablePassage", job: () => importOnisep("tablePassageCodesCertifications") },
+  { name: "onisepFormationsLycee", job: () => importOnisep("ideoActionsFormationInitialeUniversLycee") },
+  { name: "onisepStructuresSecondaire", job: () => importOnisep("ideoStructuresEnseignementSecondaire") },
+  { name: "onisepFormationsInitiales", job: () => importOnisep("ideoFormationsInitiales") },
+];
 
-async function importOnisepCommand() {
-  return {
-    importTablePassage: await importOnisep("tablePassageCodesCertifications", ["certif_info_ci_identifiant"]),
-    importFormationsLycee: await importOnisep("ideoActionsFormationInitialeUniversLycee", [
-      "action_de_formation_af_identifiant_onisep",
-      "ens_code_uai",
-    ]),
-    importStructuresSecondaire: await importOnisep("ideoStructuresEnseignementSecondaire", ["code_uai"]),
-    importFormationsInitiales: await importOnisep("ideoFormationsInitiales", ["url_et_id_onisep", "duree"]),
-  };
-}
+const RCOJobs = [
+  { name: "RCOCertifInfo", job: () => importCertifInfo("certifInfo") },
+  { name: "RCOCertificationRome", job: () => importCertifInfo("certificationRome") },
+];
 
-async function importRCOCommand() {
-  return {
-    importCertifInfo: await importCertifInfo("certifInfo"),
-    importCertificationRome: await importCertifInfo("certificationRome"),
-  };
-}
+const formationEtablissementJobs = [
+  { name: "feFormation", job: importFormation },
+  { name: "feIdeoFichesFormations", job: importIdeoFichesFormations },
+  { name: "feFichesFormationsTmp", job: importFichesFormationsTmp },
+  { name: "feRCO", job: importRCO },
+  { name: "feFE", job: importFormationEtablissement },
+  { name: "feIndicateurEntree", job: importIndicateurEntree },
+  { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },
+  { name: "feFormationTag", job: computeFormationTag },
+  { name: "feFormationSimilaire", job: importFormationSimilaire },
+];
 
-async function importFormationEtablissementCommand() {
-  const importFormationStats = await importFormation();
-  const importIdeoFichesFormationsStats = await importIdeoFichesFormations();
-  const importRCOStats = await importRCO();
-  const importFormationEtablissementStats = await importFormationEtablissement();
-  const importIndicateurEntreeStats = await importIndicateurEntree();
-  const importIndicateurPoursuiteStats = await importIndicateurPoursuite();
-  const computeFormationTagStats = await computeFormationTag();
+const etablissementJobs = [
+  { name: "etablissementACCE", job: importACCEEtablissements },
+  { name: "etablissementEtablissement", job: importEtablissements },
+];
 
-  return {
-    importFormationStats,
-    importIdeoFichesFormationsStats,
-    importFormationEtablissementStats,
-    importRCOStats,
-    importIndicateurEntreeStats,
-    importIndicateurPoursuiteStats,
-    computeFormationTagStats,
-  };
-}
-
-async function importEtablissementCommand() {
-  const importACCEEtablissementsStats = await importACCEEtablissements();
-  const importEtablissementsStats = await importEtablissements();
-
-  return {
-    importACCEEtablissementsStats,
-    importEtablissementsStats,
-  };
-}
+const catalogueApprentissageJobs = [{ name: "caFormations", job: importCAFormations }];
 
 cli
   .command("importBCN")
   .description("Import les CFD et MEF depuis la BCN")
   .action(() => {
-    runScript(importBCNCommand);
+    runScript(() => runJobs(BCNJobs));
   });
 
 cli
   .command("importRome")
   .description("Importe les données des ROMEs")
   .action(() => {
-    runScript(importRomeCommand);
+    runScript(() => runJobs(romeJobs));
   });
 
 cli
   .command("importOnisep")
   .description("Importe les données de l'onisep")
   .action(() => {
-    runScript(importOnisepCommand);
+    runScript(() => runJobs(onisepJobs));
   });
 
 cli
   .command("importRCO")
   .description("Importe les données du réseau des Carif-Oref")
   .action(() => {
-    runScript(importRCOCommand);
+    runScript(() => runJobs(RCOJobs));
   });
 
 cli
   .command("importEtablissements")
   .description("Importe les données d'établissements")
   .action(() => {
-    runScript(importEtablissementCommand);
+    runScript(() => runJobs(etablissementJobs));
   });
 
 cli
   .command("importCatalogueApprentissage")
   .description("Importe les données du catalogue de l'apprentissage")
   .action(() => {
-    runScript(importCAFormations);
+    runScript(() => runJobs(catalogueApprentissageJobs));
   });
 
 cli
   .command("importFormationEtablissement")
   .description("Importe les formations dans les établissements")
   .action(() => {
-    runScript(importFormationEtablissementCommand);
-  });
-
-cli
-  .command("computeTags")
-  .description("Calcule les tags de formations")
-  .action(() => {
-    runScript(computeFormationTag);
+    runScript(() => runJobs(formationEtablissementJobs));
   });
 
 cli
   .command("importAll")
   .description("Effectue toute les taches d'importations et de calculs des données")
-  .action(() => {
+  .option("-j, --job <job>", "Nom du job à effectuer (tous si omit)")
+  .action((options) => {
+    const { job } = options;
     runScript(async () => {
-      const importBCNStats = await importBCNCommand();
-      const importRomeStats = await importRomeCommand();
-      const importOnisepStats = await importOnisepCommand();
-      const importEtablissementsStats = await importEtablissementCommand();
-      const importCatalogueApprentissageStats = await importCAFormations();
-      const importFormationEtablissementStats = await importFormationEtablissementCommand();
-      const importRCOStats = await importRCOCommand();
+      const importBCNStats = await runJobs(BCNJobs, job);
+      const importRomeStats = await runJobs(romeJobs, job);
+      const importRCOStats = await runJobs(RCOJobs, job);
+      const importOnisepStats = await runJobs(onisepJobs, job);
+      const importEtablissementsStats = await runJobs(etablissementJobs, job);
+      const importCatalogueApprentissageStats = await runJobs(catalogueApprentissageJobs, job);
+      const importFormationEtablissementStats = await runJobs(formationEtablissementJobs, job);
 
       return {
         importBCNStats,

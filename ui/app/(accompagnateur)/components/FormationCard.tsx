@@ -1,13 +1,15 @@
 import React from "react";
-import { Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail } from "#/types/formation";
 import "moment/locale/fr";
-import { TagPortesOuvertes } from "../components/PortesOuvertes";
+import { TagPortesOuvertes } from "./PortesOuvertes";
 import Card from "#/app/components/Card";
-import FormationTags from "../components/FormationTags";
+import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
-import { LabelApprentissage } from "../components/Apprentissage";
+import { LabelApprentissage } from "./Apprentissage";
+import { formatLibelle } from "#/app/utils/formation";
+import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
 import { capitalize } from "lodash-es";
 
 function formatAccessTime(time: number) {
@@ -30,6 +32,9 @@ export default React.memo(function FormationCard({
   onMouseEnter,
   onMouseLeave,
   tabIndex,
+  withJPO = true,
+  withDuration = true,
+  style = undefined,
 }: {
   latitude: number;
   longitude: number;
@@ -38,6 +43,9 @@ export default React.memo(function FormationCard({
   onMouseEnter?: Function;
   onMouseLeave?: Function;
   tabIndex: number;
+  withJPO?: boolean;
+  withDuration?: boolean;
+  style?: React.CSSProperties;
 }) {
   const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
@@ -56,6 +64,7 @@ export default React.memo(function FormationCard({
       link={formationLink}
       linkTarget="_blank"
       tabIndex={tabIndex}
+      style={style}
     >
       <Stack
         spacing={1}
@@ -68,33 +77,47 @@ export default React.memo(function FormationCard({
       <LabelApprentissage formation={formation} />
 
       <Typography variant="subtitle2" style={{ lineHeight: "28px" }}>
-        {capitalize(formation.libelle ?? "")}
+        {formatLibelle(formation.libelle)}
       </Typography>
 
-      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px", marginBottom: fr.spacing("5v") }}>
+      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
         {etablissement.libelle}
       </Typography>
-
-      <Grid container>
-        <Grid item xs={10}>
-          {etablissement.accessTime ? (
-            <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-              <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
-              {formatAccessTime(etablissement.accessTime)}
-            </Typography>
+      <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
+        {etablissement.addressCity}
+      </Typography>
+      {etablissement.statut && (
+        <Box style={{ marginTop: "0.75rem" }}>
+          {etablissement.statut === "public" ? (
+            <TagStatutPublic>{capitalize(etablissement.statut)}</TagStatutPublic>
           ) : (
-            etablissement.distance && (
-              <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-                <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
-                {(etablissement.distance / 1000).toFixed(2)} km
-              </Typography>
-            )
+            <TagStatutPrive>{capitalize(etablissement.statut)}</TagStatutPrive>
           )}
-        </Grid>
-        <Grid item xs={2}></Grid>
-      </Grid>
+        </Box>
+      )}
 
-      <TagPortesOuvertes etablissement={etablissement} />
+      {withDuration && (
+        <Grid container style={{ marginTop: fr.spacing("5v") }}>
+          <Grid item xs={10}>
+            {etablissement.accessTime ? (
+              <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
+                <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
+                {formatAccessTime(etablissement.accessTime)}
+              </Typography>
+            ) : (
+              etablissement.distance && (
+                <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
+                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
+                  {(etablissement.distance / 1000).toFixed(2)} km
+                </Typography>
+              )
+            )}
+          </Grid>
+          <Grid item xs={2}></Grid>
+        </Grid>
+      )}
+
+      {withJPO && <TagPortesOuvertes etablissement={etablissement} />}
     </Card>
   );
 });
