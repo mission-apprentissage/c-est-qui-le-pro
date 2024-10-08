@@ -8,21 +8,9 @@ import Card from "#/app/components/Card";
 import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
-import { formatLibelle } from "#/app/utils/formation";
+import { formatAccessTime, formatLibelle } from "#/app/utils/formation";
 import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
 import { capitalize } from "lodash-es";
-
-function formatAccessTime(time: number) {
-  if (time >= 3600) {
-    return (
-      <>
-        À moins de {Math.floor(time / 3600).toFixed(0)}h{(time % 3600) / 60 || ""}
-      </>
-    );
-  }
-
-  return <>À moins de {(time / 60).toFixed(0)} minutes</>;
-}
 
 export default React.memo(function FormationCard({
   latitude,
@@ -107,8 +95,8 @@ export default React.memo(function FormationCard({
             ) : (
               etablissement.distance && (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />À{" "}
-                  {(etablissement.distance / 1000).toFixed(2)} km
+                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-car-fill")} />À{" "}
+                  {Math.round(etablissement.distance / 1000)} km
                 </Typography>
               )
             )}

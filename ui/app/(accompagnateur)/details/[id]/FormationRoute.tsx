@@ -1,13 +1,10 @@
 "use client";
 import React, { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Typography } from "#/app/components/MaterialUINext";
 import { getDistance } from "geolib";
-import { formationRoute } from "#/app/queries/formation/route/query";
-import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Etablissement } from "#/types/formation";
-import moment from "moment";
+import { formatAccessTime } from "#/app/utils/formation";
 
 export default function FormationRoute({
   etablissement,
@@ -35,59 +32,22 @@ export default function FormationRoute({
     );
   }, [longitude, latitude, etablissement.latitude, etablissement.longitude]);
 
-  const { isLoading, isError, data } = useQuery({
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    retry: 0,
-    queryKey: ["formation", latitude, longitude, etablissement.latitude, etablissement.longitude],
-    queryFn: ({ signal }) => {
-      if (!latitude || !longitude) {
-        return null;
-      }
-
-      return formationRoute(
-        {
-          latitudeA: latitude,
-          longitudeA: longitude,
-          latitudeB: (etablissement.latitude ?? "").toString(),
-          longitudeB: (etablissement.longitude ?? "").toString(),
-        },
-        { signal }
-      );
-    },
-  });
-
-  const timeRoute = useMemo(() => {
-    if (!data?.paths?.length) {
-      return null;
-    }
-
-    const legs = data.paths[0].legs;
-    const departure = moment(legs[0].departure_time);
-    const arrival = moment(legs[legs.length - 1].arrival_time);
-    return arrival.diff(departure);
-  }, [data]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <>
       <Typography
         variant="subtitle4"
         style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}
       >
-        {timeRoute !== null && (
+        {etablissement.accessTime && (
           <span style={{ marginRight: fr.spacing("3v") }}>
-            <i className={fr.cx("fr-icon-bus-fill")} style={{ marginRight: fr.spacing("1w") }} />À{" "}
-            {(timeRoute / 1000 / 60).toFixed(0)} minutes
+            <i className={fr.cx("fr-icon-bus-fill")} style={{ marginRight: fr.spacing("1w") }} />
+            {formatAccessTime(etablissement.accessTime)}
           </span>
         )}
-        {!data?.paths && distance !== null && (
+        {!etablissement.accessTime && distance !== null && (
           <span style={{ marginRight: fr.spacing("3v") }}>
-            <i className={fr.cx("fr-icon-bus-fill")} style={{ marginRight: fr.spacing("1w") }} />À{" "}
-            {(distance / 1000).toFixed(2)} km
+            <i className={fr.cx("fr-icon-car-fill")} style={{ marginRight: fr.spacing("1w") }} />À{" "}
+            {Math.round(distance / 1000)} km
           </span>
         )}
 

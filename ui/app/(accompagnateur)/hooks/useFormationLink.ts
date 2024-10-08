@@ -14,7 +14,6 @@ export const useFormationLink = ({
   const searchParams = useSearchParams();
   const longitudeParams = longitude ?? searchParams.get("longitude");
   const latitudeParams = latitude ?? searchParams.get("latitude");
-  //const { getUrlParams } = useFormationsSearch();
 
   if (!formationDetail) {
     return null;
@@ -23,6 +22,10 @@ export const useFormationLink = ({
   const key = `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
     formationDetail.etablissement.uai
   }-${formationDetail.formation.voie}`;
-  return `/details/${key}?latitude=${latitudeParams || ""}&longitude=${longitudeParams || ""}`;
-  //&${getUrlParams()}`;
+  const parameters = new URLSearchParams({
+    ...(latitudeParams ? { latitude: latitudeParams } : {}),
+    ...(longitudeParams ? { longitude: longitudeParams } : {}),
+  });
+
+  return `/details/${key}?${parameters}`;
 };

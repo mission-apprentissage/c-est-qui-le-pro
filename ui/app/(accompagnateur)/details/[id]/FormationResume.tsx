@@ -14,6 +14,7 @@ import {
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
+import { isNil } from "lodash-es";
 
 function FormationResumeBlock({
   title,
@@ -84,7 +85,7 @@ function FormationResumeBlockAdmission({
   formationEtablissement: FormationEtablissement;
   formation: Formation;
 }) {
-  const tauxPression = formationEtablissement?.indicateurEntree?.tauxPression;
+  const { tauxPression, effectifs, capacite } = formationEtablissement?.indicateurEntree || {};
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -94,6 +95,7 @@ function FormationResumeBlockAdmission({
       ? "average"
       : "hard";
 
+  console.log(formationEtablissement?.indicateurEntree);
   return (
     <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-check-line"} anchor="l-admission">
       <>
@@ -102,9 +104,11 @@ function FormationResumeBlockAdmission({
             <Tag square level="easy">
               Taux de pression faible
             </Tag>
-            <Tag square level="easy">
-              Nombreuses places
-            </Tag>
+            {!isNil(effectifs) && !isNil(capacite) && capacite - effectifs > 0 && (
+              <Tag square level="easy">
+                Places libres l’an dernier
+              </Tag>
+            )}
           </>
         )}
       </>

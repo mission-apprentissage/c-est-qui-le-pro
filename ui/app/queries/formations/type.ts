@@ -28,6 +28,11 @@ const getSchema = object({
     .transform((_, value) => {
       return value === "" ? null : value;
     }),
+  academie: string()
+    .nullable()
+    .transform((_, value) => {
+      return value === "" ? null : value;
+    }),
   page: number().required().default(0).min(0).integer(),
   items_par_page: number().required().default(10).positive().integer(),
 });

@@ -7,9 +7,11 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
+COPY shared/package.json shared/
 COPY ui/package.json ui/
 RUN yarn install --frozen-lockfile
 
+COPY ./shared shared
 COPY ./ui ui
 
 WORKDIR /app/ui

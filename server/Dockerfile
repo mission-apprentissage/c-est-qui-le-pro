@@ -4,9 +4,11 @@ FROM node:18-alpine
 WORKDIR /base
 COPY package.json .
 COPY yarn.lock .
+COPY shared/package.json shared/
 COPY server/package.json server/
 RUN yarn install --frozen-lockfile
 
+COPY ./shared shared
 COPY ./server server
 RUN yarn workspace server build
 

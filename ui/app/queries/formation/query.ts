@@ -1,4 +1,6 @@
+import { paramsToString } from "#/app/utils/searchParams";
 import { FormationDetail, formationDetailSchema } from "#/types/formation";
+import { omit } from "lodash-es";
 import { FormationRequestSchema } from "./type";
 
 export async function formation(
@@ -8,7 +10,7 @@ export async function formation(
   const API_BASE_URL = process.env.NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL;
   const url = API_BASE_URL + "/formation";
 
-  const result = await fetch(`${url}/${params.id}`, {
+  const result = await fetch(`${url}/${params.id}?${paramsToString(omit(params, ["id"]))}`, {
     method: "GET",
     signal,
   });

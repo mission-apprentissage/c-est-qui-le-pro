@@ -5,6 +5,7 @@
   "repository": "https://github.com/mission-apprentissage/c-est-qui-le-pro.git",
   "private": true,
   "workspaces": [
+    "shared",
     "server",
     "ui"
   ],

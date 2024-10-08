@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { formations as formationsQuery } from "#/app/queries/formations/query";
 import { FormationDomaine, FormationTag } from "#/types/formation";
+import { RegionsService } from "shared";
 
 export default function useGetFormations({
   latitude,
@@ -13,8 +14,8 @@ export default function useGetFormations({
   domaine,
   uais,
   cfds,
+  postcode,
   page,
-
   items_par_page = 100,
 }: {
   latitude?: number;
@@ -25,9 +26,11 @@ export default function useGetFormations({
   domaine?: FormationDomaine | null;
   uais?: string[];
   cfds?: string[];
+  postcode?: string;
   page?: number;
   items_par_page?: number;
 }) {
+  const academie = RegionsService.findAcademieByPostcode(postcode || "");
   const {
     isLoading,
     isFetching,
@@ -51,6 +54,7 @@ export default function useGetFormations({
       page,
       uais?.toString(),
       cfds?.toString(),
+      academie,
     ],
     queryFn: ({ pageParam, signal }) => {
       return formationsQuery(
@@ -65,6 +69,7 @@ export default function useGetFormations({
           items_par_page,
           cfds,
           uais,
+          academie,
         },
         { signal }
       );

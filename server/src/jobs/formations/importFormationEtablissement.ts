@@ -13,10 +13,15 @@ const logger = getLoggerWithContext("import");
 export const formatDuree = (duree) => duree + " an" + (duree !== "1" ? "s" : "");
 
 async function streamCAFormations({ stats }) {
+  const codesDiplomeToFilter = [
+    "561", // CS3
+  ];
   return compose(
     // On ne renvoi que les formations post 3ème publié
     await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_previous_statut: "publié" }),
-    filterData(({ data }) => data.uai_formation),
+    filterData(
+      ({ data }) => data.uai_formation && !codesDiplomeToFilter.find((code) => data.cfd.substr(0, 3) === code)
+    ),
     transformData(async ({ data }) => {
       stats.total++;
 

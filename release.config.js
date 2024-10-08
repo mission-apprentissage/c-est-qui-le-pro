@@ -23,7 +23,14 @@ const mainConfig = {
     [
       "@semantic-release/git",
       {
-        assets: ["ui/package.json", "server/package.json", "ui/CHANGELOG.md", "CHANGELOG.md", "package.json"],
+        assets: [
+          "ui/package.json",
+          "server/package.json",
+          "shared/package.json",
+          "ui/CHANGELOG.md",
+          "CHANGELOG.md",
+          "package.json",
+        ],
         message:
           // eslint-disable-next-line no-template-curly-in-string
           "chore(release): bump ${nextRelease.version}",
