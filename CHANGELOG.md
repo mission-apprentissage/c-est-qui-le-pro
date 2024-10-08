@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.5.0...v1.5.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* accents dans les métiers ([62c2c03](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/62c2c039f7665ec3c361f81af5dfe14901880933))
+
 # [1.5.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.4.0...v1.5.0) (2024-10-08)
 
 
