@@ -128,7 +128,6 @@ function FormationBlockAdmissionScolaire({
           </Grid>
         </Grid>
       </Box>
-      <Divider variant="middle" style={{ marginLeft: 0, marginRight: 0, marginTop: "2rem", marginBottom: "2rem" }} />
     </Box>
   );
 }
@@ -165,7 +164,6 @@ function FormationBlockAdmissionVoeux({ formationDetail }: { formationDetail: Fo
         >
           <Button priority="secondary">Trouver mon entreprise sur La Bonne Alternance</Button>
         </Link>
-        <Divider variant="middle" style={{ marginLeft: 0, marginRight: 0, marginTop: "2rem", marginBottom: "2rem" }} />
       </Box>
     );
   }

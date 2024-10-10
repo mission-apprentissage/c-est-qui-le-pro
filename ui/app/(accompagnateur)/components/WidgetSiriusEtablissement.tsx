@@ -10,10 +10,11 @@ export default function WidgetSiriusEtablissement({
   etablissement: Etablissement;
 }) {
   const [isNotFound, setIsNotFound] = useState(false);
+  const [height, setHeight] = useState(0);
   const API_URL = process.env.NEXT_PUBLIC_SIRIUS_API_BASE_URL || "https://sirius.inserjeunes.beta.gouv.fr";
 
   const ref = useRef<HTMLDivElement>(null);
-  const widgetCode = `<iframe style="width: 100%; height: 0px;" src="${API_URL}/iframes/etablissement?uai=${etablissement.uai}"
+  const widgetCode = `<iframe style="width: 100%; height: 0px; margin-bottom: 2rem;" src="${API_URL}/iframes/etablissement?uai=${etablissement.uai}"
    scrolling="no" frameBorder="0"></iframe>`;
 
   useEffect(() => {
@@ -25,13 +26,22 @@ export default function WidgetSiriusEtablissement({
         } else {
           setIsNotFound(false);
         }
-        const iframe = ref.current.querySelector("iframe");
-        if (iframe) {
-          iframe.style.height = e.data.siriusHeight + "px";
-        }
+        setHeight(e.data.siriusHeight);
       }
     });
   });
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const iframe = ref.current.querySelector("iframe");
+    if (iframe) {
+      iframe.style.height = height + "px";
+      iframe.style.display = isNotFound ? "none" : "block";
+    }
+  }, [isNotFound, height]);
 
   return <>{isNotFound ? fallbackComponent : <div ref={ref} dangerouslySetInnerHTML={{ __html: widgetCode }}></div>}</>;
 }

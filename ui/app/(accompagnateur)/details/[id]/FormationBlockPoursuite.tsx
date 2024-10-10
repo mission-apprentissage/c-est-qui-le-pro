@@ -60,13 +60,13 @@ export default function FormationBlockPoursuite({
               );
             })}
 
-            <Grid item xs={12}>
-              {formation.formationPoursuite.length > nbrDisplay && (
+            {formation.formationPoursuite.length > nbrDisplay && (
+              <Grid item xs={12}>
                 <Button priority="tertiary" size="small" onClick={showMoreCb}>
                   Voir plus
                 </Button>
-              )}
-            </Grid>
+              </Grid>
+            )}
           </Grid>
         </Container>
       )}

@@ -19,7 +19,7 @@ export default function FormationBlockFormation({
     <Card type="details" title={"La formation"} {...cardProps}>
       <FormationDescription description={formation.description}>
         {formation.description && (
-          <Box style={{ marginTop: "2rem", marginBottom: "1rem" }}>
+          <Box style={{ marginTop: "2rem" }}>
             <Link
               style={{ color: "var(--blue-france-sun-113-625)" }}
               target="_blank"
@@ -31,7 +31,7 @@ export default function FormationBlockFormation({
         )}
       </FormationDescription>
       {formation.voie === "apprentissage" && (
-        <Box style={{ marginTop: fr.spacing("10v") }}>
+        <Box>
           <WidgetSiriusEtablissement etablissement={etablissement} fallbackComponent={<></>} />
         </Box>
       )}
