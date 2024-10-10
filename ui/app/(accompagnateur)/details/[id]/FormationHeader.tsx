@@ -166,26 +166,28 @@ export default function FormationHeader({
                     }
                   `}
                 />
-                <Card
-                  actionProps={modalMinistage.buttonProps}
-                  css={css`
-                    margin-bottom: ${fr.spacing("8v")};
-                    ${theme.breakpoints.down("md")} {
-                      border: 0;
-                      border-radius: 0;
-                      margin-bottom: 0;
-                      padding-left: ${fr.spacing("2v")};
-                    }
-                  `}
-                >
-                  <Typography
-                    variant="subtitle2"
-                    style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
+                <Box style={{ marginRight: "1rem" }}>
+                  <Card
+                    actionProps={modalMinistage.buttonProps}
+                    css={css`
+                      margin-bottom: ${fr.spacing("8v")};
+                      ${theme.breakpoints.down("md")} {
+                        border: 0;
+                        border-radius: 0;
+                        margin-bottom: 0;
+                        padding-left: ${fr.spacing("2v")};
+                      }
+                    `}
                   >
-                    <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
-                    Découvrir la formation lors d’un mini-stage ⓘ
-                  </Typography>
-                </Card>
+                    <Typography
+                      variant="subtitle2"
+                      style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
+                    >
+                      <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
+                      Découvrir la formation lors d’un mini-stage ⓘ
+                    </Typography>
+                  </Card>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
@@ -205,10 +207,19 @@ export default function FormationHeader({
         <BoxContainer
           maxWidth={"xl"}
           css={css`
-            padding-left: 1.25rem;
+            ${theme.breakpoints.up("md")} {
+              padding-left: 1.25rem;
+            }
           `}
         >
           <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
+        </BoxContainer>
+        <BoxContainer
+          maxWidth={"xl"}
+          css={css`
+            padding-left: 1.25rem;
+          `}
+        >
           <Box ref={refResume}>
             <FormationResume formationDetail={formationDetail} />
           </Box>

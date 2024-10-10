@@ -51,7 +51,7 @@ function FormationMetier({ formation }: { formation: Formation }) {
           <Grid container spacing={4}>
             {metierSorted.slice(0, nbrDisplay).map((metier) => {
               return (
-                <Grid key={metier.id} item xs={6}>
+                <Grid key={metier.id} item xs={12} sm={6}>
                   <Card
                     style={{
                       height: "100%",

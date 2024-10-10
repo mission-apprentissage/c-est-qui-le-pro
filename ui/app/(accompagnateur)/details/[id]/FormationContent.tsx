@@ -64,14 +64,14 @@ export default function FormationContent({ formationDetail }: { formationDetail:
                 formationDetail={formationDetail}
                 id="l-admission"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "2.5rem" }}
               />
 
               <FormationBlockPoursuite
                 formation={formation}
                 id="poursuite-etudes"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "4rem" }}
               />
 
               <FormationBlockAccesEmploi

@@ -24,6 +24,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
   const latitude = location.latitude ?? formationDetail.etablissement.latitude ?? 0;
 
   const eltByLine = isSm ? 1 : isMd ? 3 : isLg ? 4 : 4;
+  const lineMultiplier = isSm ? 2 : 1;
   const [lineToDisplay, setLineToDisplay] = useState(1);
 
   const { isLoading, isError, data } = useQuery({
@@ -55,7 +56,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
         </Typography>
 
         <Grid container spacing={4}>
-          {data.slice(0, eltByLine * lineToDisplay).map((formationDetail, index) => (
+          {data.slice(0, eltByLine * lineToDisplay * lineMultiplier).map((formationDetail, index) => (
             <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
               <Grid item xs={12 / eltByLine}>
                 <FormationCard
