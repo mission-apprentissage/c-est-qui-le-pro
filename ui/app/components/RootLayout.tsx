@@ -5,6 +5,7 @@ import { defaultColorScheme } from "#/app/defaultColorScheme";
 import Link from "next/link";
 import { LogRocketInitializer } from "./LogRocketInitializer";
 import { Plausible } from "./Plausible";
+import { Suspense } from "react";
 
 export default function RootLayout({ title, children }: { title?: string; children: JSX.Element }) {
   const lang = "fr";
@@ -38,8 +39,10 @@ export default function RootLayout({ title, children }: { title?: string; childr
             // //"Spectral-ExtraBold"
           ]}
         />
-        <Plausible />
-        <LogRocketInitializer />
+        <Suspense>
+          <Plausible />
+          <LogRocketInitializer />
+        </Suspense>
       </head>
       <body
         style={{
