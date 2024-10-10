@@ -18,7 +18,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
           <div>
             <ConstructionHeader />
             {children}
-            <ConsentBannerAndConsentManagement />
+            {/* <ConsentBannerAndConsentManagement /> */}
             <Footer
               brandTop={
                 <>
