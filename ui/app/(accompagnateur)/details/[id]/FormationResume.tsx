@@ -95,7 +95,6 @@ function FormationResumeBlockAdmission({
       ? "average"
       : "hard";
 
-  console.log(formationEtablissement?.indicateurEntree);
   return (
     <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-check-line"} anchor="l-admission">
       <>
