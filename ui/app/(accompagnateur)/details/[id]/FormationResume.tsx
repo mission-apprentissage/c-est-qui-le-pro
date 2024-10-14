@@ -4,13 +4,8 @@ import { useCallback } from "react";
 import { Typography, Grid, Stack, Box } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
-import { Formation, FormationDetail, FormationEtablissement } from "#/types/formation";
+import { Formation, FormationDetail, FormationEtablissement, THRESHOLD_TAUX_PRESSION } from "shared";
 import Tag from "#/app/components/Tag";
-import {
-  THRESHOLD_TAUX_PRESSION,
-  THRESHOLD_EN_EMPLOI,
-  THRESHOLD_EN_ETUDE,
-} from "#/app/(accompagnateur)/constants/constants";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
@@ -142,13 +137,15 @@ function FormationResumeBlockAdmission({
 }
 
 function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
-  const tauxPression = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
+  const tauxEmploi = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
+  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
+
   const admissionLevel =
-    tauxPression === undefined
+    isNil(tauxEmploi) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_emploi_6_mois_q0)
       ? "unknow"
-      : tauxPression >= THRESHOLD_EN_EMPLOI[0]
+      : tauxEmploi >= tauxRegional.taux_en_emploi_6_mois_q3
       ? "easy"
-      : tauxPression > THRESHOLD_EN_EMPLOI[1]
+      : tauxEmploi > tauxRegional.taux_en_emploi_6_mois_q1
       ? "average"
       : "hard";
 
@@ -187,13 +184,15 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
 }
 
 function FormationResumeBlockEtude({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
-  const tauxPression = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
+  const tauxFormation = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
+  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
+
   const admissionLevel =
-    tauxPression === undefined
+    isNil(tauxFormation) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_formation_q0)
       ? "unknow"
-      : tauxPression >= THRESHOLD_EN_ETUDE[0]
+      : tauxFormation >= tauxRegional.taux_en_formation_q3
       ? "easy"
-      : tauxPression > THRESHOLD_EN_ETUDE[1]
+      : tauxFormation > tauxRegional.taux_en_formation_q1
       ? "average"
       : "hard";
 

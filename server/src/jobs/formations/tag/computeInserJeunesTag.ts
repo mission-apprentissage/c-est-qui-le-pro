@@ -1,20 +1,22 @@
-import { isNil } from "lodash-es";
-import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
+import { FormationTag, getDiplomeType } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb } from "#src/common/db/db";
+import IndicateurPoursuiteRegionalRepository from "#src/common/repositories/indicateurPoursuiteRegional.js";
 
 const logger = getLoggerWithContext("import");
 
-export async function computeInserJeunesTag(
-  formationEtablissement,
-  { thresholdEnEmploi = null } = {
-    thresholdEnEmploi: null,
+export async function computeInserJeunesTag(formationEtablissement) {
+  const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
+  if (!diplomeType) {
+    logger.error(`Niveau diplome ${formationEtablissement.formation.niveauDiplome} inconnu`);
+    return [];
   }
-) {
-  if (isNil(thresholdEnEmploi)) {
-    logger.error("Seuil en emploi  non défini");
-    return null;
-  }
+
+  const indicateurPoursuiteRegional = await IndicateurPoursuiteRegionalRepository.quartileFor(
+    diplomeType,
+    formationEtablissement.etablissement.region,
+    formationEtablissement.formation.voie
+  );
 
   const indicateurPoursuite = await kdb
     .selectFrom("indicateurPoursuite")
@@ -24,13 +26,13 @@ export async function computeInserJeunesTag(
     .limit(1)
     .executeTakeFirst();
 
-  if (!indicateurPoursuite) {
+  if (!indicateurPoursuite || indicateurPoursuite.taux_en_emploi_6_mois === null || !indicateurPoursuiteRegional) {
     return [];
   }
 
   return [
-    ...(indicateurPoursuite.taux_en_emploi_6_mois >= thresholdEnEmploi
-      ? [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT]
+    ...(indicateurPoursuite.taux_en_emploi_6_mois >= indicateurPoursuiteRegional.taux_en_emploi_6_mois_q3
+      ? [FormationTag.POUR_TRAVAILLER_RAPIDEMENT]
       : []),
   ];
 }

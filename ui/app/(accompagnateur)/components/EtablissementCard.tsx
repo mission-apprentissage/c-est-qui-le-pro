@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Etablissement } from "#/types/formation";
+import { Etablissement } from "shared";
 import FormationRoute from "../details/[id]/FormationRoute";
 import Link from "#/app/components/Link";
 

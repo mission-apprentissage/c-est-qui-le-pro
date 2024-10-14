@@ -8,6 +8,7 @@ import { kdb, upsert } from "#src/common/db/db";
 import { isNil } from "lodash-es";
 import { urlOnisepToId } from "#src/services/onisep/utils.js";
 import { formatLibelle } from "#src/common/utils/formatUtils.js";
+import { FormationVoie } from "shared";
 
 const logger = getLoggerWithContext("import");
 
@@ -112,7 +113,8 @@ async function importFromBcnAndOnisep() {
         const formationInitiale = await getFormationInitialeWithContinuum(bcn);
         const dataFormatted = {
           cfd: code_formation_diplome,
-          voie: type === "mef" ? "scolaire" : "apprentissage",
+          niveauDiplome: code_formation_diplome.substr(0, 3),
+          voie: type == "mef" ? FormationVoie.SCOLAIRE : FormationVoie.APPRENTISSAGE,
           codeDispositif: bcnMef ? bcnMef.dispositif_formation : null,
           codeDiplome: bcn.diplome.code,
           mef11: bcnMef ? code_certification : null,

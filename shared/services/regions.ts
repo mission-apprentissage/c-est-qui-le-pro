@@ -1,4 +1,12 @@
-export const REGIONS = [
+type Region = {
+  code: string;
+  code_region_academique: string;
+  nom: string;
+  departements: { code: string; nom: string; academie: string | null }[];
+  academies: { code: string; nom: string }[];
+};
+
+export const REGIONS: Region[] = [
   {
     code: "00",
     code_region_academique: "00",
@@ -298,7 +306,7 @@ export function codePostalToDepartement(postcode: string): string {
 
 export function findRegionByCodePostal(postcode: string) {
   const departement = codePostalToDepartement(postcode);
-  return REGIONS.find((region) => region.departements.find((d) => d.code == departement)) || null;
+  return REGIONS.find((region) => region.departements.find((d) => d.code == departement));
 }
 
 export function findAcademieByPostcode(postcode: string): string | null {

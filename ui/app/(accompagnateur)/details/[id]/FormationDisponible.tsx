@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material";
 import { css } from "@emotion/react";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail, FormationVoie } from "#/types/formation";
+import { FormationDetail, FormationVoie } from "shared";
 import useGetFormations from "#/app/(accompagnateur)/hooks/useGetFormations";
 import { useFormationLink } from "#/app/(accompagnateur)/hooks/useFormationLink";
 import Link from "#/app/components/Link";

@@ -1,6 +1,5 @@
-import { FormationDetail } from "#/types/formation";
+import { FormationDetail } from "shared";
 import { useSearchParams } from "next/navigation";
-import { useFormationsSearch } from "../context/FormationsSearchContext";
 
 export const useFormationLink = ({
   formationDetail,

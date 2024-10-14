@@ -1,5 +1,5 @@
 import { paramsToString } from "#/app/utils/searchParams";
-import { FormationDetail, formationDetailSchema } from "#/types/formation";
+import { FormationDetail, formationDetailSchema } from "shared";
 import { omit } from "lodash-es";
 import { FormationRequestSchema } from "./type";
 

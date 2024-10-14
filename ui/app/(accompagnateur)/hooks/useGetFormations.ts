@@ -2,7 +2,7 @@
 import { useCallback, useMemo } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { formations as formationsQuery } from "#/app/queries/formations/query";
-import { FormationDomaine, FormationTag } from "#/types/formation";
+import { FormationDomaine, FormationTag } from "shared";
 import { RegionsService } from "shared";
 
 export default function useGetFormations({

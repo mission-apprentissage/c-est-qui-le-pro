@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { Etablissement, Formation } from "#/types/formation";
-
+import { Etablissement, Formation } from "shared";
 export default function WidgetInserJeunes({
   etablissement,
   formation,

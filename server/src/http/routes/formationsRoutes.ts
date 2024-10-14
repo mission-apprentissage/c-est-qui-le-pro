@@ -6,13 +6,13 @@ import * as validators from "#src/http/utils/validators.js";
 import { validate } from "#src/http/utils/validators.js";
 import { addJsonHeaders } from "#src/http/utils/responseUtils.js";
 import { getRouteDate, getFormationsSQL } from "#src/queries/getFormations.js";
-import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
 import FormationEtablissement from "#src/common/repositories/formationEtablissement";
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import { stripNull } from "../utils/formatters";
 import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
 import { merge } from "lodash-es";
+import { FormationTag } from "shared";
 
 export default () => {
   const router = express.Router();
@@ -69,7 +69,7 @@ export default () => {
             timeLimit: Joi.number().valid().default(null),
             tag: Joi.string()
               .empty("")
-              .valid(...Object.values(FORMATION_TAG))
+              .valid(...Object.values(FormationTag))
               .default(null),
             ...validators.uais(),
             ...validators.cfds(),

@@ -1,5 +1,5 @@
 {
-  "include": ["src" /*, "../shared"*/],
+  "include": ["."],
   "exclude": ["**/node_modules", "node_modules", "public/**/*"],
   "compilerOptions": {
     "strictPropertyInitialization": false,
@@ -17,7 +17,7 @@
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
     "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */,
     //"strict": true /* Enable all strict type-checking options. */,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "skipLibCheck": true,
 
     "noEmit": true,

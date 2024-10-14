@@ -1,7 +1,7 @@
 import React from "react";
 import Tag from "#/app/components/Tag";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Etablissement } from "#/types/formation";
+import { Etablissement } from "shared";
 import moment from "moment";
 import "moment/locale/fr";
 

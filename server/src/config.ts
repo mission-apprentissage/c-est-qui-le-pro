@@ -99,11 +99,11 @@ const config = {
   },
   rco: {
     bucket: {
-      endpoint: env.get("RCO_BUCKET_ENDPOINT").asString(),
-      region: env.get("RCO_BUCKET_REGION").asString(),
-      accessKey: env.get("RCO_BUCKET_ACCESS_KEY").asString(),
-      secretKey: env.get("RCO_BUCKET_SECRET_KEY").asString(),
-      name: env.get("RCO_BUCKET_NAME").asString(),
+      endpoint: env.get("RCO_BUCKET_ENDPOINT").required().asString(),
+      region: env.get("RCO_BUCKET_REGION").required().asString(),
+      accessKey: env.get("RCO_BUCKET_ACCESS_KEY").required().asString(),
+      secretKey: env.get("RCO_BUCKET_SECRET_KEY").required().asString(),
+      name: env.get("RCO_BUCKET_NAME").required().asString(),
     },
     file: {
       certifInfo: "inserJeune-certifinfo.csv",
