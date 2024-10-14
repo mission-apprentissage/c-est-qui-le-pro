@@ -1,5 +1,5 @@
 import { isNil } from "lodash-es";
-import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
+import { FormationTag } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb } from "#src/common/db/db";
 
@@ -34,5 +34,5 @@ export async function computeIndicateurEntree(
     return [];
   }
 
-  return [FORMATION_TAG.FAIBLE_TAUX_PRESSION];
+  return [FormationTag.FAIBLE_TAUX_PRESSION];
 }

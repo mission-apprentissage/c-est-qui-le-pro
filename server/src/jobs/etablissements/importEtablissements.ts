@@ -8,6 +8,7 @@ import { get } from "lodash-es";
 import { kdb, kyselyChainFn, upsert } from "#src/common/db/db";
 import { sql } from "kysely";
 import { formatUrl } from "#src/common/utils/formatUtils.js";
+import { RegionsService } from "shared";
 
 const logger = getLoggerWithContext("import");
 
@@ -43,26 +44,33 @@ export async function importEtablissements() {
     await RawDataRepository.search(RawDataType.ACCE),
     filterData((data) => {
       // Filtre les établissement qui nous intéressent (lycée, CFA ...)
-      return data.data.nature_uai.match(/^[2345678]/);
+      return data.data.nature_uai.match(/^[2345678]/) && data.data.pays_libe.toLowerCase() === "france";
     }),
     transformData(({ data }) => {
-      return {
-        data,
-        // TODO: validate data
-        formated: {
-          uai: data.numero_uai,
-          libelle: data.appellation_officielle,
-          url: formatUrl(data.site_web),
-          ...formatStatutEtablissement(data.secteur_public_prive_libe),
-
-          addressStreet: data.adresse_uai,
-          addressPostCode: data.code_postal_uai,
-          addressCity: data.commune_libe,
-          addressCedex: /cedex/i.test(data.localite_acheminement_uai),
-          academie: data.academie,
-        },
-      };
+      try {
+        return {
+          data,
+          // TODO: validate data
+          formated: {
+            uai: data.numero_uai,
+            libelle: data.appellation_officielle,
+            url: formatUrl(data.site_web),
+            ...formatStatutEtablissement(data.secteur_public_prive_libe),
+            addressStreet: data.adresse_uai,
+            addressPostCode: data.commune,
+            addressCity: data.commune_libe,
+            addressCedex: /cedex/i.test(data.localite_acheminement_uai),
+            academie: data.academie,
+            region: data.commune ? RegionsService.findRegionByCodePostal(data.commune)?.code : null,
+          },
+        };
+      } catch (err) {
+        logger.error(err);
+        stats.failed++;
+        return null;
+      }
     }),
+    filterData((data) => data),
     // Ajout des données de l'onisep
     transformData(
       async ({ data, formated }) => {

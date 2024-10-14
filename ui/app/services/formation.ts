@@ -1,4 +1,4 @@
-import { FormationDomaine, FormationTag } from "#/types/formation";
+import { FormationDomaine, FormationTag } from "shared";
 import CalendarIcon from "#/app/components/icon/CalendarIcon";
 import { FrCxArg, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import MoneyIcon from "../components/icon/MoneyIcon";

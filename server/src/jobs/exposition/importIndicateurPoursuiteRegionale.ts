@@ -1,13 +1,17 @@
 import { Readable } from "stream";
 import { oleoduc, writeData, transformData, filterData, flattenArray } from "oleoduc";
-import { range } from "lodash-es";
+import { flatten, isNil, pick, range } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import RawDataRepository, { RawDataType } from "#src/common/repositories/rawData";
+import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
 import { ExpositionApi } from "#src/services/exposition/ExpositionApi.js";
+import { DiplomeType, FormationVoie } from "shared";
+import { kdb, upsert } from "#src/common/db/db.js";
+import { sql } from "kysely";
+import { computeTauxEnEmploi } from "#src/services/exposition/utils.js";
 
 const logger = getLoggerWithContext("import");
 
-export async function importIndicateurPoursuiteRegionale() {
+async function importStats() {
   logger.info(`Importation des indicateurs de poursuite (données InserJeunes)`);
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
   const expositionApiOptions = { retry: { retries: 5 } };
@@ -68,4 +72,101 @@ export async function importIndicateurPoursuiteRegionale() {
   );
 
   return stats;
+}
+
+async function importIndicateurs() {
+  logger.info(`Importation des indicateurs de poursuite`);
+  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+
+  await oleoduc(
+    await RawDataRepository.search(RawDataType.EXPOSITION_regionales),
+    filterData(({ data: { data } }) => {
+      return (
+        (data.code_certification_type === "mef11" || data.code_certification_type === "cfd") &&
+        data.donnee_source.type === "self" &&
+        !isNil(data.taux_en_emploi_6_mois)
+      );
+    }),
+    writeData(
+      async ({ data: { data } }) => {
+        const voie = data.code_certification_type == "mef11" ? FormationVoie.SCOLAIRE : FormationVoie.APPRENTISSAGE;
+        const bcnMefData =
+          voie === FormationVoie.SCOLAIRE &&
+          ((
+            await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
+              code_certification: data.code_certification,
+            })
+          )?.data as RawData[RawDataType.BCN_MEF]);
+
+        const indicateurPoursuite = {
+          cfd: data.code_formation_diplome,
+          voie: voie,
+          codeDispositif: voie === FormationVoie.SCOLAIRE ? bcnMefData?.dispositif_formation : null,
+          millesime: data.millesime,
+          region: data.region.code,
+          part_en_emploi_6_mois: data.taux_en_emploi_6_mois,
+          taux_en_emploi_6_mois: computeTauxEnEmploi(data),
+          taux_en_formation: data.taux_en_formation,
+          taux_autres_6_mois: data.taux_autres_6_mois,
+        };
+
+        try {
+          await upsert(
+            kdb,
+            "indicateurPoursuiteRegional",
+            ["cfd", "voie", "codeDispositif", "millesime", "region"],
+            indicateurPoursuite,
+            indicateurPoursuite,
+            ["id"]
+          );
+
+          logger.info(
+            `Indicateur de poursuite régionale ${Object.values(
+              pick(indicateurPoursuite, ["cfd, voie, codeDipositif, millesime, region"])
+            ).join("/")} ajoutée`
+          );
+          stats.created++;
+        } catch (e) {
+          logger.error(
+            e,
+            `Impossible d'ajouter les indicateurs de poursuite régionale ${Object.values(
+              pick(indicateurPoursuite, ["cfd, voie, codeDipositif, millesime, region"])
+            ).join("/")}`
+          );
+          stats.failed++;
+        }
+      },
+      { parallel: 1 }
+    )
+  );
+
+  return stats;
+}
+
+export async function importIndicateurPoursuiteRegionale() {
+  const resultImport = await importStats();
+  const resultImportIndicateurs = await importIndicateurs();
+
+  // Check if we cover all code
+  const diplomesCodeNotCover = await kdb
+    .selectFrom(
+      kdb
+        .selectFrom("formationEtablissement")
+        .innerJoin("formation", "formation.id", "formationEtablissement.formationId")
+        .select((eb) => eb.fn<string>("SUBSTR", ["cfd", sql.val(1), sql.val(3)]).as("code"))
+        .as("formations")
+    )
+    .select("code")
+    .where("code", "not in", flatten(Object.values(DiplomeType)))
+    .groupBy("code")
+    .execute();
+
+  if (diplomesCodeNotCover.length > 0) {
+    logger.error(`Code diplome ${diplomesCodeNotCover.map((d) => d.code).join("/")} non couvert!`);
+  }
+
+  return {
+    import: resultImport,
+    importIndicateurs: resultImportIndicateurs,
+  };
 }

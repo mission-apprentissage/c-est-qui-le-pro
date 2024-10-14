@@ -1,7 +1,7 @@
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import * as Cache from "#src/common/cache.js";
 import moment from "#src/common/utils/dateUtils.js";
-import { FORMATION_TAG } from "#src/common/constants/formationEtablissement.js";
+import { FormationTag } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb, kyselyChainFn } from "#src/common/db/db.js";
 import { SelectQueryBuilder, sql } from "kysely";
@@ -18,7 +18,7 @@ export function buildFilterTag(eb, tag) {
     return eb;
   }
 
-  const formationTag = Object.values(FORMATION_TAG).includes(tag);
+  const formationTag = Object.values(FormationTag).includes(tag);
   if (!formationTag) {
     logger.error(`Tag ${tag} inconnu dans les filtres de formations`);
     return eb;
@@ -118,7 +118,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
     return null;
   }
 
-  if (isochroneBuckets.length === 0) {
+  if (!isochroneBuckets || isochroneBuckets.length === 0) {
     return null;
   }
 
@@ -262,7 +262,7 @@ export async function getFormationsSQL(
             .select((eb) => eb.fn("row_to_json", [sql`"formationEtablissement"`]).as("formationEtablissement"))
             .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
             .select("formationEtablissement.id as id")
-            .$if(tag, (eb) => buildFilterTag(eb, tag))
+            .$if(!!tag, (eb) => buildFilterTag(eb, tag))
             .where("millesime", "&&", [millesime])
             .innerJoin(
               queryEtablissement.query.as("etablissement"),

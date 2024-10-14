@@ -1,5 +1,5 @@
 import { object, number, array, string, InferType } from "yup";
-import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN } from "#/types/formation";
+import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN } from "shared";
 
 const getSchema = object({
   longitude: number().min(-180).max(180),

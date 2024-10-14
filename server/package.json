@@ -87,6 +87,7 @@
     "@types/http-cache-semantics": "4.0.4",
     "@types/node": "22.5.0",
     "@types/pg": "8.11.8",
+    "@types/transform-coordinates": "1.0.2",
     "@typescript-eslint/eslint-plugin": "8.6.0",
     "@typescript-eslint/parser": "8.6.0",
     "axiosist": "1.2.0",
