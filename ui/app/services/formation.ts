@@ -13,7 +13,7 @@ export type FormationTagType = {
 export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
-    libelle: "POUR TRAVAILLER RAPIDEMENT",
+    libelle: "TAUX D'INSERTION FAVORABLE",
     color: "#18753c",
     bgColor: "var(--success-975-75)",
     icon: MoneyIcon,
