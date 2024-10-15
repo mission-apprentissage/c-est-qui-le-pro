@@ -199,6 +199,9 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
       [
         queryIsochrones ? '"accessTime"' : null,
         queryIsochrones ? 'case when "accessTime" is not null then statut else null end DESC' : null,
+        queryIsochrones
+          ? `case when "accessTime" is not null then array_position(array['sous contrat',null,'reconnu par l''Etat', 'hors contrat'], "statutDetail") else null end`
+          : null,
         "distance",
         '"etablissementId"',
         "id",
@@ -268,6 +271,7 @@ export async function getFormationsSQL(
             )
             .select("etablissement.accessTime as accessTime")
             .select("etablissement.statut as statut")
+            .select("etablissement.statutDetail as statutDetail")
             .select("etablissement.distance as distance")
             .select("etablissement.id as etablissementId")
             .innerJoin(queryFormation.query.as("formation"), "formationEtablissement.formationId", "formation.id")
@@ -298,7 +302,7 @@ export async function getFormationsSQL(
         formations: eb.fn.coalesce(
           sql<
             { formation: Formation; etablissement: Etablissement; formationEtablissement: FormationEtablissement }[]
-          >`json_agg(to_jsonb(formations.*) - 'total' - 'id' - 'order' - 'statut' - 'distance' - 'etablissementId' - 'totalIsochrone' ORDER BY formations.order, formations.id)`,
+          >`json_agg(to_jsonb(formations.*) - 'total' - 'id' - 'order' - 'statut' - 'statutDetail' - 'distance' - 'etablissementId' - 'totalIsochrone' ORDER BY formations.order, formations.id)`,
           sql.val("[]")
         ),
       }).as("results")
