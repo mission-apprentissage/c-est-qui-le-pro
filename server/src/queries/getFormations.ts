@@ -162,6 +162,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
         .selectFrom("etablissement")
         .$call(EtablissementRepository._base())
         .selectAll("etablissement")
+        .selectAll("JPODates")
         .select((eb) => distanceQuery(eb).as("distance"))
         .where("hasFormation", "=", true)
         .as("etablissement")
