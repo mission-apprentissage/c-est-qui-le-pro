@@ -18,7 +18,7 @@ import FormationRoute from "./FormationRoute";
 import FormationDisponible from "./FormationDisponible";
 import Link from "#/app/components/Link";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
-import { formatLibelle } from "#/app/utils/formation";
+import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import styled from "@emotion/styled";
 
 const BoxContainer = styled(Box)<BoxProps>`
@@ -65,11 +65,11 @@ export default function FormationHeader({
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
               <TagStatutPublic square bold>
-                {etablissement.statut.toUpperCase()}
+                {formatStatut(etablissement).toUpperCase()}
               </TagStatutPublic>
             ) : (
               <TagStatutPrive square bold>
-                {etablissement.statut.toUpperCase()}
+                {formatStatut(etablissement).toUpperCase()}
               </TagStatutPrive>
             ))}
           {formationEtablissement.duree && (
