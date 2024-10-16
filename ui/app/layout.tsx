@@ -4,7 +4,7 @@ import Header from "#/app/components/Header";
 import { title, tagline } from "./(accompagnateur)/constants/constants";
 import "./(accompagnateur)/style.scss";
 import Title from "./(accompagnateur)/components/Title";
-import Footer from "./components/Footer";
+import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
 import ConstructionHeader from "./(accompagnateur)/components/ConstructionHeader";
@@ -43,14 +43,6 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                   licence libre. Une partie du design de ce service est conçu avec le système de design de l&apos;État.
                 </>
               }
-              domains={[
-                { name: "InserJeunes", url: "beta.gouv.fr/incubateurs/mission-inserjeunes.html" },
-                { name: "ONISEP", url: "onisep.fr" },
-                {
-                  name: "beta.gouv.fr",
-                  url: "beta.gouv.fr",
-                },
-              ]}
               bottomItems={[
                 {
                   text: "Documentation",

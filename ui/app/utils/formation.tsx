@@ -1,3 +1,5 @@
+import { Etablissement } from "#/types/formation";
+
 export function formatLibelle(libelle: string | undefined): string {
   if (!libelle) {
     return "";
@@ -16,4 +18,8 @@ export function formatAccessTime(time: number) {
   }
 
   return <>À moins de {(time / 60).toFixed(0)} minutes</>;
+}
+
+export function formatStatut(etablissement: Etablissement): string {
+  return etablissement.statut + (etablissement.statutDetail ? ` ${etablissement.statutDetail}` : "");
 }

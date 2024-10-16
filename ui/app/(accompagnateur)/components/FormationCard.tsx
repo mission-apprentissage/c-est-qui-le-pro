@@ -8,7 +8,7 @@ import Card from "#/app/components/Card";
 import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
-import { formatAccessTime, formatLibelle } from "#/app/utils/formation";
+import { formatAccessTime, formatLibelle, formatStatut } from "#/app/utils/formation";
 import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
 import { capitalize } from "lodash-es";
 
@@ -77,9 +77,9 @@ export default React.memo(function FormationCard({
       {etablissement.statut && (
         <Box style={{ marginTop: "0.75rem" }}>
           {etablissement.statut === "public" ? (
-            <TagStatutPublic>{capitalize(etablissement.statut)}</TagStatutPublic>
+            <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
           ) : (
-            <TagStatutPrive>{capitalize(etablissement.statut)}</TagStatutPrive>
+            <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
           )}
         </Box>
       )}

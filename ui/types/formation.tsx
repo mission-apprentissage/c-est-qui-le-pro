@@ -120,6 +120,7 @@ export type JourneesPortesOuverte = {
 export type Etablissement = {
   id: string;
   statut?: string;
+  statutDetail?: string;
   url?: string;
   libelle?: string;
   uai: string;
