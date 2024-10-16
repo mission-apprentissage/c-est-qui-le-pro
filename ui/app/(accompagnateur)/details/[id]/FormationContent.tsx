@@ -6,7 +6,7 @@ import { Box, useTheme } from "@mui/material";
 import { Grid } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail } from "#/types/formation";
+import { FormationDetail } from "shared";
 import { useSize } from "#/app/(accompagnateur)/hooks/useSize";
 import DialogMinistage from "#/app/(accompagnateur)/components/DialogMinistage";
 import FormationBlockPoursuite from "./FormationBlockPoursuite";

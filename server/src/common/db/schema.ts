@@ -39,6 +39,7 @@ export interface Etablissement {
   JPODetails: string | null;
   libelle: string | null;
   onisepId: string | null;
+  region: Generated<string>;
   statut: string | null;
   statutDetail: string | null;
   uai: string;
@@ -78,6 +79,7 @@ export interface Formation {
   id: Generated<string>;
   libelle: string | null;
   mef11: string | null;
+  niveauDiplome: Generated<string>;
   onisepIdentifiant: string | null;
   updatedAt: Generated<Timestamp>;
   voie: string;
@@ -168,6 +170,20 @@ export interface IndicateurPoursuite {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface IndicateurPoursuiteRegional {
+  cfd: string;
+  codeDispositif: string | null;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  millesime: string | null;
+  region: string;
+  taux_autres_6_mois: number | null;
+  taux_en_emploi_6_mois: number | null;
+  taux_en_formation: number | null;
+  updatedAt: Generated<Timestamp>;
+  voie: string;
+}
+
 export interface Log {
   createdAt: Generated<Timestamp>;
   data: Json | null;
@@ -245,6 +261,7 @@ export interface DB {
   geometry_columns: GeometryColumns;
   indicateurEntree: IndicateurEntree;
   indicateurPoursuite: IndicateurPoursuite;
+  indicateurPoursuiteRegional: IndicateurPoursuiteRegional;
   log: Log;
   metric: Metric;
   rawData: RawData;

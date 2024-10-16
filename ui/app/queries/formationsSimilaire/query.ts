@@ -1,4 +1,4 @@
-import { FormationDetail, formationDetailSchema } from "#/types/formation";
+import { FormationDetail, formationDetailSchema } from "shared";
 import { FormationsSimilaireRequestSchema } from "./type";
 import * as yup from "yup";
 import { fetchJson } from "../../utils/fetch";

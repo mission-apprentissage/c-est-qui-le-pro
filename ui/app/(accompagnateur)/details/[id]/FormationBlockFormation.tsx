@@ -1,11 +1,10 @@
 "use client";
 import { Box } from "@mui/material";
 import FormationDescription from "../../components/FormationDescription";
-import { Etablissement, Formation } from "#/types/formation";
+import { Etablissement, Formation } from "shared";
 import Card from "#/app/components/Card";
 import Link from "#/app/components/Link";
-import WidgetSiriusEtablissement from "../../components/WidgetSiriusEtablissement";
-import { fr } from "@codegouvfr/react-dsfr";
+import WidgetSiriusFormation from "../../components/WidgetSiriusFormation";
 
 export default function FormationBlockFormation({
   formation,
@@ -32,7 +31,7 @@ export default function FormationBlockFormation({
       </FormationDescription>
       {formation.voie === "apprentissage" && (
         <Box>
-          <WidgetSiriusEtablissement etablissement={etablissement} fallbackComponent={<></>} />
+          <WidgetSiriusFormation formation={formation} fallbackComponent={<></>} />
         </Box>
       )}
     </Card>

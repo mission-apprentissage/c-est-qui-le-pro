@@ -1,4 +1,4 @@
-import { Etablissement } from "#/types/formation";
+import { Etablissement } from "shared";
 
 export function formatLibelle(libelle: string | undefined): string {
   if (!libelle) {

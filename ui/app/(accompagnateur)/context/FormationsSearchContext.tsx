@@ -1,6 +1,6 @@
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
-import { FormationDomaine, FormationTag } from "#/types/formation";
+import { FormationDomaine, FormationTag } from "shared";
 import { usePlausible } from "next-plausible";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";

@@ -47,7 +47,7 @@ export function formatLibelle(libelle: string): string {
   );
 }
 
-export function formatUrl(url: string | null): string {
+export function formatUrl(url: string | null): string | null {
   if (!url) {
     return null;
   }

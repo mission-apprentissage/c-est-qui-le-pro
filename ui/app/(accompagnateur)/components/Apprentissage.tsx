@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import Tag from "#/app/components/Tag";
-import { Formation } from "#/types/formation";
+import { Formation } from "shared";
 import "moment/locale/fr";
 
 export function TagApprentissage({ formation }: { formation: Formation }) {

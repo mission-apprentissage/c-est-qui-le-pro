@@ -3,6 +3,14 @@ import * as yup from "yup";
 export const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^[0-9A-Z]{8}$/;
 
+export const THRESHOLD_TAUX_PRESSION = [1, 1.27];
+
+export const DiplomeType = {
+  BAC_PRO: ["400", "403"], // Bac pro et bac pro agricole
+  CAP: ["500", "503"], // cap et cap agricole
+  BP: ["450", "553"], // BP et BP agricole
+};
+
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
   FAIBLE_TAUX_PRESSION = "faible_taux_pression",
@@ -58,6 +66,22 @@ type IndicateurPoursuite = {
   taux_autres_6_mois?: number;
 };
 
+type IndicateurPoursuiteRegional = {
+  millesime: string;
+  region: string;
+  voie: string;
+  taux_en_formation_q0: number;
+  taux_en_formation_q1: number;
+  taux_en_formation_q2: number;
+  taux_en_formation_q3: number;
+  taux_en_formation_q4: number;
+  taux_en_emploi_6_mois_q0: number;
+  taux_en_emploi_6_mois_q1: number;
+  taux_en_emploi_6_mois_q2: number;
+  taux_en_emploi_6_mois_q3: number;
+  taux_en_emploi_6_mois_q4: number;
+};
+
 type FormationPoursuite = {
   type?: string;
   libelle: string;
@@ -70,6 +94,7 @@ export type FormationEtablissement = {
   tags?: FormationTag[] | null;
   indicateurEntree?: IndicateurEntree;
   indicateurPoursuite?: IndicateurPoursuite;
+  indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
 };
 
 export type MetierTransitionType = "transitionNumerique" | "transitionEcologique" | "transitionDemographique";
@@ -170,6 +195,23 @@ export const formationDetailSchema: yup.ObjectSchema<FormationDetail> = yup.obje
             taux_en_emploi_6_mois: yup.number(),
             taux_en_formation: yup.number(),
             taux_autres_6_mois: yup.number(),
+          })
+          .default(undefined),
+        indicateurPoursuiteRegional: yup
+          .object({
+            millesime: yup.string().required(),
+            region: yup.string().required(),
+            voie: yup.string().required(),
+            taux_en_formation_q0: yup.number().required(),
+            taux_en_formation_q1: yup.number().required(),
+            taux_en_formation_q2: yup.number().required(),
+            taux_en_formation_q3: yup.number().required(),
+            taux_en_formation_q4: yup.number().required(),
+            taux_en_emploi_6_mois_q0: yup.number().required(),
+            taux_en_emploi_6_mois_q1: yup.number().required(),
+            taux_en_emploi_6_mois_q2: yup.number().required(),
+            taux_en_emploi_6_mois_q3: yup.number().required(),
+            taux_en_emploi_6_mois_q4: yup.number().required(),
           })
           .default(undefined),
       })

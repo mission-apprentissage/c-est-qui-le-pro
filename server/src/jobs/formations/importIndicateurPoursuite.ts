@@ -5,6 +5,8 @@ import { getLoggerWithContext } from "#src/common/logger.js";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
 import { ExpositionApi } from "#src/services/exposition/ExpositionApi.js";
 import { kdb, upsert } from "#src/common/db/db";
+import { computeTauxEnEmploi } from "#src/services/exposition/utils.js";
+import { omitNil } from "#src/common/utils/objectUtils.js";
 
 const logger = getLoggerWithContext("import");
 
@@ -66,13 +68,14 @@ export async function importIndicateurPoursuite() {
     filterData((data) => data && data.formationEtablissement),
     writeData(
       async ({ formationEtablissement: { formationEtablissement, etablissement, formation }, formationStats }) => {
-        const indicateurPoursuite = {
+        const indicateurPoursuite = omitNil({
           formationEtablissementId: formationEtablissement.id,
           millesime: formationStats.millesime,
-          taux_en_emploi_6_mois: formationStats.taux_en_emploi_6_mois,
+          taux_en_emploi_6_mois: computeTauxEnEmploi(formationStats),
+          part_en_emploi_6_mois: formationStats.taux_en_emploi_6_mois,
           taux_en_formation: formationStats.taux_en_formation,
           taux_autres_6_mois: formationStats.taux_autres_6_mois,
-        };
+        });
 
         try {
           await upsert(

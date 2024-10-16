@@ -2,7 +2,7 @@
 import React from "react";
 import { Box, Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationTag } from "#/types/formation";
+import { FormationTag } from "shared";
 import Tag from "#/app/components/Tag";
 import { FORMATION_TAG, FormationTagType } from "#/app/services/formation";
 import { capitalize } from "lodash-es";

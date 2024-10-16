@@ -13,6 +13,7 @@ export class RomeMetierRepository extends SqlRepository<DB, "romeMetier"> {
         onisepLibelle: null,
         onisepLink: null,
         franceTravailLink: null,
+        franceTravailLibelle: null,
         transitionEcologique: null,
         transitionEcologiqueDetaillee: null,
         transitionNumerique: null,

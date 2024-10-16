@@ -1,4 +1,4 @@
-import { Metier, MetierTransitionType } from "#/types/formation";
+import { Metier, MetierTransitionType } from "shared";
 import { FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 
 export const METIER_TRANSITION: {
