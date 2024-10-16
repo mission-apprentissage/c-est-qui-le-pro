@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Formation } from "#/types/formation";
+import { Formation } from "shared";
 import { WidgetSirius } from "./WidgetSirius";
 
 export default function WidgetSiriusFormation({
