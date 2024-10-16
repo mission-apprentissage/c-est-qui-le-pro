@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.5.1...v1.6.0) (2024-10-16)
+
+
+### Features
+
+* affichage des détails des statuts privés ([#10](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/10)) ([24cead4](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/24cead48f3985be66675b236967aa254550a8379))
+
 ## [1.5.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.5.0...v1.5.1) (2024-10-08)
 
 
