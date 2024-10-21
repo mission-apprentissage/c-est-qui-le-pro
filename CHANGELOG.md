@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.7.0...v1.8.0) (2024-10-21)
+
+
+### Features
+
+* nouveaux filtres ([#12](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/12)) ([4a57302](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/4a573023e4485020bd1be4f942a1d4169da01540))
+
 # [1.7.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.6.0...v1.7.0) (2024-10-21)
 
 
