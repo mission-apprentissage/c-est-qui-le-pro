@@ -14,6 +14,7 @@ export type SearchFormationFormData = {
   address: string;
   time: number;
   distance: number;
+  formation?: string;
   tag?: string;
   domaine?: string;
 };
@@ -25,6 +26,7 @@ export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
     distance: yup.number().required(),
     tag: yup.string(),
     domaine: yup.string(),
+    formation: yup.string(),
   })
   .required();
 

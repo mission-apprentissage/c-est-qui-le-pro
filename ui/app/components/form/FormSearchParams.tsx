@@ -59,8 +59,7 @@ export function FormSearchParams<FormData extends FieldValues>({
       return [[key, get(forceValues, key, data[key])]];
     });
 
-    const urlParams = new URLSearchParams(flatten(entries));
-
+    const urlParams = new URLSearchParams(flatten(entries).filter(([_, value]) => value !== undefined));
     router.push(`${url}?${urlParams}`);
   });
 
