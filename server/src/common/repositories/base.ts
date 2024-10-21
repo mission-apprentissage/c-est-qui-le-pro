@@ -6,7 +6,7 @@ import { upsert } from "../db/db";
 import { InsertExpression } from "kysely/dist/cjs/parser/insert-values-parser";
 import { Readable } from "stream";
 import { compose, transformData } from "oleoduc";
-import { Entries } from "../utils/tsUtils";
+import { Entries } from "shared";
 
 export class Repository {}
 

@@ -1,4 +1,4 @@
-import { FormationDetail, formationDetailSchema } from "#/types/formation";
+import { FormationDetail, formationDetailSchema } from "shared";
 import { FormationsRequestSchema } from "./type";
 import { PaginationsFormation, getPaginationFormationSchema } from "#/types/pagination";
 import * as yup from "yup";

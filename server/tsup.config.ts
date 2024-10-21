@@ -10,10 +10,7 @@ export default defineConfig({
   shims: true,
   minify: false,
   sourcemap: true,
-  noExternal: [
-    "geotoolbox",
-    /*"shared"*/
-  ],
+  noExternal: ["geotoolbox", "shared"],
   clean: true,
   publicDir: false,
   watch: isDev ? ["src" /*, "../shared"*/] : false,

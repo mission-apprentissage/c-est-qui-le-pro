@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail } from "#/types/formation";
+import { FormationDetail } from "shared";
 import "moment/locale/fr";
 import { TagPortesOuvertes } from "./PortesOuvertes";
 import Card from "#/app/components/Card";

@@ -5,7 +5,7 @@ import { useTheme } from "@mui/material";
 import { css } from "@emotion/react";
 import { Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Etablissement } from "#/types/formation";
+import { Etablissement } from "shared";
 import { formatPortesOuvertes } from "#/app/(accompagnateur)/components/PortesOuvertes";
 import Link from "#/app/components/Link";
 

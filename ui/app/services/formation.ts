@@ -1,4 +1,4 @@
-import { FormationDomaine, FormationTag } from "#/types/formation";
+import { FormationDomaine, FormationTag } from "shared";
 import CalendarIcon from "#/app/components/icon/CalendarIcon";
 import { FrCxArg, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import MoneyIcon from "../components/icon/MoneyIcon";
@@ -13,7 +13,7 @@ export type FormationTagType = {
 export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
-    libelle: "POUR TRAVAILLER RAPIDEMENT",
+    libelle: "TAUX D'INSERTION FAVORABLE",
     color: "#18753c",
     bgColor: "var(--success-975-75)",
     icon: MoneyIcon,

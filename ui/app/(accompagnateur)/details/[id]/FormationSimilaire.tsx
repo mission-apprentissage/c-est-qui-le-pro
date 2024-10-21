@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { formationsSimilaire } from "#/app/queries/formationsSimilaire/query";
-import { FormationDetail } from "#/types/formation";
+import { FormationDetail } from "shared";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryLocation } from "../../hooks/useQueryLocation";
 import Loader from "#/app/components/Loader";

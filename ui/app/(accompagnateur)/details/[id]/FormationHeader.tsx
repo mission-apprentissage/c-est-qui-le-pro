@@ -6,7 +6,7 @@ import { Box, BoxProps, Stack, useTheme } from "@mui/material";
 import { Typography, Grid } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
-import { FormationDetail } from "#/types/formation";
+import { FormationDetail } from "shared";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
 import PortesOuvertesHeader from "./PortesOuvertesHeader";

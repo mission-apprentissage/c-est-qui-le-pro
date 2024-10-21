@@ -10,7 +10,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "../components/FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { FormationTag, FormationDomaine, FormationDetail } from "#/types/formation";
+import { FormationTag, FormationDomaine, FormationDetail } from "shared";
 import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";

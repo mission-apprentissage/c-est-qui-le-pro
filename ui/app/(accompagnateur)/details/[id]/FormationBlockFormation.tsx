@@ -1,7 +1,7 @@
 "use client";
 import { Box } from "@mui/material";
 import FormationDescription from "../../components/FormationDescription";
-import { Etablissement, Formation } from "#/types/formation";
+import { Etablissement, Formation } from "shared";
 import Card from "#/app/components/Card";
 import Link from "#/app/components/Link";
 import WidgetSiriusFormation from "../../components/WidgetSiriusFormation";

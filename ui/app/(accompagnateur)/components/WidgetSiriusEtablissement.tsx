@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Etablissement } from "#/types/formation";
 import { WidgetSirius } from "./WidgetSirius";
+import { Etablissement } from "shared";
 
 export default function WidgetSiriusEtablissement({
   etablissement,

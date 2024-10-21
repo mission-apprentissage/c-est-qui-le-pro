@@ -7,7 +7,7 @@ import {
   LeafletSelectedEtablissementIcon,
   FitBound,
 } from "#/app/components/Map";
-import { Etablissement, FormationDetail } from "#/types/formation";
+import { Etablissement, FormationDetail } from "shared";
 import { FeatureGroup, Marker } from "react-leaflet";
 import EtablissementCard from "./EtablissementCard";
 import DynamicPopup from "./DynamicPopup";

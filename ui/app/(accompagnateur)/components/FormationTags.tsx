@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Typography } from "#/app/components/MaterialUINext";
-import { FormationTag } from "#/types/formation";
+import { FormationTag } from "shared";
 import Tag from "#/app/components/Tag";
 import { FORMATION_TAG } from "#/app/services/formation";
 

@@ -2,11 +2,7 @@ import { oleoduc, writeData, transformData } from "oleoduc";
 import { flatten } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement.js";
-import {
-  FORMATION_TAG,
-  THRESHOLD_TAUX_PRESSION,
-  THRESHOLD_EN_EMPLOI,
-} from "#src/common/constants/formationEtablissement.js";
+import { FormationTag, THRESHOLD_TAUX_PRESSION } from "shared";
 import { computeInserJeunesTag } from "./computeInserJeunesTag.js";
 import { computeIndicateurEntree } from "./computeIndicateurEntree.js";
 
@@ -14,18 +10,13 @@ const logger = getLoggerWithContext("import");
 
 const COMPUTE_FORMATION_TAG = {
   inserjeunes: {
-    tags: [FORMATION_TAG.POUR_TRAVAILLER_RAPIDEMENT],
-    compute: async (
-      formation,
-      { thresholdEnEmploi } = {
-        thresholdEnEmploi: THRESHOLD_EN_EMPLOI[0],
-      }
-    ) => {
-      return computeInserJeunesTag(formation, { thresholdEnEmploi });
+    tags: [FormationTag.POUR_TRAVAILLER_RAPIDEMENT],
+    compute: async (formation) => {
+      return computeInserJeunesTag(formation);
     },
   },
   indicateurEntree: {
-    tags: [FORMATION_TAG.FAIBLE_TAUX_PRESSION],
+    tags: [FormationTag.FAIBLE_TAUX_PRESSION],
     compute: async (formation, { thresholdTauxPression } = { thresholdTauxPression: THRESHOLD_TAUX_PRESSION[0] }) => {
       return computeIndicateurEntree(formation, { thresholdTauxPression });
     },

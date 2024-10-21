@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { Typography } from "#/app/components/MaterialUINext";
 import { getDistance } from "geolib";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Etablissement } from "#/types/formation";
+import { Etablissement } from "shared";
 import { formatAccessTime } from "#/app/utils/formation";
 
 export default function FormationRoute({

@@ -12,7 +12,7 @@ import ErrorAddressInvalid from "../errors/ErrorAddressInvalid";
 import UserGeolocatioDenied from "../components/UserGeolocatioDenied";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
 import { capitalize } from "lodash-es";
-import { FormationDomaine } from "#/types/formation";
+import { FormationDomaine } from "shared";
 import { FORMATION_DOMAINE } from "#/app/services/formation";
 import OptionsCarousel from "#/app/components/form/OptionsCarousel";
 import { myPosition } from "#/app/components/form/AddressField";

@@ -8,7 +8,9 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "dependencies": {},
+    "dependencies": {
+        "yup": "^1.2.0"
+    },
     "engines": {
         "node": ">=18.20.2"
     },
