@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.6.0...v1.7.0) (2024-10-21)
+
+
+### Features
+
+* widget sirius par formation ([#11](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/11)) ([47459c3](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/47459c3f9b34c656d12ace993c76552018ed4c60))
+
 # [1.6.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.5.1...v1.6.0) (2024-10-16)
 
 
