@@ -10,12 +10,14 @@ export default function FormationField({
   InputProps,
   error,
   sx,
+  onOpen,
 }: any) {
   return (
     <>
       <Autocomplete
         value={value || ""}
         defaultValue={value}
+        onOpen={() => onOpen && onOpen()}
         onInputChange={(e, v) => onChange(v)}
         onChange={(e, v) => onChange(v)}
         getOptionLabel={(option) => option.toString()}

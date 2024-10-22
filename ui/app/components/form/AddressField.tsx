@@ -108,6 +108,7 @@ export default function AddressField({
   sx,
   isMobile,
   defaultValues,
+  onOpen,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
@@ -171,6 +172,7 @@ export default function AddressField({
         defaultValue={value}
         open={isFocus}
         onOpen={(e) => {
+          onOpen && onOpen();
           setIsFocus(true);
         }}
         onBlur={(e) => {

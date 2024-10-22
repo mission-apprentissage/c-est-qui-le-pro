@@ -26,12 +26,7 @@ export default function SearchHeader() {
             },
           }}
         >
-          <SearchFormationHomeForm
-            url={"/recherche"}
-            defaultValues={{ address: null, distance: 0, time: 90 }}
-            bordered
-            withFormation={true}
-          />
+          <SearchFormationHomeForm url={"/recherche"} defaultValues={{ address: null }} bordered withFormation={true} />
         </Box>
       </Box>
     </Container>

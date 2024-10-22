@@ -59,25 +59,38 @@ export default () => {
   router.get(
     "/api/formations",
     tryCatch(async (req, res) => {
-      const { longitude, latitude, distance, timeLimit, tag, uais, cfds, domaine, academie, page, items_par_page } =
-        await validate(
-          { ...req.query, ...req.params },
-          {
-            longitude: Joi.number().min(-180).max(180).default(null),
-            latitude: Joi.number().min(-90).max(90).default(null),
-            distance: Joi.number().min(0).max(100000).default(null),
-            timeLimit: Joi.number().valid().default(null),
-            tag: Joi.string()
-              .empty("")
-              .valid(...Object.values(FormationTag))
-              .default(null),
-            ...validators.uais(),
-            ...validators.cfds(),
-            domaine: Joi.string().empty("").default(null),
-            academie: Joi.string().empty("").default(null),
-            ...validators.pagination({ items_par_page: 100 }),
-          }
-        );
+      const {
+        longitude,
+        latitude,
+        distance,
+        timeLimit,
+        tag,
+        uais,
+        cfds,
+        domaine,
+        academie,
+        formation,
+        page,
+        items_par_page,
+      } = await validate(
+        { ...req.query, ...req.params },
+        {
+          longitude: Joi.number().min(-180).max(180).default(null),
+          latitude: Joi.number().min(-90).max(90).default(null),
+          distance: Joi.number().min(0).max(100000).default(null),
+          timeLimit: Joi.number().valid().default(null),
+          tag: Joi.string()
+            .empty("")
+            .valid(...Object.values(FormationTag))
+            .default(null),
+          ...validators.uais(),
+          ...validators.cfds(),
+          domaine: Joi.string().empty("").default(null),
+          academie: Joi.string().empty("").default(null),
+          formation: Joi.string().empty("").default(null),
+          ...validators.pagination({ items_par_page: 100 }),
+        }
+      );
 
       const year = new Date().getFullYear();
       const millesime = [(year - 1).toString(), year.toString()];
@@ -85,7 +98,7 @@ export default () => {
       const results = await getFormationsSQL(
         {
           filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
-          filtersFormation: { cfds, domaine },
+          filtersFormation: { cfds, domaine, formation },
           tag,
           millesime,
         },

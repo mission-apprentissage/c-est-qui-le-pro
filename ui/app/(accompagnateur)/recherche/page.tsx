@@ -19,7 +19,7 @@ import { myPosition } from "#/app/components/form/AddressField";
 
 function ResearchFormationsParameter() {
   const { params, updateParams } = useFormationsSearch();
-  const { address, distance = 0, time = 15, tag, domaine } = params ?? {};
+  const { address, tag, domaine, formation } = params ?? {};
 
   const { data, isLoading, error } = useQuery({
     staleTime: Infinity,
@@ -111,16 +111,7 @@ function ResearchFormationsParameter() {
           />
         </Grid>
       </Grid>
-      {data && (
-        <ResearchFormationsResult
-          location={data}
-          distance={distance * 1000}
-          time={time * 60}
-          tag={tag}
-          domaine={domaine}
-          page={1}
-        />
-      )}
+      {data && <ResearchFormationsResult location={data} tag={tag} domaine={domaine} formation={formation} page={1} />}
     </>
   );
 }

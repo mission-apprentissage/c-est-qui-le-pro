@@ -28,6 +28,11 @@ const getSchema = object({
     .transform((_, value) => {
       return value === "" ? null : value;
     }),
+  formation: string()
+    .nullable()
+    .transform((_, value) => {
+      return value === "" ? null : value;
+    }),
   academie: string()
     .nullable()
     .transform((_, value) => {
