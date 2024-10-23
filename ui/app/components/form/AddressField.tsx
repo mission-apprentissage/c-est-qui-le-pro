@@ -171,6 +171,7 @@ export default function AddressField({
         value={value}
         defaultValue={value}
         open={isFocus}
+        blurOnSelect
         onOpen={(e) => {
           onOpen && onOpen();
           setIsFocus(true);

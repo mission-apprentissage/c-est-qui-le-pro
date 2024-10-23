@@ -121,6 +121,7 @@ export default function FormationField({
         value={value || ""}
         defaultValue={value}
         open={isFocus}
+        blurOnSelect
         onOpen={(e) => {
           onOpen && onOpen();
           setIsFocus(true);
