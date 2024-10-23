@@ -10,7 +10,8 @@ import { SearchFormationFormData, schema } from "./SearchFormationForm";
 import { Box, Stack, Theme } from "@mui/material";
 import useSearchHistory from "#/app/(accompagnateur)/hooks/useSearchHistory";
 import FormationField from "./FormationField";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { uniq } from "lodash-es";
 
 export default function SearchFormationHomeForm({
   url,
@@ -27,6 +28,11 @@ export default function SearchFormationHomeForm({
   const [isBordered, setIsBordered] = useState(bordered);
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const { history, push: pushHistory } = useSearchHistory();
+  const addressHistory = useMemo(
+    () => uniq(history.map(({ address }) => address).filter((a) => a !== myPosition)),
+    [history]
+  );
+  const formationHistory = useMemo(() => uniq(history.map(({ formation }) => formation).filter((f) => f)), [history]);
 
   useEffect(() => {
     setIsBordered(bordered || (isFocus && isDownSm));
@@ -71,7 +77,7 @@ export default function SearchFormationHomeForm({
       <FormSearchParams
         onSubmit={(data) => {
           setIsFocus(false);
-          data.address && data.address !== myPosition && pushHistory(data.address);
+          data.address && pushHistory(data);
         }}
         url={url}
         defaultValues={defaultValues}
@@ -85,7 +91,7 @@ export default function SearchFormationHomeForm({
                 <Grid
                   container
                   columnSpacing={!withFormation ? { xs: 0 } : { xs: 0, md: 4 }}
-                  rowSpacing={withFormation ? { xs: isFocus ? 2 : 0, md: 4 } : { xs: 0 }}
+                  rowSpacing={withFormation ? { xs: 2, md: 4 } : { xs: 0 }}
                   style={{
                     backgroundColor: "#FFFFFF",
                     ...(isBordered && !withFormation
@@ -119,7 +125,7 @@ export default function SearchFormationHomeForm({
                             form={form}
                             formRef={formRef}
                             submitOnChange={!withFormation}
-                            defaultValues={history}
+                            defaultValues={addressHistory}
                             onOpen={() => setIsFocus(true)}
                           />
                         )}
@@ -153,7 +159,7 @@ export default function SearchFormationHomeForm({
                     </Stack>
                   </Grid>
 
-                  {withFormation && (!isDownSm || (isDownSm && isFocus)) && (
+                  {withFormation && (
                     <Grid item xs={12} md={5}>
                       <Stack
                         direction="row"
@@ -161,9 +167,6 @@ export default function SearchFormationHomeForm({
                         style={{
                           position: "relative",
                           backgroundColor: "#FFFFFF",
-                          ...(isBordered && withFormation
-                            ? { borderRadius: "5px", border: "2px solid var(--blue-france-sun-113-625-hover)" }
-                            : {}),
                         }}
                       >
                         <Controller
@@ -171,6 +174,7 @@ export default function SearchFormationHomeForm({
                           control={control}
                           render={(form) => (
                             <FormationField
+                              bordered={isBordered && withFormation}
                               sx={{ padding: "18px", paddingRight: "0px" }}
                               isMobile={isDownSm}
                               InputProps={{
@@ -180,6 +184,7 @@ export default function SearchFormationHomeForm({
                               form={form}
                               formRef={formRef}
                               onOpen={() => setIsFocus(true)}
+                              defaultValues={formationHistory}
                             />
                           )}
                         />

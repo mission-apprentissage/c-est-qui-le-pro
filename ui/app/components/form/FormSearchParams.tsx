@@ -64,7 +64,12 @@ export function FormSearchParams<FormData extends FieldValues>({
   });
 
   return (
-    <form autoComplete="off" onSubmit={onSubmitBase} ref={formRef} style={{ flex: "1" }}>
+    <form
+      autoComplete="off"
+      onSubmit={onSubmitBase}
+      ref={formRef}
+      style={{ flex: "1", display: "flex", flexDirection: "column" }}
+    >
       {children({ control, errors, formRef })}
     </form>
   );

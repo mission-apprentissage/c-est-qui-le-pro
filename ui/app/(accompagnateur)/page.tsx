@@ -8,8 +8,6 @@ import Button from "#/app/components/Button";
 import SearchFormationHomeForm from "#/app/components/form/SearchFormationHomeForm";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
-
   return (
     <Suspense>
       <Container maxWidth={false} style={{ backgroundColor: "var(--blue-france-975-75)", paddingBottom: "10rem" }}>
@@ -42,7 +40,7 @@ export default function Page({ params }: { params: { id: string } }) {
               md={9}
               xs={12}
             >
-              <SearchFormationHomeForm url={"/recherche"} withFormation={isDownSm} defaultValues={{ address: null }} />
+              <SearchFormationHomeForm url={"/recherche"} defaultValues={{ address: null }} />
             </Grid>
 
             <Grid sm={12} md={6.5} sx={{ padding: { xs: "1rem", md: "0" } }}>
