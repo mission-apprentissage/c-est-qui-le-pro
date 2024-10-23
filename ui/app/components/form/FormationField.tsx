@@ -45,7 +45,7 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
         flex: " 1 1 auto",
         "& .MuiPaper-root": {
           height: "100%",
-          maxHeight: "60vh",
+          maxHeight: "50dvh",
           boxShadow: "none",
         },
         "& .MuiAutocomplete-listbox": {
