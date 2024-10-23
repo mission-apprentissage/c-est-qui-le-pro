@@ -186,6 +186,9 @@ export default function AddressField({
           submitOnChange && formRef.current.requestSubmit();
           setIsFocus(false);
         }}
+        onClose={() => {
+          setIsFocus(false);
+        }}
         filterOptions={(x) => x}
         options={options || []}
         freeSolo
