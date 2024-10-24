@@ -27,7 +27,7 @@ const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComp
         style={{ padding: "1rem" }}
       >
         Formation non trouvée ?{" "}
-        <Link target="_blank" href="https://adresse.data.gouv.fr/nous-contacter">
+        <Link target="_blank" href="mailto:contact@inserjeunes.beta.gouv.fr">
           Envoyer une alerte aux équipes.
         </Link>
       </Typography>
@@ -148,7 +148,7 @@ export default function FormationField({
         }}
         freeSolo
         disablePortal
-        options={defaultValues}
+        options={defaultValues.filter((v: string) => v !== value)}
         sx={{
           "& .MuiOutlinedInput-root": {
             paddingRight: "10px!important",
