@@ -11,3 +11,11 @@ export function stripNull(data) {
     emptyStrings: false,
   });
 }
+
+export function cleanString(value) {
+  if (!value) {
+    return value;
+  }
+
+  return value.replace(/\s+/g, " ").trim();
+}

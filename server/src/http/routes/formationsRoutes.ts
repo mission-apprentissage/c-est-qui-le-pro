@@ -8,7 +8,7 @@ import { addJsonHeaders } from "#src/http/utils/responseUtils.js";
 import { getRouteDate, getFormationsSQL } from "#src/queries/getFormations.js";
 import FormationEtablissement from "#src/common/repositories/formationEtablissement";
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
-import { stripNull } from "../utils/formatters";
+import { cleanString, stripNull } from "../utils/formatters";
 import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
 import { merge } from "lodash-es";
@@ -98,7 +98,7 @@ export default () => {
       const results = await getFormationsSQL(
         {
           filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
-          filtersFormation: { cfds, domaine, formation },
+          filtersFormation: { cfds, domaine, formation: cleanString(formation) },
           tag,
           millesime,
         },
