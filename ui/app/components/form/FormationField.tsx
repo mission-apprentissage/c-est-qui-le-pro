@@ -91,6 +91,7 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
 };
 
 export default function FormationField({
+  formRef,
   form: {
     field: { onChange, onBlur, value, name, ref, ...rest },
     ...formProps
@@ -102,6 +103,7 @@ export default function FormationField({
   defaultValues,
   isMobile,
   bordered,
+  submitOnChange,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
@@ -121,7 +123,6 @@ export default function FormationField({
         value={value || ""}
         defaultValue={value}
         open={isFocus}
-        blurOnSelect
         onOpen={(e) => {
           onOpen && onOpen();
           setIsFocus(true);
@@ -134,9 +135,11 @@ export default function FormationField({
         }}
         onChange={(e, v) => {
           onChange(v);
+          submitOnChange && formRef.current.requestSubmit();
           setIsFocus(false);
         }}
         onClose={() => {
+          submitOnChange && formRef.current.requestSubmit();
           setIsFocus(false);
         }}
         getOptionLabel={(option) => option.toString()}

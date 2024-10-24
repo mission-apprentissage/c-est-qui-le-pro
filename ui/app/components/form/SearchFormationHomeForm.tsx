@@ -135,7 +135,7 @@ export default function SearchFormationHomeForm({
                               error={errors?.address}
                               form={form}
                               formRef={formRef}
-                              submitOnChange={!withFormation}
+                              submitOnChange={!withFormation || !isDownSm}
                               defaultValues={addressHistory}
                               onOpen={() => setIsFocus(true)}
                             />
@@ -185,6 +185,7 @@ export default function SearchFormationHomeForm({
                             control={control}
                             render={(form) => (
                               <FormationField
+                                submitOnChange={!isDownSm}
                                 bordered={isBordered && withFormation}
                                 sx={{ padding: "18px", paddingRight: "0px" }}
                                 isMobile={isDownSm}
