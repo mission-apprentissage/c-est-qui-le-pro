@@ -68,7 +68,7 @@ const FormationResult = React.memo(
     }, [formationDetail, setSelected]);
 
     return (
-      <Grid item sm={12} ref={formationRef}>
+      <Grid item xs={12} ref={formationRef}>
         <Box sx={{ maxWidth: { xs: "100%", lg: "100%" }, paddingRight: { lg: "0", xl: "6rem" } }}>
           <FormationCard
             selected={isSelected}
