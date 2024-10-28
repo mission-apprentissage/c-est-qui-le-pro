@@ -8,10 +8,9 @@ import { RegionsService } from "shared";
 export default function useGetFormations({
   latitude,
   longitude,
-  distance,
-  time,
   tag,
   domaine,
+  formation,
   uais,
   cfds,
   postcode,
@@ -20,10 +19,9 @@ export default function useGetFormations({
 }: {
   latitude?: number;
   longitude?: number;
-  distance?: number;
-  time?: number;
   tag?: FormationTag | null;
   domaine?: FormationDomaine | null;
+  formation?: string | null;
   uais?: string[];
   cfds?: string[];
   postcode?: string;
@@ -47,10 +45,9 @@ export default function useGetFormations({
       "formations",
       latitude,
       longitude,
-      distance,
-      time,
       tag,
       domaine,
+      formation,
       page,
       uais?.toString(),
       cfds?.toString(),
@@ -61,10 +58,11 @@ export default function useGetFormations({
         {
           latitude,
           longitude,
-          distance,
-          timeLimit: time,
+          distance: 0,
+          timeLimit: 5400,
           tag,
           domaine,
+          formation,
           page: pageParam ?? 1,
           items_par_page,
           cfds,

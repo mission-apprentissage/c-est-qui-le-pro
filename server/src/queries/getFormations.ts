@@ -212,11 +212,21 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   };
 }
 
-async function buildFiltersFormationSQL({ cfds, domaine }) {
+async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   let queryFormation = kdb.selectFrom("formation").$call(FormationRepository._base()).selectAll();
 
   if (cfds.length > 0) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
+  }
+
+  if (formation) {
+    queryFormation = queryFormation.where((eb) =>
+      eb(
+        eb.fn("f_unaccent", ["libelle"]),
+        "ilike",
+        eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
+      )
+    );
   }
 
   if (!domaine) {

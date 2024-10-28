@@ -1,10 +1,11 @@
 "use client";
 import React, { Suspense } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Theme } from "@mui/material";
 import Container from "#/app/components/Container";
 import { Grid, Stack, Typography } from "#/app/components/MaterialUINext";
 import Button from "#/app/components/Button";
 import SearchFormationHomeForm from "#/app/components/form/SearchFormationHomeForm";
-import { useTheme } from "@mui/material/styles";
 
 export default function Page({ params }: { params: { id: string } }) {
   return (
@@ -39,7 +40,7 @@ export default function Page({ params }: { params: { id: string } }) {
               md={9}
               xs={12}
             >
-              <SearchFormationHomeForm url={"/recherche"} defaultValues={{ address: null, distance: 0, time: 90 }} />
+              <SearchFormationHomeForm url={"/recherche"} defaultValues={{ address: null }} />
             </Grid>
 
             <Grid sm={12} md={6.5} sx={{ padding: { xs: "1rem", md: "0" } }}>

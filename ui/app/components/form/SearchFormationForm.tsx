@@ -6,14 +6,11 @@ import * as yup from "yup";
 import { Nullable } from "#/app/utils/types";
 import FormSearchParams from "./FormSearchParams";
 import AddressField from "./AddressField";
-import DistanceField from "./DistanceField";
-import TimeField from "./TimeField";
 import Button from "../Button";
 
 export type SearchFormationFormData = {
   address: string;
-  time: number;
-  distance: number;
+  formation?: string | null;
   tag?: string;
   domaine?: string;
 };
@@ -21,10 +18,9 @@ export type SearchFormationFormData = {
 export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
   .object({
     address: yup.string().required(),
-    time: yup.number().required(),
-    distance: yup.number().required(),
     tag: yup.string(),
     domaine: yup.string(),
+    formation: yup.string().nullable(),
   })
   .required();
 
@@ -45,20 +41,6 @@ export default function SearchFormationForm({
                 name="address"
                 control={control}
                 render={(form) => <AddressField error={errors?.address} form={form} />}
-              />
-            </Grid>
-            <Grid item md={2} xs={2} style={{ display: "none" }}>
-              <Controller
-                name="distance"
-                control={control}
-                render={(form) => <DistanceField error={errors?.distance} form={form} />}
-              />
-            </Grid>
-            <Grid item md={2} sm={2} xs={6} style={{ display: "none" }}>
-              <Controller
-                name="time"
-                control={control}
-                render={(form) => <TimeField error={errors?.time} form={form} />}
               />
             </Grid>
             <Grid item md={4} sm={2} xs={6} style={{ textAlign: "left" }}>

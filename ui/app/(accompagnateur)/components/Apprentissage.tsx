@@ -1,6 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
-import Tag from "#/app/components/Tag";
+import Tag, { TagApprentissage as StyledTagApprentissage } from "#/app/components/Tag";
 import { Formation } from "shared";
 import "moment/locale/fr";
 
@@ -21,16 +20,5 @@ export function TagApprentissage({ formation }: { formation: Formation }) {
 }
 
 export function LabelApprentissage({ formation }: { formation: Formation }) {
-  return (
-    formation.voie === "apprentissage" && (
-      <Typography
-        style={{
-          fontSize: "16px",
-          color: "var(--warning-425-625-hover)",
-        }}
-      >
-        Alternance
-      </Typography>
-    )
-  );
+  return formation.voie === "apprentissage" && <StyledTagApprentissage>Alternance</StyledTagApprentissage>;
 }

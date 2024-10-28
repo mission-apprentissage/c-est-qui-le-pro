@@ -54,15 +54,23 @@ export default React.memo(function FormationCard({
       tabIndex={tabIndex}
       style={style}
     >
-      <Stack
-        spacing={1}
-        style={{
-          marginBottom: formationEtablissement.tags && formationEtablissement.tags.length > 0 ? fr.spacing("3v") : 0,
-        }}
-      >
+      <Stack direction={"row"} spacing={1} useFlexGap sx={{ flexWrap: "wrap", marginBottom: fr.spacing("3v") }}>
+        <LabelApprentissage formation={formation} />
+
+        {etablissement.statut && (
+          <Box>
+            {etablissement.statut === "public" ? (
+              <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
+            ) : (
+              <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
+            )}
+          </Box>
+        )}
+
+        {withJPO && <TagPortesOuvertes etablissement={etablissement} />}
+
         <FormationTags tags={formationEtablissement.tags || []} />
       </Stack>
-      <LabelApprentissage formation={formation} />
 
       <Typography variant="subtitle2" style={{ lineHeight: "28px" }}>
         {formatLibelle(formation.libelle)}
@@ -74,15 +82,6 @@ export default React.memo(function FormationCard({
       <Typography variant={"body2"} style={{ color: "#3A3A3A", lineHeight: "24px" }}>
         {etablissement.addressCity}
       </Typography>
-      {etablissement.statut && (
-        <Box style={{ marginTop: "0.75rem" }}>
-          {etablissement.statut === "public" ? (
-            <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
-          ) : (
-            <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
-          )}
-        </Box>
-      )}
 
       {withDuration && (
         <Grid container style={{ marginTop: fr.spacing("5v") }}>
@@ -104,8 +103,6 @@ export default React.memo(function FormationCard({
           <Grid item xs={2}></Grid>
         </Grid>
       )}
-
-      {withJPO && <TagPortesOuvertes etablissement={etablissement} />}
     </Card>
   );
 });

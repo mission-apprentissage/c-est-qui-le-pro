@@ -33,7 +33,7 @@ export default function FormationDisponible({ formationDetail }: { formationDeta
   const formationLink = useFormationLink({ formationDetail: autreFormation });
 
   if (isLoading) {
-    return <Loader />;
+    return null;
   }
 
   return (

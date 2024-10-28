@@ -20,17 +20,13 @@ export default function SearchHeader() {
             width: "100%",
             paddingLeft: "1rem",
             paddingRight: {
-              xl: "20rem",
-              lg: "10rem",
+              xl: "1rem",
+              lg: "1rem",
               xs: "1rem",
             },
           }}
         >
-          <SearchFormationHomeForm
-            url={"/recherche"}
-            defaultValues={{ address: null, distance: 0, time: 90 }}
-            bordered
-          />
+          <SearchFormationHomeForm url={"/recherche"} defaultValues={{ address: null }} bordered withFormation={true} />
         </Box>
       </Box>
     </Container>

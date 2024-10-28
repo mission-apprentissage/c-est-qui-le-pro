@@ -33,12 +33,10 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
         if (!params) {
           return;
         }
-        const { address, distance, time, domaine } = params;
+        const { address, domaine } = params;
 
         updateParams({
           address,
-          distance,
-          time,
           domaine,
           tag: selectedTag === selected ? undefined : selectedTag,
         });
@@ -70,8 +68,8 @@ const FormationResult = React.memo(
     }, [formationDetail, setSelected]);
 
     return (
-      <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
-        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
+      <Grid item sm={12} ref={formationRef}>
+        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" }, paddingRight: { lg: "0", xl: "6rem" } }}>
           <FormationCard
             selected={isSelected}
             onMouseEnter={cb}
@@ -89,17 +87,15 @@ FormationResult.displayName = "FormationResult";
 
 export default function ResearchFormationsResult({
   location,
-  distance,
-  time,
   tag,
   domaine,
+  formation,
   page = 1,
 }: {
   location: UserLocation;
-  distance: number;
-  time: number;
   tag?: FormationTag | null;
   domaine?: FormationDomaine | null;
+  formation?: string | null;
   page: number;
 }) {
   const theme = useTheme();
@@ -110,12 +106,11 @@ export default function ResearchFormationsResult({
   const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
     latitude: location.latitude,
     longitude: location.longitude,
-    distance,
-    time,
     tag,
     page,
     domaine,
     postcode: location.postcode,
+    formation,
   });
 
   React.useEffect(() => {

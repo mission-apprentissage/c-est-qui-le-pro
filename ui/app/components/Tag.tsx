@@ -100,4 +100,9 @@ export const TagDuree = styled(TagStyled)`
   color: var(--info-425-625);
 `;
 
+export const TagApprentissage = styled(TagStyled)`
+  color: var(--warning-425-625-hover);
+  background-color: var(--error-950-100);
+`;
+
 export default TagStyled;

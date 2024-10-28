@@ -2,15 +2,9 @@
 import React, { HTMLAttributes, useState } from "react";
 import { Box, TextField, Typography } from "#/app/components/MaterialUINext";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useQuery } from "@tanstack/react-query";
-import { CircularProgress } from "#/app/components/MaterialUINext";
-import { fetchAddress } from "#/app/services/address";
-import { useThrottle } from "@uidotdev/usehooks";
-import Popper, { PopperProps } from "@mui/material/Popper";
 import { fr } from "@codegouvfr/react-dsfr";
 import Link from "../Link";
-
-export const myPosition = "Autour de moi";
+import { Popper, PopperProps } from "@mui/material";
 
 const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComponent(
   props: HTMLAttributes<HTMLElement>,
@@ -32,8 +26,8 @@ const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComp
         variant="body3"
         style={{ padding: "1rem" }}
       >
-        Adresse non trouvée ?{" "}
-        <Link target="_blank" href="https://adresse.data.gouv.fr/nous-contacter">
+        Formation non trouvée ?{" "}
+        <Link target="_blank" href="mailto:contact@inserjeunes.beta.gouv.fr">
           Envoyer une alerte aux équipes.
         </Link>
       </Typography>
@@ -51,10 +45,11 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
         flex: " 1 1 auto",
         "& .MuiPaper-root": {
           height: "100%",
+          maxHeight: "50dvh",
+          boxShadow: "none",
         },
         "& .MuiAutocomplete-listbox": {
           overflowY: "auto",
-          height: "0px",
           maxHeight: "100%",
           flex: "1 1 auto",
         },
@@ -95,55 +90,22 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
   );
 };
 
-export default function AddressField({
+export default function FormationField({
   formRef,
   form: {
-    field: { onChange, onBlur, value, name, ref },
+    field: { onChange, onBlur, value, name, ref, ...rest },
     ...formProps
   },
   InputProps,
-  FieldProps,
-  submitOnChange,
   error,
   sx,
-  isMobile,
-  defaultValues,
   onOpen,
+  defaultValues,
+  isMobile,
+  bordered,
+  submitOnChange,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
-
-  const [isLocationLoading, setIsLocationLoading] = useState(false);
-
-  const valueDebounce = useThrottle(value, 300);
-
-  const { isLoading, data: options } = useQuery({
-    keepPreviousData: true,
-    // TODO : type
-    placeholderData: (previousData: any) => {
-      return previousData;
-    },
-    queryKey: ["address", valueDebounce],
-    queryFn: async () => {
-      if (!valueDebounce || valueDebounce === myPosition) {
-        return [myPosition, ...(defaultValues ?? [])];
-      }
-
-      const result = await fetchAddress(valueDebounce);
-      return result
-        ? [
-            myPosition,
-            ...result.features.map((f: any) => {
-              const label =
-                f.properties.type === "municipality"
-                  ? f.properties.label + " (" + f.properties.postcode + ")"
-                  : f.properties.label;
-              return label;
-            }),
-          ]
-        : [myPosition, ...(defaultValues ?? [])];
-    },
-    cacheTime: Infinity,
-  });
 
   return (
     <div
@@ -152,23 +114,13 @@ export default function AddressField({
         width: "100%",
         borderRadius: "5px",
         backgroundColor: "white",
-        ...(isFocus && isMobile
-          ? {
-              position: "fixed",
-              top: "0",
-              left: 0,
-              height: "100vh",
-              zIndex: 9999,
-              display: "flex",
-              flexFlow: "column",
-            }
+        ...(bordered && (!isMobile || !isFocus)
+          ? { borderRadius: "5px", border: "2px solid var(--blue-france-sun-113-625-hover)" }
           : {}),
       }}
     >
       <Autocomplete
-        loading={isLoading}
-        loadingText={<CircularProgress />}
-        value={value}
+        value={value || ""}
         defaultValue={value}
         open={isFocus}
         onOpen={(e) => {
@@ -187,12 +139,16 @@ export default function AddressField({
           setIsFocus(false);
         }}
         onClose={() => {
+          submitOnChange && formRef.current.requestSubmit();
           setIsFocus(false);
         }}
-        filterOptions={(x) => x}
-        options={options || []}
+        getOptionLabel={(option) => option.toString()}
+        filterOptions={(options, params) => {
+          return [...(value ? [value] : []), ...options];
+        }}
         freeSolo
         disablePortal
+        options={defaultValues.filter((v: string) => v !== value)}
         sx={{
           "& .MuiOutlinedInput-root": {
             paddingRight: "10px!important",
@@ -202,7 +158,6 @@ export default function AddressField({
                 flex: " 0 1 auto",
                 borderRadius: "5px",
                 border: "2px solid var(--blue-france-sun-113-625-hover)",
-                margin: "1rem",
               }
             : {}),
           ...sx,
@@ -213,13 +168,9 @@ export default function AddressField({
           const { key, ...rest } = props;
 
           return (
-            <li
-              key={option}
-              {...rest}
-              style={{ color: option === myPosition ? "var(--blue-france-sun-113-625-hover)" : "" }}
-            >
+            <li key={option} {...rest}>
               <i
-                className={option === myPosition ? fr.cx("ri-map-pin-5-line") : fr.cx("ri-map-pin-line")}
+                className={fr.cx("ri-award-line")}
                 style={{
                   borderRadius: "3px",
                   padding: fr.spacing("1v"),
@@ -236,41 +187,22 @@ export default function AddressField({
           <TextField
             {...params}
             error={!!error}
-            helperText={error ? "Votre adresse n'est pas valide" : ""}
+            helperText={error ? "La formation n'est pas valide" : ""}
             InputLabelProps={{ shrink: true }}
-            label={isMobile && isFocus ? "" : "Ton adresse, ta ville"}
-            placeholder={"Saisir sa ville, son adresse"}
-            className="addressField"
+            label={"Une formation, un type de diplôme"}
+            placeholder={"Exemple : CAP Cuisine"}
             onFocus={(event) => {
               event.target.select();
-              setIsFocus(true);
             }}
             InputProps={{
               ...params.InputProps,
               type: "search",
-              startAdornment:
-                isMobile && isFocus ? (
-                  <i
-                    onClick={(e) => {
-                      setIsFocus(false);
-                    }}
-                    style={{ marginRight: "1rem" }}
-                    className={fr.cx("ri-arrow-left-s-line")}
-                  ></i>
-                ) : (
-                  <></>
-                ),
-              endAdornment: isLocationLoading ? (
-                <CircularProgress />
-              ) : (
-                <>
-                  {value && <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>}
-                </>
+              endAdornment: (
+                <>{<div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>}</>
               ),
               ...InputProps,
             }}
-            variant={"standard"}
-            {...FieldProps}
+            variant="standard"
           />
         )}
       />

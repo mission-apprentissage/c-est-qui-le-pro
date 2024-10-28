@@ -47,6 +47,7 @@ export default function RootLayout({ title, children }: { title?: string; childr
       <body
         style={{
           minHeight: "100vh",
+          height: "100vh",
           display: "flex",
           flexDirection: "column",
         }}

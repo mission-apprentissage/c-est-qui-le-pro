@@ -7,6 +7,27 @@ import Loader from "#/app/components/Loader";
 import { notFound } from "next/navigation";
 import Title from "#/app/(accompagnateur)/components/Title";
 import FormationContent from "./FormationContent";
+import { FormationDetail } from "shared";
+import useGetFormations from "../../hooks/useGetFormations";
+
+function FormationPrefetch({
+  formationDetail,
+  children,
+}: {
+  formationDetail: FormationDetail;
+  children: JSX.Element | JSX.Element[];
+}) {
+  const { isLoading: isLoadingFormationAutreVoie } = useGetFormations({
+    cfds: [formationDetail.formation.cfd],
+    uais: [formationDetail.etablissement.uai],
+  });
+
+  if (isLoadingFormationAutreVoie) {
+    return <Loader withMargin />;
+  }
+
+  return children;
+}
 
 function FormationResult({ id, latitude, longitude }: { id: string; latitude?: string; longitude?: string }) {
   const { isLoading, isError, data } = useQuery({
@@ -35,12 +56,12 @@ function FormationResult({ id, latitude, longitude }: { id: string; latitude?: s
   }
 
   return (
-    <>
+    <FormationPrefetch formationDetail={data}>
       <Title
         pageTitle={`Détails de la formation ${data.formation.libelle} dans l'établissement ${data.etablissement.libelle}`}
       />
       <FormationContent formationDetail={data} />
-    </>
+    </FormationPrefetch>
   );
 }
 

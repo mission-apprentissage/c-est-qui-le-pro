@@ -7,10 +7,9 @@ import { createContext, useContext, useCallback, useEffect } from "react";
 
 type FormationsSearchParams = {
   address: string;
-  distance: number;
-  time: number;
   tag?: FormationTag;
   domaine?: FormationDomaine;
+  formation?: string;
 };
 
 const FormationsSearchContext = createContext<{
@@ -27,11 +26,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
   const plausible = usePlausible();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = searchParamsToObject(
-    searchParams,
-    { address: null, distance: 0, time: null, tag: null, domaine: null },
-    schemaFormation
-  );
+  const params = searchParamsToObject(searchParams, { address: null, tag: null, domaine: null }, schemaFormation);
 
   useEffect(() => {
     plausible("recherche", {

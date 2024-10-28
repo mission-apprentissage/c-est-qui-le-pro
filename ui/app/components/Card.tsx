@@ -25,7 +25,7 @@ function BaseCard({ title, children, className, ...props }: CardProps) {
   return (
     <Box className={className} {...props}>
       {title && (typeof title === "string" ? <Typography variant="h2">{title}</Typography> : title)}
-      <Container>{children}</Container>
+      <Container maxWidth={false}>{children}</Container>
     </Box>
   );
 }

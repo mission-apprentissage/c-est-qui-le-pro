@@ -4,9 +4,9 @@ import { useForm, Control, FieldErrors } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FieldValues } from "react-hook-form";
-import { flatten, get } from "lodash-es";
+import { flatten, get, isNil } from "lodash-es";
 import { searchParamsToObject } from "#/app/utils/searchParams";
-import { RefObject, Suspense, useRef } from "react";
+import { RefObject, Suspense, useRef, useState } from "react";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
@@ -59,13 +59,17 @@ export function FormSearchParams<FormData extends FieldValues>({
       return [[key, get(forceValues, key, data[key])]];
     });
 
-    const urlParams = new URLSearchParams(flatten(entries));
-
+    const urlParams = new URLSearchParams(flatten(entries).filter(([_, value]) => !isNil(value)));
     router.push(`${url}?${urlParams}`);
   });
 
   return (
-    <form autoComplete="off" onSubmit={onSubmitBase} ref={formRef} style={{ flex: "1" }}>
+    <form
+      autoComplete="off"
+      onSubmit={onSubmitBase}
+      ref={formRef}
+      style={{ flex: "1", display: "flex", flexDirection: "column" }}
+    >
       {children({ control, errors, formRef })}
     </form>
   );
