@@ -54,13 +54,7 @@ export default React.memo(function FormationCard({
       tabIndex={tabIndex}
       style={style}
     >
-      <Stack
-        direction={"row"}
-        spacing={1}
-        style={{
-          marginBottom: fr.spacing("3v"),
-        }}
-      >
+      <Stack direction={"row"} spacing={1} useFlexGap sx={{ flexWrap: "wrap", marginBottom: fr.spacing("3v") }}>
         <LabelApprentissage formation={formation} />
 
         {etablissement.statut && (
