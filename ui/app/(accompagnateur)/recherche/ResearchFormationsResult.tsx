@@ -68,8 +68,8 @@ const FormationResult = React.memo(
     }, [formationDetail, setSelected]);
 
     return (
-      <Grid item sm={12} lg={6} xl={4} ref={formationRef}>
-        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
+      <Grid item sm={12} ref={formationRef}>
+        <Box sx={{ maxWidth: { xs: "100%", lg: "1000px" } }}>
           <FormationCard
             selected={isSelected}
             onMouseEnter={cb}
