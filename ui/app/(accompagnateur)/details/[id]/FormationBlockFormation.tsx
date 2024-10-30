@@ -1,21 +1,33 @@
 "use client";
 import { Box } from "@mui/material";
 import FormationDescription from "../../components/FormationDescription";
-import { Etablissement, Formation } from "shared";
+import { FormationDetail } from "shared";
 import Card from "#/app/components/Card";
 import Link from "#/app/components/Link";
 import WidgetSiriusFormation from "../../components/WidgetSiriusFormation";
+import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
 
 export default function FormationBlockFormation({
-  formation,
-  etablissement,
+  formationDetail,
   ...cardProps
 }: {
-  formation: Formation;
-  etablissement: Etablissement;
+  formationDetail: FormationDetail;
 } & React.ComponentProps<typeof Card>) {
+  const { formation } = formationDetail;
+
   return (
     <Card type="details" title={"La formation"} {...cardProps}>
+      {formation.isAnneeCommune && (
+        <FormationsFamilleMetier
+          withLink
+          formationDetail={formationDetail}
+          sx={{
+            padding: "0.75rem 1rem",
+            borderRadius: "9px",
+            marginBottom: "2.5rem",
+          }}
+        />
+      )}
       <FormationDescription description={formation.description}>
         {formation.description && (
           <Box style={{ marginTop: "2rem" }}>

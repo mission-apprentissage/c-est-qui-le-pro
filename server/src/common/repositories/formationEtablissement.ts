@@ -1,5 +1,5 @@
 import { SqlRepository } from "./base.js";
-import { kdb as defaultKdb } from "../db/db";
+import { kdb as defaultKdb, kyselyChainFn } from "../db/db";
 import { DB } from "../db/schema.js";
 import FormationRepository from "./formation";
 import EtablissementRepository from "./etablissement";
@@ -41,6 +41,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       .selectFrom("formationEtablissement")
       .select((eb) => this.getKeyAlias(eb))
       .select((eb) => [...EtablissementRepository.getKeyAlias(eb), ...EtablissementRepository.getKeyRelationAlias()])
+
       .innerJoinLateral(
         (eb) =>
           eb
@@ -69,6 +70,50 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
             .as("etablissement"),
         (join) => join.on(sql`true`)
       )
+      // Formation de spécialisation de la famille de métiers
+      .leftJoinLateral(
+        (eb) =>
+          eb
+            .selectFrom((eb) =>
+              eb
+                .selectFrom("formation as fMetier")
+                .leftJoinLateral(
+                  (eb) =>
+                    eb
+                      .selectFrom("formationEtablissement as feMetier")
+                      .innerJoin("etablissement as eEtablissement", "feMetier.etablissementId", "eEtablissement.id")
+                      .whereRef("feMetier.formationId", "=", "fMetier.id")
+                      .whereRef("feMetier.etablissementId", "=", "etablissement.id")
+                      .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
+                      .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
+                      .select("feMetier.id as formationEtablissementId")
+                      .as("feMetier"),
+                  (join) => join.on(sql`true`)
+                )
+                .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
+                .select("formationEtablissement")
+                .select("etablissement")
+                .whereRef("fMetier.familleMetierId", "=", "formation.familleMetierId")
+                .where("isAnneeCommune", "=", false)
+                .orderBy(["formationEtablissementId", "fMetier.libelle"])
+                .as("formationsFamilleMetier")
+            )
+            .select((eb) => {
+              return [
+                kyselyChainFn(
+                  eb,
+                  [
+                    { fn: "to_jsonb", args: [] },
+                    { fn: "json_agg", args: [] },
+                  ],
+                  sql`"formationsFamilleMetier"`
+                ).as("formationsFamilleMetier"),
+              ];
+            })
+            .as("formationsFamilleMetier"),
+        (join) => join.on(sql`true`)
+      )
+      .select("formationsFamilleMetier")
       .where(({ eb, and }) =>
         and([
           ...this._createWhere(eb, query, "formationEtablissement"),
@@ -86,6 +131,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       formation: this.getColumnWithoutAlias("formation", result),
       etablissement: this.getColumnWithoutAlias("etablissement", result),
       formationEtablissement: this.getColumnWithoutAlias("formationEtablissement", result),
+      formationsFamilleMetier: result.formationsFamilleMetier,
     };
   }
 

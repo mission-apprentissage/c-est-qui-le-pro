@@ -53,8 +53,7 @@ export default function FormationContent({ formationDetail }: { formationDetail:
               }}
             >
               <FormationBlockFormation
-                formation={formation}
-                etablissement={etablissement}
+                formationDetail={formationDetail}
                 id="la-formation"
                 css={cssAnchor}
                 style={{ marginBottom: "2rem" }}

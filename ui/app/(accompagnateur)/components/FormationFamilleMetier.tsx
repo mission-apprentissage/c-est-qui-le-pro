@@ -1,31 +1,36 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { Box, Typography } from "@mui/material";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail } from "shared";
+import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import "moment/locale/fr";
 import { useFormationLink } from "../hooks/useFormationLink";
 import Link from "#/app/components/Link";
 
 function FormationFamilleMetier({
   formationDetail,
-  latitude,
-  longitude,
-  noLink = true,
+  withLink = false,
 }: {
-  formationDetail: FormationDetail;
-  latitude: number;
-  longitude: number;
-  noLink?: boolean;
+  formationDetail: FormationFamilleMetierDetail;
+  withLink?: boolean;
 }) {
   const formationLink = useFormationLink({
     formationDetail: formationDetail,
-    longitude: longitude.toString(),
-    latitude: latitude.toString(),
   });
 
   if (!formationLink) {
-    return <li>{formationDetail.formation.libelle}</li>;
+    return (
+      <li
+        css={css`
+          &::marker {
+            color: ${fr.colors.options.warning._425_625.active};
+          }
+          margin-left: 0.6rem;
+        `}
+      >
+        {formationDetail.formation.libelle}
+      </li>
+    );
   }
 
   return (
@@ -37,27 +42,14 @@ function FormationFamilleMetier({
         margin-left: 0.6rem;
         color: ${fr.colors.decisions.artwork.major.blueFrance.default};
         font-weight: 700;
-        font-size: 0.875rem;
-        line-height: 1.5rem;
       `}
     >
-      {noLink ? (
-        formationDetail.formation.libelle
-      ) : (
-        <Link
-          noIcon
-          noDecoration
-          onClick={(e) => e.stopPropagation()}
-          href={formationLink}
-          target="_blank"
-          css={css`
-            &[href]:hover {
-              background-color: ${fr.colors.decisions.background.default.grey.default};
-            }
-          `}
-        >
+      {withLink ? (
+        <Link noIcon noDecoration onClick={(e) => e.stopPropagation()} href={formationLink} target="_blank">
           {formationDetail.formation.libelle}
         </Link>
+      ) : (
+        formationDetail.formation.libelle
       )}
     </li>
   );
@@ -65,12 +57,14 @@ function FormationFamilleMetier({
 
 export default function FormationsFamilleMetier({
   formationDetail,
-  latitude,
-  longitude,
+  sx,
+  withLink = false,
+  small = false,
 }: {
   formationDetail: FormationDetail;
-  latitude: number;
-  longitude: number;
+  sx?: SxProps<Theme>;
+  withLink?: boolean;
+  small?: boolean;
 }) {
   if (!formationDetail.formationsFamilleMetier || formationDetail.formationsFamilleMetier.length === 0) {
     return;
@@ -79,27 +73,31 @@ export default function FormationsFamilleMetier({
   return (
     <Box
       sx={{
-        marginTop: "0.75rem",
         backgroundColor: fr.colors.decisions.background.alt.blueFrance.default,
         padding: "0.5rem 0.75rem",
-        paddingBottom: "1.25rem",
-        borderTop: "1px solid " + fr.colors.decisions.border.default.grey.default,
+        ...sx,
       }}
     >
-      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+      <Typography
+        sx={{ fontSize: small ? "0.875rem" : "1rem", fontWeight: 500, paddingBottom: small ? "0.25rem" : "0.5rem" }}
+      >
         Liste des BAC PRO accessible après cette 2nd Pro :
       </Typography>
       <ul
         css={css`
           margin: 0;
+          & li {
+            font-size: ${small ? "0.875rem" : "1.125rem"};
+            line-height: ${small ? "1.5rem" : "1.75rem"};
+            padding-bottom: 0;
+          }
         `}
       >
         {formationDetail.formationsFamilleMetier?.map((detail, index) => {
           return (
             <FormationFamilleMetier
+              withLink={withLink}
               key={"formationsFamilleMetier_" + index}
-              longitude={longitude}
-              latitude={latitude}
               formationDetail={detail}
             />
           );

@@ -108,7 +108,15 @@ export default React.memo(function FormationCard({
         )}
       </Box>
 
-      <FormationsFamilleMetier formationDetail={formationDetail} latitude={latitude} longitude={longitude} />
+      <FormationsFamilleMetier
+        small
+        sx={{
+          marginTop: "0.75rem",
+          borderTop: "1px solid " + fr.colors.decisions.border.default.grey.default,
+          paddingBottom: "1.25rem",
+        }}
+        formationDetail={formationDetail}
+      />
     </Card>
   );
 });
