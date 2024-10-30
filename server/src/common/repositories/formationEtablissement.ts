@@ -1,5 +1,5 @@
 import { SqlRepository } from "./base.js";
-import { kdb as defaultKdb } from "../db/db";
+import { kdb as defaultKdb, kyselyChainFn } from "../db/db";
 import { DB } from "../db/schema.js";
 import FormationRepository from "./formation";
 import EtablissementRepository from "./etablissement";
