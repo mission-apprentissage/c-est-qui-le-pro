@@ -28,7 +28,7 @@ function FormationFamilleMetier({
           margin-left: 0.6rem;
         `}
       >
-        {formationDetail.formation.libelle}
+        {formationDetail.formation.libelle} (pas disponible dans cet établissement)
       </li>
     );
   }

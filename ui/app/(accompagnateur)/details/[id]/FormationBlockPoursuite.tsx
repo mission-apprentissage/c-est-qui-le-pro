@@ -23,14 +23,10 @@ export default function FormationBlockPoursuite({
     setNbrDisplay(formation.formationPoursuite?.length || 3);
   }, [formation.formationPoursuite?.length]);
 
-  if (formation.isAnneeCommune) {
-    return;
-  }
-
   return (
     <Card type="details" title={"La poursuite d'études"} {...cardProps}>
       <FormationDescription description={formation.descriptionPoursuiteEtudes}></FormationDescription>
-      {formation.formationPoursuite && (
+      {formation.formationPoursuite && !formation.isAnneeCommune && (
         <Container style={{ marginTop: "2rem" }}>
           <Typography variant="h3" style={{ marginBottom: "1rem" }}>
             Quelles études sont envisageables après la formation ?
