@@ -1,5 +1,5 @@
 import { oleoduc, transformData, writeData } from "oleoduc";
-import { getBCNTable } from "#src/services/bcn.js";
+import { getBCNTable } from "#src/services/bcn";
 import { omitNil } from "#src/common/utils/objectUtils.js";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { parseAsUTCDate } from "#src/common/utils/dateUtils.js";

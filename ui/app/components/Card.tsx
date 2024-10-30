@@ -12,7 +12,7 @@ export type CardProps = Omit<MUICardProps, "title"> & {
   linkTarget?: string;
   selected?: boolean;
   actionProps?: CardActionAreaProps;
-  type?: "details";
+  type?: "details" | "formation";
 };
 
 const StyledLink = styled(Link)`
@@ -80,6 +80,23 @@ export default styled(Card)<CardProps>`
         }
           `;
 
+      case "formation":
+        return `
+            border: 1px solid #dddddd;
+            border-radius: 10px;
+            padding: 0;
+            overflow: hidden;
+    
+            h2 {
+              background-color: #f5f5fe;
+              color: var(--blue-france-sun-113-625);
+              padding: ${fr.spacing("3v")};
+            }
+    
+            & .MuiContainer-root {
+              padding: 0;
+            }  
+            `;
       default:
         return `
         border: 1px solid #dddddd;

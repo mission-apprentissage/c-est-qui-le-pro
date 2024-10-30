@@ -168,83 +168,101 @@ export type FormationDetail = {
   formationEtablissement: FormationEtablissement;
   formation: Formation;
   etablissement: Etablissement;
+  formationsFamilleMetier?: {
+    formationEtablissement: FormationEtablissement;
+    formation: Formation;
+    etablissement: Etablissement;
+  }[];
 };
 
-export const formationDetailSchema: yup.ObjectSchema<FormationDetail> = yup.object({
-  formationEtablissement: yup
-    .object()
-    .concat(
-      yup.object().shape({
-        id: yup.string().required(),
-        duree: yup.string(),
-        tags: yup
-          .array(yup.string().oneOf(Object.values(FormationTag)).required())
-          .nullable()
-          .default([]),
-        indicateurEntree: yup
-          .object({
-            rentreeScolaire: yup.string().required(),
-            capacite: yup.number(),
-            premiersVoeux: yup.number(),
-            tauxPression: yup.number(),
-          })
-          .default(undefined),
-        indicateurPoursuite: yup
-          .object({
-            millesime: yup.string().required(),
-            taux_en_emploi_6_mois: yup.number(),
-            taux_en_formation: yup.number(),
-            taux_autres_6_mois: yup.number(),
-          })
-          .default(undefined),
-        indicateurPoursuiteRegional: yup
-          .object({
-            millesime: yup.string().required(),
-            region: yup.string().required(),
-            voie: yup.string().required(),
-            taux_en_formation_q0: yup.number().required(),
-            taux_en_formation_q1: yup.number().required(),
-            taux_en_formation_q2: yup.number().required(),
-            taux_en_formation_q3: yup.number().required(),
-            taux_en_formation_q4: yup.number().required(),
-            taux_en_emploi_6_mois_q0: yup.number().required(),
-            taux_en_emploi_6_mois_q1: yup.number().required(),
-            taux_en_emploi_6_mois_q2: yup.number().required(),
-            taux_en_emploi_6_mois_q3: yup.number().required(),
-            taux_en_emploi_6_mois_q4: yup.number().required(),
-          })
-          .default(undefined),
-      })
-    )
-    .required(),
-  formation: yup.object().concat(
+const formationEtablissementSchema = yup
+  .object()
+  .concat(
     yup.object().shape({
       id: yup.string().required(),
-      cfd: yup.string().required(),
-      libelle: yup.string(),
-      voie: yup.string().oneOf(Object.values(FormationVoie)).required(),
+      duree: yup.string(),
+      tags: yup
+        .array(yup.string().oneOf(Object.values(FormationTag)).required())
+        .nullable()
+        .default([]),
+      indicateurEntree: yup
+        .object({
+          rentreeScolaire: yup.string().required(),
+          capacite: yup.number(),
+          premiersVoeux: yup.number(),
+          tauxPression: yup.number(),
+        })
+        .default(undefined),
+      indicateurPoursuite: yup
+        .object({
+          millesime: yup.string().required(),
+          taux_en_emploi_6_mois: yup.number(),
+          taux_en_formation: yup.number(),
+          taux_autres_6_mois: yup.number(),
+        })
+        .default(undefined),
+      indicateurPoursuiteRegional: yup
+        .object({
+          millesime: yup.string().required(),
+          region: yup.string().required(),
+          voie: yup.string().required(),
+          taux_en_formation_q0: yup.number().required(),
+          taux_en_formation_q1: yup.number().required(),
+          taux_en_formation_q2: yup.number().required(),
+          taux_en_formation_q3: yup.number().required(),
+          taux_en_formation_q4: yup.number().required(),
+          taux_en_emploi_6_mois_q0: yup.number().required(),
+          taux_en_emploi_6_mois_q1: yup.number().required(),
+          taux_en_emploi_6_mois_q2: yup.number().required(),
+          taux_en_emploi_6_mois_q3: yup.number().required(),
+          taux_en_emploi_6_mois_q4: yup.number().required(),
+        })
+        .default(undefined),
+    })
+  )
+  .required();
+
+const formationSchema = yup.object().concat(
+  yup.object().shape({
+    id: yup.string().required(),
+    cfd: yup.string().required(),
+    libelle: yup.string(),
+    voie: yup.string().oneOf(Object.values(FormationVoie)).required(),
+  })
+);
+
+const etablissementSchema = yup
+  .object()
+  .concat(
+    yup.object().shape({
+      id: yup.string().required(),
+      uai: yup.string().required(),
+      JPODates: yup
+        .array()
+        .of(
+          yup.object({
+            from: yup.date().transform((value) => new Date(value)),
+            to: yup.date().transform((value) => new Date(value)),
+            details: yup.string(),
+            fullDay: yup.boolean(),
+          })
+        )
+        .nullable()
+        .default(null),
+      JPODetails: yup.string().nullable().default(null),
+    })
+  )
+  .required();
+
+export const formationDetailSchema: yup.ObjectSchema<FormationDetail> = yup.object({
+  formationEtablissement: formationEtablissementSchema,
+  formation: formationSchema,
+  etablissement: etablissementSchema,
+  formationsFamilleMetier: yup.array(
+    yup.object({
+      formationEtablissement: formationEtablissementSchema,
+      formation: formationSchema,
+      etablissement: etablissementSchema,
     })
   ),
-  etablissement: yup
-    .object()
-    .concat(
-      yup.object().shape({
-        id: yup.string().required(),
-        uai: yup.string().required(),
-        JPODates: yup
-          .array()
-          .of(
-            yup.object({
-              from: yup.date().transform((value) => new Date(value)),
-              to: yup.date().transform((value) => new Date(value)),
-              details: yup.string(),
-              fullDay: yup.boolean(),
-            })
-          )
-          .nullable()
-          .default(null),
-        JPODetails: yup.string().nullable().default(null),
-      })
-    )
-    .required(),
 });

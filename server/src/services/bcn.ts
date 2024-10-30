@@ -1,7 +1,10 @@
 import { compose, transformData, writeData, oleoduc } from "oleoduc";
 import { fetchStream } from "#src/common/utils/httpUtils.js";
 import iconv from "iconv-lite";
+import { createReadStream } from "fs";
+import AutoDetectDecoderStream from "autodetect-decoder-stream";
 import { parseCsv } from "#src/common/utils/csvUtils.js";
+import config from "#src/config";
 
 export const ANCIENS_NIVEAUX_MAPPER = {
   5: "3", // CAP
@@ -89,7 +92,7 @@ export async function getTypeDiplomeSise(options) {
 }
 
 export async function getBCNTable(tableName, options = {}) {
-  let stream =
+  const stream =
     options[tableName] ||
     compose(
       await fetchStream(
@@ -107,5 +110,21 @@ export async function getBCNTable(tableName, options = {}) {
       { objectMode: false }
     ),
     parseCsv({ delimiter: "|" })
+  );
+}
+
+export function familleMetierFromCsv(filePath: string | null = null) {
+  return compose(
+    createReadStream(filePath || config.bcn.files.familleMetier),
+    new AutoDetectDecoderStream(),
+    parseCsv({ delimiter: ";", quote: '"' })
+  );
+}
+
+export function lienMefFamilleMetierFromCsv(filePath: string | null = null) {
+  return compose(
+    createReadStream(filePath || config.bcn.files.lienMefFamilleMetier),
+    new AutoDetectDecoderStream(),
+    parseCsv({ delimiter: ";", quote: '"' })
   );
 }

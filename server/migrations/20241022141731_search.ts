@@ -21,5 +21,9 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.executeQuery(sql``.compile(db));
+  await db.executeQuery(
+    sql`
+	DROP INDEX "formation_unaccent_libelle_gin";
+	`.compile(db)
+  );
 }
