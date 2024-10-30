@@ -307,6 +307,7 @@ export async function getFormationsSQL(
                   .whereRef("feMetier.etablissementId", "=", "results.etablissementId")
                   .whereRef("fMetier.familleMetierId", "=", "results.familleMetierId")
                   .where("fMetier.isAnneeCommune", "=", false)
+                  .where("feMetier.millesime", "&&", [millesime])
                   .orderBy("fMetier.libelle")
                   .as("formationsFamilleMetier")
               )

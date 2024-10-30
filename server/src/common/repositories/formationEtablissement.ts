@@ -84,9 +84,11 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                       .innerJoin("etablissement as eEtablissement", "feMetier.etablissementId", "eEtablissement.id")
                       .whereRef("feMetier.formationId", "=", "fMetier.id")
                       .whereRef("feMetier.etablissementId", "=", "etablissement.id")
+                      .whereRef("millesime", "&&", "formationEtablissement.millesime")
                       .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
                       .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
                       .select("feMetier.id as formationEtablissementId")
+                      .select("feMetier")
                       .as("feMetier"),
                   (join) => join.on(sql`true`)
                 )
