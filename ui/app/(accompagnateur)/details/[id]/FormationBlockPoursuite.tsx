@@ -27,7 +27,7 @@ export default function FormationBlockPoursuite({
     <Card type="details" title={"La poursuite d'études"} {...cardProps}>
       <FormationDescription description={formation.descriptionPoursuiteEtudes}></FormationDescription>
       {formation.formationPoursuite && !formation.isAnneeCommune && (
-        <Container style={{ marginTop: "2rem" }}>
+        <Container style={{ marginTop: "2rem", marginBottom: "2rem" }}>
           <Typography variant="h3" style={{ marginBottom: "1rem" }}>
             Quelles études sont envisageables après la formation ?
           </Typography>

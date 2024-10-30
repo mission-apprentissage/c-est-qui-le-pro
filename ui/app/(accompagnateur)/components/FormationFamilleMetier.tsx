@@ -81,7 +81,7 @@ export default function FormationsFamilleMetier({
       <Typography
         sx={{ fontSize: small ? "0.875rem" : "1rem", fontWeight: 500, paddingBottom: small ? "0.25rem" : "0.5rem" }}
       >
-        Les Bac Pro accessibles après cette 2de commune :
+        Les Bac pro accessibles après cette 2de commune :
       </Typography>
       <ul
         css={css`
