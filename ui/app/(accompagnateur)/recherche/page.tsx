@@ -1,7 +1,7 @@
 "use client";
 import ResearchFormationsResult from "./ResearchFormationsResult";
 import { fetchAddress } from "#/app/services/address";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import FormationsSearchProvider, { useFormationsSearch } from "../context/FormationsSearchContext";
 import SearchHeader from "../components/SearchHeader";
@@ -16,10 +16,18 @@ import { FormationDomaine } from "shared";
 import { FORMATION_DOMAINE } from "#/app/services/formation";
 import OptionsCarousel from "#/app/components/form/OptionsCarousel";
 import { myPosition } from "#/app/components/form/AddressField";
+import { useRouter } from "next/navigation";
 
 function ResearchFormationsParameter() {
+  const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
   const { address, tag, domaine, formation } = params ?? {};
+
+  useEffect(() => {
+    if (!address) {
+      router.push(`/`);
+    }
+  }, [address]);
 
   const { data, isLoading, error } = useQuery({
     staleTime: Infinity,
@@ -49,7 +57,7 @@ function ResearchFormationsParameter() {
     },
   });
 
-  if (!params) {
+  if (!params || !params.address) {
     return null;
   }
 

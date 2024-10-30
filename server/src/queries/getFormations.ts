@@ -304,6 +304,7 @@ export async function getFormationsSQL(
                   .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
                   .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
                   .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
+                  .select("fMetier.libelle")
                   .whereRef("feMetier.etablissementId", "=", "results.etablissementId")
                   .whereRef("fMetier.familleMetierId", "=", "results.familleMetierId")
                   .where("fMetier.isAnneeCommune", "=", false)
@@ -311,18 +312,11 @@ export async function getFormationsSQL(
                   .orderBy("fMetier.libelle")
                   .as("formationsFamilleMetier")
               )
-              .select((eb) => {
-                return [
-                  kyselyChainFn(
-                    eb,
-                    [
-                      { fn: "to_jsonb", args: [] },
-                      { fn: "json_agg", args: [] },
-                    ],
-                    sql`"formationsFamilleMetier"`
-                  ).as("formationsFamilleMetier"),
-                ];
-              })
+              .select(
+                sql`json_agg(to_jsonb("formationsFamilleMetier") - 'libelle' ORDER BY "formationsFamilleMetier".libelle)`.as(
+                  "formationsFamilleMetier"
+                )
+              )
               .as("formationsFamilleMetier"),
           (join) => join.on(sql`true`)
         )

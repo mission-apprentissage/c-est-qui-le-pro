@@ -1,5 +1,5 @@
 import { SqlRepository } from "./base.js";
-import { kdb as defaultKdb, kyselyChainFn } from "../db/db";
+import { kdb as defaultKdb } from "../db/db";
 import { DB } from "../db/schema.js";
 import FormationRepository from "./formation";
 import EtablissementRepository from "./etablissement";
@@ -88,6 +88,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                       .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
                       .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
                       .select("feMetier.id as formationEtablissementId")
+                      .select(sql.val("1").as("exist"))
                       .select("feMetier")
                       .as("feMetier"),
                   (join) => join.on(sql`true`)
@@ -95,23 +96,18 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                 .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
                 .select("formationEtablissement")
                 .select("etablissement")
+                .select("libelle")
+                .select("exist")
                 .whereRef("fMetier.familleMetierId", "=", "formation.familleMetierId")
                 .where("isAnneeCommune", "=", false)
-                .orderBy(["formationEtablissementId", "fMetier.libelle"])
+                .orderBy(["exist", "fMetier.libelle"])
                 .as("formationsFamilleMetier")
             )
-            .select((eb) => {
-              return [
-                kyselyChainFn(
-                  eb,
-                  [
-                    { fn: "to_jsonb", args: [] },
-                    { fn: "json_agg", args: [] },
-                  ],
-                  sql`"formationsFamilleMetier"`
-                ).as("formationsFamilleMetier"),
-              ];
-            })
+            .select(
+              sql`json_agg(to_jsonb("formationsFamilleMetier") - 'libelle' - 'exist' ORDER BY "exist", "formationsFamilleMetier".libelle)`.as(
+                "formationsFamilleMetier"
+              )
+            )
             .as("formationsFamilleMetier"),
         (join) => join.on(sql`true`)
       )
