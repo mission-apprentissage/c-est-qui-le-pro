@@ -113,7 +113,7 @@ export default React.memo(function FormationCard({
         sx={{
           marginTop: "0.75rem",
           borderTop: "1px solid " + fr.colors.decisions.border.default.grey.default,
-          paddingBottom: "1.25rem",
+          paddingBottom: "1.125rem",
         }}
         formationDetail={formationDetail}
       />

@@ -22,7 +22,7 @@ export default function FormationBlockFormation({
           withLink
           formationDetail={formationDetail}
           sx={{
-            padding: "0.75rem 1rem",
+            padding: "1rem 0.75rem",
             borderRadius: "9px",
             marginBottom: "2.5rem",
           }}
