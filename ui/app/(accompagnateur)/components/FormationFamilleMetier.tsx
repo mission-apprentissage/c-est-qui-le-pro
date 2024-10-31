@@ -6,6 +6,7 @@ import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import "moment/locale/fr";
 import { useFormationLink } from "../hooks/useFormationLink";
 import Link from "#/app/components/Link";
+import { useMemo } from "react";
 
 function FormationFamilleMetier({
   formationDetail,
@@ -60,13 +61,19 @@ export default function FormationsFamilleMetier({
   sx,
   withLink = false,
   small = false,
+  anneeCommune = false,
 }: {
   formationDetail: FormationDetail;
   sx?: SxProps<Theme>;
   withLink?: boolean;
   small?: boolean;
+  anneeCommune?: boolean;
 }) {
-  if (!formationDetail.formationsFamilleMetier || formationDetail.formationsFamilleMetier.length === 0) {
+  const formations = useMemo(() => {
+    return formationDetail.formationsFamilleMetier?.filter((f) => f.formation.isAnneeCommune === anneeCommune);
+  }, [formationDetail]);
+
+  if (!formations || formations.length === 0) {
     return;
   }
 
@@ -81,7 +88,9 @@ export default function FormationsFamilleMetier({
       <Typography
         sx={{ fontSize: small ? "0.875rem" : "1rem", fontWeight: 500, paddingBottom: small ? "0.25rem" : "0.5rem" }}
       >
-        Les Bac pro accessibles après cette 2de commune :
+        {anneeCommune
+          ? "La 2de commune qui permet d’accéder à ce Bac pro :"
+          : "Les Bac pro accessibles après cette 2de commune :"}
       </Typography>
       <ul
         css={css`
@@ -93,7 +102,7 @@ export default function FormationsFamilleMetier({
           }
         `}
       >
-        {formationDetail.formationsFamilleMetier?.map((detail, index) => {
+        {formations.map((detail, index) => {
           return (
             <FormationFamilleMetier
               withLink={withLink}

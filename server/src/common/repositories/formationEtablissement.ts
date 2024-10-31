@@ -99,7 +99,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                 .select("libelle")
                 .select("exist")
                 .whereRef("fMetier.familleMetierId", "=", "formation.familleMetierId")
-                .where("isAnneeCommune", "=", false)
+                .whereRef("isAnneeCommune", "!=", "formation.isAnneeCommune")
                 .orderBy(["exist", "fMetier.libelle"])
                 .as("formationsFamilleMetier")
             )

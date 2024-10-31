@@ -17,17 +17,16 @@ export default function FormationBlockFormation({
 
   return (
     <Card type="details" title={"La formation"} {...cardProps}>
-      {formation.isAnneeCommune && (
-        <FormationsFamilleMetier
-          withLink
-          formationDetail={formationDetail}
-          sx={{
-            padding: "1rem 0.75rem",
-            borderRadius: "9px",
-            marginBottom: "2.5rem",
-          }}
-        />
-      )}
+      <FormationsFamilleMetier
+        withLink
+        formationDetail={formationDetail}
+        sx={{
+          padding: "1rem 0.75rem",
+          borderRadius: "9px",
+          marginBottom: "2.5rem",
+        }}
+      />
+
       <FormationDescription description={formation.description}>
         {formation.description && (
           <Box style={{ marginTop: "2rem" }}>
