@@ -93,6 +93,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                       .as("feMetier"),
                   (join) => join.on(sql`true`)
                 )
+                .distinctOn("libelle")
                 .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
                 .select("formationEtablissement")
                 .select("etablissement")
@@ -100,7 +101,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
                 .select("exist")
                 .whereRef("fMetier.familleMetierId", "=", "formation.familleMetierId")
                 .whereRef("isAnneeCommune", "!=", "formation.isAnneeCommune")
-                .orderBy(["exist", "fMetier.libelle"])
+                .orderBy(["fMetier.libelle", "exist"])
                 .as("formationsFamilleMetier")
             )
             .select(

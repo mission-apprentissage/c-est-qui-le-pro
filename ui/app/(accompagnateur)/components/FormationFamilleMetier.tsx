@@ -7,6 +7,7 @@ import "moment/locale/fr";
 import { useFormationLink } from "../hooks/useFormationLink";
 import Link from "#/app/components/Link";
 import { useMemo } from "react";
+import { formatLibelle } from "#/app/utils/formation";
 
 function FormationFamilleMetier({
   formationDetail,
@@ -47,10 +48,10 @@ function FormationFamilleMetier({
     >
       {withLink ? (
         <Link noIcon noDecoration onClick={(e) => e.stopPropagation()} href={formationLink} target="_blank">
-          {formationDetail.formation.libelle}
+          {formatLibelle(formationDetail.formation.libelle)}
         </Link>
       ) : (
-        formationDetail.formation.libelle
+        formatLibelle(formationDetail.formation.libelle)
       )}
     </li>
   );

@@ -60,7 +60,7 @@ const formationEtablissementJobs = [
   { name: "feFichesFormationsTmp", job: importFichesFormationsTmp },
   { name: "feRCO", job: importRCO },
   { name: "feFE", job: importFormationEtablissement },
-  { name: "feimportFamillesMetiers", job: importFamillesMetiers },
+  { name: "feFamillesMetiers", job: importFamillesMetiers },
   { name: "feIndicateurEntree", job: importIndicateurEntree },
   { name: "feIndicateurPoursuiteRegionale", job: importIndicateurPoursuiteRegionale },
   { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },

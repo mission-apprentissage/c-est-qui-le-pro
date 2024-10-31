@@ -42,6 +42,11 @@ async function importFamillesMetiersListe(familleMetierFilePath) {
 async function importLienMef(lienMefFamilleMetierFilePath) {
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
+  await FormationRepository.updateBy({
+    familleMetierId: null,
+    isAnneeCommune: null,
+  });
+
   await oleoduc(
     lienMefFamilleMetierFromCsv(lienMefFamilleMetierFilePath),
     transformData(async (data) => {
