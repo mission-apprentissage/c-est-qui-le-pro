@@ -213,7 +213,11 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
 }
 
 async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
-  let queryFormation = kdb.selectFrom("formation").$call(FormationRepository._base()).selectAll();
+  let queryFormation = kdb
+    .selectFrom("formation")
+    .$call(FormationRepository._base())
+    .selectAll()
+    .where((eb) => eb.or([eb("familleMetierId", "is", null), eb("isAnneeCommune", "=", true)]));
 
   if (cfds.length > 0) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
@@ -230,7 +234,7 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   }
 
   if (!domaine) {
-    return { query: queryFormation };
+    return { query: kdb.selectFrom(queryFormation.as("formation")).selectAll() };
   }
 
   return {
@@ -273,7 +277,7 @@ export async function getFormationsSQL(
             .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
             .select("formationEtablissement.id as id")
             .$if(!!tag, (eb) => buildFilterTag(eb, tag))
-            .where("millesime", "&&", [millesime])
+            .where("formationEtablissement.millesime", "&&", [millesime])
             .innerJoin(
               queryEtablissement.query.as("etablissement"),
               "formationEtablissement.etablissementId",
@@ -285,8 +289,38 @@ export async function getFormationsSQL(
             .select("etablissement.distance as distance")
             .select("etablissement.id as etablissementId")
             .innerJoin(queryFormation.query.as("formation"), "formationEtablissement.formationId", "formation.id")
+            .select("formation.familleMetierId as familleMetierId")
             .as("results")
         )
+        // Formation de spécialisation de la famille de métiers
+        .leftJoinLateral(
+          (eb) =>
+            eb
+              .selectFrom((eb) =>
+                eb
+                  .selectFrom("formationEtablissement as feMetier")
+                  .innerJoin("formation as fMetier", "feMetier.formationId", "fMetier.id")
+                  .innerJoin("etablissement as eEtablissement", "feMetier.etablissementId", "eEtablissement.id")
+                  .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
+                  .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
+                  .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
+                  .select("fMetier.libelle")
+                  .whereRef("feMetier.etablissementId", "=", "results.etablissementId")
+                  .whereRef("fMetier.familleMetierId", "=", "results.familleMetierId")
+                  .where("fMetier.isAnneeCommune", "=", false)
+                  .where("feMetier.millesime", "&&", [millesime])
+                  .orderBy("fMetier.libelle")
+                  .as("formationsFamilleMetier")
+              )
+              .select(
+                sql`json_agg(to_jsonb("formationsFamilleMetier") - 'libelle' ORDER BY "formationsFamilleMetier".libelle)`.as(
+                  "formationsFamilleMetier"
+                )
+              )
+              .as("formationsFamilleMetier"),
+          (join) => join.on(sql`true`)
+        )
+
         .select(sql`COUNT("accessTime") OVER ()`.as("totalIsochrone"))
         .select(sql`COUNT(*) OVER ()`.as("total"))
         .select(sql<string>`ROW_NUMBER() OVER (ORDER BY  ${queryEtablissement.order})`.as("order"))

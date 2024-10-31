@@ -26,6 +26,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
   const eltByLine = isSm ? 1 : isMd ? 1 : isLg ? 1 : 1;
   const lineMultiplier = isSm ? 4 : 4;
   const [lineToDisplay, setLineToDisplay] = useState(1);
+  const totalDisplay = eltByLine * lineToDisplay * lineMultiplier;
 
   const { isLoading, isError, data } = useQuery({
     staleTime: Infinity,
@@ -56,7 +57,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
         </Typography>
 
         <Grid container spacing={4}>
-          {data.slice(0, eltByLine * lineToDisplay * lineMultiplier).map((formationDetail, index) => (
+          {data.slice(0, totalDisplay).map((formationDetail, index) => (
             <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
               <Grid item xs={12 / eltByLine}>
                 <FormationCard
@@ -79,7 +80,7 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
             </Grow>
           ))}
 
-          {lineToDisplay * eltByLine < data.length && (
+          {totalDisplay < data.length && (
             <Grid item xs={12}>
               <Button priority="tertiary no outline" onClick={() => setLineToDisplay(lineToDisplay + 1)}>
                 Voir plus de formations{" "}

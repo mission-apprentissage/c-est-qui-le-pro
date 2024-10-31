@@ -1,4 +1,4 @@
-import { FormationDetail } from "shared";
+import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import { useSearchParams } from "next/navigation";
 
 export const useFormationLink = ({
@@ -6,7 +6,7 @@ export const useFormationLink = ({
   longitude,
   latitude,
 }: {
-  formationDetail?: FormationDetail;
+  formationDetail?: FormationDetail | FormationFamilleMetierDetail;
   longitude?: string;
   latitude?: string;
 }) => {
@@ -14,7 +14,7 @@ export const useFormationLink = ({
   const longitudeParams = longitude ?? searchParams.get("longitude");
   const latitudeParams = latitude ?? searchParams.get("latitude");
 
-  if (!formationDetail) {
+  if (!formationDetail || !formationDetail.etablissement) {
     return null;
   }
 

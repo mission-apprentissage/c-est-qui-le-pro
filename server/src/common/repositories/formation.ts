@@ -23,6 +23,8 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
         onisepIdentifiant: null,
         updatedAt: null,
         voie: null,
+        familleMetierId: null,
+        isAnneeCommune: null,
       },
       kdb
     );

@@ -8,8 +8,8 @@ import Card from "#/app/components/Card";
 import Tag from "#/app/components/Tag";
 import Button from "#/app/components/Button";
 import Link from "#/app/components/Link";
-import Divider from "#/app/components/Divider";
 import { fr } from "@codegouvfr/react-dsfr";
+import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
 
 function FormationBlockAdmissionScolaire({
   formationDetail: { formationEtablissement },
@@ -178,6 +178,17 @@ export default function FormationBlockAdmission({
 } & React.ComponentProps<typeof Card>) {
   return (
     <Card type="details" title={"L'admission"} {...cardProps}>
+      <FormationsFamilleMetier
+        withLink
+        anneeCommune
+        formationDetail={formationDetail}
+        sx={{
+          padding: "1rem 0.75rem",
+          borderRadius: "9px",
+          marginBottom: "2.5rem",
+        }}
+      />
+
       <FormationDescription description={formationDetail.formation.descriptionAcces}></FormationDescription>
       <FormationBlockAdmissionVoeux formationDetail={formationDetail} />
       <Box style={{ marginTop: "2rem" }}>

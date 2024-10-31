@@ -67,6 +67,14 @@ export interface EtablissementJPODate {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface FamilleMetier {
+  code: string;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  libelle: string;
+  updatedAt: Generated<Timestamp>;
+}
+
 export interface Formation {
   cfd: string;
   codeDiplome: string | null;
@@ -76,7 +84,9 @@ export interface Formation {
   description: string | null;
   descriptionAcces: string | null;
   descriptionPoursuiteEtudes: string | null;
+  familleMetierId: string | null;
   id: Generated<string>;
+  isAnneeCommune: boolean | null;
   libelle: string | null;
   mef11: string | null;
   niveauDiplome: Generated<string>;
@@ -164,6 +174,7 @@ export interface IndicateurPoursuite {
   formationEtablissementId: string | null;
   id: Generated<string>;
   millesime: string | null;
+  part_en_emploi_6_mois: string | null;
   taux_autres_6_mois: number | null;
   taux_en_emploi_6_mois: number | null;
   taux_en_formation: number | null;
@@ -176,6 +187,7 @@ export interface IndicateurPoursuiteRegional {
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
   millesime: string | null;
+  part_en_emploi_6_mois: number | null;
   region: string;
   taux_autres_6_mois: number | null;
   taux_en_emploi_6_mois: number | null;
@@ -251,6 +263,7 @@ export interface DB {
   etablissement: Etablissement;
   etablissementIsochrone: EtablissementIsochrone;
   etablissementJPODate: EtablissementJPODate;
+  familleMetier: FamilleMetier;
   formation: Formation;
   formationDomaine: FormationDomaine;
   formationEtablissement: FormationEtablissement;
