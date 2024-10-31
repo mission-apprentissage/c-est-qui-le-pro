@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.9.0...v1.10.0) (2024-10-31)
+
+
+### Features
+
+* familles de métiers ([#15](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/15)) ([aa29203](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/aa292032a2fc26c1aab65e3c2a051c6d7531c0d5))
+
 # [1.9.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.8.0...v1.9.0) (2024-10-28)
 
 
