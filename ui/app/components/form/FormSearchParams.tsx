@@ -1,26 +1,29 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm, Control, FieldErrors } from "react-hook-form";
+import { useForm, Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FieldValues } from "react-hook-form";
 import { flatten, get, isNil } from "lodash-es";
 import { searchParamsToObject } from "#/app/utils/searchParams";
-import { RefObject, Suspense, useRef, useState } from "react";
+import { RefObject, Suspense, useEffect, useRef, useState } from "react";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
   defaultValues: FormData;
   forceValues?: Partial<FormData>;
+  dynamicValues?: Array<keyof FormData>; // Value updated outside the form
   schema: yup.ObjectSchema<FormData>;
   children: ({
     control,
     errors,
     formRef,
+    register,
   }: {
     control: Control<FormData, any>;
     errors: FieldErrors<FormData>;
     formRef: RefObject<HTMLFormElement>;
+    register: UseFormRegister<FormData>;
   }) => JSX.Element;
   onSubmit?: (data: FormData) => void;
 };
@@ -29,6 +32,7 @@ export function FormSearchParams<FormData extends FieldValues>({
   url,
   defaultValues,
   forceValues,
+  dynamicValues,
   schema,
   children,
   onSubmit,
@@ -42,6 +46,9 @@ export function FormSearchParams<FormData extends FieldValues>({
 
   const {
     control,
+    register,
+    setValue,
+    getValues,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
@@ -50,13 +57,20 @@ export function FormSearchParams<FormData extends FieldValues>({
   });
 
   const onSubmitBase = handleSubmit((data) => {
-    onSubmit && onSubmit(data);
+    const dataWithDynamic = Object.assign(
+      data,
+      (dynamicValues || []).reduce((acc, key) => {
+        return { ...acc, [key]: parameters[key] };
+      }, {})
+    );
+
+    onSubmit && onSubmit(dataWithDynamic);
 
     const entries = Object.entries(schema.fields).map(([key, fieldSchema]) => {
       if (fieldSchema.type === "array") {
-        return [get(forceValues, key, data[key]).map((v: any) => [key, v])];
+        return [get(forceValues, key, dataWithDynamic[key]).map((v: any) => [key, v])];
       }
-      return [[key, get(forceValues, key, data[key])]];
+      return [[key, get(forceValues, key, dataWithDynamic[key])]];
     });
 
     const urlParams = new URLSearchParams(flatten(entries).filter(([_, value]) => !isNil(value)));
@@ -70,7 +84,7 @@ export function FormSearchParams<FormData extends FieldValues>({
       ref={formRef}
       style={{ flex: "1", display: "flex", flexDirection: "column" }}
     >
-      {children({ control, errors, formRef })}
+      {children({ control, register, errors, formRef })}
     </form>
   );
 }

@@ -93,7 +93,8 @@ export default function SearchFormationHomeForm({
           url={url}
           defaultValues={defaultValues}
           schema={schema}
-          forceValues={{ tag: "", domaine: "" }}
+          forceValues={{}}
+          dynamicValues={["domaine", "tag"]}
         >
           {({ control, errors, formRef }) => {
             return (
