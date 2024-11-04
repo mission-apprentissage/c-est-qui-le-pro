@@ -40,7 +40,7 @@ export async function createSearchIndex(options = { indexFilePath: null }) {
     ignoreLocation: true,
     findAllMatches: true,
     distance: 200,
-    threshold: 0.3,
+    threshold: 0.29,
     useExtendedSearch: true,
     includeScore: true,
     keys: ["libelles"],
