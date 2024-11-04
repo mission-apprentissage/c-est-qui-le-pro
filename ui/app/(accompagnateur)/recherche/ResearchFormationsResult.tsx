@@ -15,7 +15,7 @@ import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
-import { isNil } from "lodash-es";
+import { isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
 
@@ -33,11 +33,9 @@ function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
         if (!params) {
           return;
         }
-        const { address, domaine } = params;
 
         updateParams({
-          address,
-          domaine,
+          ...omit(params, ["tag"]),
           tag: selectedTag === selected ? undefined : selectedTag,
         });
       }}
