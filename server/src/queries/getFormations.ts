@@ -10,39 +10,10 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
+import { getSearch, getSearch2 } from "#src/services/search/search.js";
 import Fuse from "fuse.js";
-import fs from "fs";
-import { createSearchIndex } from "#src/jobs/formations/createSearchIndex.js";
 
 const logger = getLoggerWithContext("query");
-
-// TODO : TO MOVE
-const fuse = loadFuse();
-
-async function loadFuse() {
-  await createSearchIndex();
-  if (!fs.existsSync(config.formation.files.fuseIndex)) {
-    return null;
-  }
-
-  const formationsIndex = JSON.parse(fs.readFileSync(config.formation.files.fuseIndex, "utf8") || null);
-  if (!formationsIndex) {
-    return null;
-  }
-
-  const fuse = new Fuse(
-    formationsIndex.formations,
-    {
-      ...formationsIndex.options,
-    },
-    Fuse.parseIndex(formationsIndex.index)
-  );
-  return fuse;
-}
-
-async function getFuseInstance() {
-  return await fuse;
-}
 
 export function buildFilterTag(eb, tag) {
   if (!tag) {
@@ -254,29 +225,28 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
   }
 
-  if (formation) {
-    // Use fuse.js searching
-    const fuse = await getFuseInstance();
-    if (fuse) {
-      const searchResult = fuse.search<{ id: string }>(
-        `${formation
-          .split(" ")
-          .map((f) => `${f}`)
-          .join(" ")}`
-      );
-      queryFormation = queryFormation.where((eb) =>
-        eb("id", "=", eb.fn.any(sql.val(searchResult.map((r) => r.item.id))))
-      );
-    } else {
-      queryFormation = queryFormation.where((eb) =>
-        eb(
-          eb.fn("f_unaccent", ["libelle"]),
-          "ilike",
-          eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
-        )
-      );
-    }
-  }
+  // if (formation) {
+  //   const search = await getSearch();
+  //   if (search) {
+  //     const searchResult = search.search<{ id: string }>(
+  //       `${formation
+  //         .split(" ")
+  //         .map((f) => `${f}`)
+  //         .join(" ")}`
+  //     );
+  //     queryFormation = queryFormation.where((eb) =>
+  //       eb("id", "=", eb.fn.any(sql.val(searchResult.map((r) => r.item.id))))
+  //     );
+  //   } else {
+  //     queryFormation = queryFormation.where((eb) =>
+  //       eb(
+  //         eb.fn("f_unaccent", ["libelle"]),
+  //         "ilike",
+  //         eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
+  //       )
+  //     );
+  //   }
+  // }
 
   if (!domaine) {
     return { query: kdb.selectFrom(queryFormation.as("formation")).selectAll() };
@@ -299,7 +269,12 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
 }
 
 export async function getFormationsSQL(
-  { filtersEtablissement = {}, filtersFormation = {}, tag = null, millesime },
+  {
+    filtersEtablissement = {},
+    filtersFormation = { cfds: null, domaine: null, formation: null },
+    tag = null,
+    millesime,
+  },
   pagination = { page: 1, limit: 100 }
 ) {
   const page = pagination.page || 1;
@@ -310,6 +285,19 @@ export async function getFormationsSQL(
   const queryEtablissement = await buildFiltersEtablissementSQL(filtersEtablissement as any);
 
   const queryFormation = await buildFiltersFormationSQL(filtersFormation as any);
+
+  // Fuse search
+  let filtersId: string[] = null;
+  if (filtersFormation.formation) {
+    const search = await getSearch2();
+    const searchResult = search.search<{ id: string }>(
+      `${filtersFormation.formation
+        .split(" ")
+        .map((f) => `${f}`)
+        .join(" ")}`
+    );
+    filtersId = searchResult.map((r) => r.item.id);
+  }
 
   const results = await kdb
     .selectFrom(
@@ -322,6 +310,9 @@ export async function getFormationsSQL(
             .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
             .select("formationEtablissement.id as id")
             .$if(!!tag, (eb) => buildFilterTag(eb, tag))
+            .$if(!!filtersId, (eb) =>
+              eb.where((eb) => eb("formationEtablissement.id", "=", eb.fn.any(sql.val(filtersId))))
+            )
             .where("formationEtablissement.millesime", "&&", [millesime])
             .innerJoin(
               queryEtablissement.query.as("etablissement"),
