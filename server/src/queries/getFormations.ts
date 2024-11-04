@@ -10,8 +10,20 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
+import Fuse from "fuse.js";
+import fs from "fs";
 
 const logger = getLoggerWithContext("query");
+
+// TODO : TO MOVE
+const formationsIndex = JSON.parse(fs.readFileSync(config.formation.files.fuseIndex, "utf8") || null);
+const fuse = new Fuse(
+  formationsIndex.formations,
+  {
+    ...formationsIndex.options,
+  },
+  Fuse.parseIndex(formationsIndex.index)
+);
 
 export function buildFilterTag(eb, tag) {
   if (!tag) {
@@ -224,13 +236,26 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   }
 
   if (formation) {
-    queryFormation = queryFormation.where((eb) =>
-      eb(
-        eb.fn("f_unaccent", ["libelle"]),
-        "ilike",
-        eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
-      )
-    );
+    // Use fuse.js searching
+    if (formationsIndex) {
+      const searchResult = fuse.search<{ id: string }>(
+        `${formation
+          .split(" ")
+          .map((f) => `'${f}`)
+          .join(" ")}`
+      );
+      queryFormation = queryFormation.where((eb) =>
+        eb("id", "=", eb.fn.any(sql.val(searchResult.map((r) => r.item.id))))
+      );
+    } else {
+      queryFormation = queryFormation.where((eb) =>
+        eb(
+          eb.fn("f_unaccent", ["libelle"]),
+          "ilike",
+          eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
+        )
+      );
+    }
   }
 
   if (!domaine) {

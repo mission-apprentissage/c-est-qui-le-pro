@@ -111,6 +111,7 @@ const config = {
   formation: {
     files: {
       formationSimilaire: path.join(currentDir, "..", "data", "formationSimilaire.json"),
+      fuseIndex: path.join(currentDir, "..", "data", "fuseIndex.json"),
     },
   },
   bcn: {
