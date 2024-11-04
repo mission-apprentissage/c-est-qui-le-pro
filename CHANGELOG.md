@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.10.0...v1.10.1) (2024-11-04)
+
+
+### Bug Fixes
+
+* ne pas mettre à zero les domaines et les tags dans la recherche ([#16](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/16)) ([f62eed2](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f62eed276715f8cead386875005fe06f55c8fdfa))
+
 # [1.10.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.9.0...v1.10.0) (2024-10-31)
 
 
