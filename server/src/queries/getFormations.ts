@@ -241,7 +241,7 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
       const searchResult = fuse.search<{ id: string }>(
         `${formation
           .split(" ")
-          .map((f) => `'${f}`)
+          .map((f) => `${f}`)
           .join(" ")}`
       );
       queryFormation = queryFormation.where((eb) =>
