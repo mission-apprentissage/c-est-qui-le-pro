@@ -16,14 +16,27 @@ import fs from "fs";
 const logger = getLoggerWithContext("query");
 
 // TODO : TO MOVE
-const formationsIndex = JSON.parse(fs.readFileSync(config.formation.files.fuseIndex, "utf8") || null);
-const fuse = new Fuse(
-  formationsIndex.formations,
-  {
-    ...formationsIndex.options,
-  },
-  Fuse.parseIndex(formationsIndex.index)
-);
+const fuse = loadFuse();
+
+function loadFuse() {
+  if (!fs.existsSync(config.formation.files.fuseIndex)) {
+    return null;
+  }
+
+  const formationsIndex = JSON.parse(fs.readFileSync(config.formation.files.fuseIndex, "utf8") || null);
+  if (!formationsIndex) {
+    return null;
+  }
+
+  const fuse = new Fuse(
+    formationsIndex.formations,
+    {
+      ...formationsIndex.options,
+    },
+    Fuse.parseIndex(formationsIndex.index)
+  );
+  return fuse;
+}
 
 export function buildFilterTag(eb, tag) {
   if (!tag) {
@@ -237,7 +250,7 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
 
   if (formation) {
     // Use fuse.js searching
-    if (formationsIndex) {
+    if (fuse) {
       const searchResult = fuse.search<{ id: string }>(
         `${formation
           .split(" ")
