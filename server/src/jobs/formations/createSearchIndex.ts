@@ -34,6 +34,7 @@ export async function createSearchIndex(options = { indexFilePath: null }) {
   );
 
   logger.info(`Indexation de ${formations.length} formations`);
+  stats.total += formations.length;
 
   const fuseOptions = {
     ignoreLocation: true,

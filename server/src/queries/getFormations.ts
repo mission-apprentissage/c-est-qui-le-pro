@@ -12,13 +12,15 @@ import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
 import Fuse from "fuse.js";
 import fs from "fs";
+import { createSearchIndex } from "#src/jobs/formations/createSearchIndex.js";
 
 const logger = getLoggerWithContext("query");
 
 // TODO : TO MOVE
 const fuse = loadFuse();
 
-function loadFuse() {
+async function loadFuse() {
+  await createSearchIndex();
   if (!fs.existsSync(config.formation.files.fuseIndex)) {
     return null;
   }
@@ -36,6 +38,10 @@ function loadFuse() {
     Fuse.parseIndex(formationsIndex.index)
   );
   return fuse;
+}
+
+async function getFuseInstance() {
+  return await fuse;
 }
 
 export function buildFilterTag(eb, tag) {
@@ -250,6 +256,7 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
 
   if (formation) {
     // Use fuse.js searching
+    const fuse = await getFuseInstance();
     if (fuse) {
       const searchResult = fuse.search<{ id: string }>(
         `${formation
