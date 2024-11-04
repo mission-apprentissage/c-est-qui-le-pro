@@ -36,9 +36,9 @@ export async function createSearchIndex(options = { indexFilePath: null }) {
   logger.info(`Indexation de ${formations.length} formations`);
 
   const fuseOptions = {
-    ignoreLocation: false,
+    ignoreLocation: true,
     findAllMatches: true,
-    distance: 100,
+    distance: 200,
     threshold: 0.3,
     useExtendedSearch: true,
     includeScore: true,
