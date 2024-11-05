@@ -2,54 +2,20 @@ import { oleoduc, writeData, transformData } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import FormationRepository from "#src/common/repositories/formation";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
-import Fuse from "fuse.js";
+import Fuse, { IFuseOptions } from "fuse.js";
 import { uniq } from "lodash-es";
 import fs from "fs";
+import config from "#src/config.js";
 const logger = getLoggerWithContext("search");
 
 let fuse: Fuse<any> = null;
-let fuse2: Fuse<any> = null;
 
-export async function createSearchIndex() {
-  logger.info(`Création d'un index de recherche pour les formations`);
-  const formations = [];
-  await oleoduc(
-    await FormationRepository.find({}),
-    transformData(async (data) => {
-      const formationsFamilleMetier = data.familleMetierId
-        ? await FormationRepository.familleMetier(data.familleMetierId)
-        : [];
-      return { formation: data, formationsFamilleMetier };
-    }),
-    writeData(async ({ formation, formationsFamilleMetier }) => {
-      formations.push({
-        id: formation.id,
-        libelle: formation.libelle,
-        libelles: uniq([formation.libelle, ...formationsFamilleMetier.map((f) => f.libelle)]),
-      });
-    })
-  );
+type FormationSearch = {
+  id: string;
+  libelles: string[];
+};
 
-  logger.info(`Indexation de ${formations.length} formations`);
-
-  const fuseOptions = {
-    ignoreLocation: true,
-    findAllMatches: true,
-    distance: 200,
-    threshold: 0.29,
-    useExtendedSearch: true,
-    includeScore: true,
-    keys: ["libelles"],
-  };
-  const myIndex = Fuse.createIndex(fuseOptions.keys, formations);
-  return {
-    formations: formations,
-    index: myIndex,
-    options: fuseOptions,
-  };
-}
-
-export async function createSearchIndex2() {
+export async function createSearchIndex(indexDir = config.formation.files.fuseIndex) {
   logger.info(`Création d'un index de recherche pour les formations dans un établissement`);
   const formations = [];
   await oleoduc(
@@ -74,6 +40,7 @@ export async function createSearchIndex2() {
         )
       ).filter((f) => f.exist);
 
+      logger.info(`Ajout de ${formationEtablissement.id}`);
       formations.push({
         id: formationEtablissement.id,
         libelle: formation.libelle,
@@ -94,38 +61,41 @@ export async function createSearchIndex2() {
     keys: ["libelles"],
   };
   const myIndex = Fuse.createIndex(fuseOptions.keys, formations);
+  await fs.promises.writeFile(
+    indexDir,
+    JSON.stringify({
+      formations: formations,
+      index: myIndex,
+      options: fuseOptions,
+    })
+  );
 
-  return {
-    formations: formations,
-    index: myIndex,
-    options: fuseOptions,
-  };
+  return true;
+}
+
+export async function loadSearchIndex(): Promise<{
+  formations: FormationSearch[];
+  index: any;
+  options: IFuseOptions<any>;
+}> {
+  try {
+    const fuseIndex = JSON.parse((await fs.promises.readFile(config.formation.files.fuseIndex, "utf8")) || null);
+    return fuseIndex;
+  } catch (err) {
+    logger.error(err);
+    return null;
+  }
 }
 
 export async function getSearch(): Promise<Fuse<any>> {
   if (!fuse) {
-    const { formations, index, options } = await createSearchIndex();
-    fuse = new Fuse(
-      formations,
-      {
-        ...options,
-      },
-      Fuse.parseIndex(index)
-    );
+    const fuseIndex = await loadSearchIndex();
+    if (!fuseIndex) {
+      return null;
+    }
+
+    const { formations, index, options } = fuseIndex;
+    fuse = new Fuse(formations, options, Fuse.parseIndex(index));
   }
   return fuse;
-}
-
-export async function getSearch2(): Promise<Fuse<any>> {
-  if (!fuse2) {
-    const { formations, index, options } = await createSearchIndex2();
-    fuse2 = new Fuse(
-      formations,
-      {
-        ...options,
-      },
-      Fuse.parseIndex(index)
-    );
-  }
-  return fuse2;
 }

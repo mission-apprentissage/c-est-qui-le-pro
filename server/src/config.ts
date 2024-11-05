@@ -3,6 +3,8 @@ import path from "path";
 import { getDirname } from "./common/utils/esmUtils.js";
 
 const currentDir: string = getDirname(import.meta.url);
+const dataDir = path.join(currentDir, "..", "data");
+const dataVolumeDir = env.get("VOLUME_DIR").default(path.join(currentDir, "..", "data")).asString();
 
 const config = {
   env: env.get("ACCOMPAGNATEUR_ENV").default("local").asString(),
@@ -78,21 +80,21 @@ const config = {
   acce: {
     files: {
       // https://dep.adc.education.fr/acce/extract.php
-      etablissements: path.join(currentDir, "..", "data", "acce_etablissements.csv"),
+      etablissements: path.join(dataDir, "acce_etablissements.csv"),
     },
   },
   orion: {
     files: {
       // https://orion-recette.inserjeunes.beta.gouv.fr/api/etablissements?order=asc&limit=1000000&withAnneeCommune=true
-      exportEtablissements: path.join(currentDir, "../data/orion/", "etablissement_export_rentree_2023.csv"),
+      exportEtablissements: path.join(dataDir, "orion", "etablissement_export_rentree_2023.csv"),
     },
   },
   rome: {
     files: {
       // https://www.data.gouv.fr/fr/datasets/repertoire-operationnel-des-metiers-et-des-emplois-rome/
-      rome: path.join(currentDir, "..", "data", "rome", "rome.csv"),
+      rome: path.join(dataDir, "rome", "rome.csv"),
       // Manually generated
-      romeMetier: path.join(currentDir, "..", "data", "rome", "romeMetier.csv"),
+      romeMetier: path.join(dataDir, "rome", "romeMetier.csv"),
     },
   },
   rco: {
@@ -110,14 +112,15 @@ const config = {
   },
   formation: {
     files: {
-      formationSimilaire: path.join(currentDir, "..", "data", "formationSimilaire.json"),
+      formationSimilaire: path.join(dataDir, "formationSimilaire.json"),
+      fuseIndex: path.join(dataVolumeDir, "fuseIndex.json"),
     },
   },
   bcn: {
     files: {
       // Manually generated
-      familleMetier: path.join(currentDir, "..", "data", "bcn", "n_famille_metier_spec_pro.csv"),
-      lienMefFamilleMetier: path.join(currentDir, "..", "data", "bcn", "n_lien_mef_famille_metier.csv"),
+      familleMetier: path.join(dataDir, "bcn", "n_famille_metier_spec_pro.csv"),
+      lienMefFamilleMetier: path.join(dataDir, "bcn", "n_lien_mef_famille_metier.csv"),
     },
   },
 };

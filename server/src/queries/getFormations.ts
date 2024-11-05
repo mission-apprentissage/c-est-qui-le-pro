@@ -10,8 +10,7 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
-import { getSearch, getSearch2 } from "#src/services/search/search.js";
-import Fuse from "fuse.js";
+import { getSearch } from "#src/services/search/search.js";
 
 const logger = getLoggerWithContext("query");
 
@@ -214,7 +213,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   };
 }
 
-async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
+async function buildFiltersFormationSQL({ cfds, domaine }) {
   let queryFormation = kdb
     .selectFrom("formation")
     .$call(FormationRepository._base())
@@ -224,29 +223,6 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   if (cfds.length > 0) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
   }
-
-  // if (formation) {
-  //   const search = await getSearch();
-  //   if (search) {
-  //     const searchResult = search.search<{ id: string }>(
-  //       `${formation
-  //         .split(" ")
-  //         .map((f) => `${f}`)
-  //         .join(" ")}`
-  //     );
-  //     queryFormation = queryFormation.where((eb) =>
-  //       eb("id", "=", eb.fn.any(sql.val(searchResult.map((r) => r.item.id))))
-  //     );
-  //   } else {
-  //     queryFormation = queryFormation.where((eb) =>
-  //       eb(
-  //         eb.fn("f_unaccent", ["libelle"]),
-  //         "ilike",
-  //         eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
-  //       )
-  //     );
-  //   }
-  // }
 
   if (!domaine) {
     return { query: kdb.selectFrom(queryFormation.as("formation")).selectAll() };
@@ -268,12 +244,29 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   };
 }
 
+async function getFiltersId(formation) {
+  if (!formation) {
+    return null;
+  }
+
+  // Fuse search
+  const search = await getSearch();
+  const searchResult = search.search<{ id: string }>(
+    `${formation
+      .split(" ")
+      .map((f) => `${f}`)
+      .join(" ")}`
+  );
+  return searchResult.map((r) => r.item.id);
+}
+
 export async function getFormationsSQL(
   {
     filtersEtablissement = {},
-    filtersFormation = { cfds: null, domaine: null, formation: null },
+    filtersFormation = { cfds: null, domaine: null },
     tag = null,
     millesime,
+    formation = null,
   },
   pagination = { page: 1, limit: 100 }
 ) {
@@ -286,18 +279,7 @@ export async function getFormationsSQL(
 
   const queryFormation = await buildFiltersFormationSQL(filtersFormation as any);
 
-  // Fuse search
-  let filtersId: string[] = null;
-  if (filtersFormation.formation) {
-    const search = await getSearch2();
-    const searchResult = search.search<{ id: string }>(
-      `${filtersFormation.formation
-        .split(" ")
-        .map((f) => `${f}`)
-        .join(" ")}`
-    );
-    filtersId = searchResult.map((r) => r.item.id);
-  }
+  const filtersId = await getFiltersId(formation);
 
   const results = await kdb
     .selectFrom(

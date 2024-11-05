@@ -26,6 +26,7 @@ import { importFormationSimilaire } from "./jobs/formations/importFormationSimil
 import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
 import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndicateurPoursuiteRegionale";
 import { importFamillesMetiers } from "./jobs/formations/importFamillesMetiers";
+import { createSearchIndex } from "./services/search/search";
 
 const cli = new Command();
 
@@ -66,6 +67,7 @@ const formationEtablissementJobs = [
   { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },
   { name: "feFormationTag", job: computeFormationTag },
   { name: "feFormationSimilaire", job: importFormationSimilaire },
+  { name: "feSearchIndex", job: createSearchIndex },
 ];
 
 const etablissementJobs = [
