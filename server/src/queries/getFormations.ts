@@ -251,6 +251,10 @@ async function getFiltersId(formation) {
 
   // Fuse search
   const search = await getSearch();
+  if (!search) {
+    return null;
+  }
+
   const searchResult = search.search<{ id: string }>(
     `${formation
       .split(" ")
