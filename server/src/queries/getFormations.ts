@@ -10,6 +10,7 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
+import { search } from "#src/services/formation/search.js";
 
 const logger = getLoggerWithContext("query");
 
@@ -212,7 +213,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   };
 }
 
-async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
+async function buildFiltersFormationSQL({ cfds, domaine }) {
   let queryFormation = kdb
     .selectFrom("formation")
     .$call(FormationRepository._base())
@@ -221,16 +222,6 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
 
   if (cfds.length > 0) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
-  }
-
-  if (formation) {
-    queryFormation = queryFormation.where((eb) =>
-      eb(
-        eb.fn("f_unaccent", ["libelle"]),
-        "ilike",
-        eb(sql.val("%"), "||", eb(eb.fn<string>("f_unaccent", [sql.val(formation)]), "||", "%"))
-      )
-    );
   }
 
   if (!domaine) {
@@ -253,8 +244,23 @@ async function buildFiltersFormationSQL({ cfds, domaine, formation }) {
   };
 }
 
+async function getFiltersId(formation) {
+  if (!formation) {
+    return null;
+  }
+
+  // Fuse search
+  return await search(formation);
+}
+
 export async function getFormationsSQL(
-  { filtersEtablissement = {}, filtersFormation = {}, tag = null, millesime },
+  {
+    filtersEtablissement = {},
+    filtersFormation = { cfds: null, domaine: null },
+    tag = null,
+    millesime,
+    formation = null,
+  },
   pagination = { page: 1, limit: 100 }
 ) {
   const page = pagination.page || 1;
@@ -265,6 +271,8 @@ export async function getFormationsSQL(
   const queryEtablissement = await buildFiltersEtablissementSQL(filtersEtablissement as any);
 
   const queryFormation = await buildFiltersFormationSQL(filtersFormation as any);
+
+  const filtersId = await getFiltersId(formation);
 
   const results = await kdb
     .selectFrom(
@@ -277,6 +285,9 @@ export async function getFormationsSQL(
             .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
             .select("formationEtablissement.id as id")
             .$if(!!tag, (eb) => buildFilterTag(eb, tag))
+            .$if(!!filtersId, (eb) =>
+              eb.where((eb) => eb("formationEtablissement.id", "=", eb.fn.any(sql.val(filtersId))))
+            )
             .where("formationEtablissement.millesime", "&&", [millesime])
             .innerJoin(
               queryEtablissement.query.as("etablissement"),

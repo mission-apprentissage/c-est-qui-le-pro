@@ -128,6 +128,17 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
       `metier as ${this.tableName}.metier` as AnyAliasedColumn<DB, T>,
     ];
   }
+
+  async familleMetier(familleMetierId: string) {
+    const formations = await this.kdb
+      .selectFrom("formation")
+      .$call(this._base())
+      .selectAll()
+      .where("familleMetierId", "=", familleMetierId)
+      .execute();
+
+    return formations;
+  }
 }
 
 export default new FormationRepository();

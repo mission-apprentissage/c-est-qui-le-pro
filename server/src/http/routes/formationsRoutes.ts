@@ -98,9 +98,10 @@ export default () => {
       const results = await getFormationsSQL(
         {
           filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
-          filtersFormation: { cfds, domaine, formation: cleanString(formation) },
+          filtersFormation: { cfds, domaine },
           tag,
           millesime,
+          formation: cleanString(formation),
         },
         {
           limit: items_par_page,
