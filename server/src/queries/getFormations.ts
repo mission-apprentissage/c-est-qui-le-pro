@@ -10,7 +10,7 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
-import { getSearch } from "#src/services/search/search.js";
+import { search } from "#src/services/formation/search.js";
 
 const logger = getLoggerWithContext("query");
 
@@ -250,18 +250,7 @@ async function getFiltersId(formation) {
   }
 
   // Fuse search
-  const search = await getSearch();
-  if (!search) {
-    return null;
-  }
-
-  const searchResult = search.search<{ id: string }>(
-    `${formation
-      .split(" ")
-      .map((f) => `${f}`)
-      .join(" ")}`
-  );
-  return searchResult.map((r) => r.item.id);
+  return await search(formation);
 }
 
 export async function getFormationsSQL(

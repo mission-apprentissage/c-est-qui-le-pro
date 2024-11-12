@@ -26,7 +26,7 @@ import { importFormationSimilaire } from "./jobs/formations/importFormationSimil
 import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
 import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndicateurPoursuiteRegionale";
 import { importFamillesMetiers } from "./jobs/formations/importFamillesMetiers";
-import { createSearchIndex } from "./services/search/search";
+import { createSearchIndex } from "./services/formation/search";
 
 const cli = new Command();
 

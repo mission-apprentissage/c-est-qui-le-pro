@@ -1,4 +1,5 @@
 import { oleoduc, writeData, transformData } from "oleoduc";
+import diacritics from "diacritics";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import FormationRepository from "#src/common/repositories/formation";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
@@ -43,8 +44,10 @@ export async function createSearchIndex(indexDir = config.formation.files.fuseIn
       logger.info(`Ajout de ${formationEtablissement.id}`);
       formations.push({
         id: formationEtablissement.id,
-        libelle: formation.libelle,
-        libelles: uniq([formation.libelle, ...filteredFamilleMetier.map((f) => f.libelle)]),
+        libelle: diacritics.remove(formation.libelle),
+        libelles: uniq([formation.libelle, ...filteredFamilleMetier.map((f) => f.libelle)]).map((v) =>
+          diacritics.remove(v)
+        ),
       });
     })
   );
@@ -98,4 +101,20 @@ export async function getSearch(): Promise<Fuse<any>> {
     fuse = new Fuse(formations, options, Fuse.parseIndex(index));
   }
   return fuse;
+}
+
+export async function search(input: string): Promise<null | string[]> {
+  // Fuse search
+  const search = await getSearch();
+  if (!search) {
+    return null;
+  }
+
+  const searchResult = search.search<{ id: string }>(
+    `${input
+      .split(" ")
+      .map((f) => `${diacritics.remove(f)}`)
+      .join(" ")}`
+  );
+  return searchResult.map((r) => r.item.id);
 }
