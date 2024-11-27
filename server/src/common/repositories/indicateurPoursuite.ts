@@ -4,16 +4,13 @@ import { DB } from "../db/schema.js";
 import { DiplomeType, FormationVoie } from "shared";
 import { sql } from "kysely";
 
-export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "indicateurPoursuiteRegional"> {
+export class IndicateurPoursuiteRepository extends SqlRepository<DB, "indicateurPoursuite"> {
   constructor(kdb = defaultKdb) {
     super(
-      "indicateurPoursuiteRegional",
+      "indicateurPoursuite",
       {
         id: null,
-        cfd: null,
-        voie: null,
-        codeDispositif: null,
-        region: null,
+        formationEtablissementId: null,
         millesime: null,
         taux_en_emploi_6_mois: null,
         taux_en_formation: null,
@@ -28,9 +25,12 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
 
   quartileFor(type: keyof typeof DiplomeType, region?: string, voie?: FormationVoie) {
     let query = this.kdb
-      .selectFrom("indicateurPoursuiteRegional")
+      .selectFrom("indicateurPoursuite")
+      .innerJoin("formationEtablissement", "formationEtablissement.id", "indicateurPoursuite.formationEtablissementId")
+      .innerJoin("etablissement", "formationEtablissement.etablissementId", "etablissement.id")
+      .innerJoin("formation", "formationEtablissement.formationId", "formation.id")
       .distinctOn(["region", "voie"])
-      .select(["millesime", "region", "voie"])
+      .select(["indicateurPoursuite.millesime", "region", "voie"])
       .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q2"))
@@ -57,11 +57,11 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
     query = region ? query.where("region", "=", region) : query;
     query = voie ? query.where("voie", "=", voie) : query;
     return query
-      .groupBy(["region", "voie", "millesime"])
-      .orderBy(["region", "voie", "millesime desc"])
+      .groupBy(["region", "voie", "indicateurPoursuite.millesime"])
+      .orderBy(["region", "voie", "indicateurPoursuite.millesime desc"])
       .limit(1)
       .executeTakeFirst();
   }
 }
 
-export default new IndicateurPoursuiteRegionalRepository();
+export default new IndicateurPoursuiteRepository();
