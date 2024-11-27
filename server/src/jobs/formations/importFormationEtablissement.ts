@@ -1,4 +1,4 @@
-import { oleoduc, writeData, transformData, concatStreams, compose, filterData } from "oleoduc";
+import { oleoduc, writeData, transformData, concatStreams, compose, filterData, mergeStreams } from "oleoduc";
 import { omit, pick, uniq } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import moment from "#src/common/utils/dateUtils.js";
@@ -18,7 +18,10 @@ async function streamCAFormations({ stats }) {
   ];
   return compose(
     // On ne renvoi que les formations post 3ème publié
-    await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_previous_statut: "publié" }),
+    mergeStreams(
+      await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_previous_statut: "publié" }),
+      await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_statut: "publié" })
+    ),
     filterData(
       ({ data }) => data.uai_formation && !codesDiplomeToFilter.find((code) => data.cfd.substr(0, 3) === code)
     ),

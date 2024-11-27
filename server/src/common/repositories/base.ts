@@ -1,5 +1,13 @@
 import { mapKeys, pickBy } from "lodash-es";
-import { AnyAliasedColumn, AnyColumn, ExpressionBuilder, Kysely, OnConflictDatabase, OnConflictTables } from "kysely";
+import {
+  AnyAliasedColumn,
+  AnyColumn,
+  ExpressionBuilder,
+  Kysely,
+  OnConflictDatabase,
+  OnConflictTables,
+  Updateable,
+} from "kysely";
 import { UpdateObjectExpression } from "kysely/dist/cjs/parser/update-set-parser";
 import { ExtractTableAlias } from "kysely/dist/cjs/parser/table-parser";
 import { upsert } from "../db/db";
@@ -58,7 +66,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return upsert(this.kdb, this.tableName, keys, data, onConflictData, returningKeys);
   }
 
-  updateBy(data: Partial<DB[F]>, where: Partial<DB[F]> | null = null) {
+  updateBy(data: Updateable<DB[F]>, where: Partial<DB[F]> | null = null) {
     const query = this.kdb
       .updateTable(this.tableName)
       .set(

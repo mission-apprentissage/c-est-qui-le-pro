@@ -16,7 +16,7 @@ export const WidgetSirius = React.memo(
   ({ params, fallbackComponent }: { fallbackComponent?: JSX.Element; params: string }) => {
     const [isNotFound, setIsNotFound] = useState(false);
     const [height, setHeight] = useState(0);
-    const API_URL = process.env.NEXT_PUBLIC_SIRIUS_API_BASE_URL || "https://sirius.inserjeunes.beta.gouv.fr";
+    const API_URL = process.env.NEXT_PUBLIC_SIRIUS_API_BASE_URL || "https://sirius-recette.inserjeunes.beta.gouv.fr";
 
     const ref = useRef<HTMLDivElement>(null);
 
