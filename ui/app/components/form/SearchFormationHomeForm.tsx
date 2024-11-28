@@ -51,7 +51,6 @@ export default function SearchFormationHomeForm({
   return (
     <div style={{ ...(isFocus && isDownSm ? { height: "100vh", backgroundColor: "white", width: "100%" } : {}) }}>
       <div
-        data-private
         style={{
           ...(isFocus && isDownSm
             ? {
