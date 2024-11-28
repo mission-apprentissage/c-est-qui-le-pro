@@ -109,7 +109,6 @@ export default function FormationField({
 
   return (
     <div
-      data-private
       style={{
         width: "100%",
         borderRadius: "5px",
