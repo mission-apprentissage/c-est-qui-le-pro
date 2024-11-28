@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.11.0...v1.12.0) (2024-11-28)
+
+
+### Features
+
+* affiche les mots clés dans logrocket ([#19](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/19)) ([4ccd2b7](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/4ccd2b7a7fff08be4b931b460e0bd026b8f4511a))
+
 # [1.11.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.10.1...v1.11.0) (2024-11-12)
 
 
