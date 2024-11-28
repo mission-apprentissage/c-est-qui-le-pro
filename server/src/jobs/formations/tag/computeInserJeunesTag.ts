@@ -14,8 +14,7 @@ export async function computeInserJeunesTag(formationEtablissement) {
 
   const indicateurPoursuiteRegional = await IndicateurPoursuiteRepository.quartileFor(
     diplomeType,
-    formationEtablissement.etablissement.region,
-    formationEtablissement.formation.voie
+    formationEtablissement.etablissement.region
   );
 
   const indicateurPoursuite = await kdb

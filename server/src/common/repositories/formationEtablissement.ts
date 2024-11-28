@@ -170,11 +170,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
 
       const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
       const indicateurPoursuiteRegional = diplomeType
-        ? await IndicateurPoursuiteRepository.quartileFor(
-            diplomeType,
-            formationEtablissement.etablissement.region,
-            formationEtablissement.formation.voie
-          )
+        ? await IndicateurPoursuiteRepository.quartileFor(diplomeType, formationEtablissement.etablissement.region)
         : null;
 
       formationEtablissement = merge(formationEtablissement, {

@@ -3,6 +3,7 @@ import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 import { DiplomeType, FormationVoie } from "shared";
 import { sql } from "kysely";
+import { merge } from "lodash-es";
 
 export class IndicateurPoursuiteRepository extends SqlRepository<DB, "indicateurPoursuite"> {
   constructor(kdb = defaultKdb) {
@@ -23,14 +24,12 @@ export class IndicateurPoursuiteRepository extends SqlRepository<DB, "indicateur
     );
   }
 
-  quartileFor(type: keyof typeof DiplomeType, region?: string, voie?: FormationVoie) {
+  async quartileFor(type: keyof typeof DiplomeType, region?: string, voie?: FormationVoie) {
     let query = this.kdb
       .selectFrom("indicateurPoursuite")
       .innerJoin("formationEtablissement", "formationEtablissement.id", "indicateurPoursuite.formationEtablissementId")
       .innerJoin("etablissement", "formationEtablissement.etablissementId", "etablissement.id")
       .innerJoin("formation", "formationEtablissement.formationId", "formation.id")
-      .distinctOn(["region", "voie"])
-      .select(["indicateurPoursuite.millesime", "region", "voie"])
       .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q2"))
@@ -53,14 +52,19 @@ export class IndicateurPoursuiteRepository extends SqlRepository<DB, "indicateur
       )
 
       .where("taux_en_formation", "is not", null)
-      .where(this.kdb.fn("SUBSTR", ["cfd", sql.val(1), sql.val(3)]), "in", DiplomeType[type]);
+      .where(this.kdb.fn("SUBSTR", ["cfd", sql.val(1), sql.val(3)]), "in", DiplomeType[type])
+      .select(["indicateurPoursuite.millesime"]);
+
     query = region ? query.where("region", "=", region) : query;
     query = voie ? query.where("voie", "=", voie) : query;
-    return query
-      .groupBy(["region", "voie", "indicateurPoursuite.millesime"])
-      .orderBy(["region", "voie", "indicateurPoursuite.millesime desc"])
+
+    const result = await query
+      .groupBy(["indicateurPoursuite.millesime"])
+      .orderBy(["indicateurPoursuite.millesime desc"])
       .limit(1)
       .executeTakeFirst();
+
+    return result ? merge({}, result, { voie, region }) : result;
   }
 }
 

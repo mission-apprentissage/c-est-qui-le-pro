@@ -3,6 +3,7 @@ import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 import { DiplomeType, FormationVoie } from "shared";
 import { sql } from "kysely";
+import { merge } from "lodash-es";
 
 export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "indicateurPoursuiteRegional"> {
   constructor(kdb = defaultKdb) {
@@ -26,11 +27,10 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
     );
   }
 
-  quartileFor(type: keyof typeof DiplomeType, region?: string, voie?: FormationVoie) {
+  async quartileFor(type: keyof typeof DiplomeType, region?: string, voie?: FormationVoie) {
     let query = this.kdb
       .selectFrom("indicateurPoursuiteRegional")
-      .distinctOn(["region", "voie"])
-      .select(["millesime", "region", "voie"])
+      .select(["millesime"])
       .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY taux_en_formation)`.as("taux_en_formation_q2"))
@@ -56,11 +56,8 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
       .where(this.kdb.fn("SUBSTR", ["cfd", sql.val(1), sql.val(3)]), "in", DiplomeType[type]);
     query = region ? query.where("region", "=", region) : query;
     query = voie ? query.where("voie", "=", voie) : query;
-    return query
-      .groupBy(["region", "voie", "millesime"])
-      .orderBy(["region", "voie", "millesime desc"])
-      .limit(1)
-      .executeTakeFirst();
+    const result = await query.groupBy(["millesime"]).orderBy(["millesime desc"]).limit(1).executeTakeFirst();
+    return result ? merge({}, result, { voie, region }) : result;
   }
 }
 

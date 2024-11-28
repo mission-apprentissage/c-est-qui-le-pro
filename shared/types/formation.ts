@@ -69,7 +69,7 @@ type IndicateurPoursuite = {
 type IndicateurPoursuiteRegional = {
   millesime: string;
   region: string;
-  voie: string;
+  voie?: string;
   taux_en_formation_q0: number;
   taux_en_formation_q1: number;
   taux_en_formation_q2: number;
@@ -206,7 +206,7 @@ const formationEtablissementSchema = yup.object().concat(
       .object({
         millesime: yup.string().required(),
         region: yup.string().required(),
-        voie: yup.string().required(),
+        voie: yup.string(),
         taux_en_formation_q0: yup.number().required(),
         taux_en_formation_q1: yup.number().required(),
         taux_en_formation_q2: yup.number().required(),
