@@ -7,7 +7,7 @@ import { Readable } from "stream";
 import { compose, transformData } from "oleoduc";
 import { sql } from "kysely";
 import { merge } from "lodash-es";
-import IndicateurPoursuiteRegionalRepository from "./indicateurPoursuiteRegional.js";
+import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
 
 type QueryFormationEtablissement = Partial<{ [key in keyof DB["formationEtablissement"]]: string }>;
@@ -170,11 +170,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
 
       const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
       const indicateurPoursuiteRegional = diplomeType
-        ? await IndicateurPoursuiteRegionalRepository.quartileFor(
-            diplomeType,
-            formationEtablissement.etablissement.region,
-            formationEtablissement.formation.voie
-          )
+        ? await IndicateurPoursuiteRepository.quartileFor(diplomeType, formationEtablissement.etablissement.region)
         : null;
 
       formationEtablissement = merge(formationEtablissement, {

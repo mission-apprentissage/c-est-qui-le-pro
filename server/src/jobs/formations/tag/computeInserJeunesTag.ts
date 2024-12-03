@@ -1,7 +1,7 @@
 import { FormationTag, getDiplomeType } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb } from "#src/common/db/db";
-import IndicateurPoursuiteRegionalRepository from "#src/common/repositories/indicateurPoursuiteRegional.js";
+import IndicateurPoursuiteRepository from "#src/common/repositories/indicateurPoursuite.js";
 
 const logger = getLoggerWithContext("import");
 
@@ -12,10 +12,9 @@ export async function computeInserJeunesTag(formationEtablissement) {
     return [];
   }
 
-  const indicateurPoursuiteRegional = await IndicateurPoursuiteRegionalRepository.quartileFor(
+  const indicateurPoursuiteRegional = await IndicateurPoursuiteRepository.quartileFor(
     diplomeType,
-    formationEtablissement.etablissement.region,
-    formationEtablissement.formation.voie
+    formationEtablissement.etablissement.region
   );
 
   const indicateurPoursuite = await kdb
