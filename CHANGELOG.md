@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.12.0...v1.13.0) (2024-12-03)
+
+
+### Features
+
+* nouveaux calculs pour les libellés ([#20](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/20)) ([08f98a2](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/08f98a2489869ea20687a1339e495a4b51bcdb2c))
+
 # [1.12.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.11.0...v1.12.0) (2024-11-28)
 
 
