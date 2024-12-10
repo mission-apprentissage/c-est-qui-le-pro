@@ -25,7 +25,7 @@ services:
     image: isochrones
     environment:
       - ISOCHRONE_PARALLEL=${ISOCHRONE_PARALLEL:-16}
-      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2024-12-16T05%3A00%3A00.000Z}
+      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2024-12-16T07%3A30%3A00.000Z}
       - CQLP_API=${CQLP_API:-http://host.docker.internal:5000}
       - COMPUTE_POSTGRES_URI=${POSTGRES_URI}
       - GRAPHHOPPER_URL=${GRAPHHOPPER_URL:-http://graphhopper:8989}

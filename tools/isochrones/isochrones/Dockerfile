@@ -7,4 +7,4 @@ WORKDIR /data
 
 COPY entrypoint.sh entrypoint.sh
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+ENTRYPOINT ["bash", "entrypoint.sh", "pt", "bike"]

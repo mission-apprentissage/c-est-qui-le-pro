@@ -30,7 +30,7 @@ export function buildFilterTag(eb, tag) {
 
 export function getRouteDate() {
   if (config.features.graphhopper.useStaticDate) {
-    return moment("2024-09-09").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
+    return moment("2024-12-16").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
   }
   return moment().startOf("isoWeek").add(1, "week").set({ hour: 8, minute: 30, second: 0, millisecond: 0 }).toDate();
 }

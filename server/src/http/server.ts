@@ -7,6 +7,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { tryCatch } from "./middlewares/tryCatchMiddleware.js";
 import { corsMiddleware } from "./middlewares/corsMiddleware.js";
 import formationsRoutes from "./routes/formationsRoutes.js";
+import etablissementsRoutes from "./routes/etablissementsRoutes.js";
 import packageJson from "../../package.json";
 import { kdb } from "#src/common/db/db";
 import { sql } from "kysely";
@@ -30,6 +31,7 @@ export default async () => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
   app.use(formationsRoutes());
+  app.use(etablissementsRoutes());
 
   app.use("/static", express.static("public"));
 
