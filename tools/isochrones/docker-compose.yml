@@ -28,7 +28,6 @@ services:
       - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2024-12-16T05%3A00%3A00.000Z}
       - CQLP_API=${CQLP_API:-http://host.docker.internal:5000}
       - COMPUTE_POSTGRES_URI=${POSTGRES_URI}
-      - ISOCHRONES_MEMORY_LIMIT=${ISOCHRONES_MEMORY_LIMIT:-4g}
       - GRAPHHOPPER_URL=${GRAPHHOPPER_URL:-http://graphhopper:8989}
     container_name: isochrones
     build:

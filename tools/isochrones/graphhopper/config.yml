@@ -11,6 +11,7 @@ graphhopper:
        - bike.json
   profiles_ch:
     - profile: foot
+    - profile: bike
   graph.encoded_values: foot_access, foot_average_speed, hike_rating, foot_priority, bike_priority, bike_access, roundabout, bike_average_speed,average_slope, hike_rating, country, road_class
   import.osm.ignored_highways: motorway,trunk # ,primary
 

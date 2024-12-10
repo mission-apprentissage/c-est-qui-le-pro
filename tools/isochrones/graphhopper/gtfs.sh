@@ -8,6 +8,8 @@ function download_and_clean() {
     cd gtfs-out
     zip -0 $filename *
     mv $filename ..
+    cd ..
+    rm -Rf gtfs-out
 }
 
 download_and_clean https://eu.ftp.opendatasoft.com/stif/GTFS/IDFM-gtfs.zip
