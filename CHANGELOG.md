@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.13.0...v1.14.0) (2024-12-11)
+
+
+### Features
+
+* Widget Sirius par CFD ([#21](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/21)) ([7354239](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/7354239ae52a85d4a7fc37d6d839cd3d87369520))
+
 # [1.13.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.12.0...v1.13.0) (2024-12-03)
 
 
