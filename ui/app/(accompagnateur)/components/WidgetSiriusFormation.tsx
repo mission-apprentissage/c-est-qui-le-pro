@@ -14,7 +14,5 @@ export default function WidgetSiriusFormation({
     return fallbackComponent;
   }
 
-  return (
-    <WidgetSirius params={`formation?intitule=${encodeURI(formation.libelle)}`} fallbackComponent={fallbackComponent} />
-  );
+  return <WidgetSirius params={`formation?cfd=${encodeURI(formation.cfd)}`} fallbackComponent={fallbackComponent} />;
 }

@@ -169,7 +169,7 @@ cli
     "Geometry key path (lodash path format). \n Exemple pour Graphhopper : polygons[0].geometry"
   )
   .requiredOption(
-    "-b, --buckets",
+    "-b, --buckets <buckets>",
     "Liste des durées des différents buckets en ordre décroissant (séparés par des virgules)",
     "5400,3600,2700,1800,900"
   )
