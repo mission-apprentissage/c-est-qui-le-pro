@@ -13,6 +13,7 @@ export type CardProps = Omit<MUICardProps, "title"> & {
   selected?: boolean;
   actionProps?: CardActionAreaProps;
   type?: "details" | "formation";
+  focusHighlight?: boolean;
 };
 
 const StyledLink = styled(Link)`
@@ -35,6 +36,7 @@ export function Card({ title, link, linkTarget, style, children, className, acti
     return (
       <CardActionArea
         {...actionProps}
+        disableRipple
         className={className}
         style={style}
         onClick={(e) => {
@@ -112,12 +114,33 @@ export default styled(Card)<CardProps>`
 
         & .MuiContainer-root {
           padding: ${fr.spacing("3v")};
-        }  
-        `;
+        }`;
     }
   }};
 
   ${({ selected }) => {
     return !isNil(selected) && selected ? "background-color: var(--hover);" : "";
   }}
+
+  ${({ focusHighlight }) => {
+    return (
+      focusHighlight ||
+      `& .MuiCardActionArea-focusHighlight {
+  display: none;
+}`
+    );
+  }}
+
+
+  & .MuiButtonBase-root {
+    background-color: white;
+  }
+
+  & .MuiButtonBase-root:hover {
+    background-color: var(--hover);
+  }
+
+  &.MuiButtonBase-root {
+    background-color: white;
+  }
 `;

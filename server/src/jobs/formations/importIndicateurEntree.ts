@@ -81,7 +81,7 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
     filterData((data) => data),
     writeData(
       async ({ formationEtablissement: { formationEtablissement, formation, etablissement }, data }) => {
-        const effectifsAnnee = (formationEtablissement.familleMetierId ? ["1", "2"] : ["1"])
+        const effectifsAnnee = (formation.familleMetierId ? ["1", "2"] : ["1"])
           .filter((a) => data[`Année ${a}`] !== undefined)
           .find((_) => true);
 
@@ -104,6 +104,7 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
           if (
             previousYearExist &&
             previousYearExist.effectifsAnnee !== null &&
+            previousYearExist.effectifs !== null &&
             previousYearExist.effectifsAnnee < indicateurEntree.effectifsAnnee
           ) {
             return;

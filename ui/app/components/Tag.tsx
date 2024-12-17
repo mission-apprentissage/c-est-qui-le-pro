@@ -101,8 +101,8 @@ export const TagDuree = styled(TagStyled)`
 `;
 
 export const TagApprentissage = styled(TagStyled)`
-  color: var(--warning-425-625-hover);
-  background-color: var(--error-950-100);
+  color: ${fr.colors.decisions.text.default.success.default};
+  background-color: ${fr.colors.options.greenMenthe._975_75.default};
 `;
 
 export default TagStyled;
