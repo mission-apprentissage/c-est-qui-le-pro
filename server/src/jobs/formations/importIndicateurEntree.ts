@@ -7,6 +7,7 @@ import config from "#src/config.js";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
 import { kdb, upsert } from "#src/common/db/db";
 import { cfdsParentAndChildren } from "#src/queries/cfdsParentAndChildren.js";
+import IndicateurEntreeRepository from "#src/common/repositories/indicateurEntree";
 
 const logger = getLoggerWithContext("import");
 
@@ -80,18 +81,34 @@ export async function importIndicateurEntree(options = { exportEtablissementsOri
     filterData((data) => data),
     writeData(
       async ({ formationEtablissement: { formationEtablissement, formation, etablissement }, data }) => {
+        const effectifsAnnee = (formationEtablissement.familleMetierId ? ["1", "2"] : ["1"])
+          .filter((a) => data[`Année ${a}`] !== undefined)
+          .find((_) => true);
+
         const indicateurEntree = {
           formationEtablissementId: formationEtablissement.id,
           rentreeScolaire: data["RS"],
           capacite: formatInt(data["Capacité"]),
           premiersVoeux: formatInt(data["Nb de premiers voeux"]),
-          // TODO: mieux gérer les spécialités
-          // Il y a les capacités uniquement pour la deuxième année
-          effectifs: formatInt(data["Année 1"]),
+          effectifs: effectifsAnnee ? formatInt(data[`Année ${effectifsAnnee}`]) : null,
+          effectifsAnnee,
           tauxPression: formatFloat(data["Tx de pression"]),
         };
 
         try {
+          // Vérifie qu'il n'existe pas déjà un effectif pour une année antérieur
+          const previousYearExist = await IndicateurEntreeRepository.first({
+            formationEtablissementId: indicateurEntree.formationEtablissementId,
+            rentreeScolaire: indicateurEntree.rentreeScolaire,
+          });
+          if (
+            previousYearExist &&
+            previousYearExist.effectifsAnnee !== null &&
+            previousYearExist.effectifsAnnee < indicateurEntree.effectifsAnnee
+          ) {
+            return;
+          }
+
           await upsert(
             kdb,
             "indicateurEntree",

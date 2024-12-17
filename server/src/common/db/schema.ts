@@ -86,7 +86,7 @@ export interface Formation {
   descriptionPoursuiteEtudes: string | null;
   familleMetierId: string | null;
   id: Generated<string>;
-  isAnneeCommune: boolean | null;
+  isAnneeCommune: Generated<boolean | null>;
   libelle: string | null;
   mef11: string | null;
   niveauDiplome: Generated<string>;
@@ -161,6 +161,7 @@ export interface IndicateurEntree {
   capacite: number | null;
   createdAt: Generated<Timestamp>;
   effectifs: number | null;
+  effectifsAnnee: Generated<string>;
   formationEtablissementId: string | null;
   id: Generated<string>;
   premiersVoeux: number | null;
