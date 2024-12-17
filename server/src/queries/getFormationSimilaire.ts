@@ -141,6 +141,7 @@ export async function getFormationsSimilaire(
                       )
                       .select("formationEtablissement.formationId as formationIdBase")
                       .select("cfd")
+                      .where("formation.id", "!=", formationId)
                       .as("results"),
                   (join) => join.onRef("formationSimilaire.formationRelatedId", "=", "results.formationIdBase")
                 )
