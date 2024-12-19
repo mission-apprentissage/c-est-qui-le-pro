@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.15.0...v1.16.0) (2024-12-19)
+
+
+### Features
+
+* affichage des admissions pour les bacs pro famille de metiers ([#23](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/23)) ([83b011d](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/83b011db8f31beeb5ea84edc40ee832c6c54f626))
+
 # [1.15.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.14.0...v1.15.0) (2024-12-17)
 
 
