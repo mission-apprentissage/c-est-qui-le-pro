@@ -196,7 +196,7 @@ cli
   .requiredOption("-i, --input <input>", "Dossier contenant les isochrones")
   .option("-c, --caPath <caPath>", "Fichier du certificat PostgreSQL")
   .requiredOption(
-    "-b, --buckets",
+    "-b, --buckets <buckets>",
     "Liste des durées des différents buckets en ordre décroissant (séparés par des virgules)",
     "5400,3600,2700,1800,900"
   )
