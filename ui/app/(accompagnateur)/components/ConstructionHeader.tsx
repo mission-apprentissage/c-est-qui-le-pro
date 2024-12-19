@@ -60,11 +60,12 @@ export default function ConstructionHeader() {
                 ou encore{" "}
                 <Link
                   noIcon
-                  href="mailto:contact@inserjeunes.beta.gouv.fr"
+                  target="_blank"
+                  href="https://tally.so/r/wz0AOR"
                   style={{ color: fr.colors.decisions.text.title.blueFrance.default, backgroundImage: "none" }}
                 >
                   <MailSendIcon style={{ verticalAlign: "text-top", marginLeft: "0.25rem", marginRight: "0.5rem" }} />
-                  Rejoindre l’expérimentation !
+                  Partager votre avis !
                 </Link>
               </Typography>
             </Box>

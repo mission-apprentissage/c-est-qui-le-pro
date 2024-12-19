@@ -1,5 +1,5 @@
 "use client";
-import Header from "@codegouvfr/react-dsfr/Header";
+import Header, { HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { css } from "@emotion/css";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -12,10 +12,9 @@ export default function CustomHeader({
 }: {
   title: string;
   tagline?: string;
-  quickAccessItems?: JSX.Element[];
+  quickAccessItems?: (JSX.Element | HeaderProps.QuickAccessItem)[];
   withBetaTag?: boolean;
 }) {
-
   return (
     <Header
       className={css`
@@ -27,6 +26,10 @@ export default function CustomHeader({
         }
         .${fr.cx("fr-header__tools")} {
           flex: 1 1 auto;
+        }
+
+        & .fr-btns-group li {
+          flex-direction: row-reverse;
         }
       `}
       brandTop={

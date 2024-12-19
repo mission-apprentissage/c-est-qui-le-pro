@@ -12,6 +12,7 @@ import { formatAccessTime, formatLibelle, formatStatut } from "#/app/utils/forma
 import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
 import { capitalize } from "lodash-es";
 import FormationsFamilleMetier from "./FormationFamilleMetier";
+import { SerializedStyles } from "@emotion/react";
 
 export default React.memo(function FormationCard({
   latitude,
@@ -21,10 +22,11 @@ export default React.memo(function FormationCard({
   onMouseEnter,
   onMouseLeave,
   tabIndex,
-  focusHighlight = false,
   withJPO = true,
   withDuration = true,
   style = undefined,
+  css = undefined,
+  className = undefined,
 }: {
   latitude: number;
   longitude: number;
@@ -33,10 +35,11 @@ export default React.memo(function FormationCard({
   onMouseEnter?: Function;
   onMouseLeave?: Function;
   tabIndex: number;
-  focusHighlight?: boolean;
   withJPO?: boolean;
   withDuration?: boolean;
   style?: React.CSSProperties;
+  css?: SerializedStyles;
+  className?: string;
 }) {
   const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
@@ -56,8 +59,8 @@ export default React.memo(function FormationCard({
       linkTarget="_blank"
       tabIndex={tabIndex}
       style={style}
+      className={className}
       type={"formation"}
-      focusHighlight={focusHighlight}
     >
       <Box style={{ padding: "1.25rem" }}>
         <Stack direction={"row"} spacing={1} useFlexGap sx={{ flexWrap: "wrap", marginBottom: fr.spacing("3v") }}>
