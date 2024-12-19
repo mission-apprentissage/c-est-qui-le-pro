@@ -21,6 +21,7 @@ export default React.memo(function FormationCard({
   onMouseEnter,
   onMouseLeave,
   tabIndex,
+  focusHighlight = false,
   withJPO = true,
   withDuration = true,
   style = undefined,
@@ -32,6 +33,7 @@ export default React.memo(function FormationCard({
   onMouseEnter?: Function;
   onMouseLeave?: Function;
   tabIndex: number;
+  focusHighlight?: boolean;
   withJPO?: boolean;
   withDuration?: boolean;
   style?: React.CSSProperties;
@@ -55,6 +57,7 @@ export default React.memo(function FormationCard({
       tabIndex={tabIndex}
       style={style}
       type={"formation"}
+      focusHighlight={focusHighlight}
     >
       <Box style={{ padding: "1.25rem" }}>
         <Stack direction={"row"} spacing={1} useFlexGap sx={{ flexWrap: "wrap", marginBottom: fr.spacing("3v") }}>

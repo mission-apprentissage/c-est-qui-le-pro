@@ -97,9 +97,13 @@ export default function FormationsFamilleMetier({
         css={css`
           margin: 0;
           & li {
-            font-size: ${small ? "0.875rem" : "1.125rem"};
+            font-size: ${small ? "1rem" : "1.125rem"};
             line-height: ${small ? "1.5rem" : "1.75rem"};
             padding-bottom: 0;
+          }
+
+          & li:not(:last-child) {
+            margin-bottom: ${small ? "0.25rem" : "0.25rem"};
           }
         `}
       >

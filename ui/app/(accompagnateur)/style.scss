@@ -1,3 +1,9 @@
+
+body {
+    --hover: #ECECFE;
+}
+
+
 [target=_blank]::after {
     -webkit-mask-image: url("../dsfr/icons/external-link-fill.svg") !important;
     mask-image: url("../dsfr/icons/external-link-fill.svg") !important;

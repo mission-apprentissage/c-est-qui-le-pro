@@ -1,6 +1,6 @@
 import { FormationDomaine, FormationTag } from "shared";
 import CalendarIcon from "#/app/components/icon/CalendarIcon";
-import { FrCxArg, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
+import { FrCxArg, FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
 import MoneyIcon from "../components/icon/MoneyIcon";
 
 export type FormationTagType = {
@@ -14,16 +14,16 @@ export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
     libelle: "TAUX D'INSERTION FAVORABLE",
-    color: "#18753c",
-    bgColor: "var(--success-975-75)",
+    color: fr.colors.decisions.text.default.success.default,
+    bgColor: fr.colors.decisions.background.contrast.success.default,
     icon: MoneyIcon,
   },
 
   {
     tag: FormationTag.FAIBLE_TAUX_PRESSION,
     libelle: "TAUX DE PRESSION FAIBLE",
-    color: "var(--info-425-625)",
-    bgColor: "var(--info-975-75)",
+    color: fr.colors.decisions.text.default.success.default,
+    bgColor: fr.colors.decisions.background.contrast.success.default,
     icon: CalendarIcon,
   },
 ];
