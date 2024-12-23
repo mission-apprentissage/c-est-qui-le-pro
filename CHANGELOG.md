@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.16.0...v1.17.0) (2024-12-23)
+
+
+### Features
+
+* formulaire de contact ([#24](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/24)) ([22aea54](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/22aea54c247a1063a5b1c838d1837d0c639e039c))
+
 # [1.16.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.15.0...v1.16.0) (2024-12-19)
 
 
