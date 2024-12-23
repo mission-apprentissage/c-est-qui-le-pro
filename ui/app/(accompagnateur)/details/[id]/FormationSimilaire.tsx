@@ -61,7 +61,6 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
             <Grow in={true} unmountOnExit key={`formation-similaire-${index}`}>
               <Grid item xs={12 / eltByLine}>
                 <FormationCard
-                  focusHighlight
                   formationDetail={formationDetail}
                   latitude={latitude}
                   longitude={longitude}
@@ -69,6 +68,15 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
                   tabIndex={index}
                   withDuration={false}
                   withJPO={false}
+                  css={css`
+                    &.MuiButtonBase-root:hover {
+                      background-color: white;
+                    }
+
+                    & .MuiCardActionArea-focusHighlight {
+                      display: block;
+                    }
+                  `}
                   style={{
                     height: "100%",
                     display: "flex",

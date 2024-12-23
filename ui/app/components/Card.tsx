@@ -13,7 +13,6 @@ export type CardProps = Omit<MUICardProps, "title"> & {
   selected?: boolean;
   actionProps?: CardActionAreaProps;
   type?: "details" | "formation";
-  focusHighlight?: boolean;
 };
 
 const StyledLink = styled(Link)`
@@ -122,21 +121,19 @@ export default styled(Card)<CardProps>`
     return !isNil(selected) && selected ? "background-color: var(--hover);" : "";
   }}
 
-  ${({ focusHighlight }) => {
-    return (
-      focusHighlight ||
-      `& .MuiCardActionArea-focusHighlight {
-  display: none;
-}`
-    );
-  }}
-
+  & .MuiCardActionArea-focusHighlight {
+    display: none;
+  }
 
   & .MuiButtonBase-root {
     background-color: white;
   }
 
   & .MuiButtonBase-root:hover {
+    background-color: var(--hover);
+  }
+
+  &.MuiButtonBase-root:hover {
     background-color: var(--hover);
   }
 

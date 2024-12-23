@@ -1,8 +1,12 @@
 
+:root { 
+    --background-raised-grey-hover: #ECECFE;
+    --background-default-grey-hover: #ECECFE;
+}
+
 body {
     --hover: #ECECFE;
 }
-
 
 [target=_blank]::after {
     -webkit-mask-image: url("../dsfr/icons/external-link-fill.svg") !important;

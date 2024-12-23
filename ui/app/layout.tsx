@@ -6,15 +6,30 @@ import "./(accompagnateur)/style.scss";
 import Title from "./(accompagnateur)/components/Title";
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
-import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
 import ConstructionHeader from "./(accompagnateur)/components/ConstructionHeader";
+import Button from "./components/Button";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
     <RootLayout>
       <>
         <Title />
-        <Layout header={<Header title={title} tagline={tagline} />} title={title}>
+        <Layout
+          header={
+            <Header
+              title={title}
+              tagline={tagline}
+              quickAccessItems={[
+                <Link key={"donner-votre-avis"} noIcon target="_blank" href="https://tally.so/r/wz0AOR">
+                  <Button iconId="ri-emotion-happy-fill" priority="tertiary">
+                    Donner votre avis
+                  </Button>
+                </Link>,
+              ]}
+            />
+          }
+          title={title}
+        >
           <div>
             <ConstructionHeader />
             {children}
@@ -47,6 +62,10 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 {
                   text: "Documentation",
                   linkProps: { href: "/documentation", target: "_blank" },
+                },
+                {
+                  text: "Nous contacter",
+                  linkProps: { href: "https://tally.so/r/wz0AOR", target: "_blank" },
                 },
               ]}
             />
