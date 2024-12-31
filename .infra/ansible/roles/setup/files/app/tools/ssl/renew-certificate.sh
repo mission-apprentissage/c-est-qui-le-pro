@@ -11,17 +11,17 @@ start_reverse_proxy() {
 }
 
 stop_reverse_proxy() {
-  bash /opt/accompagnateur/stop-app.sh accompagnateur_pro_reverse_proxy --no-deps reverse_proxy
+  bash /opt/accompagnateur/stop-app.sh accompagnateur_reverse_proxy --no-deps reverse_proxy
 }
 
 renew_certificate() {
   cd "${SCRIPT_DIR}"
-  docker build --tag accompagnateur_pro_certbot certbot/
-  docker run --rm --name accompagnateur_pro_certbot \
+  docker build --tag accompagnateur_certbot certbot/
+  docker run --rm --name accompagnateur_certbot \
     -p 80:5000 \
     -v /opt/accompagnateur/data/certbot:/etc/letsencrypt \
     -v /opt/accompagnateur/data/ssl:/ssl \
-    accompagnateur_pro_certbot renew "${DNS_NAMES[@]}"
+    accompagnateur_certbot renew "${DNS_NAMES[@]}"
   cd -
 }
 
