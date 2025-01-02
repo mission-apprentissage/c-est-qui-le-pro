@@ -55,21 +55,21 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
                 formationDetail={formationDetail}
                 id="la-formation"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "0.5rem" }}
               ></FormationBlockFormation>
 
               <FormationBlockAdmission
                 formationDetail={formationDetail}
                 id="l-admission"
                 css={cssAnchor}
-                style={{ marginBottom: "2.5rem" }}
+                style={{ marginBottom: "2rem" }}
               />
 
               <FormationBlockPoursuite
                 formation={formation}
                 id="poursuite-etudes"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "0.5rem" }}
               />
 
               <FormationBlockAccesEmploi

@@ -72,16 +72,16 @@ async function importLienMef(lienMefFamilleMetierFilePath) {
         return null;
       }
 
-      return { formation, familleMetier };
+      return { formation, familleMetier, isAnneeCommune: data["tag"] === "2NDE PRO COMMUNE" };
     }),
     filterData((d) => d),
     writeData(
-      async ({ formation, familleMetier }) => {
+      async ({ formation, familleMetier, isAnneeCommune }) => {
         stats.total++;
 
         const formatted = {
           familleMetierId: familleMetier.id,
-          isAnneeCommune: formation.mef11[3] === "1", // On prend la 1ère année = seconde commune
+          isAnneeCommune,
         };
 
         try {
