@@ -3,7 +3,7 @@ import Tag, { TagApprentissage as StyledTagApprentissage } from "#/app/component
 import { Formation } from "shared";
 import "moment/locale/fr";
 
-export function TagApprentissage({ formation }: { formation: Formation }) {
+export const TagApprentissage = React.memo(function ({ formation }: { formation: Formation }) {
   return (
     formation.voie === "apprentissage" && (
       <Tag
@@ -17,8 +17,10 @@ export function TagApprentissage({ formation }: { formation: Formation }) {
       </Tag>
     )
   );
-}
+});
+TagApprentissage.displayName = "TagApprentissage";
 
-export function LabelApprentissage({ formation }: { formation: Formation }) {
+export const LabelApprentissage = React.memo(function ({ formation }: { formation: Formation }) {
   return formation.voie === "apprentissage" && <StyledTagApprentissage>Alternance</StyledTagApprentissage>;
-}
+});
+LabelApprentissage.displayName = "LabelApprentissage";

@@ -9,7 +9,7 @@ import { Etablissement } from "shared";
 import { formatPortesOuvertes } from "#/app/(accompagnateur)/components/PortesOuvertes";
 import Link from "#/app/components/Link";
 
-const PortesOuvertesHeader = ({ etablissement }: { etablissement: Etablissement }) => {
+const PortesOuvertesHeader = React.memo(({ etablissement }: { etablissement: Etablissement }) => {
   const theme = useTheme();
   const strPortesOuvertes = useMemo(() => formatPortesOuvertes(etablissement), [etablissement]);
   const url = etablissement?.onisepId
@@ -49,6 +49,8 @@ const PortesOuvertesHeader = ({ etablissement }: { etablissement: Etablissement 
   ) : (
     <></>
   );
-};
+});
+
+PortesOuvertesHeader.displayName = "PortesOuvertesHeader";
 
 export default PortesOuvertesHeader;

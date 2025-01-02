@@ -3,7 +3,7 @@
 import React, { Suspense, useCallback, useMemo, useState } from "react";
 import { css } from "@emotion/react";
 import { useInView } from "react-intersection-observer";
-import { Typography, Grid } from "../../components/MaterialUINext";
+import { Typography, Grid, Grid2 } from "../../components/MaterialUINext";
 import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -67,7 +67,7 @@ const FormationResult = React.memo(
 
     return (
       <Grid item xs={12} ref={formationRef}>
-        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" }, paddingRight: { lg: "0", xl: "6rem" } }}>
+        <Box sx={{ maxWidth: { xs: "100%", lg: "100%" } }}>
           <FormationCard
             selected={isSelected}
             onMouseEnter={cb}
@@ -146,19 +146,21 @@ export default function ResearchFormationsResult({
         <ClientSideScrollRestorer />
       </Suspense>
 
-      <Grid container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
-        <Grid
-          item
+      <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
+        <Grid2
           md={8}
           lg={8}
           xl={8}
           sm={12}
           css={css`
+            max-width: 784px;
             padding: 1.5rem;
+            padding-left: 2.5rem;
+            padding-right: 3rem;
             z-index: 500;
             width: 100%;
             ${theme.breakpoints.up("lg")} {
-              padding-left: 1.75rem;
+              padding-left: 2.5rem;
             }
           `}
         >
@@ -193,7 +195,7 @@ export default function ResearchFormationsResult({
             </InformationCard>
           ) : (
             <>
-              <Grid container spacing={2}>
+              <Grid container rowSpacing={2}>
                 <Grid item xs={12}>
                   <Typography variant="h6">
                     À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
@@ -249,19 +251,15 @@ export default function ResearchFormationsResult({
               )}
             </>
           )}
-        </Grid>
+        </Grid2>
 
-        <Grid
-          item
-          sm={12}
-          md={4}
-          lg={4}
-          xl={4}
+        <Grid2
+          xs
           css={css`
-            width: 100%;
             top: 0;
             position: sticky;
             height: 100vh;
+            width: 100%;
             ${theme.breakpoints.down("md")} {
               height: 40vh;
               z-index: 600;
@@ -289,8 +287,8 @@ export default function ResearchFormationsResult({
               }}
             />
           )}
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
     </>
