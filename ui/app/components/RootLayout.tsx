@@ -5,6 +5,7 @@ import { defaultColorScheme } from "#/app/defaultColorScheme";
 import Link from "next/link";
 import { LogRocketInitializer } from "./LogRocketInitializer";
 import { Plausible } from "./Plausible";
+import { MatomoAnalytics } from "../(accompagnateur)/components/Matomo";
 import { Suspense } from "react";
 
 export default function RootLayout({ title, children }: { title?: string; children: JSX.Element }) {
@@ -41,6 +42,7 @@ export default function RootLayout({ title, children }: { title?: string; childr
         />
         <Suspense>
           <Plausible />
+          <MatomoAnalytics />
           <LogRocketInitializer />
         </Suspense>
       </head>
