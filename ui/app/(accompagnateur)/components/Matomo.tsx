@@ -18,7 +18,6 @@ export function MatomoAnalytics() {
   const { finalityConsent } = useConsent();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const isInitialLoad = useRef(true);
 
   const searchParamsString = searchParams.toString();
 
