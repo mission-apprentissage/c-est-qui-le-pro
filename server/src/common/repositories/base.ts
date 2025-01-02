@@ -3,18 +3,25 @@ import {
   AnyAliasedColumn,
   AnyColumn,
   ExpressionBuilder,
+  InsertType,
   Kysely,
   OnConflictDatabase,
   OnConflictTables,
   Updateable,
+  ValueExpression,
 } from "kysely";
 import { UpdateObjectExpression } from "kysely/dist/cjs/parser/update-set-parser";
 import { ExtractTableAlias } from "kysely/dist/cjs/parser/table-parser";
 import { upsert } from "../db/db";
 import { InsertExpression } from "kysely/dist/cjs/parser/insert-values-parser";
+
 import { Readable } from "stream";
 import { compose, transformData } from "oleoduc";
 import { Entries } from "shared";
+
+export type WhereObject<DB, TB extends keyof DB> = {
+  [C in keyof DB[TB]]: ValueExpression<DB, TB, InsertType<DB[TB][C]>>;
+};
 
 export class Repository {}
 
@@ -33,13 +40,13 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return this.kdb.insertInto(this.tableName).values(data).returningAll().execute();
   }
 
-  async remove(where: Partial<DB[F]>) {
+  async remove(where: Partial<WhereObject<DB, F>>) {
     const query = this.kdb.deleteFrom(this.tableName);
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
     return queryCond.returningAll().execute();
   }
 
-  async find(where: Partial<DB[F]>, returnStream = true) {
+  async find(where: Partial<WhereObject<DB, F>>, returnStream = true) {
     const query = this.kdb.selectFrom(this.tableName).selectAll();
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 
@@ -50,7 +57,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return compose(Readable.from(queryCond.stream()));
   }
 
-  async first(where: Partial<DB[F]>) {
+  async first(where: Partial<WhereObject<DB, F>>) {
     const query = this.kdb.selectFrom(this.tableName).selectAll();
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 
@@ -66,7 +73,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return upsert(this.kdb, this.tableName, keys, data, onConflictData, returningKeys);
   }
 
-  updateBy(data: Updateable<DB[F]>, where: Partial<DB[F]> | null = null) {
+  updateBy(data: Updateable<DB[F]>, where: Partial<WhereObject<DB, F>> | null = null) {
     const query = this.kdb
       .updateTable(this.tableName)
       .set(
@@ -115,11 +122,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     );
   }
 
-  _createWhere<E extends ExpressionBuilder<DB, F>, T extends { [key in keyof DB[F]]: string }>(
-    eb: E,
-    query: Partial<T>,
-    alias?: string
-  ) {
+  _createWhere<E extends ExpressionBuilder<DB, F>>(eb: E, query: Partial<WhereObject<DB, F>>, alias?: string) {
     return (Object.entries(query) as Entries<typeof query>).map(([key, value]) => {
       if (value === null) {
         return eb(`${alias ? `${alias}.` : ""}${key.toString()}` as any, "is", null);
