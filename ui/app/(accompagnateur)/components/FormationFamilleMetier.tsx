@@ -72,7 +72,7 @@ export default function FormationsFamilleMetier({
 }) {
   const formations = useMemo(() => {
     return formationDetail.formationsFamilleMetier?.filter((f) => f.formation.isAnneeCommune === anneeCommune);
-  }, [formationDetail]);
+  }, [anneeCommune, formationDetail]);
 
   if (!formations || formations.length === 0) {
     return;

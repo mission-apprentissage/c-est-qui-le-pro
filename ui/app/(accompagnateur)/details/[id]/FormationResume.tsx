@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { useCallback } from "react";
-import { Typography, Grid, Stack, Box } from "#/app/components/MaterialUINext";
+import { useCallback, useEffect, useState } from "react";
+import { Typography, Grid, Stack, Box, BoxContainer } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
 import { Formation, FormationDetail, FormationEtablissement, THRESHOLD_TAUX_PRESSION } from "shared";
@@ -10,18 +10,23 @@ import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { isNil } from "lodash-es";
+import React from "react";
+import Divider from "#/app/components/Divider";
+import { useScrollspy } from "../../hooks/useScrollSpy";
+import { useSize } from "../../hooks/useSize";
+import { useFormationsDetailsHeadersSize } from "../../context/FormationDetailsHeaderContext";
+import { Theme } from "@mui/material";
 
-function FormationResumeBlock({
-  title,
-  icon,
-  children,
-  anchor,
-}: {
+interface FormationResumeBlockProps {
   title: string;
   icon: FrCxArg;
   children?: JSX.Element | JSX.Element[];
   anchor?: string;
-}) {
+  hideTag?: boolean;
+  isActive?: boolean;
+}
+
+function FormationResumeBlock({ title, icon, children, anchor, hideTag, isActive }: FormationResumeBlockProps) {
   const { push } = useRouter();
   const anchorCb = useCallback(() => {
     if (!anchor) {
@@ -40,6 +45,10 @@ function FormationResumeBlock({
               :hover .resumeUnderline {
                 opacity: 100;
               }
+
+              :hover {
+                color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
+              }
             `
           : null
       }
@@ -47,7 +56,7 @@ function FormationResumeBlock({
       <Box
         css={css`
           display: inline-block;
-          margin-bottom: 0.8rem;
+          color: ${isActive ? `${fr.colors.decisions.background.actionHigh.blueFrance.hover}` : "inherit"};
         `}
       >
         <Typography variant={"body1"}>
@@ -56,19 +65,27 @@ function FormationResumeBlock({
         </Typography>
         {anchor && (
           <Box
-            className="resumeUnderline"
+            className={`resumeUnderline`}
             css={css`
-              border-top: 3px solid black;
+              border-top: 3px solid ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
               margin-top: 0.25rem;
-              opacity: 0;
+              opacity: ${isActive ? "100" : "0"};
             `}
           ></Box>
         )}
       </Box>
 
-      <Stack direction={{ sm: "column", md: "column" }} spacing={{ xs: fr.spacing("2v"), sm: fr.spacing("2v") }}>
-        {children}
-      </Stack>
+      {!hideTag && (
+        <Stack
+          css={css`
+            margin-top: 0.8rem;
+          `}
+          direction={{ sm: "column", md: "column" }}
+          spacing={{ xs: fr.spacing("2v"), sm: fr.spacing("2v") }}
+        >
+          {children}
+        </Stack>
+      )}
     </Box>
   );
 }
@@ -76,10 +93,11 @@ function FormationResumeBlock({
 function FormationResumeBlockAdmission({
   formationEtablissement,
   formation,
+  ...formationResumeBlockProps
 }: {
   formationEtablissement: FormationEtablissement;
   formation: Formation;
-}) {
+} & Partial<FormationResumeBlockProps>) {
   const { tauxPression, effectifs, capacite } = formationEtablissement?.indicateurEntree || {};
   const admissionLevel =
     tauxPression === undefined
@@ -91,7 +109,12 @@ function FormationResumeBlockAdmission({
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'admission"} icon={"ri-calendar-check-line"} anchor="l-admission">
+    <FormationResumeBlock
+      {...formationResumeBlockProps}
+      title={"L'admission"}
+      icon={"ri-calendar-check-line"}
+      anchor="l-admission"
+    >
       <>
         {admissionLevel === "easy" && (
           <>
@@ -136,7 +159,12 @@ function FormationResumeBlockAdmission({
   );
 }
 
-function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+function FormationResumeBlockEmploi({
+  formationEtablissement,
+  ...formationResumeBlockProps
+}: {
+  formationEtablissement: FormationEtablissement;
+} & Partial<FormationResumeBlockProps>) {
   const tauxEmploi = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
   const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
 
@@ -150,7 +178,12 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
       : "hard";
 
   return (
-    <FormationResumeBlock title={"L'accès à l'emploi"} icon={"ri-briefcase-4-line"} anchor="acces-emploi">
+    <FormationResumeBlock
+      {...formationResumeBlockProps}
+      title={"L'accès à l'emploi"}
+      icon={"ri-briefcase-4-line"}
+      anchor="acces-emploi"
+    >
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -183,7 +216,12 @@ function FormationResumeBlockEmploi({ formationEtablissement }: { formationEtabl
   );
 }
 
-function FormationResumeBlockEtude({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
+function FormationResumeBlockEtude({
+  formationEtablissement,
+  ...formationResumeBlockProps
+}: {
+  formationEtablissement: FormationEtablissement;
+} & Partial<FormationResumeBlockProps>) {
   const tauxFormation = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
   const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
 
@@ -197,7 +235,12 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
       : "hard";
 
   return (
-    <FormationResumeBlock title={"La poursuite d'études"} icon={"ri-sun-line"} anchor={"poursuite-etudes"}>
+    <FormationResumeBlock
+      {...formationResumeBlockProps}
+      title={"La poursuite d'études"}
+      icon={"ri-sun-line"}
+      anchor={"poursuite-etudes"}
+    >
       <>
         {admissionLevel === "easy" && (
           <Tag square level="easy">
@@ -230,26 +273,48 @@ function FormationResumeBlockEtude({ formationEtablissement }: { formationEtabli
   );
 }
 
-export default function FormationResume({
+const FormationResume = React.memo(function ({
   formationDetail: { formation, formationEtablissement },
+  hideTag,
 }: {
   formationDetail: FormationDetail;
+  hideTag?: boolean;
 }) {
-  const theme = useTheme();
+  const [currentSection, setCurrentSection] = useState("la-formation");
+  const { headersSize } = useFormationsDetailsHeadersSize();
+  const activeId = useScrollspy(
+    ["la-formation", "l-admission", "poursuite-etudes", "acces-emploi"],
+    headersSize.headerHeight + headersSize.resumeHeight + 1
+  );
+
+  useEffect(() => {
+    if (activeId) {
+      setCurrentSection(activeId);
+    }
+  }, [activeId]);
 
   return (
     <Container
       maxWidth={false}
       css={css`
         background-color: #fff;
-        ${theme.breakpoints.down("md")} {
-          padding-left: ${fr.spacing("5v")};
-        }
       `}
     >
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={2}
+        css={css`
+          background-color: #fff;
+        `}
+      >
         <Grid item xs={12} md={3}>
-          <FormationResumeBlock title={"La formation"} icon={"ri-graduation-cap-line"} anchor="la-formation">
+          <FormationResumeBlock
+            hideTag={hideTag}
+            title={"La formation"}
+            icon={"ri-graduation-cap-line"}
+            anchor="la-formation"
+            isActive={currentSection === "la-formation"}
+          >
             {formation.voie === "scolaire" ? (
               <>
                 <Tag square variant="purple-light">
@@ -272,15 +337,97 @@ export default function FormationResume({
           </FormationResumeBlock>
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockAdmission formation={formation} formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockAdmission
+            hideTag={hideTag}
+            formation={formation}
+            formationEtablissement={formationEtablissement}
+            isActive={currentSection === "l-admission"}
+          />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEtude formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockEtude
+            hideTag={hideTag}
+            formationEtablissement={formationEtablissement}
+            isActive={currentSection === "poursuite-etudes"}
+          />
         </Grid>
         <Grid item xs={12} md={3}>
-          <FormationResumeBlockEmploi formationEtablissement={formationEtablissement} />
+          <FormationResumeBlockEmploi
+            hideTag={hideTag}
+            formationEtablissement={formationEtablissement}
+            isActive={currentSection === "acces-emploi"}
+          />
         </Grid>
       </Grid>
     </Container>
   );
-}
+});
+FormationResume.displayName = "FormationResume";
+
+const FormationResumeHideTagFix = React.memo(function ({
+  formationDetail,
+  hideTag,
+}: {
+  formationDetail: FormationDetail;
+  hideTag?: boolean;
+}) {
+  const theme = useTheme();
+  const { _, setHeadersSize } = useFormationsDetailsHeadersSize();
+  const refResume = React.useRef<HTMLElement>(null);
+  const stickyResumeSize = useSize(refResume);
+
+  useEffect(() => {
+    setHeadersSize({ resumeHeight: stickyResumeSize?.height || 0 });
+  }, [setHeadersSize, stickyResumeSize]);
+
+  return (
+    <BoxContainer>
+      <Box style={{ display: "grid", gridTemplateColumns: "1fr" }}>
+        <Box style={{ gridRowStart: 1, gridColumnStart: 1 }}>
+          <Box
+            css={css`
+              backgroundcolor: #fff;
+            `}
+          >
+            <BoxContainer
+              maxWidth={"xl"}
+              css={css`
+                pointer-events: auto;
+                padding-left: 1.25rem;
+              `}
+            >
+              <FormationResume formationDetail={formationDetail} hideTag={hideTag} />
+
+              <Divider
+                variant="middle"
+                style={{
+                  marginBottom: 0,
+                }}
+              />
+            </BoxContainer>
+          </Box>
+        </Box>
+        <Box style={{ gridRowStart: 1, gridColumnStart: 1, visibility: "hidden" }}>
+          <BoxContainer
+            maxWidth={"xl"}
+            css={css`
+              pointer-events: auto;
+              ${theme.breakpoints.up("md")} {
+                padding-left: 1.25rem;
+              }
+            `}
+            ref={refResume}
+          >
+            {hideTag !== undefined && <FormationResume hideTag={true} formationDetail={formationDetail} />}
+          </BoxContainer>
+        </Box>
+        <Box style={{ gridRowStart: 1, gridColumnStart: 1, visibility: "hidden" }}>
+          <FormationResume formationDetail={formationDetail} />
+        </Box>
+      </Box>
+    </BoxContainer>
+  );
+});
+FormationResumeHideTagFix.displayName = "FormationResumeHideTagFix";
+
+export default FormationResumeHideTagFix;

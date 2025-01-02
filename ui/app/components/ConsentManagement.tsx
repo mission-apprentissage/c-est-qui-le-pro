@@ -35,7 +35,7 @@ export const {
       if (disableTrackingParams !== null) {
         saveDisableTracking(disableTrackingParams);
       }
-    }, [disableTrackingParams]);
+    }, [saveDisableTracking, disableTrackingParams]);
 
     return {
       finalityConsent: { analytics: !disableTracking },

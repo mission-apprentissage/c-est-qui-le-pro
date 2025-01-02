@@ -23,8 +23,8 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
   const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
   const latitude = location.latitude ?? formationDetail.etablissement.latitude ?? 0;
 
-  const eltByLine = isSm ? 1 : isMd ? 1 : isLg ? 1 : 1;
-  const lineMultiplier = isSm ? 4 : 4;
+  const eltByLine = isSm ? 1 : isMd ? 3 : isLg ? 3 : 3;
+  const lineMultiplier = isSm ? 4 : 1;
   const [lineToDisplay, setLineToDisplay] = useState(1);
   const totalDisplay = eltByLine * lineToDisplay * lineMultiplier;
 
