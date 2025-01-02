@@ -372,7 +372,7 @@ const FormationResumeHideTagFix = React.memo(function ({
   hideTag?: boolean;
 }) {
   const theme = useTheme();
-  const { _, setHeadersSize } = useFormationsDetailsHeadersSize();
+  const { headersSize, setHeadersSize } = useFormationsDetailsHeadersSize();
   const refResume = React.useRef<HTMLElement>(null);
   const stickyResumeSize = useSize(refResume);
 
