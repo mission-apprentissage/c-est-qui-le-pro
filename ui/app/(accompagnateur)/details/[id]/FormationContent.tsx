@@ -26,9 +26,9 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
 
   const cssAnchor = css`
     ${theme.breakpoints.up("md")} {
-      scroll-margin-top: calc(${headersSize.headerHeight}px + ${headersSize.resumeHeight || 0}px);
+      scroll-margin-top: calc(${headersSize.headerHeight}px + ${headersSize.resumeHeight || 0}px + 2px);
     }
-    scroll-margin-top: calc(${headersSize.headerHeight || 0}px);
+    scroll-margin-top: calc(${headersSize.headerHeight || 0}px + 2px);
   `;
 
   useScrollToLocation();

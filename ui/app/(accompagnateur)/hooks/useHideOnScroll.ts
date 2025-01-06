@@ -1,7 +1,7 @@
 import { useWindowScroll } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 
-export const useHideOnScroll = (ref: React.RefObject<HTMLElement>) => {
+export const useHideOnScroll = (ref: React.RefObject<HTMLElement>, offset: number) => {
   const [hide, setHide] = useState(true);
   const [scrollPosition] = useWindowScroll();
 
@@ -14,12 +14,12 @@ export const useHideOnScroll = (ref: React.RefObject<HTMLElement>) => {
     const headerStyle = window.getComputedStyle(ref.current);
     const marginSize = parseFloat(headerStyle.marginTop);
 
-    if (boundingBox.y <= marginSize) {
+    if (boundingBox.y - offset <= marginSize) {
       setHide(true);
-    } else if (boundingBox.y > marginSize) {
+    } else if (boundingBox.y - offset > marginSize + 1) {
       setHide(false);
     }
-  }, [ref, scrollPosition]);
+  }, [ref, scrollPosition, offset]);
 
   return hide;
 };

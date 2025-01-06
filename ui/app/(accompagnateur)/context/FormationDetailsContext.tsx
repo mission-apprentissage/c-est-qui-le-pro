@@ -16,9 +16,13 @@ type DetailsHeaderSizeParams = {
 const FormationDetailsContext = createContext<{
   headersSize: DetailsHeaderSize;
   setHeadersSize: (params: DetailsHeaderSizeParams) => void;
+  resumeCollapse?: boolean;
+  setResumeCollapse: (v: boolean | undefined) => void;
 }>({
   headersSize: { headerHeight: 0, resumeHeight: 0 },
   setHeadersSize: (params: DetailsHeaderSizeParams) => {},
+  resumeCollapse: undefined,
+  setResumeCollapse: (v: boolean | undefined) => {},
 });
 
 const FormationDetailsProvider = ({
@@ -29,6 +33,7 @@ const FormationDetailsProvider = ({
   children: React.ReactNode;
 }) => {
   const [headersSize, setHeadersSize] = useState({ headerHeight: 0, resumeHeight: 0 });
+  const [resumeCollapse, setResumeCollapse] = useState<boolean | undefined>(undefined);
   const matomo = useMatomo();
 
   useEffect(() => {
@@ -48,6 +53,8 @@ const FormationDetailsProvider = ({
       value={{
         headersSize,
         setHeadersSize: setHeaderSizeCb,
+        resumeCollapse,
+        setResumeCollapse,
       }}
     >
       {children}

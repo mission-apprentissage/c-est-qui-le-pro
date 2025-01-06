@@ -15,7 +15,8 @@ import Divider from "#/app/components/Divider";
 import { useScrollspy } from "../../hooks/useScrollSpy";
 import { useSize } from "../../hooks/useSize";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
-import { Theme } from "@mui/material";
+import { Theme, useMediaQuery } from "@mui/material";
+import { useHideOnScroll } from "../../hooks/useHideOnScroll";
 
 interface FormationResumeBlockProps {
   title: string;
@@ -284,7 +285,7 @@ const FormationResume = React.memo(function ({
   const { headersSize } = useFormationsDetails();
   const activeId = useScrollspy(
     ["la-formation", "l-admission", "poursuite-etudes", "acces-emploi"],
-    headersSize.headerHeight + headersSize.resumeHeight + 1
+    headersSize.headerHeight + headersSize.resumeHeight + 3
   );
 
   useEffect(() => {
@@ -364,21 +365,22 @@ const FormationResume = React.memo(function ({
 });
 FormationResume.displayName = "FormationResume";
 
-const FormationResumeHideTagFix = React.memo(function ({
-  formationDetail,
-  hideTag,
-}: {
-  formationDetail: FormationDetail;
-  hideTag?: boolean;
-}) {
+const FormationResumeHideTagFix = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
-  const { headersSize, setHeadersSize } = useFormationsDetails();
+  const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
+  const { headersSize, setHeadersSize, setResumeCollapse } = useFormationsDetails();
   const refResume = React.useRef<HTMLElement>(null);
   const stickyResumeSize = useSize(refResume);
+  const hideonScroll = useHideOnScroll(refResume, headersSize.headerHeight + 2);
+  const hideResumeTag = isDownSm ? undefined : hideonScroll;
 
   useEffect(() => {
     setHeadersSize({ resumeHeight: stickyResumeSize?.height || 0 });
   }, [setHeadersSize, stickyResumeSize]);
+
+  useEffect(() => {
+    setResumeCollapse(hideResumeTag);
+  }, [hideResumeTag]);
 
   return (
     <BoxContainer>
@@ -396,7 +398,7 @@ const FormationResumeHideTagFix = React.memo(function ({
                 padding-left: 1.25rem;
               `}
             >
-              <FormationResume formationDetail={formationDetail} hideTag={hideTag} />
+              <FormationResume formationDetail={formationDetail} hideTag={hideResumeTag} />
 
               <Divider
                 variant="middle"
@@ -418,7 +420,7 @@ const FormationResumeHideTagFix = React.memo(function ({
             `}
             ref={refResume}
           >
-            {hideTag !== undefined && <FormationResume hideTag={true} formationDetail={formationDetail} />}
+            {hideResumeTag !== undefined && <FormationResume hideTag={true} formationDetail={formationDetail} />}
           </BoxContainer>
         </Box>
         <Box style={{ gridRowStart: 1, gridColumnStart: 1, visibility: "hidden" }}>

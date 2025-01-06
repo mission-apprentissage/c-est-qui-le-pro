@@ -20,7 +20,6 @@ import Link from "#/app/components/Link";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
-import { useHideOnScroll } from "../../hooks/useHideOnScroll";
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
@@ -28,14 +27,9 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
   const longitude = searchParams.get("longitude");
   const latitude = searchParams.get("latitude");
 
-  const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
-
-  const { headersSize, setHeadersSize } = useFormationsDetails();
+  const { setHeadersSize, resumeCollapse } = useFormationsDetails();
   const refHeader = React.useRef<HTMLElement>(null);
   const stickyHeaderSize = useSize(refHeader);
-
-  const hideonScroll = useHideOnScroll(refHeader);
-  const hideResumeTag = isDownSm ? undefined : hideonScroll;
 
   const { formationEtablissement, formation, etablissement } = formationDetail;
 
@@ -109,6 +103,8 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
           background-color: #fff;
           z-index: 99;
           display: flex;
+
+          visibility: ${resumeCollapse ? "hidden" : "inherit"};
         `}
       >
         <Grid container>
@@ -214,7 +210,7 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
         >
           <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
         </BoxContainer>
-        <FormationResume formationDetail={formationDetail} hideTag={hideResumeTag} />
+        <FormationResume formationDetail={formationDetail} />
       </BoxContainer>
     </>
   );
