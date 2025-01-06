@@ -26,7 +26,7 @@ async function importFormationSimilaireSecondeCommune() {
       const formationSimilaire = [];
       for (const formation of formations) {
         const formations = (await FormationSimilaireRepository.find({ formationId: formation.id }, false)).map((f) => ({
-          id: f.formationId,
+          id: f.formationRelatedId,
           similarityOrder: f.similarityOrder,
         }));
         formationSimilaire.push(...formations);
