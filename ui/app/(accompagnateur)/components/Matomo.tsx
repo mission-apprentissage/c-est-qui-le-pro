@@ -14,7 +14,7 @@ function sanitizeUrl(str: string): string {
   return strSanitized;
 }
 
-export function MatomoAnalytics() {
+export function Matomo() {
   const { finalityConsent } = useConsent();
   const searchParams = useSearchParams();
   const pathname = usePathname();

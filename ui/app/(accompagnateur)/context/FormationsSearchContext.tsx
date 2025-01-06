@@ -1,9 +1,10 @@
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { FormationDomaine, FormationTag } from "shared";
-import { usePlausible } from "next-plausible";
+import { useMatomo } from "../hooks/useMatomo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
+import { omit } from "lodash-es";
 
 type FormationsSearchParams = {
   address: string;
@@ -23,18 +24,16 @@ const FormationsSearchContext = createContext<{
 });
 
 const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) => {
-  const plausible = usePlausible();
+  const { push } = useMatomo();
   const router = useRouter();
   const searchParams = useSearchParams();
   const params = searchParamsToObject(searchParams, { address: null, tag: null, domaine: null }, schemaFormation);
 
   useEffect(() => {
-    plausible("recherche", {
-      props: {
-        ...params,
-      },
+    Object.entries(omit(params, ["address"])).forEach(([key, value]) => {
+      push(["trackEvent", "recherche", "recherche", key, value]);
     });
-  }, [plausible, searchParams, params]);
+  }, [push, searchParams, params]);
 
   const getUrlParams = useCallback(() => {
     const urlSearchParams = paramsToString(params);
