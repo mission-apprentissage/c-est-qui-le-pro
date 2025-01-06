@@ -31,7 +31,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
 
   useEffect(() => {
     Object.entries(omit(params, ["address"])).forEach(([key, value]) => {
-      push(["trackEvent", "recherche", "recherche", key, value]);
+      push(["trackEvent", "recherche", key, value]);
     });
   }, [push, searchParams, params]);
 
