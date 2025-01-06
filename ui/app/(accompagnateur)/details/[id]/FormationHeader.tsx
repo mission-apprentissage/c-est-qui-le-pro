@@ -19,7 +19,7 @@ import FormationDisponible from "./FormationDisponible";
 import Link from "#/app/components/Link";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
-import { useFormationsDetailsHeadersSize } from "../../context/FormationDetailsHeaderContext";
+import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { useHideOnScroll } from "../../hooks/useHideOnScroll";
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
@@ -30,7 +30,7 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
 
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
 
-  const { headersSize, setHeadersSize } = useFormationsDetailsHeadersSize();
+  const { headersSize, setHeadersSize } = useFormationsDetails();
   const refHeader = React.useRef<HTMLElement>(null);
   const stickyHeaderSize = useSize(refHeader);
 

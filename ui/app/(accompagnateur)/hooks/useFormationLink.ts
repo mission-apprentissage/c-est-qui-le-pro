@@ -1,6 +1,16 @@
 import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import { useSearchParams } from "next/navigation";
 
+export function formationDetailToKey(formationDetail: FormationDetail | FormationFamilleMetierDetail) {
+  if (!formationDetail || !formationDetail.etablissement) {
+    return null;
+  }
+
+  return `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
+    formationDetail.etablissement.uai
+  }-${formationDetail.formation.voie}`;
+}
+
 export const useFormationLink = ({
   formationDetail,
   longitude,
@@ -18,9 +28,7 @@ export const useFormationLink = ({
     return null;
   }
 
-  const key = `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
-    formationDetail.etablissement.uai
-  }-${formationDetail.formation.voie}`;
+  const key = formationDetailToKey(formationDetail);
   const parameters = new URLSearchParams({
     ...(latitudeParams ? { latitude: latitudeParams } : {}),
     ...(longitudeParams ? { longitude: longitudeParams } : {}),

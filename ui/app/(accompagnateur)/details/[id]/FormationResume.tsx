@@ -14,7 +14,7 @@ import React from "react";
 import Divider from "#/app/components/Divider";
 import { useScrollspy } from "../../hooks/useScrollSpy";
 import { useSize } from "../../hooks/useSize";
-import { useFormationsDetailsHeadersSize } from "../../context/FormationDetailsHeaderContext";
+import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { Theme } from "@mui/material";
 
 interface FormationResumeBlockProps {
@@ -281,7 +281,7 @@ const FormationResume = React.memo(function ({
   hideTag?: boolean;
 }) {
   const [currentSection, setCurrentSection] = useState("la-formation");
-  const { headersSize } = useFormationsDetailsHeadersSize();
+  const { headersSize } = useFormationsDetails();
   const activeId = useScrollspy(
     ["la-formation", "l-admission", "poursuite-etudes", "acces-emploi"],
     headersSize.headerHeight + headersSize.resumeHeight + 1
@@ -372,7 +372,7 @@ const FormationResumeHideTagFix = React.memo(function ({
   hideTag?: boolean;
 }) {
   const theme = useTheme();
-  const { headersSize, setHeadersSize } = useFormationsDetailsHeadersSize();
+  const { headersSize, setHeadersSize } = useFormationsDetails();
   const refResume = React.useRef<HTMLElement>(null);
   const stickyResumeSize = useSize(refResume);
 

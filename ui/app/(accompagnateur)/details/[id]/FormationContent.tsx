@@ -15,16 +15,14 @@ import FormationBlockAdmission from "./FormationBlockAdmission";
 import FormationBlockFormation from "./FormationBlockFormation";
 import FormationBlockAccesEmploi from "./FormationBlockAccesEmploi";
 import FormationSimilare from "./FormationSimilaire";
-import FormationDetailsHeaderProvider, {
-  useFormationsDetailsHeadersSize,
-} from "../../context/FormationDetailsHeaderContext";
+import FormationDetailsProvider, { useFormationsDetails } from "../../context/FormationDetailsContext";
 
 const FormationContent = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const { formation, etablissement } = formationDetail;
 
   const theme = useTheme();
 
-  const { headersSize } = useFormationsDetailsHeadersSize();
+  const { headersSize } = useFormationsDetails();
 
   const cssAnchor = css`
     ${theme.breakpoints.up("md")} {
@@ -91,17 +89,13 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
 });
 FormationContent.displayName = "FormationContent";
 
-const FormationContentWithHeaderProvider = React.memo(function ({
-  formationDetail,
-}: {
-  formationDetail: FormationDetail;
-}) {
+const FormationContentWithProvider = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   return (
-    <FormationDetailsHeaderProvider>
+    <FormationDetailsProvider formationDetail={formationDetail}>
       <FormationContent formationDetail={formationDetail} />
-    </FormationDetailsHeaderProvider>
+    </FormationDetailsProvider>
   );
 });
-FormationContentWithHeaderProvider.displayName = "FormationContentWithHeaderProvider";
+FormationContentWithProvider.displayName = "FormationContentWithProvider";
 
-export default FormationContentWithHeaderProvider;
+export default FormationContentWithProvider;
