@@ -388,23 +388,32 @@ const FormationResumeHideTagFix = React.memo(function ({ formationDetail }: { fo
         <Box style={{ gridRowStart: 1, gridColumnStart: 1 }}>
           <Box
             css={css`
-              backgroundcolor: #fff;
+              background-color: #fff;
             `}
           >
             <BoxContainer
               maxWidth={"xl"}
               css={css`
                 pointer-events: auto;
-                padding-left: 1.25rem;
               `}
             >
-              <FormationResume formationDetail={formationDetail} hideTag={hideResumeTag} />
+              <Box
+                css={css`
+                  padding-left: 1.25rem;
+                `}
+              >
+                <FormationResume formationDetail={formationDetail} hideTag={hideResumeTag} />
+              </Box>
 
               <Divider
                 variant="middle"
-                style={{
-                  marginBottom: 0,
-                }}
+                css={css`
+                  margin-bottom: 0;
+                  margin-top: 0;
+                  ${theme.breakpoints.up("md")} {
+                    margin-left: 2.5rem;
+                  }
+                `}
               />
             </BoxContainer>
           </Box>

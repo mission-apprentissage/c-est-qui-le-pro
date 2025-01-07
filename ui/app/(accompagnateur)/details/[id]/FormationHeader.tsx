@@ -199,17 +199,24 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
           }
         `}
       >
-        <BoxContainer
-          maxWidth={"xl"}
+        <Box
           css={css`
             background-color: #fff;
-            ${theme.breakpoints.up("md")} {
-              padding-left: 1.25rem;
-            }
           `}
         >
-          <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
-        </BoxContainer>
+          <BoxContainer maxWidth={"xl"}>
+            <Divider
+              variant="middle"
+              css={css`
+                margin-top: 0;
+                margin-bottom: 0;
+                ${theme.breakpoints.up("md")} {
+                  margin-left: 2.5rem;
+                }
+              `}
+            />
+          </BoxContainer>
+        </Box>
         <FormationResume formationDetail={formationDetail} />
       </BoxContainer>
     </>

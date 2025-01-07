@@ -1,21 +1,26 @@
 /** @jsxImportSource @emotion/react */
 import { fr } from "@codegouvfr/react-dsfr";
-import { css } from "@emotion/react";
+import { css, SerializedStyles } from "@emotion/react";
 import Divider, { DividerProps } from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomDivider({ margin, className, ...props }: DividerProps & { margin?: string }) {
+export default function CustomDivider({
+  margin,
+  className,
+  css: cssParent,
+  ...props
+}: DividerProps & { css?: SerializedStyles; margin?: string }) {
   const theme = useTheme();
   return (
     <Divider
       component="div"
       style={{
-        marginTop: margin !== undefined ? margin : fr.spacing("5v"),
-        marginBottom: margin !== undefined ? margin : fr.spacing("5v"),
         ...props.style,
       }}
       className={className}
       css={css`
+        margin-top: ${margin !== undefined ? margin : fr.spacing("5v")};
+        margin-bottom: ${margin !== undefined ? margin : fr.spacing("5v")};
         ${theme.breakpoints.down("md")} {
           margin: 0;
         }
