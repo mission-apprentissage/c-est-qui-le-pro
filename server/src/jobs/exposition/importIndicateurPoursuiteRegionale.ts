@@ -82,8 +82,8 @@ async function importIndicateurs() {
     await RawDataRepository.search(RawDataType.EXPOSITION_regionales),
     filterData(({ data: { data } }) => {
       return (
-        (data.code_certification_type === "mef11" || data.code_certification_type === "cfd") &&
-        data.donnee_source.type === "self" &&
+        (data?.code_certification_type === "mef11" || data?.code_certification_type === "cfd") &&
+        data?.donnee_source?.type === "self" &&
         !isNil(data.taux_en_emploi_6_mois)
       );
     }),
