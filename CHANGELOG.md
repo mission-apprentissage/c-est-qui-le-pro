@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.18.0...v1.18.1) (2025-01-07)
+
+
+### Bug Fixes
+
+* importation des indicateurs régionaux ([#27](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/27)) ([e63eca9](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/e63eca9c349f91a6260f58eca1860ef6da222e56))
+
 # [1.18.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.17.0...v1.18.0) (2024-12-30)
 
 
