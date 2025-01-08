@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.18.1...v1.19.0) (2025-01-08)
+
+
+### Features
+
+* nettoyage des anciennes formation à l'importation ([#28](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/28)) ([8745ce4](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/8745ce404e547071681f750e25aebf5a67016a2f))
+
 ## [1.18.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.18.0...v1.18.1) (2025-01-07)
 
 
