@@ -13,8 +13,6 @@ services:
     restart: unless-stopped
     networks:
       - isochrones_network
-    volumes:
-      - ./graphhopper/data:/data:z
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8989/health"]
       interval: 30s
