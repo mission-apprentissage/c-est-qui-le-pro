@@ -9,7 +9,7 @@ import EtablissementRepository from "#src/common/repositories/etablissement";
 import RawDataRepository, { RawDataType } from "#src/common/repositories/rawData";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
 import IndicateurEntreeRepository from "#src/common/repositories/indicateurEntree";
-import IndicateurPoursuiteRegionalRepository from "#src/common/repositories/indicateurPoursuiteRegional";
+import IndicateurPoursuiteRepository from "#src/common/repositories/indicateurPoursuite";
 
 const logger = getLoggerWithContext("import");
 
@@ -119,7 +119,7 @@ export async function cleanFormationEtablissement() {
   logger.info(`Suppression du catalogue de formations précédent`);
 
   await IndicateurEntreeRepository.remove({});
-  await IndicateurPoursuiteRegionalRepository.remove({});
+  await IndicateurPoursuiteRepository.remove({});
   const resultFormationEtablissement = await FormationEtablissementRepository.remove({});
 
   logger.info(`${resultFormationEtablissement.length} formations supprimées`);
