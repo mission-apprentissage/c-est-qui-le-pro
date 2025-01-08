@@ -7,6 +7,9 @@ import { streamOnisepFormations } from "./streamOnisepFormations";
 import { kdb, upsert } from "#src/common/db/db";
 import EtablissementRepository from "#src/common/repositories/etablissement";
 import RawDataRepository, { RawDataType } from "#src/common/repositories/rawData";
+import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
+import IndicateurEntreeRepository from "#src/common/repositories/indicateurEntree";
+import IndicateurPoursuiteRepository from "#src/common/repositories/indicateurPoursuite";
 
 const logger = getLoggerWithContext("import");
 
@@ -110,4 +113,15 @@ export async function importFormationEtablissement() {
   );
 
   return stats;
+}
+
+export async function cleanFormationEtablissement() {
+  logger.info(`Suppression du catalogue de formations précédent`);
+
+  await IndicateurEntreeRepository.remove({});
+  await IndicateurPoursuiteRepository.remove({});
+  const resultFormationEtablissement = await FormationEtablissementRepository.remove({});
+
+  logger.info(`${resultFormationEtablissement.length} formations supprimées`);
+  return { deleted: resultFormationEtablissement.length };
 }
