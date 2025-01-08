@@ -10,7 +10,10 @@ import { importACCEEtablissements } from "./jobs/etablissements/importACCEEtabli
 import { importEtablissements } from "./jobs/etablissements/importEtablissements";
 import { importFormation } from "./jobs/formations/importFormation";
 import { importFormations as importCAFormations } from "./jobs/catalogueApprentissage/importFormations";
-import { importFormationEtablissement } from "./jobs/formations/importFormationEtablissement";
+import {
+  importFormationEtablissement,
+  cleanFormationEtablissement,
+} from "./jobs/formations/importFormationEtablissement";
 import { importOnisep } from "./jobs/onisep/importOnisep";
 import { importIndicateurEntree } from "./jobs/formations/importIndicateurEntree";
 import { computeFormationTag } from "./jobs/formations/tag/computeFormationTag";
@@ -60,6 +63,7 @@ const formationEtablissementJobs = [
   { name: "feIdeoFichesFormations", job: importIdeoFichesFormations },
   { name: "feFichesFormationsTmp", job: importFichesFormationsTmp },
   { name: "feRCO", job: importRCO },
+  { name: "feFEClean", job: cleanFormationEtablissement },
   { name: "feFE", job: importFormationEtablissement },
   { name: "feFamillesMetiers", job: importFamillesMetiers },
   { name: "feIndicateurEntree", job: importIndicateurEntree },
