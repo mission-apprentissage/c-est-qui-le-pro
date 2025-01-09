@@ -2,7 +2,7 @@
 import { useLocalStorage } from "usehooks-ts";
 import { useSearchParams } from "next/navigation";
 import { createConsentManagement } from "@codegouvfr/react-dsfr/consentManagement";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export const {
   ConsentBannerAndConsentManagement,
@@ -31,14 +31,18 @@ export const {
       disableTrackingParams !== null ? disableTrackingParams : false
     );
 
+    const consent = useMemo(() => {
+      return {
+        finalityConsent: { analytics: !disableTracking },
+      };
+    }, [disableTracking]);
+
     useEffect(() => {
       if (disableTrackingParams !== null) {
         saveDisableTracking(disableTrackingParams);
       }
-    }, [disableTrackingParams]);
+    }, [saveDisableTracking, disableTrackingParams]);
 
-    return {
-      finalityConsent: { analytics: !disableTracking },
-    };
+    return consent;
   },
 };

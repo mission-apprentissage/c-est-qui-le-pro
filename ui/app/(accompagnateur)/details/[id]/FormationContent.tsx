@@ -7,7 +7,6 @@ import { Grid } from "#/app/components/MaterialUINext";
 import Container from "#/app/components/Container";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail } from "shared";
-import { useSize } from "#/app/(accompagnateur)/hooks/useSize";
 import DialogMinistage from "#/app/(accompagnateur)/components/DialogMinistage";
 import FormationBlockPoursuite from "./FormationBlockPoursuite";
 import useScrollToLocation from "../../hooks/useScrollToLocation";
@@ -16,33 +15,31 @@ import FormationBlockAdmission from "./FormationBlockAdmission";
 import FormationBlockFormation from "./FormationBlockFormation";
 import FormationBlockAccesEmploi from "./FormationBlockAccesEmploi";
 import FormationSimilare from "./FormationSimilaire";
+import FormationDetailsProvider, { useFormationsDetails } from "../../context/FormationDetailsContext";
 
-export default function FormationContent({ formationDetail }: { formationDetail: FormationDetail }) {
+const FormationContent = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const { formation, etablissement } = formationDetail;
 
   const theme = useTheme();
 
-  const refHeader = React.useRef<HTMLElement>(null);
-  const refResume = React.useRef<HTMLElement>(null);
-  const stickyHeaderSize = useSize(refHeader);
-  const stickyResumeSize = useSize(refResume);
+  const { headersSize } = useFormationsDetails();
 
   const cssAnchor = css`
     ${theme.breakpoints.up("md")} {
-      scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + ${stickyResumeSize?.height || 0}px + 3rem);
+      scroll-margin-top: calc(${headersSize.headerHeight}px + ${headersSize.resumeHeight || 0}px + 2px);
     }
-    scroll-margin-top: calc(${stickyHeaderSize?.height || 0}px + 3rem);
+    scroll-margin-top: calc(${headersSize.headerHeight || 0}px + 2px);
   `;
 
   useScrollToLocation();
 
   return (
     <Box style={{ marginTop: fr.spacing("5v") }}>
-      <FormationHeader refHeader={refHeader} refResume={refResume} formationDetail={formationDetail} />
+      <FormationHeader formationDetail={formationDetail} />
 
-      <Container maxWidth={"xl"}>
+      <Container maxWidth={"xl"} style={{ zIndex: 99, position: "relative" }}>
         <Grid container>
-          <Grid item xs={12} style={{ backgroundColor: "#fff", zIndex: 99 }}>
+          <Grid item xs={12} style={{ backgroundColor: "#fff" }}>
             <Grid
               container
               style={{
@@ -56,21 +53,21 @@ export default function FormationContent({ formationDetail }: { formationDetail:
                 formationDetail={formationDetail}
                 id="la-formation"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "0.5rem" }}
               ></FormationBlockFormation>
 
               <FormationBlockAdmission
                 formationDetail={formationDetail}
                 id="l-admission"
                 css={cssAnchor}
-                style={{ marginBottom: "2.5rem" }}
+                style={{ marginBottom: "2rem" }}
               />
 
               <FormationBlockPoursuite
                 formation={formation}
                 id="poursuite-etudes"
                 css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
+                style={{ marginBottom: "0.5rem" }}
               />
 
               <FormationBlockAccesEmploi
@@ -84,7 +81,21 @@ export default function FormationContent({ formationDetail }: { formationDetail:
         </Grid>
         <DialogMinistage />
       </Container>
-      <FormationSimilare formationDetail={formationDetail} />
+      <Box style={{ zIndex: 99, position: "relative" }}>
+        <FormationSimilare formationDetail={formationDetail} />
+      </Box>
     </Box>
   );
-}
+});
+FormationContent.displayName = "FormationContent";
+
+const FormationContentWithProvider = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
+  return (
+    <FormationDetailsProvider formationDetail={formationDetail}>
+      <FormationContent formationDetail={formationDetail} />
+    </FormationDetailsProvider>
+  );
+});
+FormationContentWithProvider.displayName = "FormationContentWithProvider";
+
+export default FormationContentWithProvider;

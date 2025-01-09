@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React from "react";
-import { css } from "@emotion/react";
-import { Box, BoxProps, Stack, useTheme } from "@mui/material";
-import { Typography, Grid } from "#/app/components/MaterialUINext";
+import React, { useEffect } from "react";
+import { css, Theme } from "@emotion/react";
+import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
 import { FormationDetail } from "shared";
@@ -19,31 +19,23 @@ import FormationDisponible from "./FormationDisponible";
 import Link from "#/app/components/Link";
 import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
-import styled from "@emotion/styled";
+import { useFormationsDetails } from "../../context/FormationDetailsContext";
 
-const BoxContainer = styled(Box)<BoxProps>`
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-`;
-
-export default function FormationHeader({
-  formationDetail,
-  refHeader,
-  refResume,
-}: {
-  formationDetail: FormationDetail;
-  refHeader: React.RefObject<HTMLElement>;
-  refResume: React.RefObject<HTMLElement>;
-}) {
+const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
   const searchParams = useSearchParams();
   const longitude = searchParams.get("longitude");
   const latitude = searchParams.get("latitude");
 
+  const { setHeadersSize, resumeCollapse } = useFormationsDetails();
+  const refHeader = React.useRef<HTMLElement>(null);
   const stickyHeaderSize = useSize(refHeader);
 
   const { formationEtablissement, formation, etablissement } = formationDetail;
+
+  useEffect(() => {
+    setHeadersSize({ headerHeight: stickyHeaderSize?.height || 0 });
+  }, [setHeadersSize, stickyHeaderSize]);
 
   return (
     <>
@@ -94,8 +86,9 @@ export default function FormationHeader({
           css={css`
             padding-left: 2.5rem;
           `}
+          ref={refHeader}
         >
-          <Typography ref={refHeader} variant="h1" style={{ marginBottom: fr.spacing("6v"), marginTop: "0.75rem" }}>
+          <Typography variant="h1" style={{ marginBottom: fr.spacing("6v"), marginTop: "0.75rem" }}>
             {formatLibelle(formation.libelle)}
           </Typography>
         </BoxContainer>
@@ -104,12 +97,14 @@ export default function FormationHeader({
         maxWidth={"xl"}
         css={css`
           ${theme.breakpoints.up("md")} {
-            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2.2rem)` : 0};
+            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px)` : 0};
             position: sticky;
           }
           background-color: #fff;
           z-index: 99;
           display: flex;
+
+          visibility: ${resumeCollapse ? "hidden" : "inherit"};
         `}
       >
         <Grid container>
@@ -198,39 +193,34 @@ export default function FormationHeader({
         css={css`
           ${theme.breakpoints.up("md")} {
             position: sticky;
-            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px + 2rem)` : 0};
+            top: ${stickyHeaderSize ? `calc(${stickyHeaderSize.height}px)` : 0};
             z-index: 100;
+            pointer-events: none; /* Fix because height change on sticky cause jumping issue */
           }
-          background-color: #fff;
         `}
       >
-        <BoxContainer
-          maxWidth={"xl"}
+        <Box
           css={css`
-            ${theme.breakpoints.up("md")} {
-              padding-left: 1.25rem;
-            }
+            background-color: #fff;
           `}
         >
-          <Divider variant="middle" style={{ marginTop: 0, marginBottom: 0 }} />
-        </BoxContainer>
-        <BoxContainer
-          maxWidth={"xl"}
-          css={css`
-            padding-left: 1.25rem;
-          `}
-        >
-          <Box ref={refResume}>
-            <FormationResume formationDetail={formationDetail} />
-          </Box>
-          <Divider
-            variant="middle"
-            style={{
-              marginBottom: 0,
-            }}
-          />
-        </BoxContainer>
+          <BoxContainer maxWidth={"xl"}>
+            <Divider
+              variant="middle"
+              css={css`
+                margin-top: 0;
+                margin-bottom: 0;
+                ${theme.breakpoints.up("md")} {
+                  margin-left: 2.5rem;
+                }
+              `}
+            />
+          </BoxContainer>
+        </Box>
+        <FormationResume formationDetail={formationDetail} />
       </BoxContainer>
     </>
   );
-}
+});
+FormationHeader.displayName = "FormationHeader";
+export default FormationHeader;

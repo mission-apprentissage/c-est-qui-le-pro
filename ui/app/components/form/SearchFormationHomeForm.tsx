@@ -1,17 +1,41 @@
 "use client";
+import styled from "@emotion/styled";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Grid } from "#/app/components/MaterialUINext";
 import { Controller } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
 import AddressField, { myPosition } from "./AddressField";
-import Button from "../Button";
+import Button, { ButtonProps } from "../Button";
 import { SearchFormationFormData, schema } from "./SearchFormationForm";
 import { Box, Stack, Theme } from "@mui/material";
 import useSearchHistory from "#/app/(accompagnateur)/hooks/useSearchHistory";
 import FormationField from "./FormationField";
 import { useEffect, useMemo, useState } from "react";
 import { uniq } from "lodash-es";
+import { fr } from "@codegouvfr/react-dsfr";
+
+const SubmitStyled = styled(Button, {
+  shouldForwardProp: (prop) => !["isFocusMobile"].includes(prop),
+})<ButtonProps & { isFocusMobile?: boolean }>`
+  border-radius: 26px;
+  height: 100%;
+  width: 100%;
+  background-color: var(--blue-france-sun-113-625-hover);
+  font-size: 20px;
+  line-height: 32px;
+  justify-content: center;
+  --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};
+
+  ${({ isFocusMobile }) => {
+    return isFocusMobile
+      ? `border-radius: 36px;
+            padding: 1rem;
+            padding-left: 2rem;
+            padding-right: 2rem;`
+      : "";
+  }}
+`;
 
 export default function SearchFormationHomeForm({
   url,
@@ -151,20 +175,7 @@ export default function SearchFormationHomeForm({
                               display: { xs: "none", md: "block" },
                             }}
                           >
-                            <Button
-                              type={"submit"}
-                              style={{
-                                borderRadius: "26px",
-                                height: "100%",
-                                width: "100%",
-                                backgroundColor: "var(--blue-france-sun-113-625-hover)",
-                                fontSize: "20px",
-                                lineHeight: "32px",
-                                justifyContent: "center",
-                              }}
-                            >
-                              {"Explorer"}
-                            </Button>
+                            <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
                           </Box>
                         )}
                       </Stack>
@@ -214,20 +225,7 @@ export default function SearchFormationHomeForm({
                               display: { xs: "block", md: "block" },
                             }}
                           >
-                            <Button
-                              type={"submit"}
-                              style={{
-                                borderRadius: "26px",
-                                height: "100%",
-                                width: "100%",
-                                backgroundColor: "var(--blue-france-sun-113-625-hover)",
-                                fontSize: "20px",
-                                lineHeight: "32px",
-                                justifyContent: "center",
-                              }}
-                            >
-                              {"Explorer"}
-                            </Button>
+                            <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
                           </Box>
                         }
                       </Grid>
@@ -237,22 +235,9 @@ export default function SearchFormationHomeForm({
                 {isFocus && isDownSm && (
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div></div>
-                    <Button
-                      type={"submit"}
-                      style={{
-                        borderRadius: "36px",
-                        height: "100%",
-                        padding: "1rem",
-                        paddingLeft: "2rem",
-                        paddingRight: "2rem",
-                        backgroundColor: "var(--blue-france-sun-113-625-hover)",
-                        fontSize: "20px",
-                        lineHeight: "32px",
-                        justifyContent: "center",
-                      }}
-                    >
+                    <SubmitStyled type={"submit"} isFocusMobile>
                       {"Explorer"}
-                    </Button>
+                    </SubmitStyled>
                   </div>
                 )}
               </>
