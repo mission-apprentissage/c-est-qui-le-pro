@@ -5,6 +5,7 @@ import { useMatomo } from "../hooks/useMatomo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
 import { omit } from "lodash-es";
+import { usePlausible } from "next-plausible";
 
 type FormationsSearchParams = {
   address: string;
@@ -24,6 +25,7 @@ const FormationsSearchContext = createContext<{
 });
 
 const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) => {
+  const plausible = usePlausible();
   const { push } = useMatomo();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,6 +36,14 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
       push(["trackEvent", "recherche", key, value]);
     });
   }, [push, searchParams, params]);
+
+  useEffect(() => {
+    plausible("recherche", {
+      props: {
+        ...params,
+      },
+    });
+  }, [plausible, searchParams, params]);
 
   const getUrlParams = useCallback(() => {
     const urlSearchParams = paramsToString(params);

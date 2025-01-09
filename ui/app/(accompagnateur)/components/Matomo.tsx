@@ -3,7 +3,7 @@
 import { useConsent } from "#/app/components/ConsentManagement";
 import { init, push } from "@socialgouv/matomo-next";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 function sanitizeUrl(str: string): string {
   let strSanitized = str.replace(/address=([^&]*)/, "address=***");
@@ -23,6 +23,10 @@ export function Matomo() {
 
   useEffect(() => {
     if (!finalityConsent?.analytics) {
+      return;
+    }
+
+    if (process.env.NEXT_PUBLIC_MATOMO_ENABLE !== "true") {
       return;
     }
 
