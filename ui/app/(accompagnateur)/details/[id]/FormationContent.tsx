@@ -16,6 +16,7 @@ import FormationBlockFormation from "./FormationBlockFormation";
 import FormationBlockAccesEmploi from "./FormationBlockAccesEmploi";
 import FormationSimilare from "./FormationSimilaire";
 import FormationDetailsProvider, { useFormationsDetails } from "../../context/FormationDetailsContext";
+import { createPortal } from "react-dom";
 
 const FormationContent = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const { formation, etablissement } = formationDetail;
@@ -79,7 +80,7 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
             </Grid>
           </Grid>
         </Grid>
-        <DialogMinistage />
+        {createPortal(<DialogMinistage />, document.body)}
       </Container>
       <Box style={{ zIndex: 99, position: "relative" }}>
         <FormationSimilare formationDetail={formationDetail} />
