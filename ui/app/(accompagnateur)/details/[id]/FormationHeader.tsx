@@ -17,7 +17,7 @@ import { modalMinistage } from "#/app/(accompagnateur)/components/DialogMinistag
 import FormationRoute from "./FormationRoute";
 import FormationDisponible from "./FormationDisponible";
 import Link from "#/app/components/Link";
-import { TagApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
+import { LabelApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 
@@ -69,7 +69,7 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
               {`En ${formationEtablissement.duree}`.toUpperCase()}
             </TagDuree>
           )}
-          <TagApprentissage formation={formation} />
+          <LabelApprentissage formation={formation} />
         </Stack>
       </BoxContainer>
       <BoxContainer

@@ -1,12 +1,7 @@
 "use client";
 import React from "react";
-import { Dialog, DialogTitle } from "@mui/material";
 import { Typography } from "#/app/components/MaterialUINext";
-import Container from "#/app/components/Container";
 import { fr } from "@codegouvfr/react-dsfr";
-import Divider from "#/app/components/Divider";
-import Button from "#/app/components/Button";
-
 import { createModal } from "@codegouvfr/react-dsfr/Modal";
 
 export const modalMinistage = createModal({
