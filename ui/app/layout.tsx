@@ -47,6 +47,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 title,
               }}
               accessibility="non compliant"
+              accessibilityLinkProps={{ href: "/accessibilite" }}
               contentDescription={
                 <>
                   <b>C&apos;est qui le pro ?</b> est un service de la{" "}

@@ -1,7 +1,5 @@
 "use client";
 import React, { Suspense } from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material";
 import Container from "#/app/components/Container";
 import { Grid, Stack, Typography } from "#/app/components/MaterialUINext";
 import Button from "#/app/components/Button";
