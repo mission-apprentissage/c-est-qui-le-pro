@@ -236,7 +236,7 @@ export default function AddressField({
           <TextField
             {...params}
             error={!!error}
-            helperText={error ? "Votre adresse n'est pas valide" : ""}
+            helperText={error ? "Vous devez toujours choisir une localisation valide" : ""}
             InputLabelProps={{ shrink: true }}
             label={isMobile && isFocus ? "" : "Ton adresse, ta ville"}
             placeholder={"Saisir sa ville, son adresse"}
