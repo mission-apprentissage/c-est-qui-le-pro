@@ -154,11 +154,19 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
       </Box>
 
       <Highlight style={{ marginLeft: 0, marginTop: "2rem" }}>
-        <div style={{ fontWeight: 700 }}>Attention l’admission dépend aussi de : </div>
+        <div style={{ fontWeight: 700, marginBottom: "1rem" }}>Attention l’admission dépend aussi de : </div>
         <ul
           css={css`
             list-style-type: none;
             padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            & li {
+              padding: 0;
+            }
             & li i {
               color: #000091;
             }
