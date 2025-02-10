@@ -12,6 +12,7 @@ import Button from "#/app/components/Button";
 import Link from "#/app/components/Link";
 import { fr } from "@codegouvfr/react-dsfr";
 import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
+import { LIBELLE_PRESSION } from "#/app/services/formation";
 
 function TagAdmission({
   level,
@@ -22,7 +23,7 @@ function TagAdmission({
 }) {
   const tagByLevel = {
     easy: {
-      title: <>Favorable (taux de pression faible)</>,
+      title: <>{LIBELLE_PRESSION["easy"]}</>,
       description: (
         <>
           L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable, la formation n’a pas été très demandée par les
@@ -32,22 +33,22 @@ function TagAdmission({
       ),
     },
     average: {
-      title: <>Assez difficile (taux de pression modéré)</>,
+      title: <>{LIBELLE_PRESSION["average"]}</>,
       description: (
         <>
           L’an dernier (Mai {rentreeScolaire}), c’était assez difficile, la formation a été souvent demandée par les
-          élèves. Il y a avait donc moins de places disponibles dans les classes que vœux faits par des élèves. Certains
-          élèves n’ont donc pas été pris dans cette formation.
+          élèves. Il y avait donc moins de places disponibles dans les classes que de vœux faits par des élèves.
+          Certains élèves n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
     hard: {
-      title: <>Très difficile (taux de pression élevé)</>,
+      title: <>{LIBELLE_PRESSION["hard"]}</>,
       description: (
         <>
           L’an dernier (Mai {rentreeScolaire}), c’était très difficile, la formation a été demandée par de nombreux
-          élèves. Il n’y a avait donc pas assez de places dans les classes pour accueillir tous les élèves ayant formulé
-          ce vœu . De nombreux élèves n’ont donc pas été pris dans cette formation.
+          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous les élèves ayant formulé
+          ce vœu. De nombreux élèves n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
@@ -154,7 +155,7 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
       </Box>
 
       <Highlight style={{ marginLeft: 0, marginTop: "2rem" }}>
-        <div style={{ fontWeight: 700, marginBottom: "1rem" }}>Attention l’admission dépend aussi de : </div>
+        <div style={{ fontWeight: 700, marginBottom: "1rem" }}>Attention l’admission dépend aussi : </div>
         <ul
           css={css`
             list-style-type: none;

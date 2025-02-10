@@ -17,6 +17,7 @@ import { useSize } from "../../hooks/useSize";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { Theme, useMediaQuery } from "@mui/material";
 import { useHideOnScroll } from "../../hooks/useHideOnScroll";
+import { LIBELLE_PRESSION } from "#/app/services/formation";
 
 interface FormationResumeBlockProps {
   title: string;
@@ -120,7 +121,7 @@ function FormationResumeBlockAdmission({
         {admissionLevel === "easy" && (
           <>
             <Tag square level="easy">
-              Taux de pression faible
+              {LIBELLE_PRESSION["easy"]}
             </Tag>
             {!isNil(effectifs) && !isNil(capacite) && capacite - effectifs > 0 && (
               <Tag square level="easy">
@@ -133,14 +134,14 @@ function FormationResumeBlockAdmission({
       <>
         {admissionLevel === "average" && (
           <Tag square level="average">
-            Taux de pression modéré
+            {LIBELLE_PRESSION["average"]}
           </Tag>
         )}
       </>
       <>
         {admissionLevel === "hard" && (
           <Tag square level="hard">
-            Taux de pression élevé
+            {LIBELLE_PRESSION["hard"]}
           </Tag>
         )}
       </>
