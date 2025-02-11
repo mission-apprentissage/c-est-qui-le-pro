@@ -1,7 +1,5 @@
 "use client";
 import React, { Suspense } from "react";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { Theme } from "@mui/material";
 import Container from "#/app/components/Container";
 import { Grid, Stack, Typography } from "#/app/components/MaterialUINext";
 import Button from "#/app/components/Button";
@@ -62,7 +60,9 @@ export default function Page({ params }: { params: { id: string } }) {
               </Typography>
               <Stack direction={{ md: "row", xs: "column" }} spacing={"14px"}>
                 <Button
-                  linkProps={{ href: "https://avenirs.onisep.fr/eleves/decouvrir-la-voie-pro-au-college" }}
+                  linkProps={{
+                    href: "https://www.onisep.fr/formation/apres-la-3-la-voie-professionnelle/qu-est-ce-que-la-voie-professionnelle",
+                  }}
                   rounded={"4px"}
                   priority="secondary"
                   variant={"white-black"}
@@ -71,7 +71,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 </Button>
                 <Button
                   linkProps={{
-                    href: "https://avenirs.onisep.fr/eleves/decouvrir-la-voie-pro-au-college/quiz-voie-pro",
+                    href: "https://www.onisep.fr/formation/apres-la-3-la-voie-professionnelle/quiz-collegiens-que-savez-vous-de-la-voie-professionnelle",
                   }}
                   rounded={"4px"}
                   priority="secondary"
