@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.19.0...v1.20.0) (2025-02-11)
+
+
+### Features
+
+* déclaration d'accessibilité ([#31](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/31)) ([98b7400](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/98b740019028386bbe3d5d7473fa339abc4dc0af))
+
 # [1.19.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.18.1...v1.19.0) (2025-01-08)
 
 
