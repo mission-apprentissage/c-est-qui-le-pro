@@ -18,7 +18,7 @@ Cette déclaration d’accessibilité s’applique à **C'est qui le pro ?** (
 
 ## **Amélioration et contact**
 
-Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de C'est qui le pro ? pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
+Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de **C'est qui le pro ?** pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
 
 - E-mail : [contact@inserjeunes.beta.gouv.fr](mailto:contact@inserjeunes.beta.gouv.fr)
 - Formulaire de contact : [Nous contacter](https://tally.so/r/wz0AOR)
@@ -33,7 +33,7 @@ Vous pouvez :
 
 - Écrire un message au [Défenseur des droits](https://formulaire.defenseurdesdroits.fr/)
 - Contacter [le délégué du Défenseur des droits dans votre région](https://www.defenseurdesdroits.fr/saisir/delegues)
-- Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) :Défenseur des droitsLibre réponse 71120 75342 Paris CEDEX 07
+- Envoyer un courrier par la poste (gratuit, ne pas mettre de timbre) : Défenseur des droits, Libre réponse 71120, 75342 Paris CEDEX 07
 
 ---
 
