@@ -43,10 +43,8 @@ function FormationMetier({ formation }: { formation: Formation }) {
   return (
     metierSorted &&
     metierSorted.length > 0 && (
-      <>
-        <Typography variant="h3" style={{ marginTop: "1.25rem", marginBottom: "1.25rem" }}>
-          Quels métiers sont possibles ?
-        </Typography>
+      <Box>
+        <Typography variant="h3">Quels métiers sont possibles ?</Typography>
         <Box style={{ display: "flex", width: "100%", justifyContent: "flex-start" }}>
           <Grid container spacing={4}>
             {metierSorted.slice(0, nbrDisplay).map((metier) => {
@@ -78,16 +76,16 @@ function FormationMetier({ formation }: { formation: Formation }) {
                 </Grid>
               );
             })}
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              {metierSorted.length > nbrDisplay && (
+            {metierSorted.length > nbrDisplay && (
+              <Grid item xs={12} style={{ textAlign: "center" }}>
                 <Button priority="tertiary" size="small" onClick={showMoreCb}>
                   Voir plus
                 </Button>
-              )}
-            </Grid>
+              </Grid>
+            )}
           </Grid>
         </Box>
-      </>
+      </Box>
     )
   );
 }
@@ -102,10 +100,14 @@ export default function FormationBlockAccesEmploi({
 } & React.ComponentProps<typeof Card>) {
   return (
     <Card type="details" title="L’accès à l’emploi" {...cardProps}>
-      <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
-      <WidgetInserJeunes etablissement={etablissement} formation={formation} />
+      <Box style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+        <Box>
+          <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
+          <WidgetInserJeunes etablissement={etablissement} formation={formation} />
+        </Box>
 
-      <FormationMetier formation={formation} />
+        <FormationMetier formation={formation} />
+      </Box>
     </Card>
   );
 }

@@ -38,48 +38,38 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
     <Box style={{ marginTop: fr.spacing("5v") }}>
       <FormationHeader formationDetail={formationDetail} />
 
-      <Container maxWidth={"xl"} style={{ zIndex: 99, position: "relative" }}>
-        <Grid container>
-          <Grid item xs={12} style={{ backgroundColor: "#fff" }}>
-            <Grid
-              container
-              style={{
-                maxWidth: "800px",
-                paddingLeft: fr.spacing("8v"),
-                paddingRight: fr.spacing("8v"),
-                paddingTop: fr.spacing("10v"),
-              }}
-            >
-              <FormationBlockFormation
-                formationDetail={formationDetail}
-                id="la-formation"
-                css={cssAnchor}
-                style={{ marginBottom: "0.5rem" }}
-              ></FormationBlockFormation>
+      <Container
+        maxWidth={"xl"}
+        style={{ zIndex: 99, position: "relative", backgroundColor: "#fff", marginBottom: "2rem" }}
+      >
+        <Box
+          style={{
+            maxWidth: "800px",
+            display: "flex",
+            flexDirection: "column",
+            paddingLeft: fr.spacing("8v"),
+            paddingRight: fr.spacing("8v"),
+            paddingTop: fr.spacing("10v"),
+            gap: "3rem",
+          }}
+        >
+          <FormationBlockFormation
+            formationDetail={formationDetail}
+            id="la-formation"
+            css={cssAnchor}
+          ></FormationBlockFormation>
 
-              <FormationBlockAdmission
-                formationDetail={formationDetail}
-                id="l-admission"
-                css={cssAnchor}
-                style={{ marginBottom: "2rem" }}
-              />
+          <FormationBlockAdmission formationDetail={formationDetail} id="l-admission" css={cssAnchor} />
 
-              <FormationBlockPoursuite
-                formation={formation}
-                id="poursuite-etudes"
-                css={cssAnchor}
-                style={{ marginBottom: "0.5rem" }}
-              />
+          <FormationBlockPoursuite formation={formation} id="poursuite-etudes" css={cssAnchor} />
 
-              <FormationBlockAccesEmploi
-                formation={formation}
-                etablissement={etablissement}
-                id="acces-emploi"
-                css={cssAnchor}
-              ></FormationBlockAccesEmploi>
-            </Grid>
-          </Grid>
-        </Grid>
+          <FormationBlockAccesEmploi
+            formation={formation}
+            etablissement={etablissement}
+            id="acces-emploi"
+            css={cssAnchor}
+          ></FormationBlockAccesEmploi>
+        </Box>
         {createPortal(<DialogMinistage />, document.body)}
       </Container>
       <Box style={{ zIndex: 99, position: "relative" }}>

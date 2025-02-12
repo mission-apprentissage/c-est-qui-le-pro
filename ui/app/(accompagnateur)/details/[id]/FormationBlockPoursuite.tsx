@@ -25,51 +25,51 @@ export default function FormationBlockPoursuite({
 
   return (
     <Card type="details" title={"La poursuite d'études"} {...cardProps}>
-      <FormationDescription description={formation.descriptionPoursuiteEtudes}></FormationDescription>
-      {formation.formationPoursuite && !formation.isAnneeCommune && (
-        <Container style={{ marginTop: "2rem", marginBottom: "2rem" }}>
-          <Typography variant="h3" style={{ marginBottom: "1rem" }}>
-            Quelles études sont envisageables après la formation ?
-          </Typography>
-          <Grid container spacing={"1.25rem"}>
-            {formation.formationPoursuite.slice(0, nbrDisplay).map((formationPoursuite, index) => {
-              return (
-                <Grid item xs={12} key={index}>
-                  <Box
-                    style={{
-                      paddingTop: "0.5rem",
-                      paddingBottom: "0.5rem",
-                      padding: "1rem",
-                      backgroundColor: fr.colors.options.blueFrance._975_75.default,
-                    }}
-                  >
-                    <Typography variant="subtitle2">
-                      {formationPoursuite.onisepId ? (
-                        <Link
-                          target="_blank"
-                          href={`https://www.onisep.fr/http/redirection/formation/slug/${formationPoursuite.onisepId}`}
-                        >
-                          {formatLibelle(formationPoursuite.libelle)}
-                        </Link>
-                      ) : (
-                        formatLibelle(formationPoursuite.libelle)
-                      )}
-                    </Typography>
-                  </Box>
-                </Grid>
-              );
-            })}
+      <Box style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+        <FormationDescription description={formation.descriptionPoursuiteEtudes}></FormationDescription>
+        {formation.formationPoursuite && !formation.isAnneeCommune && (
+          <Container>
+            <Typography variant="h3">Quelles études sont envisageables après la formation ?</Typography>
+            <Grid container spacing={"1.25rem"}>
+              {formation.formationPoursuite.slice(0, nbrDisplay).map((formationPoursuite, index) => {
+                return (
+                  <Grid item xs={12} key={index}>
+                    <Box
+                      style={{
+                        paddingTop: "0.5rem",
+                        paddingBottom: "0.5rem",
+                        padding: "1rem",
+                        backgroundColor: fr.colors.options.blueFrance._975_75.default,
+                      }}
+                    >
+                      <Typography variant="subtitle2">
+                        {formationPoursuite.onisepId ? (
+                          <Link
+                            target="_blank"
+                            href={`https://www.onisep.fr/http/redirection/formation/slug/${formationPoursuite.onisepId}`}
+                          >
+                            {formatLibelle(formationPoursuite.libelle)}
+                          </Link>
+                        ) : (
+                          formatLibelle(formationPoursuite.libelle)
+                        )}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                );
+              })}
 
-            {formation.formationPoursuite.length > nbrDisplay && (
-              <Grid item xs={12}>
-                <Button priority="tertiary" size="small" onClick={showMoreCb}>
-                  Voir plus
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </Container>
-      )}
+              {formation.formationPoursuite.length > nbrDisplay && (
+                <Grid item xs={12}>
+                  <Button priority="tertiary" size="small" onClick={showMoreCb}>
+                    Voir plus
+                  </Button>
+                </Grid>
+              )}
+            </Grid>
+          </Container>
+        )}
+      </Box>
     </Card>
   );
 }

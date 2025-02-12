@@ -22,7 +22,6 @@ export default function FormationDescription({
             border: "1px solid #DDDDDD",
             padding: "1rem",
             paddingTop: "1.5rem",
-            marginBottom: "2rem",
           }}
         >
           <TruncateMarkup

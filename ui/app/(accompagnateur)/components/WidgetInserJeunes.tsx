@@ -16,7 +16,7 @@ export default function WidgetInserJeunes({
 
   return (
     <>
-      <div>
+      <div style={{ marginBottom: "-45px" }}>
         <iframe
           style={{ display: "block", width: "100%", maxWidth: "650px", height: 0 }}
           scrolling="no"
