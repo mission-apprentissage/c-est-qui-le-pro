@@ -17,34 +17,35 @@ export default function FormationBlockFormation({
 
   return (
     <Card type="details" title={"La formation"} {...cardProps}>
-      <FormationsFamilleMetier
-        withLink
-        formationDetail={formationDetail}
-        sx={{
-          padding: "1rem 0.75rem",
-          borderRadius: "9px",
-          marginBottom: "2.5rem",
-        }}
-      />
+      <Box style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+        <FormationsFamilleMetier
+          withLink
+          formationDetail={formationDetail}
+          sx={{
+            padding: "1rem 0.75rem",
+            borderRadius: "9px",
+          }}
+        />
 
-      <FormationDescription description={formation.description}>
-        {formation.description && (
-          <Box style={{ marginTop: "2rem" }}>
-            <Link
-              style={{ color: "var(--blue-france-sun-113-625)" }}
-              target="_blank"
-              href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
-            >
-              En savoir plus, sur le site de l&apos;Onisep
-            </Link>
+        <FormationDescription description={formation.description}>
+          {formation.description && (
+            <Box>
+              <Link
+                style={{ color: "var(--blue-france-sun-113-625)" }}
+                target="_blank"
+                href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
+              >
+                En savoir plus, sur le site de l&apos;Onisep
+              </Link>
+            </Box>
+          )}
+        </FormationDescription>
+        {formation.voie === "apprentissage" && (
+          <Box>
+            <WidgetSiriusFormation formation={formation} fallbackComponent={<></>} />
           </Box>
         )}
-      </FormationDescription>
-      {formation.voie === "apprentissage" && (
-        <Box>
-          <WidgetSiriusFormation formation={formation} fallbackComponent={<></>} />
-        </Box>
-      )}
+      </Box>
     </Card>
   );
 }

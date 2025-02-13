@@ -77,7 +77,7 @@ export default styled(Card)<CardProps>`
         }  
 
         h2 {
-          margin-bottom: 2rem;
+          margin-bottom: 2.5rem;
         }
           `;
 

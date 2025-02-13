@@ -286,7 +286,7 @@ const FormationResume = React.memo(function ({
   const { headersSize } = useFormationsDetails();
   const activeId = useScrollspy(
     ["la-formation", "l-admission", "poursuite-etudes", "acces-emploi"],
-    headersSize.headerHeight + headersSize.resumeHeight + 3
+    headersSize.headerHeight + headersSize.resumeHeight + 200
   );
 
   useEffect(() => {

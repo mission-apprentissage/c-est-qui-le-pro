@@ -65,6 +65,9 @@ const { MuiDsfrThemeProvider } = createMuiDsfrThemeProvider({
               lineHeight: "3rem",
             },
           },
+          h3: {
+            marginBottom: "2rem",
+          },
           h5: {
             fontSize: "1.25rem",
             lineHeight: "1.75rem",
