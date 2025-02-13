@@ -51,7 +51,7 @@ export const formationTagSchema: yup.StringSchema<FormationTag> = yup
   .oneOf(Object.values(FormationTag))
   .required();
 
-type IndicateurEntree = {
+export type IndicateurEntree = {
   rentreeScolaire: string;
   capacite?: number;
   premiersVoeux?: number;

@@ -10,6 +10,13 @@ export type FormationTagType = {
   bgColor: string;
   icon: (() => JSX.Element) | FrCxArg;
 };
+
+export const LIBELLE_PRESSION = {
+  easy: "Favorable (taux de pression faible)",
+  average: "Assez difficile (taux de pression modéré)",
+  hard: "Très difficile (taux de pression élevé)",
+};
+
 export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,

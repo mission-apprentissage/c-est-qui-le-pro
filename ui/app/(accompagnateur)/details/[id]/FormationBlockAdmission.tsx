@@ -1,22 +1,77 @@
+/** @jsxImportSource @emotion/react */
 "use client";
+import { css } from "@emotion/react";
 import { Box, Grid } from "@mui/material";
 import { Highlight } from "@codegouvfr/react-dsfr/Highlight";
 import { Typography } from "#/app/components/MaterialUINext";
 import FormationDescription from "../../components/FormationDescription";
-import { FormationDetail, THRESHOLD_TAUX_PRESSION } from "shared";
+import { FormationDetail, IndicateurEntree, THRESHOLD_TAUX_PRESSION } from "shared";
 import Card from "#/app/components/Card";
 import Tag from "#/app/components/Tag";
 import Button from "#/app/components/Button";
 import Link from "#/app/components/Link";
 import { fr } from "@codegouvfr/react-dsfr";
 import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
+import { LIBELLE_PRESSION } from "#/app/services/formation";
 
-function FormationBlockAdmissionScolaire({
-  formationDetail: { formationEtablissement },
+function TagAdmission({
+  level,
+  rentreeScolaire,
 }: {
-  formationDetail: FormationDetail;
+  level: "easy" | "average" | "hard" | "unknow";
+  rentreeScolaire: string;
 }) {
-  let { premiersVoeux, capacite, effectifs, tauxPression } = formationEtablissement?.indicateurEntree ?? {};
+  const tagByLevel = {
+    easy: {
+      title: <>{LIBELLE_PRESSION["easy"]}</>,
+      description: (
+        <>
+          L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable, la formation n’a pas été très demandée par les
+          élèves. Il y avait plus de places dans les classes que de vœux numéro 1 formulés par les élèves. Mais
+          attention certains élèves n’ont pas été pris dans cette formation en raison de leur dossier.
+        </>
+      ),
+    },
+    average: {
+      title: <>{LIBELLE_PRESSION["average"]}</>,
+      description: (
+        <>
+          L’an dernier (Mai {rentreeScolaire}), c’était assez difficile, la formation a été souvent demandée par les
+          élèves. Il y avait donc moins de places disponibles dans les classes que de vœux faits par des élèves.
+          Certains élèves n’ont donc pas été pris dans cette formation.
+        </>
+      ),
+    },
+    hard: {
+      title: <>{LIBELLE_PRESSION["hard"]}</>,
+      description: (
+        <>
+          L’an dernier (Mai {rentreeScolaire}), c’était très difficile, la formation a été demandée par de nombreux
+          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous les élèves ayant formulé
+          ce vœu. De nombreux élèves n’ont donc pas été pris dans cette formation.
+        </>
+      ),
+    },
+    unknow: {
+      title: <></>,
+      description: <></>,
+    },
+  };
+
+  return level === "unknow" ? (
+    <></>
+  ) : (
+    <Box>
+      <Tag square level={level} style={{ marginRight: "0.5rem" }}>
+        {tagByLevel[level].title}
+      </Tag>
+      <div style={{ marginTop: "0.5rem" }}>{tagByLevel[level].description}</div>
+    </Box>
+  );
+}
+
+function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntree: IndicateurEntree }) {
+  let { premiersVoeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -47,36 +102,7 @@ function FormationBlockAdmissionScolaire({
         Est-ce facile d’y rentrer ?
       </Typography>
       <Box style={{ fontWeight: "500" }}>
-        <>
-          {admissionLevel === "easy" && (
-            <Box>
-              <Tag square level="easy" style={{ marginRight: "0.5rem" }}>
-                Oui
-              </Tag>
-              C’est plutôt simple, il y avait plus de places disponibles que de demandes l’an dernier.
-            </Box>
-          )}
-        </>
-        <>
-          {admissionLevel === "average" && (
-            <Box>
-              <Tag square level="average" style={{ marginRight: "0.5rem" }}>
-                Moyennement
-              </Tag>
-              Il y a eu plus de demandes que de places disponibles l’an dernier.
-            </Box>
-          )}
-        </>
-        <>
-          {admissionLevel === "hard" && (
-            <Box>
-              <Tag square level="hard" style={{ marginRight: "0.5rem" }}>
-                Non
-              </Tag>
-              L’an dernier, il y a eu bien plus de demandes que de places disponibles.
-            </Box>
-          )}
-        </>
+        <TagAdmission level={admissionLevel} rentreeScolaire={rentreeScolaire} />
       </Box>
       <Box sx={{ width: "300px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
         <Grid container columnSpacing={3} rowSpacing={20}>
@@ -127,6 +153,49 @@ function FormationBlockAdmissionScolaire({
           </Grid>
         </Grid>
       </Box>
+
+      <Highlight style={{ marginLeft: 0, marginTop: "2rem" }}>
+        <div style={{ fontWeight: 700, marginBottom: "1rem" }}>Attention l’admission dépend aussi : </div>
+        <ul
+          css={css`
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            & li {
+              padding: 0;
+            }
+            & li i {
+              color: #000091;
+            }
+          `}
+        >
+          <li>
+            <i className={fr.cx("ri-home-4-line")} /> de l’adresse du domicile, et notamment de l’académie de
+            rattachement
+          </li>
+
+          <li>
+            <i className={fr.cx("ri-checkbox-multiple-line")} /> de la maîtrise des compétences du socle commun et des
+            résultats scolaires
+          </li>
+
+          <li>
+            <i className={fr.cx("ri-chat-follow-up-line")} /> de l’avis des chefs d’établissement d’origine et d’accueil
+          </li>
+
+          <li>
+            <i className={fr.cx("ri-mental-health-line")} /> de la motivation
+          </li>
+        </ul>
+        <div>
+          Conseil aux candidats : de façon à augmenter les chances d’être retenu, il est conseillé de formuler plusieurs
+          vœux, dans différents établissements et pour plusieurs formations.
+        </div>
+      </Highlight>
     </Box>
   );
 }
@@ -141,13 +210,13 @@ function FormationBlockAdmissionVoeux({ formationDetail }: { formationDetail: Fo
         <Box style={{ marginBottom: "1rem" }}>
           En alternance, le plus compliqué est bien souvent de trouver une entreprise pour signer un contrat.
           <br />
-          <br /> Mais pas de panique ! Il y a beaucoup d&apos;interlocuteurs et de ressources pour aider dans cette
+          <br /> Mais pas de panique ! Il y a beaucoup d’interlocuteurs et de ressources pour aider dans cette
           recherche.
           <br />
           <ul>
             <li>
               Il est par exemple possible de <b>se faire aider par son futur lycée ou CFA</b> (centre de formation
-              d&apos;apprentis) ou par une mission locale.
+              d’apprentis) ou par une mission locale.
             </li>
             <li>
               Le site <b>La bonne alternance</b> permet de consulter des offres de contrat en alternance des entreprises
@@ -167,7 +236,11 @@ function FormationBlockAdmissionVoeux({ formationDetail }: { formationDetail: Fo
     );
   }
 
-  return <FormationBlockAdmissionScolaire formationDetail={formationDetail} />;
+  return (
+    formationDetail.formationEtablissement.indicateurEntree && (
+      <FormationBlockAdmissionScolaire indicateurEntree={formationDetail.formationEtablissement.indicateurEntree} />
+    )
+  );
 }
 
 export default function FormationBlockAdmission({
