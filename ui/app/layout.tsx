@@ -65,6 +65,10 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                   linkProps: { href: "/documentation", target: "_blank" },
                 },
                 {
+                  text: "Statistiques",
+                  linkProps: { href: "/stats", target: "_blank" },
+                },
+                {
                   text: "Nous contacter",
                   linkProps: { href: "https://tally.so/r/wz0AOR", target: "_blank" },
                 },
