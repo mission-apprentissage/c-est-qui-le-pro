@@ -1,7 +1,7 @@
 import { oleoduc, writeData, transformData, concatStreams, compose, filterData, mergeStreams } from "oleoduc";
 import { omit, pick, uniq } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import moment from "#src/common/utils/dateUtils.js";
+import moment from "#src/common/utils/dateUtils";
 import FormationRepository from "#src/common/repositories/formation";
 import { streamOnisepFormations } from "./streamOnisepFormations";
 import { kdb, upsert } from "#src/common/db/db";

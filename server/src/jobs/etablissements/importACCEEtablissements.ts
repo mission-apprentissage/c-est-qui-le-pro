@@ -1,5 +1,5 @@
 import { filterData, oleoduc, writeData } from "oleoduc";
-import moment from "#src/common/utils/dateUtils.js";
+import moment from "#src/common/utils/dateUtils";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { omitNil } from "#src/common/utils/objectUtils.js";
 import * as ACCE from "#src/services/acce.js";

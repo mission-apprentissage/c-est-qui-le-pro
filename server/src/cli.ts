@@ -8,6 +8,7 @@ import { computeBCNMEFContinuum } from "./jobs/bcn/computeBCNMEFContinuum";
 import { importLibelle } from "./jobs/bcn/importLibelle";
 import { importACCEEtablissements } from "./jobs/etablissements/importACCEEtablissements";
 import { importEtablissements } from "./jobs/etablissements/importEtablissements";
+import { importEtablissementJPOScrapTmp } from "./jobs/etablissements/importEtablissementJPOScrapTmp";
 import { importFormation } from "./jobs/formations/importFormation";
 import { importFormations as importCAFormations } from "./jobs/catalogueApprentissage/importFormations";
 import {
@@ -77,6 +78,7 @@ const formationEtablissementJobs = [
 const etablissementJobs = [
   { name: "etablissementACCE", job: importACCEEtablissements },
   { name: "etablissementEtablissement", job: importEtablissements },
+  { name: "etablissementJPOScrapTmp", job: importEtablissementJPOScrapTmp },
 ];
 
 const catalogueApprentissageJobs = [{ name: "caFormations", job: importCAFormations }];
