@@ -7,7 +7,7 @@ export const revalidate = 0;
 export default function Page() {
   return (
     <Container maxWidth={"lg"}>
-      <NotionPage pageId={"2c4d4e4c-969b-4a47-9fa3-dc849306b04c"} urlBasePath={"/documentation/"} />
+      <NotionPage pageId={"160d0d8ec0158098a83bfa1895d2c69e"} urlBasePath={"/stats/"} />
     </Container>
   );
 }
