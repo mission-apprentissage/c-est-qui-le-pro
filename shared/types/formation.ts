@@ -55,6 +55,7 @@ export type IndicateurEntree = {
   rentreeScolaire: string;
   capacite?: number;
   premiersVoeux?: number;
+  voeux?: number;
   tauxPression?: number;
   effectifs?: number;
 };

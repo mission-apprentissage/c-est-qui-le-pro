@@ -27,8 +27,8 @@ function TagAdmission({
       description: (
         <>
           L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable, la formation n’a pas été très demandée par les
-          élèves. Il y avait plus de places dans les classes que de vœux numéro 1 formulés par les élèves. Mais
-          attention certains élèves n’ont pas été pris dans cette formation en raison de leur dossier.
+          élèves. Il y avait plus de places dans les classes que de vœux n°1 formulés par les élèves. Mais attention
+          certains élèves n’ont pas été pris dans cette formation en raison de leur dossier.
         </>
       ),
     },
@@ -71,7 +71,7 @@ function TagAdmission({
 }
 
 function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntree: IndicateurEntree }) {
-  let { premiersVoeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
+  let { premiersVoeux, voeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -82,7 +82,7 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
       : "hard";
   const maxSize = 158;
   const minSize = 84;
-  const max = Math.max(premiersVoeux || 0, capacite || 0, effectifs || 0);
+  const max = Math.max(voeux || 0, premiersVoeux || 0, capacite || 0, effectifs || 0);
 
   const baseStyle = {
     display: "flex",
@@ -92,7 +92,13 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
     borderRadius: "100px",
   };
 
-  if (!tauxPression || premiersVoeux === undefined || capacite === undefined || effectifs === undefined) {
+  if (
+    !tauxPression ||
+    voeux === undefined ||
+    premiersVoeux === undefined ||
+    capacite === undefined ||
+    effectifs === undefined
+  ) {
     return null;
   }
 
@@ -103,18 +109,33 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
         <Box style={{ fontWeight: "500" }}>
           <TagAdmission level={admissionLevel} rentreeScolaire={rentreeScolaire} />
         </Box>
-        <Box sx={{ width: "300px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
+        <Box sx={{ width: "340px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
           <Grid container columnSpacing={3} rowSpacing={20}>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+              Total vœux
+            </Grid>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Vœux n°1
             </Grid>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Places
             </Grid>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Élèves à la rentrée
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
+              <Box
+                style={{
+                  ...baseStyle,
+                  backgroundColor: "#E3E3FD",
+                  height: Math.max(minSize, (maxSize / max) * voeux),
+                  color: "#000091",
+                }}
+              >
+                {voeux}
+              </Box>
+            </Grid>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,
@@ -126,7 +147,7 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
                 {premiersVoeux}
               </Box>
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,
@@ -138,7 +159,7 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
                 {capacite}
               </Box>
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,

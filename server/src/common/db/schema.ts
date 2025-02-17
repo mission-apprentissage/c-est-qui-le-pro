@@ -161,13 +161,13 @@ export interface IndicateurEntree {
   capacite: number | null;
   createdAt: Generated<Timestamp>;
   effectifs: number | null;
-  effectifsAnnee: Generated<string>;
   formationEtablissementId: string | null;
   id: Generated<string>;
   premiersVoeux: number | null;
   rentreeScolaire: string | null;
   tauxPression: number | null;
   updatedAt: Generated<Timestamp>;
+  voeux: number | null;
 }
 
 export interface IndicateurPoursuite {

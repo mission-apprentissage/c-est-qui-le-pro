@@ -94,7 +94,7 @@ async function importIndicateurs() {
           voie === FormationVoie.SCOLAIRE &&
           ((
             await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
-              code_certification: data.code_certification,
+              mef_stat_11: data.code_certification,
             })
           )?.data as RawData[RawDataType.BCN_MEF]);
 
