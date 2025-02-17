@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.21.0...v1.22.0) (2025-02-17)
+
+
+### Features
+
+* page stats ([#35](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/35)) ([e2e6921](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/e2e6921002adc9b96368b96de06bba25426b3b83))
+
 # [1.21.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.20.0...v1.21.0) (2025-02-17)
 
 
