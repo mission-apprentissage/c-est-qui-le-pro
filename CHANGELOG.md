@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.20.0...v1.21.0) (2025-02-17)
+
+
+### Features
+
+* date et amélioration du widget admissions ([#33](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/33)) ([a2aa2df](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/a2aa2dfdf661d3e86db00112d38b364741e154a3))
+
 # [1.20.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.19.0...v1.20.0) (2025-02-11)
 
 
