@@ -18,6 +18,7 @@ function parseVoeux(filePath) {
     stream,
     parseCsv({
       delimiter: ";",
+      from_line: 2,
     })
   );
 }
