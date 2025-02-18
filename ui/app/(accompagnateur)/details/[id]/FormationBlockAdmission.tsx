@@ -127,9 +127,9 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
               <Box
                 style={{
                   ...baseStyle,
-                  backgroundColor: "#E3E3FD",
-                  height: Math.max(minSize, (maxSize / max) * voeux),
+                  backgroundColor: "#E8EDFF",
                   color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + voeux) / Math.log(1 + max))),
                 }}
               >
                 {voeux}
@@ -140,8 +140,8 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
                 style={{
                   ...baseStyle,
                   backgroundColor: "#BFCCFB",
-                  height: Math.max(minSize, (maxSize / max) * premiersVoeux),
                   color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + premiersVoeux) / Math.log(1 + max))),
                 }}
               >
                 {premiersVoeux}
@@ -151,9 +151,9 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
               <Box
                 style={{
                   ...baseStyle,
-                  backgroundColor: "#E8EDFF",
-                  height: Math.max(minSize, (maxSize / max) * capacite),
-                  color: "#000091",
+                  backgroundColor: "#000091",
+                  color: "#FFFFFF",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + capacite) / Math.log(1 + max))),
                 }}
               >
                 {capacite}
@@ -163,9 +163,9 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
               <Box
                 style={{
                   ...baseStyle,
-                  backgroundColor: "#000091",
-                  height: Math.max(minSize, (maxSize / max) * effectifs),
-                  color: "#FFFFFF",
+                  backgroundColor: "#E3E3FD",
+                  color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + effectifs) / Math.log(1 + max))),
                 }}
               >
                 {effectifs}
