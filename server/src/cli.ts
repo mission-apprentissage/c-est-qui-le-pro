@@ -74,7 +74,6 @@ const formationEtablissementJobs = [
 const etablissementJobs = [
   { name: "etablissementACCE", job: importACCEEtablissements },
   { name: "etablissementEtablissement", job: importEtablissements },
-  { name: "etablissementJPOScrapTmp", job: importEtablissementJPOScrapTmp },
 ];
 
 const catalogueApprentissageJobs = [{ name: "caFormations", job: importCAFormations }];
@@ -155,6 +154,16 @@ cli
     });
   });
 
+cli
+  .command("scrapJPO")
+  .description("Scrap les JPOs depuis le site de l'Onisep")
+  .action(() => {
+    runScript(async () => {
+      const scrapJPOStats = await importEtablissementJPOScrapTmp();
+
+      return scrapJPOStats;
+    });
+  });
 cli
   .command("splitIsochrones")
   .description(

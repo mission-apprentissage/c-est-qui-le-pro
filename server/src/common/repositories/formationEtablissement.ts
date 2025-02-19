@@ -216,7 +216,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       {},
       false
     )) as UpdateResult[];
-    return result ? (result[0].numUpdatedRows as unknown as number) : 0;
+    return result ? Number(result[0].numUpdatedRows) : 0;
   }
 
   async removeStale() {
@@ -224,7 +224,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       { state: FORMATION_ETABLISSEMENT_STATE.update_waiting },
       false
     )) as DeleteResult[];
-    return result ? (result[0].numDeletedRows as unknown as number) : 0;
+    return result ? Number(result[0].numDeletedRows) : 0;
   }
 }
 
