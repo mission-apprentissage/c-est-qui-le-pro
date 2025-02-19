@@ -1,11 +1,11 @@
 import { SqlRepository, WhereObject } from "./base.js";
 import { kdb as defaultKdb } from "../db/db";
-import { DB } from "../db/schema.js";
+import { DB, FormationEtablissementState } from "../db/schema.js";
 import FormationRepository from "./formation";
 import EtablissementRepository from "./etablissement";
 import { Readable } from "stream";
 import { compose, transformData } from "oleoduc";
-import { sql } from "kysely";
+import { DeleteResult, sql, UpdateResult } from "kysely";
 import { merge } from "lodash-es";
 import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
@@ -13,6 +13,11 @@ import { getDiplomeType } from "shared";
 type QueryFormationEtablissement = Partial<WhereObject<DB, "formationEtablissement">>;
 type QueryEtablissement = Partial<WhereObject<DB, "etablissement">>;
 type QueryFormation = Partial<WhereObject<DB, "formation">>;
+
+export const FORMATION_ETABLISSEMENT_STATE: { [k: string]: FormationEtablissementState } = {
+  updated: "updated",
+  update_waiting: "update_waiting",
+};
 
 export class FormationEtablissementRepository extends SqlRepository<DB, "formationEtablissement"> {
   constructor(kdb = defaultKdb) {
@@ -27,6 +32,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         millesime: null,
         tags: null,
         updatedAt: null,
+        state: null,
       },
       kdb
     );
@@ -200,6 +206,25 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         };
       })
     );
+  }
+
+  async startUpdate() {
+    const result = (await this.updateBy(
+      {
+        state: FORMATION_ETABLISSEMENT_STATE.update_waiting,
+      },
+      {},
+      false
+    )) as UpdateResult[];
+    return result ? (result[0].numUpdatedRows as unknown as number) : 0;
+  }
+
+  async removeStale() {
+    const result = (await this.remove(
+      { state: FORMATION_ETABLISSEMENT_STATE.update_waiting },
+      false
+    )) as DeleteResult[];
+    return result ? (result[0].numDeletedRows as unknown as number) : 0;
   }
 }
 
