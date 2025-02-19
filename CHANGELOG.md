@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.22.0...v1.23.0) (2025-02-19)
+
+
+### Features
+
+* utilisation des voeux affelnet ([#37](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/37)) ([efcd1c1](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/efcd1c146b80b091e3b42725735cc89da1ade135))
+
 # [1.22.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.21.0...v1.22.0) (2025-02-17)
 
 
