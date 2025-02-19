@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.23.0...v1.24.0) (2025-02-19)
+
+
+### Features
+
+* scrapping des JPOs et cron de mise à jour des formations ([#36](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/36)) ([7aab543](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/7aab5430c3f80fe01d877a23cd98fc6dbd4d3522))
+
 # [1.23.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.22.0...v1.23.0) (2025-02-19)
 
 
