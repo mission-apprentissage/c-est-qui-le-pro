@@ -123,6 +123,12 @@ const config = {
       lienMefFamilleMetier: path.join(dataDir, "bcn", "n_lien_mef_famille_metier.csv"),
     },
   },
+  affelnet: {
+    voeuxAnneeRentree: "2024",
+    files: {
+      voeux: path.join(dataDir, "affelnet", "voeux_2024_diffusable.csv"),
+    },
+  },
 };
 
 export default config;

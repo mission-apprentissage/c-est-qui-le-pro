@@ -26,9 +26,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["easy"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable, la formation n’a pas été très demandée par les
-          élèves. Il y avait plus de places dans les classes que de vœux numéro 1 formulés par les élèves. Mais
-          attention certains élèves n’ont pas été pris dans cette formation en raison de leur dossier.
+          L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable. La formation n’a pas été très demandée : il y
+          avait plus de places dans les classes que de vœux n°1 formulés par les élèves. Mais attention certains élèves
+          n’ont pas été pris dans cette formation en raison de leur dossier.
         </>
       ),
     },
@@ -36,9 +36,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["average"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était assez difficile, la formation a été souvent demandée par les
-          élèves. Il y avait donc moins de places disponibles dans les classes que de vœux faits par des élèves.
-          Certains élèves n’ont donc pas été pris dans cette formation.
+          L’an dernier (Mai {rentreeScolaire}), c’était assez difficile. La formation a été souvent demandée : il y
+          avait moins de places disponibles dans les classes que de vœux n°1 formulés par les élèves. Certains élèves
+          n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
@@ -46,9 +46,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["hard"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était très difficile, la formation a été demandée par de nombreux
-          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous les élèves ayant formulé
-          ce vœu. De nombreux élèves n’ont donc pas été pris dans cette formation.
+          L’an dernier (Mai {rentreeScolaire}), c’était très difficile. La formation a été demandée par de nombreux
+          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous ceux ayant formulé ce vœu.
+          De nombreux élèves n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
@@ -71,7 +71,7 @@ function TagAdmission({
 }
 
 function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntree: IndicateurEntree }) {
-  let { premiersVoeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
+  let { premiersVoeux, voeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"
@@ -82,7 +82,7 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
       : "hard";
   const maxSize = 158;
   const minSize = 84;
-  const max = Math.max(premiersVoeux || 0, capacite || 0, effectifs || 0);
+  const max = Math.max(voeux || 0, premiersVoeux || 0, capacite || 0, effectifs || 0);
 
   const baseStyle = {
     display: "flex",
@@ -92,7 +92,13 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
     borderRadius: "100px",
   };
 
-  if (!tauxPression || premiersVoeux === undefined || capacite === undefined || effectifs === undefined) {
+  if (
+    !tauxPression ||
+    voeux === undefined ||
+    premiersVoeux === undefined ||
+    capacite === undefined ||
+    effectifs === undefined
+  ) {
     return null;
   }
 
@@ -103,48 +109,63 @@ function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntre
         <Box style={{ fontWeight: "500" }}>
           <TagAdmission level={admissionLevel} rentreeScolaire={rentreeScolaire} />
         </Box>
-        <Box sx={{ width: "300px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
+        <Box sx={{ width: "340px", fontSize: "0.875rem", marginLeft: { sm: "0", md: "3rem" }, marginTop: "1.5rem" }}>
           <Grid container columnSpacing={3} rowSpacing={20}>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+              Total vœux
+            </Grid>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Vœux n°1
             </Grid>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Places
             </Grid>
-            <Grid item xs={4} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
+            <Grid item xs={3} style={{ textAlign: "center", color: fr.colors.decisions.text.title.blueFrance.default }}>
               Élèves à la rentrée
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
+              <Box
+                style={{
+                  ...baseStyle,
+                  backgroundColor: "#E8EDFF",
+                  color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + voeux) / Math.log(1 + max))),
+                }}
+              >
+                {voeux}
+              </Box>
+            </Grid>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,
                   backgroundColor: "#BFCCFB",
-                  height: Math.max(minSize, (maxSize / max) * premiersVoeux),
                   color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + premiersVoeux) / Math.log(1 + max))),
                 }}
               >
                 {premiersVoeux}
               </Box>
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,
-                  backgroundColor: "#E8EDFF",
-                  height: Math.max(minSize, (maxSize / max) * capacite),
-                  color: "#000091",
+                  backgroundColor: "#000091",
+                  color: "#FFFFFF",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + capacite) / Math.log(1 + max))),
                 }}
               >
                 {capacite}
               </Box>
             </Grid>
-            <Grid item xs={4} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Grid item xs={3} style={{ display: "flex", alignItems: "flex-end" }}>
               <Box
                 style={{
                   ...baseStyle,
-                  backgroundColor: "#000091",
-                  height: Math.max(minSize, (maxSize / max) * effectifs),
-                  color: "#FFFFFF",
+                  backgroundColor: "#E3E3FD",
+                  color: "#000091",
+                  height: Math.max(minSize, maxSize * (Math.log(1 + effectifs) / Math.log(1 + max))),
                 }}
               >
                 {effectifs}

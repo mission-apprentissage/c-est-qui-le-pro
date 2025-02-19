@@ -3,7 +3,7 @@ import * as yup from "yup";
 export const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^[0-9A-Z]{8}$/;
 
-export const THRESHOLD_TAUX_PRESSION = [1, 1.27];
+export const THRESHOLD_TAUX_PRESSION = [1, 1.42];
 
 export const DiplomeType = {
   BAC_PRO: ["400", "403"], // Bac pro et bac pro agricole
@@ -55,6 +55,7 @@ export type IndicateurEntree = {
   rentreeScolaire: string;
   capacite?: number;
   premiersVoeux?: number;
+  voeux?: number;
   tauxPression?: number;
   effectifs?: number;
 };

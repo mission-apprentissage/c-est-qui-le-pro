@@ -1,4 +1,4 @@
-import { SqlRepository } from "./base.js";
+import { SqlRepository, WhereObject } from "./base.js";
 import { kdb as defaultKdb } from "../db/db";
 import { DB } from "../db/schema.js";
 import FormationRepository from "./formation";
@@ -10,9 +10,9 @@ import { merge } from "lodash-es";
 import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
 
-type QueryFormationEtablissement = Partial<{ [key in keyof DB["formationEtablissement"]]: string }>;
-type QueryEtablissement = Partial<{ [key in keyof DB["etablissement"]]: string }>;
-type QueryFormation = Partial<{ [key in keyof DB["formation"]]: string }>;
+type QueryFormationEtablissement = Partial<WhereObject<DB, "formationEtablissement">>;
+type QueryEtablissement = Partial<WhereObject<DB, "etablissement">>;
+type QueryFormation = Partial<WhereObject<DB, "formation">>;
 
 export class FormationEtablissementRepository extends SqlRepository<DB, "formationEtablissement"> {
   constructor(kdb = defaultKdb) {
