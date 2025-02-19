@@ -1,4 +1,4 @@
-import moment from "#src/common/utils/dateUtils.js";
+import moment from "#src/common/utils/dateUtils";
 
 export function parseJourneesPortesOuvertes(journeesPortesOuvertes) {
   const dateFormat = "DD/MM/YYYY";
@@ -9,7 +9,7 @@ export function parseJourneesPortesOuvertes(journeesPortesOuvertes) {
   const optionalRegex = "(?: en virtuel)?( \\([^\\)]+\\))?( voir [^\\s]+)?";
   const rules = {
     date: {
-      regex: `^le ([0-9]{2}/[0-9]{2}/[0-9]{4})${optionalRegex}$`,
+      regex: `^[lL]e ([0-9]{1,2}/[0-9]{2}/[0-9]{4})${optionalRegex}$`,
       match: defaultMatch,
       transform: (rule, str) => {
         const match = str.match(rule.regex);
@@ -26,7 +26,7 @@ export function parseJourneesPortesOuvertes(journeesPortesOuvertes) {
     },
 
     dateHour: {
-      regex: `^le ([0-9]{2}/[0-9]{2}/[0-9]{4}) de ([0-9]{2}h[0-9]{2}) à ([0-9]{2}h[0-9]{2})${optionalRegex}$`,
+      regex: `^[lL]e ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) de ([0-9]{1,2}h[0-9]{2}) à ([0-9]{1,2}h[0-9]{2})${optionalRegex}$`,
       match: defaultMatch,
       transform: (rule, str) => {
         const match = str.match(rule.regex);
@@ -44,7 +44,7 @@ export function parseJourneesPortesOuvertes(journeesPortesOuvertes) {
     },
 
     period: {
-      regex: `^du ([0-9]{2}/[0-9]{2}/[0-9]{4}) au ([0-9]{2}/[0-9]{2}/[0-9]{4})${optionalRegex}$`,
+      regex: `^[dD]u ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) au ([0-9]{1,2}/[0-9]{2}/[0-9]{4})${optionalRegex}$`,
       match: defaultMatch,
       transform: (rule, str) => {
         const match = str.match(rule.regex);
@@ -62,7 +62,7 @@ export function parseJourneesPortesOuvertes(journeesPortesOuvertes) {
     },
 
     periodHour: {
-      regex: `^du ([0-9]{2}/[0-9]{2}/[0-9]{4}) au ([0-9]{2}/[0-9]{2}/[0-9]{4}) de ([0-9]{2}h[0-9]{2}) à ([0-9]{2}h[0-9]{2})${optionalRegex}$`,
+      regex: `^[dD]u ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) au ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) de ([0-9]{1,2}h[0-9]{2}) à ([0-9]{1,2}h[0-9]{2})${optionalRegex}$`,
       match: defaultMatch,
       transform: (rule, str) => {
         const match = str.match(rule.regex);

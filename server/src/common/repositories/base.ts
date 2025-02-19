@@ -40,9 +40,14 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return this.kdb.insertInto(this.tableName).values(data).returningAll().execute();
   }
 
-  async remove(where: Partial<WhereObject<DB, F>>) {
+  async remove(where: Partial<WhereObject<DB, F>>, returningAll: boolean = true) {
     const query = this.kdb.deleteFrom(this.tableName);
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+
+    if (!returningAll) {
+      return queryCond.execute();
+    }
+
     return queryCond.returningAll().execute();
   }
 
@@ -73,7 +78,7 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return upsert(this.kdb, this.tableName, keys, data, onConflictData, returningKeys);
   }
 
-  updateBy(data: Updateable<DB[F]>, where: Partial<WhereObject<DB, F>> | null = null) {
+  updateBy(data: Updateable<DB[F]>, where: Partial<WhereObject<DB, F>> | null = null, returningAll: boolean = true) {
     const query = this.kdb
       .updateTable(this.tableName)
       .set(
@@ -85,6 +90,10 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
       );
 
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+
+    if (!returningAll) {
+      return queryCond.execute();
+    }
 
     return queryCond.returningAll().execute();
   }

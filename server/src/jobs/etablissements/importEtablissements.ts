@@ -162,7 +162,7 @@ export async function importEtablissements() {
                     { fn: "ST_SetSRID", args: [sql`4326`] },
                   ])
                 : null,
-              JPOdetails: jPO ? jPO.details : null,
+              JPODetails: jPO ? jPO.details : null,
             });
 
           const result = await upsert(kdb, "etablissement", ["uai"], queryData, queryData, ["id"]);

@@ -1,13 +1,15 @@
 import { oleoduc, writeData, transformData, concatStreams, compose, filterData, mergeStreams } from "oleoduc";
 import { omit, pick, uniq } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import moment from "#src/common/utils/dateUtils.js";
+import moment from "#src/common/utils/dateUtils";
 import FormationRepository from "#src/common/repositories/formation";
 import { streamOnisepFormations } from "./streamOnisepFormations";
 import { kdb, upsert } from "#src/common/db/db";
 import EtablissementRepository from "#src/common/repositories/etablissement";
 import RawDataRepository, { RawDataType } from "#src/common/repositories/rawData";
-import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement";
+import FormationEtablissementRepository, {
+  FORMATION_ETABLISSEMENT_STATE,
+} from "#src/common/repositories/formationEtablissement";
 import IndicateurEntreeRepository from "#src/common/repositories/indicateurEntree";
 import IndicateurPoursuiteRepository from "#src/common/repositories/indicateurPoursuite";
 
@@ -46,7 +48,9 @@ async function streamCAFormations({ stats }) {
 
 export async function importFormationEtablissement() {
   logger.info(`Importation des formations depuis l'onisep' et depuis le catalogue de l'apprentissage`);
-  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const stats = { total: 0, created: 0, updated: 0, failed: 0, deleted: 0 };
+
+  await FormationEtablissementRepository.startUpdate();
 
   await oleoduc(
     // Important des formations depuis l'Idéo actions de formation initiale de l'Onisep et du catalogue de l'apprentissage
@@ -78,6 +82,7 @@ export async function importFormationEtablissement() {
             ...omit(data, "millesime"),
             etablissementId: etablissement.id,
             formationId: formation.id,
+            state: FORMATION_ETABLISSEMENT_STATE.updated,
           };
 
           const result = await upsert(
@@ -111,6 +116,8 @@ export async function importFormationEtablissement() {
       { parallel: 1 }
     )
   );
+
+  stats.deleted = await FormationEtablissementRepository.removeStale();
 
   return stats;
 }

@@ -64,6 +64,16 @@
     weekday: 1-5
     job: "bash /opt/accompagnateur/reload-app.sh >> /var/log/cron.log 2>&1"
 
+- name: Add cron to import new formations and JPOs
+  ansible.builtin.cron:
+    name: "update-data"
+    minute: "0"
+    hour: "4"
+    weekday: "1"
+    job: "bash /opt/accompagnateur/cli.sh importAll >> /var/log/cron.log 2>&1"
+
+
+
 # Disable by default, enable after app deployment
 - name: Add cron to monitor the app and restart it automatically
   when: monitor == "true"

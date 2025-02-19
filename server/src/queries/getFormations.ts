@@ -1,6 +1,6 @@
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import * as Cache from "#src/common/cache.js";
-import moment from "#src/common/utils/dateUtils.js";
+import moment from "#src/common/utils/dateUtils";
 import { FormationTag } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb, kyselyChainFn } from "#src/common/db/db.js";
