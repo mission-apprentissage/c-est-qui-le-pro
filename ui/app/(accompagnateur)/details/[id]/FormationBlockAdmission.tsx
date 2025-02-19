@@ -26,9 +26,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["easy"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable, la formation n’a pas été très demandée par les
-          élèves. Il y avait plus de places dans les classes que de vœux n°1 formulés par les élèves. Mais attention
-          certains élèves n’ont pas été pris dans cette formation en raison de leur dossier.
+          L’an dernier (Mai {rentreeScolaire}), c’était plutôt favorable. La formation n’a pas été très demandée : il y
+          avait plus de places dans les classes que de vœux n°1 formulés par les élèves. Mais attention certains élèves
+          n’ont pas été pris dans cette formation en raison de leur dossier.
         </>
       ),
     },
@@ -36,9 +36,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["average"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était assez difficile, la formation a été souvent demandée par les
-          élèves. Il y avait donc moins de places disponibles dans les classes que de vœux faits par des élèves.
-          Certains élèves n’ont donc pas été pris dans cette formation.
+          L’an dernier (Mai {rentreeScolaire}), c’était assez difficile. La formation a été souvent demandée : il y
+          avait moins de places disponibles dans les classes que de vœux n°1 formulés par les élèves. Certains élèves
+          n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
@@ -46,9 +46,9 @@ function TagAdmission({
       title: <>{LIBELLE_PRESSION["hard"]}</>,
       description: (
         <>
-          L’an dernier (Mai {rentreeScolaire}), c’était très difficile, la formation a été demandée par de nombreux
-          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous les élèves ayant formulé
-          ce vœu. De nombreux élèves n’ont donc pas été pris dans cette formation.
+          L’an dernier (Mai {rentreeScolaire}), c’était très difficile. La formation a été demandée par de nombreux
+          élèves. Il n’y avait donc pas assez de places dans les classes pour accueillir tous ceux ayant formulé ce vœu.
+          De nombreux élèves n’ont donc pas été pris dans cette formation.
         </>
       ),
     },
