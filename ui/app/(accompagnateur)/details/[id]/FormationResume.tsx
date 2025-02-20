@@ -18,8 +18,10 @@ import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { Theme, useMediaQuery } from "@mui/material";
 import { useHideOnScroll } from "../../hooks/useHideOnScroll";
 import { LIBELLE_PRESSION } from "#/app/services/formation";
+import FormationResumeBlockEmploi from "./FormationResumeBlockEmploi";
+import FormationResumeBlockEtude from "./FormationResumeBlockEtude";
 
-interface FormationResumeBlockProps {
+export interface FormationResumeBlockProps {
   title: string;
   icon: FrCxArg;
   children?: JSX.Element | JSX.Element[];
@@ -28,7 +30,7 @@ interface FormationResumeBlockProps {
   isActive?: boolean;
 }
 
-function FormationResumeBlock({ title, icon, children, anchor, hideTag, isActive }: FormationResumeBlockProps) {
+export function FormationResumeBlock({ title, icon, children, anchor, hideTag, isActive }: FormationResumeBlockProps) {
   const { push } = useRouter();
   const anchorCb = useCallback(() => {
     if (!anchor) {
@@ -161,120 +163,6 @@ function FormationResumeBlockAdmission({
   );
 }
 
-function FormationResumeBlockEmploi({
-  formationEtablissement,
-  ...formationResumeBlockProps
-}: {
-  formationEtablissement: FormationEtablissement;
-} & Partial<FormationResumeBlockProps>) {
-  const tauxEmploi = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
-  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
-
-  const admissionLevel =
-    isNil(tauxEmploi) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_emploi_6_mois_q0)
-      ? "unknow"
-      : tauxEmploi >= tauxRegional.taux_en_emploi_6_mois_q3
-      ? "easy"
-      : tauxEmploi > tauxRegional.taux_en_emploi_6_mois_q1
-      ? "average"
-      : "hard";
-
-  return (
-    <FormationResumeBlock
-      {...formationResumeBlockProps}
-      title={"L'accès à l'emploi"}
-      icon={"ri-briefcase-4-line"}
-      anchor="acces-emploi"
-    >
-      <>
-        {admissionLevel === "easy" && (
-          <Tag square level="easy">
-            Très favorable
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "average" && (
-          <Tag square level="average">
-            Dans la moyenne
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "hard" && (
-          <Tag square level="hard">
-            Plutôt difficile
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "unknow" && (
-          <Tag square level="unknow">
-            Taux d’emploi indisponible
-          </Tag>
-        )}
-      </>
-    </FormationResumeBlock>
-  );
-}
-
-function FormationResumeBlockEtude({
-  formationEtablissement,
-  ...formationResumeBlockProps
-}: {
-  formationEtablissement: FormationEtablissement;
-} & Partial<FormationResumeBlockProps>) {
-  const tauxFormation = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
-  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
-
-  const admissionLevel =
-    isNil(tauxFormation) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_formation_q0)
-      ? "unknow"
-      : tauxFormation >= tauxRegional.taux_en_formation_q3
-      ? "easy"
-      : tauxFormation > tauxRegional.taux_en_formation_q1
-      ? "average"
-      : "hard";
-
-  return (
-    <FormationResumeBlock
-      {...formationResumeBlockProps}
-      title={"La poursuite d'études"}
-      icon={"ri-sun-line"}
-      anchor={"poursuite-etudes"}
-    >
-      <>
-        {admissionLevel === "easy" && (
-          <Tag square level="easy">
-            Très souvent
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "average" && (
-          <Tag square level="average">
-            Souvent
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "hard" && (
-          <Tag square level="hard">
-            Peu souvent
-          </Tag>
-        )}
-      </>
-      <>
-        {admissionLevel === "unknow" && (
-          <Tag square level="unknow">
-            Taux de poursuite d’études indisponible
-          </Tag>
-        )}
-      </>
-    </FormationResumeBlock>
-  );
-}
-
 const FormationResume = React.memo(function ({
   formationDetail: { formation, formationEtablissement },
   hideTag,
@@ -349,6 +237,7 @@ const FormationResume = React.memo(function ({
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEtude
             hideTag={hideTag}
+            formation={formation}
             formationEtablissement={formationEtablissement}
             isActive={currentSection === "poursuite-etudes"}
           />
@@ -356,6 +245,7 @@ const FormationResume = React.memo(function ({
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEmploi
             hideTag={hideTag}
+            formation={formation}
             formationEtablissement={formationEtablissement}
             isActive={currentSection === "acces-emploi"}
           />

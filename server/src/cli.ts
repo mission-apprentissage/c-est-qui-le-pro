@@ -15,7 +15,10 @@ import { importFormationEtablissement } from "./jobs/formations/importFormationE
 import { importOnisep } from "./jobs/onisep/importOnisep";
 import { importIndicateurEntree } from "./jobs/formations/importIndicateurEntree";
 import { computeFormationTag } from "./jobs/formations/tag/computeFormationTag";
-import { importIndicateurPoursuite } from "./jobs/formations/importIndicateurPoursuite";
+import {
+  importIndicateurPoursuite,
+  importIndicateurPoursuiteAnneeCommune,
+} from "./jobs/formations/importIndicateurPoursuite";
 import { importIdeoFichesFormations } from "./jobs/formations/importIdeoFichesFormations";
 import { importRCO } from "./jobs/formations/importRCO";
 import { splitIsochrones } from "./jobs/isochrones/splitIsochrones";
@@ -66,6 +69,7 @@ const formationEtablissementJobs = [
   { name: "feIndicateurEntree", job: importIndicateurEntree },
   { name: "feIndicateurPoursuiteRegionale", job: importIndicateurPoursuiteRegionale },
   { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },
+  { name: "feIndicateurPoursuiteAnneeCommune", job: importIndicateurPoursuiteAnneeCommune },
   { name: "feFormationTag", job: computeFormationTag },
   { name: "feFormationSimilaire", job: importFormationSimilaire },
   { name: "feSearchIndex", job: createSearchIndex },

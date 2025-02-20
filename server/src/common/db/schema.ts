@@ -178,7 +178,20 @@ export interface IndicateurPoursuite {
   formationEtablissementId: string | null;
   id: Generated<string>;
   millesime: string | null;
-  part_en_emploi_6_mois: string | null;
+  part_en_emploi_6_mois: number | null;
+  taux_autres_6_mois: number | null;
+  taux_en_emploi_6_mois: number | null;
+  taux_en_formation: number | null;
+  updatedAt: Generated<Timestamp>;
+}
+
+export interface IndicateurPoursuiteAnneeCommune {
+  codeCertification: string;
+  createdAt: Generated<Timestamp>;
+  formationEtablissementId: string;
+  id: Generated<string>;
+  millesime: string;
+  part_en_emploi_6_mois: number | null;
   taux_autres_6_mois: number | null;
   taux_en_emploi_6_mois: number | null;
   taux_en_formation: number | null;
@@ -278,6 +291,7 @@ export interface DB {
   geometry_columns: GeometryColumns;
   indicateurEntree: IndicateurEntree;
   indicateurPoursuite: IndicateurPoursuite;
+  indicateurPoursuiteAnneeCommune: IndicateurPoursuiteAnneeCommune;
   indicateurPoursuiteRegional: IndicateurPoursuiteRegional;
   log: Log;
   metric: Metric;

@@ -10,6 +10,15 @@ import { omitNil } from "#src/common/utils/objectUtils.js";
 
 const logger = getLoggerWithContext("import");
 
+function formatStats(stats) {
+  return {
+    taux_en_emploi_6_mois: computeTauxEnEmploi(stats),
+    part_en_emploi_6_mois: stats.taux_en_emploi_6_mois,
+    taux_en_formation: stats.taux_en_formation,
+    taux_autres_6_mois: stats.taux_autres_6_mois,
+  };
+}
+
 export async function importIndicateurPoursuite() {
   logger.info(`Importation des indicateurs de poursuite (données InserJeunes)`);
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
@@ -71,10 +80,7 @@ export async function importIndicateurPoursuite() {
         const indicateurPoursuite = omitNil({
           formationEtablissementId: formationEtablissement.id,
           millesime: formationStats.millesime,
-          taux_en_emploi_6_mois: computeTauxEnEmploi(formationStats),
-          part_en_emploi_6_mois: formationStats.taux_en_emploi_6_mois,
-          taux_en_formation: formationStats.taux_en_formation,
-          taux_autres_6_mois: formationStats.taux_autres_6_mois,
+          ...formatStats(formationStats),
         });
 
         try {
@@ -92,6 +98,95 @@ export async function importIndicateurPoursuite() {
         } catch (e) {
           logger.error(e, `Impossible d'ajouter les indicateurs de la poursuite ${etablissement.uai}/${formation.cfd}`);
           stats.failed++;
+        }
+      },
+      { parallel: 1 }
+    )
+  );
+
+  return stats;
+}
+
+export async function importIndicateurPoursuiteAnneeCommune() {
+  logger.info(`Importation des indicateurs de poursuite pour les années communes (données InserJeunes)`);
+  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const expositionApiOptions = { retry: { retries: 5 } };
+  const expositionApi = new ExpositionApi(expositionApiOptions);
+
+  function handleError(e, context, msg = `Impossible d'importer les stats de formations`) {
+    logger.error({ err: e, ...context }, msg);
+    stats.failed++;
+    return null; //ignore chunk
+  }
+
+  await oleoduc(
+    await FormationEtablissementRepository.find({ isAnneeCommune: true }),
+    filterData((formationEtablissement) => formationEtablissement.formation.isAnneeCommune),
+    transformData(async (formationEtablissement) => {
+      try {
+        const uai = formationEtablissement.etablissement.uai;
+        const type = formationEtablissement.formation.voie === "scolaire" ? "MEFSTAT11" : "CFD";
+        const codeCertification =
+          type === "MEFSTAT11" ? formationEtablissement.formation.mef11 : formationEtablissement.formation.cfd;
+
+        logger.info(`Récupération des stats de formations pour ${formationEtablissement.formationEtablissement.id}`);
+        const stats = await expositionApi.fetchFormationStats(uai, codeCertification, type);
+        return { formationEtablissement, stats };
+      } catch (err) {
+        return handleError(err, { formationEtablissementId: formationEtablissement.formationEtablissement.id });
+      }
+    }),
+    filterData(({ stats }) => stats),
+    transformData(async ({ formationEtablissement, stats }) => {
+      for (const statIndex in stats.certificationsTerminales) {
+        const stat = stats.certificationsTerminales[statIndex];
+        const uai = formationEtablissement.etablissement.uai;
+        const type = formationEtablissement.formation.voie === "scolaire" ? "MEFSTAT11" : "CFD";
+        const codeCertification = stat.code_certification;
+
+        try {
+          const statsAnneeTerminale = await expositionApi.fetchFormationStats(uai, codeCertification, type);
+          stats.certificationsTerminales[statIndex] = statsAnneeTerminale;
+        } catch (err) {
+          handleError(err, {
+            formationEtablissementId: formationEtablissement.formationEtablissement.id,
+            codeAnneeTerminale: codeCertification,
+          });
+        }
+      }
+      return { formationEtablissement, stats };
+    }),
+    writeData(
+      async ({ formationEtablissement: { formationEtablissement, etablissement, formation }, stats }) => {
+        for (const stat of stats.certificationsTerminales) {
+          const indicateurPoursuite = omitNil({
+            formationEtablissementId: formationEtablissement.id,
+            codeCertification: stat.code_certification,
+            millesime: stats.millesime,
+            ...formatStats(stat),
+          });
+
+          try {
+            await upsert(
+              kdb,
+              "indicateurPoursuiteAnneeCommune",
+              ["formationEtablissementId", "codeCertification", "millesime"],
+              indicateurPoursuite,
+              indicateurPoursuite,
+              ["id"]
+            );
+
+            logger.info(
+              `Indicateur de poursuite d'année commune pour ${etablissement.uai}/${formation.cfd}, année terminale: ${stat.code_certification} ajoutée`
+            );
+            stats.created++;
+          } catch (e) {
+            logger.error(
+              e,
+              `Impossible d'ajouter les indicateurs de poursuite d'année commune pour ${etablissement.uai}/${formation.cfd}, année terminale: ${stat.code_certification}`
+            );
+            stats.failed++;
+          }
         }
       },
       { parallel: 1 }

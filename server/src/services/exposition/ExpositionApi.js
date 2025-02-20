@@ -78,12 +78,15 @@ class ExpositionApi extends RateLimitedApi {
   async fetchFormationStats(uai, codeCertification, type = "CFD") {
     return this.execute(async () => {
       // /!\ L'API Inserjeunes retourne un json dans un json, on retourne le json en string ici
-      console.error(`${ExpositionApi.baseApiUrl}/inserjeunes/formations/${uai}-${type}:${codeCertification}`);
       const response = await fetchJsonWithRetry(
         `${ExpositionApi.baseApiUrl}/inserjeunes/formations/${uai}-${type}:${codeCertification}`,
-        {},
+        { validateStatus: (status) => (status >= 200 && status < 300) || status === 404 },
         { ...this.retry }
       );
+
+      if (response?.statusCode === 404) {
+        return null;
+      }
 
       return response;
     });
