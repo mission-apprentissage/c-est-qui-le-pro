@@ -1,11 +1,14 @@
-import { RateLimiter } from "./RateLimiter.js";
+import { RateLimiter } from "./RateLimiter";
 import { ApiError } from "./ApiError.js";
-import { getLoggerWithContext } from "#src/common/logger.ts";
+import { getLoggerWithContext } from "#src/common/logger";
 
 const logger = getLoggerWithContext("api");
 
 class RateLimitedApi {
-  constructor(name, options = {}) {
+  name: string;
+  rateLimiter: any;
+
+  constructor(name, options: { nbRequests?: number; durationInSeconds?: number } = {}) {
     this.name = name;
     this.rateLimiter = new RateLimiter(this.name, {
       nbRequests: options.nbRequests || 1,
