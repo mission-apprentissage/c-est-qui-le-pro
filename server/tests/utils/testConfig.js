@@ -8,3 +8,5 @@ process.env.RCO_BUCKET_REGION = "region";
 process.env.RCO_BUCKET_ACCESS_KEY = "access";
 process.env.RCO_BUCKET_SECRET_KEY = "secret";
 process.env.RCO_BUCKET_NAME = "bucket";
+process.env.FRANCE_TRAVAIL_API_CLIENT_ID = "client_id";
+process.env.FRANCE_TRAVAIL_API_CLIENT_SECRET = "secret";

@@ -52,6 +52,7 @@ const onisepJobs = [
   { name: "onisepFormationsLycee", job: () => importOnisep("ideoActionsFormationInitialeUniversLycee") },
   { name: "onisepStructuresSecondaire", job: () => importOnisep("ideoStructuresEnseignementSecondaire") },
   { name: "onisepFormationsInitiales", job: () => importOnisep("ideoFormationsInitiales") },
+  { name: "onisepMetiers", job: () => importOnisep("ideoMetiers") },
 ];
 
 const RCOJobs = [
@@ -139,9 +140,9 @@ cli
     const { job } = options;
     runScript(async () => {
       const importBCNStats = await runJobs(BCNJobs, job);
+      const importOnisepStats = await runJobs(onisepJobs, job);
       const importRomeStats = await runJobs(romeJobs, job);
       const importRCOStats = await runJobs(RCOJobs, job);
-      const importOnisepStats = await runJobs(onisepJobs, job);
       const importEtablissementsStats = await runJobs(etablissementJobs, job);
       const importCatalogueApprentissageStats = await runJobs(catalogueApprentissageJobs, job);
       const importFormationEtablissementStats = await runJobs(formationEtablissementJobs, job);

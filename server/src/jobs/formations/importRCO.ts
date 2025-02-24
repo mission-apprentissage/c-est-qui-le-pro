@@ -4,7 +4,7 @@ import RawDataRepository, { RawData, RawDataType } from "#src/common/repositorie
 import { Formation } from "#src/common/db/schema.js";
 import FormationRomeRepository from "#src/common/repositories/formationRome.js";
 import FormationRepository from "#src/common/repositories/formation.js";
-import RomeRepository from "#src/common/repositories/rome.js";
+import RomeRepository from "#src/common/repositories/rome";
 
 const logger = getLoggerWithContext("import");
 

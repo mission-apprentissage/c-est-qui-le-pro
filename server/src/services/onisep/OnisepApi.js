@@ -1,4 +1,4 @@
-import { RateLimitedApi } from "#src/common/api/RateLimitedApi.js";
+import { RateLimitedApi } from "#src/common/api/RateLimitedApi";
 import config from "#src/config.ts";
 import { fetchJsonWithRetry } from "#src/common/utils/httpUtils.js";
 
