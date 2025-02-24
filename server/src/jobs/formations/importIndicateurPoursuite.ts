@@ -130,23 +130,23 @@ export async function importIndicateurPoursuiteAnneeCommune() {
           type === "MEFSTAT11" ? formationEtablissement.formation.mef11 : formationEtablissement.formation.cfd;
 
         logger.info(`Récupération des stats de formations pour ${formationEtablissement.formationEtablissement.id}`);
-        const stats = await expositionApi.fetchFormationStats(uai, codeCertification, type);
-        return { formationEtablissement, stats };
+        const formationStats = await expositionApi.fetchFormationStats(uai, codeCertification, type);
+        return { formationEtablissement, formationStats };
       } catch (err) {
         return handleError(err, { formationEtablissementId: formationEtablissement.formationEtablissement.id });
       }
     }),
-    filterData(({ stats }) => stats),
-    transformData(async ({ formationEtablissement, stats }) => {
-      for (const statIndex in stats.certificationsTerminales) {
-        const stat = stats.certificationsTerminales[statIndex];
+    filterData(({ formationStats }) => formationStats),
+    transformData(async ({ formationEtablissement, formationStats }) => {
+      for (const statIndex in formationStats.certificationsTerminales) {
+        const stat = formationStats.certificationsTerminales[statIndex];
         const uai = formationEtablissement.etablissement.uai;
         const type = formationEtablissement.formation.voie === "scolaire" ? "MEFSTAT11" : "CFD";
         const codeCertification = stat.code_certification;
 
         try {
           const statsAnneeTerminale = await expositionApi.fetchFormationStats(uai, codeCertification, type);
-          stats.certificationsTerminales[statIndex] = statsAnneeTerminale;
+          formationStats.certificationsTerminales[statIndex] = statsAnneeTerminale;
         } catch (err) {
           handleError(err, {
             formationEtablissementId: formationEtablissement.formationEtablissement.id,
@@ -154,15 +154,15 @@ export async function importIndicateurPoursuiteAnneeCommune() {
           });
         }
       }
-      return { formationEtablissement, stats };
+      return { formationEtablissement, formationStats };
     }),
     writeData(
-      async ({ formationEtablissement: { formationEtablissement, etablissement, formation }, stats }) => {
-        for (const stat of stats.certificationsTerminales) {
+      async ({ formationEtablissement: { formationEtablissement, etablissement, formation }, formationStats }) => {
+        for (const stat of formationStats.certificationsTerminales) {
           const indicateurPoursuite = omitNil({
             formationEtablissementId: formationEtablissement.id,
             codeCertification: stat.code_certification,
-            millesime: stats.millesime,
+            millesime: formationStats.millesime,
             ...formatStats(stat),
           });
 
