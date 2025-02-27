@@ -65,7 +65,7 @@ function FormationResumeBlockEmploiAnneeCommuneTag({
     <>
       {hasStatTerminale ? (
         <Tag square variant="dark-blue" bold={"500"}>
-          Différent selon le Bac Pro choisi après de cette seconde commune
+          Différent selon le Bac Pro choisi après cette seconde commune
         </Tag>
       ) : (
         <Tag square level="unknow">
