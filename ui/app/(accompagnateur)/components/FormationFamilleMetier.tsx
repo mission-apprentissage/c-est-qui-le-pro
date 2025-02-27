@@ -82,7 +82,9 @@ export default function FormationsFamilleMetier({
     <Box
       sx={{
         backgroundColor: fr.colors.decisions.background.alt.blueFrance.default,
-        padding: "0.5rem 0.75rem",
+        padding: "1rem 0.75rem",
+        borderRadius: "9px",
+
         ...sx,
       }}
     >

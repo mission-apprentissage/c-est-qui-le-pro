@@ -1,11 +1,17 @@
 "use client";
 import { Box } from "@mui/material";
+import styled from "@emotion/styled";
 import FormationDescription from "../../components/FormationDescription";
 import { FormationDetail } from "shared";
 import Card from "#/app/components/Card";
 import Link from "#/app/components/Link";
 import WidgetSiriusFormation from "../../components/WidgetSiriusFormation";
 import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
+import { ContentContainer } from "./FormationBlock.styled";
+
+const StyledLink = styled(Link)`
+  color: var(--blue-france-sun-113-625);
+`;
 
 export default function FormationBlockFormation({
   formationDetail,
@@ -17,26 +23,18 @@ export default function FormationBlockFormation({
 
   return (
     <Card type="details" title={"La formation"} {...cardProps}>
-      <Box style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-        <FormationsFamilleMetier
-          withLink
-          formationDetail={formationDetail}
-          sx={{
-            padding: "1rem 0.75rem",
-            borderRadius: "9px",
-          }}
-        />
+      <ContentContainer>
+        <FormationsFamilleMetier withLink formationDetail={formationDetail} />
 
         <FormationDescription description={formation.description}>
           {formation.description && (
             <Box>
-              <Link
-                style={{ color: "var(--blue-france-sun-113-625)" }}
+              <StyledLink
                 target="_blank"
                 href={`https://www.onisep.fr/http/redirection/formation/slug/${formation?.onisepIdentifiant}`}
               >
                 En savoir plus, sur le site de l&apos;Onisep
-              </Link>
+              </StyledLink>
             </Box>
           )}
         </FormationDescription>
@@ -45,7 +43,7 @@ export default function FormationBlockFormation({
             <WidgetSiriusFormation formation={formation} fallbackComponent={<></>} />
           </Box>
         )}
-      </Box>
+      </ContentContainer>
     </Card>
   );
 }
