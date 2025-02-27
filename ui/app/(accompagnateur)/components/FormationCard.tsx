@@ -117,6 +117,7 @@ export default React.memo(function FormationCard({
       <FormationsFamilleMetier
         small
         sx={{
+          padding: "0.5rem 0.75rem",
           marginTop: "0.75rem",
           borderTop: "1px solid " + fr.colors.decisions.border.default.grey.default,
           paddingBottom: "1.125rem",
