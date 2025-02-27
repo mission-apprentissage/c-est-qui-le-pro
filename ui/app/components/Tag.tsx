@@ -93,6 +93,11 @@ export const TagStatutPublic = styled(TagStyled)`
   color: var(--blue-france-sun-113-625);
 `;
 
+export const TagDiplome = styled(TagStyled)`
+  background-color: #f4f5fe;
+  font-weight: 500;
+`;
+
 export const TagStatutPrive = styled(TagStyled)`
   background-color: #feebcb;
   color: #7b341e;

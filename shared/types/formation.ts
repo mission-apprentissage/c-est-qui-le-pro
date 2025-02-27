@@ -11,6 +11,15 @@ export const DiplomeType = {
   BP: ["450", "553"], // BP et BP agricole
 };
 
+export const DiplomeTypeLibelle: { [key: string]: string } = {
+  "400": "BAC PRO",
+  "403": "BAC PRO AG",
+  "500": "CAP",
+  "503": "CAPA",
+  "450": "BREVET PRO",
+  "553": "BREVET PRO AG",
+};
+
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
   FAIBLE_TAUX_PRESSION = "faible_taux_pression",
@@ -135,6 +144,7 @@ export type Formation = {
   codeDispositif?: string;
   mef11?: string;
   codeDiplome?: string;
+  niveauDiplome?: string;
   codeRncp?: string;
   formationPoursuite?: FormationPoursuite[];
   metier?: Metier[];
