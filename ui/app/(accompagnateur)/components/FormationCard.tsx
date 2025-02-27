@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
-import { FormationDetail } from "shared";
+import { DiplomeTypeLibelle, FormationDetail } from "shared";
 import "moment/locale/fr";
 import { TagPortesOuvertes } from "./PortesOuvertes";
 import Card from "#/app/components/Card";
@@ -9,7 +9,7 @@ import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
 import { formatAccessTime, formatLibelle, formatStatut } from "#/app/utils/formation";
-import { TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
+import { TagDiplome, TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
 import { capitalize } from "lodash-es";
 import FormationsFamilleMetier from "./FormationFamilleMetier";
 import { SerializedStyles } from "@emotion/react";
@@ -64,6 +64,9 @@ export default React.memo(function FormationCard({
     >
       <Box style={{ padding: "1.25rem" }}>
         <Stack direction={"row"} spacing={1} useFlexGap sx={{ flexWrap: "wrap", marginBottom: fr.spacing("3v") }}>
+          {formation.niveauDiplome && DiplomeTypeLibelle[formation.niveauDiplome] && (
+            <TagDiplome>{DiplomeTypeLibelle[formation.niveauDiplome]}</TagDiplome>
+          )}
           <LabelApprentissage formation={formation} />
 
           {etablissement.statut && (
