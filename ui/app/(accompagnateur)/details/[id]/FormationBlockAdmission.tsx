@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
+import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import { Typography } from "#/app/components/MaterialUINext";
 import FormationDescription from "../../components/FormationDescription";
@@ -7,11 +8,9 @@ import { FormationDetail } from "shared";
 import Card from "#/app/components/Card";
 import Button from "#/app/components/Button";
 import Link from "#/app/components/Link";
-import { fr } from "@codegouvfr/react-dsfr";
 import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
 import { BlockDivider, ContentContainer, HighlightBox } from "./FormationBlock.styled";
 import { FormationBlockAdmissionScolaire } from "./FormationBlockAdmissionScolaire";
-import styled from "@emotion/styled";
 
 const ListAide = styled.ul`
   list-style-type: none;
