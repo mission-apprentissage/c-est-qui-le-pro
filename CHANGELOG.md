@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.24.0...v1.25.0) (2025-02-27)
+
+
+### Features
+
+* indicateurs de poursuite pour les familles de metiers ([#38](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/38)) ([b9a2851](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/b9a28519aae167506ec98b5531d113510456354f))
+
 # [1.24.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.23.0...v1.24.0) (2025-02-19)
 
 
