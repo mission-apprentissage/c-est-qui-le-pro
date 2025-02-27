@@ -22,11 +22,15 @@ export async function createSearchIndex(indexDir = config.formation.files.fuseIn
   await oleoduc(
     await FormationEtablissementRepository.find({}),
     transformData(async (data) => {
-      const formation = await FormationRepository.first({ id: data.formationId });
+      const formation = data.formation;
       const formationsFamilleMetier = formation.familleMetierId
         ? await FormationRepository.familleMetier(formation.familleMetierId)
         : [];
-      return { formationEtablissement: data, formation, formationsFamilleMetier };
+      return {
+        formationEtablissement: data.formationEtablissement,
+        formation,
+        formationsFamilleMetier,
+      };
     }),
     writeData(async ({ formationEtablissement, formation, formationsFamilleMetier }) => {
       const filteredFamilleMetier = (
