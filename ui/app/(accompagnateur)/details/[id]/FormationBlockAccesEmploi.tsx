@@ -102,7 +102,14 @@ export default function FormationBlockAccesEmploi({
     <Card type="details" title="L’accès à l’emploi" {...cardProps}>
       <Box style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
         <Box>
-          <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
+          {formation.isAnneeCommune ? (
+            <Typography variant="h3">
+              Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
+            </Typography>
+          ) : (
+            <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
+          )}
+
           <WidgetInserJeunes etablissement={etablissement} formation={formation} />
         </Box>
 

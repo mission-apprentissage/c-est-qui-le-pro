@@ -6,11 +6,11 @@ import { fr } from "@codegouvfr/react-dsfr";
 type Level = "unknow" | "easy" | "average" | "hard";
 
 export type TagProps = {
-  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue" | "filter";
+  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue" | "filter" | "dark-blue";
   active?: boolean;
   level?: Level;
   square?: boolean;
-  bold?: boolean;
+  bold?: boolean | string;
 } & DSFRBTagProps;
 
 // TODO: fix css order
@@ -45,6 +45,9 @@ const TagStyled = styled(Tag, {
         case "blue":
           return `background-color: var(--info-975-75);
            color: var(--info-425-625);`;
+        case "dark-blue":
+          return `background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
+             color: ${fr.colors.decisions.text.title.blueFrance.default};`;
         case "filter":
           return `
           background-color: var(--grey-1000-50);
@@ -81,7 +84,7 @@ const TagStyled = styled(Tag, {
       return square ? `border-radius: 4px;` : "";
     }}
 
-    ${({ bold }) => (bold ? "font-weight: 700;" : "")}
+    ${({ bold }) => (bold ? (bold === true ? "font-weight: 700;" : `font-weight: ${bold};`) : "")}
   }
 `;
 

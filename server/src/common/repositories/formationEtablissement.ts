@@ -174,17 +174,70 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         .limit(1)
         .executeTakeFirst();
 
+      const indicateurPoursuiteAnneeCommune = formationEtablissement.formation.isAnneeCommune
+        ? await this.kdb
+            .selectFrom("indicateurPoursuiteAnneeCommune")
+            .selectAll()
+            .where("formationEtablissementId", "=", formationEtablissement.formationEtablissement.id)
+            .where("millesime", "=", (eb) =>
+              eb
+                .selectFrom("indicateurPoursuiteAnneeCommune")
+                .select("millesime")
+                .where("formationEtablissementId", "=", formationEtablissement.formationEtablissement.id)
+                .orderBy("millesime desc")
+                .limit(1)
+            )
+            .execute()
+        : null;
+
       const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
       const indicateurPoursuiteRegional = diplomeType
         ? await IndicateurPoursuiteRepository.quartileFor(diplomeType, formationEtablissement.etablissement.region)
         : null;
 
       formationEtablissement = merge(formationEtablissement, {
-        formationEtablissement: { indicateurEntree, indicateurPoursuite, indicateurPoursuiteRegional },
+        formationEtablissement: {
+          indicateurEntree,
+          indicateurPoursuite,
+          indicateurPoursuiteAnneeCommune,
+          indicateurPoursuiteRegional,
+        },
       });
     }
 
     return formationEtablissement;
+  }
+
+  async find(
+    where: Partial<
+      WhereObject<DB, "formationEtablissement"> | WhereObject<DB, "formation"> | WhereObject<DB, "etablissement">
+    > | null,
+    returnStream = true
+  ) {
+    const query = this.kdb
+      .selectFrom(this.tableName)
+      .select((eb) => this.getKeyAlias(eb))
+      .select((eb) => EtablissementRepository.getKeyAlias(eb))
+      .select((eb) => FormationRepository.getKeyAlias(eb))
+      .innerJoin("etablissement", "etablissement.id", "etablissementId")
+      .innerJoin("formation", "formation.id", "formationId");
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+    const result = queryCond.stream();
+
+    if (!returnStream) {
+      return queryCond.execute();
+    }
+
+    return compose(
+      Readable.from(result),
+      transformData((result) => {
+        return {
+          formation: this.getColumnWithoutAlias("formation", result),
+          etablissement: this.getColumnWithoutAlias("etablissement", result),
+          formationEtablissement: this.getColumnWithoutAlias("formationEtablissement", result),
+        };
+      })
+    );
   }
 
   async getAll() {
@@ -196,6 +249,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       .innerJoin("etablissement", "etablissement.id", "etablissementId")
       .innerJoin("formation", "formation.id", "formationId")
       .stream();
+
     return compose(
       Readable.from(result),
       transformData((result) => {

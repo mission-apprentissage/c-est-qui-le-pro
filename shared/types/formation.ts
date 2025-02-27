@@ -67,6 +67,14 @@ type IndicateurPoursuite = {
   taux_autres_6_mois?: number;
 };
 
+type IndicateurPoursuiteAnneeCommune = {
+  millesime: string;
+  codeCertification: string;
+  taux_en_emploi_6_mois?: number;
+  taux_en_formation?: number;
+  taux_autres_6_mois?: number;
+};
+
 type IndicateurPoursuiteRegional = {
   millesime: string;
   region: string;
@@ -95,6 +103,7 @@ export type FormationEtablissement = {
   tags?: FormationTag[] | null;
   indicateurEntree?: IndicateurEntree;
   indicateurPoursuite?: IndicateurPoursuite;
+  indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[];
   indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
 };
 
@@ -202,6 +211,17 @@ const formationEtablissementSchema = yup.object().concat(
         taux_en_formation: yup.number(),
         taux_autres_6_mois: yup.number(),
       })
+      .default(undefined),
+    indicateurPoursuiteAnneeCommune: yup
+      .array(
+        yup.object({
+          millesime: yup.string().required(),
+          codeCertification: yup.string().required(),
+          taux_en_emploi_6_mois: yup.number(),
+          taux_en_formation: yup.number(),
+          taux_autres_6_mois: yup.number(),
+        })
+      )
       .default(undefined),
     indicateurPoursuiteRegional: yup
       .object({
