@@ -123,6 +123,7 @@ export default function FormationBlockAccesEmploi({
           ) : (
             <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
           )}
+          <Typography>{etablissement.libelle}</Typography>
           <WidgetInserJeunes etablissement={etablissement} formation={formation} />
         </Box>
         <FormationMetier formation={formation} />
