@@ -20,6 +20,7 @@ import Link from "#/app/components/Link";
 import { LabelApprentissage } from "#/app/(accompagnateur)/components/Apprentissage";
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
+import { capitalize } from "lodash-es";
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
@@ -56,19 +57,11 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
         <Stack spacing={1} direction={"row"}>
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
-              <TagStatutPublic square bold>
-                {formatStatut(etablissement).toUpperCase()}
-              </TagStatutPublic>
+              <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
             ) : (
-              <TagStatutPrive square bold>
-                {formatStatut(etablissement).toUpperCase()}
-              </TagStatutPrive>
+              <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
             ))}
-          {formationEtablissement.duree && (
-            <TagDuree bold square>
-              {`En ${formationEtablissement.duree}`.toUpperCase()}
-            </TagDuree>
-          )}
+          {formationEtablissement.duree && <TagDuree>{`En ${formationEtablissement.duree}`}</TagDuree>}
           <LabelApprentissage formation={formation} />
         </Stack>
       </BoxContainer>
