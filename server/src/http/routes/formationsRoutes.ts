@@ -116,12 +116,13 @@ export default () => {
   router.get(
     "/api/formationsSimilaire",
     tryCatch(async (req, res) => {
-      const { longitude, latitude, formationEtablissementId } = await validate(
+      const { longitude, latitude, academie, formationEtablissementId } = await validate(
         { ...req.query, ...req.params },
         {
           longitude: Joi.number().min(-180).max(180).required(),
           latitude: Joi.number().min(-90).max(90).required(),
           formationEtablissementId: Joi.string().required(),
+          academie: Joi.string().required(),
         }
       );
 
@@ -137,7 +138,7 @@ export default () => {
 
       const results = await getFormationsSimilaire({
         formationId: formationEtablissement.formation.id,
-        filtersEtablissement: { latitude, longitude, timeLimit: 5400 },
+        filtersEtablissement: { latitude, longitude, timeLimit: 5400, academie },
         millesime,
       });
       addJsonHeaders(res);

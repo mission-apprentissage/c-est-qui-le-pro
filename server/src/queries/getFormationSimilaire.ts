@@ -5,7 +5,24 @@ import { Etablissement, Formation, FormationEtablissement } from "#src/common/db
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 
-async function buildIsochronesQuery({ timeLimit, latitude, longitude }) {
+type FilterEtablissement = {
+  timeLimit?: number;
+  academie?: number;
+  latitude: string;
+  longitude: string;
+};
+
+type FormationSimilaireFilters = {
+  formationId: string;
+  filtersEtablissement: FilterEtablissement;
+  millesime: string[];
+};
+
+type FormationSimilairePagination = {
+  limit?: number;
+};
+
+async function buildIsochronesQuery({ timeLimit, latitude, longitude }: FilterEtablissement) {
   return {
     query: kdb
       .selectFrom(
@@ -44,15 +61,7 @@ async function buildIsochronesQuery({ timeLimit, latitude, longitude }) {
   };
 }
 
-async function buildFiltersEtablissement({
-  timeLimit,
-  latitude,
-  longitude,
-}: {
-  timeLimit: number;
-  latitude: string;
-  longitude: string;
-}) {
+async function buildFiltersEtablissement({ timeLimit, academie, latitude, longitude }: FilterEtablissement) {
   const distanceQuery = (eb) => {
     return kyselyChainFn(eb, [
       { fn: "ST_Point", args: [sql`${longitude}`, sql`${latitude}`] },
@@ -78,7 +87,7 @@ async function buildFiltersEtablissement({
 
   return {
     query: queryEtablissement
-      .innerJoin(queryIsochrones.query, (join) => join.onRef("etablissement.id", "=", "buckets.bucketId"))
+      .leftJoin(queryIsochrones.query, (join) => join.onRef("etablissement.id", "=", "buckets.bucketId"))
       .select("buckets.time as accessTime")
       .orderBy("buckets.time")
       .select(
@@ -88,7 +97,7 @@ async function buildFiltersEtablissement({
             .join(",")
         )})`.as("order")
       )
-      .orderBy("etablissement.distance"),
+      .where((eb) => eb.or([eb("academie", "=", academie), eb("buckets.time", "is not", null)])),
   };
 }
 
@@ -99,8 +108,8 @@ async function buildFiltersFormation() {
 }
 
 export async function getFormationsSimilaire(
-  { formationId, filtersEtablissement = {}, millesime },
-  pagination = { limit: 12 }
+  { formationId, filtersEtablissement, millesime }: FormationSimilaireFilters,
+  pagination: FormationSimilairePagination = { limit: 12 }
 ) {
   const limit = pagination.limit || 12;
   const queryEtablissement = await buildFiltersEtablissement(filtersEtablissement as any);
