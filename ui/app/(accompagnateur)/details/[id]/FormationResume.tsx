@@ -195,6 +195,7 @@ const FormationResume = React.memo(function ({
         background-color: #fff;
         padding: 1.5rem;
         padding-right: 1rem;
+        ${hideTag ? "padding-bottom: 0;" : ""}
       `}
     >
       <Grid
