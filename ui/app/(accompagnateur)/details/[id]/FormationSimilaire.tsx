@@ -35,7 +35,12 @@ export default function FormationSimilare({ formationDetail }: { formationDetail
     queryKey: ["formationSimilaire", formationDetail.formationEtablissement.id, latitude, longitude],
     queryFn: ({ signal }) => {
       return formationsSimilaire(
-        { formationEtablissementId: formationDetail.formationEtablissement.id, latitude, longitude },
+        {
+          formationEtablissementId: formationDetail.formationEtablissement.id,
+          latitude,
+          longitude,
+          academie: formationDetail.etablissement.academie,
+        },
         { signal }
       );
     },

@@ -183,6 +183,9 @@ export type Etablissement = {
   longitude?: number;
   accessTime?: number;
   distance?: number;
+
+  academie: string;
+  region: string;
 };
 
 export type FormationFamilleMetierDetail = {
@@ -266,6 +269,8 @@ const etablissementSchema = yup.object().concat(
   yup.object().shape({
     id: yup.string().required(),
     uai: yup.string().required(),
+    academie: yup.string().required(),
+    region: yup.string().required(),
     JPODates: yup
       .array()
       .of(

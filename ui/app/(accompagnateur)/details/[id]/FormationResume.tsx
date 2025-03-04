@@ -61,7 +61,9 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
                   color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
                   box-shadow: 0px -3px 0px var(--background-action-high-blue-france-hover) inset;
                 }
+              }
 
+              ${theme.breakpoints.up("md")} {
                 ${isActive ? `box-shadow: 0px -3px 0px var(--background-action-high-blue-france-hover) inset;` : ""}
               }
             `
@@ -71,7 +73,7 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
       <Box
         css={css`
           display: inline-block;
-          ${theme.breakpoints.up("sm")} {
+          ${theme.breakpoints.up("md")} {
             color: ${isActive ? `${fr.colors.decisions.background.actionHigh.blueFrance.hover}` : "inherit"};
           }
         `}
@@ -193,6 +195,7 @@ const FormationResume = React.memo(function ({
         background-color: #fff;
         padding: 1.5rem;
         padding-right: 1rem;
+        ${hideTag ? "padding-bottom: 0;" : ""}
       `}
     >
       <Grid
