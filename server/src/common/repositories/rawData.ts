@@ -14,6 +14,7 @@ export enum RawDataType {
   ONISEP_ideoActionsFormationInitialeUniversLycee = "ONISEP_ideoActionsFormationInitialeUniversLycee",
   ONISEP_ideoStructuresEnseignementSecondaire = "ONISEP_ideoStructuresEnseignementSecondaire",
   ONISEP_ideoFormationsInitiales = "ONISEP_ideoFormationsInitiales",
+  ONISEP_ideoMetiers = "ONISEP_ideoMetiers",
 
   BCN = "BCN",
   BCN_MEF = "BCN_MEF",
@@ -22,6 +23,8 @@ export enum RawDataType {
   RCO_certificationRome = "RCO_certificationRome",
 
   EXPOSITION_regionales = "EXPOSITION_regionales",
+
+  FRANCE_TRAVAIL_metiers = "FRANCE_TRAVAIL_metiers",
 }
 export interface RawData {
   [RawDataType.CatalogueApprentissage]: any;
@@ -32,9 +35,11 @@ export interface RawData {
   [RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee]: any;
   [RawDataType.ONISEP_ideoStructuresEnseignementSecondaire]: any;
   [RawDataType.ONISEP_ideoFormationsInitiales]: any;
+  [RawDataType.ONISEP_ideoMetiers]: any;
   [RawDataType.RCO_certifInfo]: any;
   [RawDataType.RCO_certificationRome]: any;
   [RawDataType.EXPOSITION_regionales]: any;
+  [RawDataType.FRANCE_TRAVAIL_metiers]: any;
 }
 
 export class RawDataRepository extends SqlRepository<DB, "rawData"> {

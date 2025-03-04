@@ -1,39 +1,60 @@
-import { oleoduc, writeData, filterData, transformData } from "oleoduc";
+import { oleoduc, writeData, transformData, flattenArray } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import { isRomeValid, romeMetierFromCsv } from "#src/services/rome";
 import RomeMetierRepository from "#src/common/repositories/romeMetier";
+import RomeRepository from "#src/common/repositories/rome.js";
+import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData.js";
 
 const logger = getLoggerWithContext("import");
 
-export async function importRomeMetier(options = { romeMetierFile: null }) {
+export async function importRomeMetier() {
   logger.info(`Importation des métiers des ROMEs`);
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
-  const romeMetierFile = options.romeMetierFile || null;
-
   await oleoduc(
-    await romeMetierFromCsv(romeMetierFile),
-    filterData((data) => {
-      if (!isRomeValid(data["Code ROME"])) {
-        logger.error(`Le code rome ${data["Code ROME"]} n'est pas valide.`);
+    await RomeRepository.getAll(),
+    transformData(async (rome) => {
+      const franceTravailData = (
+        await RawDataRepository.firstForType(RawDataType.FRANCE_TRAVAIL_metiers, {
+          code: rome.rome,
+        })
+      )?.data as RawData[RawDataType.FRANCE_TRAVAIL_metiers];
+      if (!franceTravailData) {
+        logger.error(`Code rome ${rome.rome} inconnu dans la base rome france travail`);
         stats.failed++;
-        return false;
+        return null;
       }
-      return true;
+
+      const onisepDatas = (
+        await RawDataRepository.search(
+          RawDataType.ONISEP_ideoMetiers,
+          {
+            data: { code_rome: rome.rome },
+          },
+          false
+        )
+      ).map((data) => data.data.data);
+
+      return onisepDatas.length > 0
+        ? onisepDatas.map((onisepData) => ({
+            rome,
+            franceTravailData,
+            onisepData,
+          }))
+        : [{ rome, franceTravailData, onisepData: null }];
     }),
-    transformData((data) => {
-      const strToBoolean = (str: string) => (str === "Oui" ? true : false);
+    flattenArray(),
+    transformData(({ rome, franceTravailData, onisepData }) => {
       return {
-        rome: data["Code ROME"],
-        libelle: data["libellé métier onisep"] || data["Lib_ROME_FT"],
-        onisepLibelle: data["libellé métier onisep"],
-        onisepLink: data["lien site onisep.fr"],
-        franceTravailLibelle: data["Lib_ROME_FT"],
-        franceTravailLink: data["lien site FT"],
-        transitionEcologique: strToBoolean(data["transitionEcologique"]),
-        transitionEcologiqueDetaillee: data["transitionEcologiqueDetaillee"],
-        transitionNumerique: strToBoolean(data["transitionNumerique"]),
-        transitionDemographique: strToBoolean(data["transitionDemographique"]),
+        rome: rome.rome,
+        libelle: onisepData?.libelle_metier || franceTravailData.libelle,
+        onisepLibelle: onisepData?.libelle_metier,
+        onisepLink: onisepData?.lien_site_onisepfr,
+        franceTravailLibelle: franceTravailData.libelle,
+        franceTravailLink: `https://candidat.francetravail.fr/metierscope/fiche-metier/${rome.rome}`,
+        transitionEcologique: franceTravailData.transitionEcologique || false,
+        transitionEcologiqueDetaillee: franceTravailData.transitionEcologiqueDetaillee || null,
+        transitionNumerique: franceTravailData.transitionNumerique || false,
+        transitionDemographique: franceTravailData.transitionDemographique || false,
       };
     }),
     writeData(

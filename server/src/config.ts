@@ -31,40 +31,23 @@ const config = {
   sql: {
     logLevel: env.get("ACCOMPAGNATEUR_SQL_LOG_LEVEL").asArray(),
   },
-  graphHopper: {
-    api: {
-      // Sandbox url for testing purpose, TODO : enlever serveur de ananda en cas de crash (utiliser pour accèlerer graphhopper)
-      baseUrl: env.get("GRAPHHOPPER_BASE_URL").default("http://ananda-nono.io:8989").asString(),
-      //baseUrl: env.get("GRAPHHOPPER_BASE_URL").default("http://141.94.105.71:8989").asString(),
-    },
-  },
-  exposition: {
-    api: {
-      baseUrl: env.get("EXPOSITION_API_BASE_URL").default("https://api.exposition.inserjeunes.beta.gouv.fr").asString(),
-      username: env.get("EXPOSITION_API_USERNAME").required().asString(),
-      password: env.get("EXPOSITION_API_PASSWORD").required().asString(),
-    },
-  },
-  datagouv: {
-    api: {
-      baseUrl: env.get("DATAGOUV_BASE_URL").default("https://www.data.gouv.fr/api/1").asString(),
-    },
-    datasets: {
-      certifinfo: "f2981d6f-e55c-42cd-8eba-3e891777e222",
-    },
-  },
-  onisep: {
-    api: {
-      baseUrl: env.get("ONISEP_BASE_URL").default("https://api.opendata.onisep.fr/api/1.0").asString(),
-    },
-    datasets: {
-      tablePassageCodesCertifications: "6152ccdf850ef",
-      ideoActionsFormationInitialeUniversLycee: "605340ddc19a9",
-      ideoStructuresEnseignementSecondaire: "5fa5816ac6a6e",
-      ideoFormationsInitiales: "5fa591127f501",
-    },
+  acce: {
     files: {
-      ideoFichesFormations: "https://api.opendata.onisep.fr/downloads/5fe07a9ecc960/5fe07a9ecc960.zip",
+      // https://dep.adc.education.fr/acce/extract.php
+      etablissements: path.join(dataDir, "acce_etablissements.csv"),
+    },
+  },
+  affelnet: {
+    voeuxAnneeRentree: "2024",
+    files: {
+      voeux: path.join(dataDir, "affelnet", "voeux_2024_diffusable.csv"),
+    },
+  },
+  bcn: {
+    files: {
+      // Manually generated
+      familleMetier: path.join(dataDir, "bcn", "n_famille_metier_spec_pro.csv"),
+      lienMefFamilleMetier: path.join(dataDir, "bcn", "n_lien_mef_famille_metier.csv"),
     },
   },
   catalogueApprentissage: {
@@ -77,24 +60,62 @@ const config = {
       password: env.get("CATALOGUE_APPRENTISSAGE_PASSWORD").required().asString(),
     },
   },
-  acce: {
+  datagouv: {
+    api: {
+      baseUrl: env.get("DATAGOUV_BASE_URL").default("https://www.data.gouv.fr/api/1").asString(),
+    },
+    datasets: {
+      certifinfo: "f2981d6f-e55c-42cd-8eba-3e891777e222",
+    },
+  },
+  exposition: {
+    api: {
+      baseUrl: env.get("EXPOSITION_API_BASE_URL").default("https://api.exposition.inserjeunes.beta.gouv.fr").asString(),
+      username: env.get("EXPOSITION_API_USERNAME").required().asString(),
+      password: env.get("EXPOSITION_API_PASSWORD").required().asString(),
+    },
+  },
+  formation: {
     files: {
-      // https://dep.adc.education.fr/acce/extract.php
-      etablissements: path.join(dataDir, "acce_etablissements.csv"),
+      formationSimilaire: path.join(dataDir, "formationSimilaire.json"),
+      fuseIndex: path.join(dataVolumeDir, "fuseIndex.json"),
+    },
+  },
+  franceTravail: {
+    api: {
+      baseAuthUrl: env.get("FRANCE_TRAVAIL_API_BASE_AUTH_URL").default("https://entreprise.pole-emploi.fr").asString(),
+      baseUrl: env.get("FRANCE_TRAVAIL_API_BASE_URL").default("https://api.francetravail.io").asString(),
+      clientId: env.get("FRANCE_TRAVAIL_API_CLIENT_ID").required().asString(),
+      clientSecret: env.get("FRANCE_TRAVAIL_API_CLIENT_SECRET").required().asString(),
+      scope: env.get("FRANCE_TRAVAIL_API_SCOPE").default("api_rome-metiersv1 nomenclatureRome").asString(),
+    },
+  },
+  graphHopper: {
+    api: {
+      // Sandbox url for testing purpose, TODO : enlever serveur de ananda en cas de crash (utiliser pour accèlerer graphhopper)
+      baseUrl: env.get("GRAPHHOPPER_BASE_URL").default("http://ananda-nono.io:8989").asString(),
+      //baseUrl: env.get("GRAPHHOPPER_BASE_URL").default("http://141.94.105.71:8989").asString(),
+    },
+  },
+  onisep: {
+    api: {
+      baseUrl: env.get("ONISEP_BASE_URL").default("https://api.opendata.onisep.fr/api/1.0").asString(),
+    },
+    datasets: {
+      tablePassageCodesCertifications: "6152ccdf850ef",
+      ideoActionsFormationInitialeUniversLycee: "605340ddc19a9",
+      ideoStructuresEnseignementSecondaire: "5fa5816ac6a6e",
+      ideoFormationsInitiales: "5fa591127f501",
+      ideoMetiers: "5fa5949243f97",
+    },
+    files: {
+      ideoFichesFormations: "https://api.opendata.onisep.fr/downloads/5fe07a9ecc960/5fe07a9ecc960.zip",
     },
   },
   orion: {
     files: {
       // https://orion-recette.inserjeunes.beta.gouv.fr/api/etablissements?order=asc&limit=1000000&withAnneeCommune=true
       exportEtablissements: path.join(dataDir, "orion", "etablissement_export_rentree_2023.csv"),
-    },
-  },
-  rome: {
-    files: {
-      // https://www.data.gouv.fr/fr/datasets/repertoire-operationnel-des-metiers-et-des-emplois-rome/
-      rome: path.join(dataDir, "rome", "rome.csv"),
-      // Manually generated
-      romeMetier: path.join(dataDir, "rome", "romeMetier.csv"),
     },
   },
   rco: {
@@ -108,25 +129,6 @@ const config = {
     file: {
       certifInfo: "inserJeune-certifinfo.csv",
       certificationRome: "inserJeune-certification-rome.csv",
-    },
-  },
-  formation: {
-    files: {
-      formationSimilaire: path.join(dataDir, "formationSimilaire.json"),
-      fuseIndex: path.join(dataVolumeDir, "fuseIndex.json"),
-    },
-  },
-  bcn: {
-    files: {
-      // Manually generated
-      familleMetier: path.join(dataDir, "bcn", "n_famille_metier_spec_pro.csv"),
-      lienMefFamilleMetier: path.join(dataDir, "bcn", "n_lien_mef_famille_metier.csv"),
-    },
-  },
-  affelnet: {
-    voeuxAnneeRentree: "2024",
-    files: {
-      voeux: path.join(dataDir, "affelnet", "voeux_2024_diffusable.csv"),
     },
   },
 };
