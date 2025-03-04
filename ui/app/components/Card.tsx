@@ -15,12 +15,6 @@ export type CardProps = Omit<MUICardProps, "title"> & {
   type?: "details" | "formation";
 };
 
-const StyledLink = styled(Link)`
-  &[target="_blank"]::after {
-    content: none;
-  }
-`;
-
 function BaseCard({ title, children, className, ...props }: CardProps) {
   return (
     <Box className={className} {...props}>
@@ -78,6 +72,7 @@ export default styled(Card)<CardProps>`
 
         h2 {
           margin-bottom: 2.5rem;
+          font-size: 2.5rem;
         }
           `;
 

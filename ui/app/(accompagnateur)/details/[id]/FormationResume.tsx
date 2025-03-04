@@ -2,7 +2,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { Typography, Grid, Stack, Box, BoxContainer } from "#/app/components/MaterialUINext";
-import Container from "#/app/components/Container";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
 import { Formation, FormationDetail, FormationEtablissement, THRESHOLD_TAUX_PRESSION } from "shared";
 import Tag from "#/app/components/Tag";
@@ -31,6 +30,7 @@ export interface FormationResumeBlockProps {
 }
 
 export function FormationResumeBlock({ title, icon, children, anchor, hideTag, isActive }: FormationResumeBlockProps) {
+  const theme = useTheme();
   const { push } = useRouter();
   const anchorCb = useCallback(() => {
     if (!anchor) {
@@ -45,13 +45,24 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
       css={
         anchor
           ? css`
+              height: 100%;
               cursor: pointer;
+              padding-bottom: 24px;
+              padding-right: 2rem;
+
               :hover .resumeUnderline {
                 opacity: 100;
               }
 
-              :hover {
-                color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
+              box-shadow: 0px -1px 0px rgb(221, 221, 221) inset;
+
+              ${theme.breakpoints.up("sm")} {
+                :hover {
+                  color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
+                  box-shadow: 0px -3px 0px var(--background-action-high-blue-france-hover) inset;
+                }
+
+                ${isActive ? `box-shadow: 0px -3px 0px var(--background-action-high-blue-france-hover) inset;` : ""}
               }
             `
           : null
@@ -60,23 +71,15 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
       <Box
         css={css`
           display: inline-block;
-          color: ${isActive ? `${fr.colors.decisions.background.actionHigh.blueFrance.hover}` : "inherit"};
+          ${theme.breakpoints.up("sm")} {
+            color: ${isActive ? `${fr.colors.decisions.background.actionHigh.blueFrance.hover}` : "inherit"};
+          }
         `}
       >
         <Typography variant={"body1"}>
           <i className={fr.cx(icon)} style={{ marginRight: fr.spacing("1w") }} />
           {title}
         </Typography>
-        {anchor && (
-          <Box
-            className={`resumeUnderline`}
-            css={css`
-              border-top: 3px solid ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
-              margin-top: 0.25rem;
-              opacity: ${isActive ? "100" : "0"};
-            `}
-          ></Box>
-        )}
       </Box>
 
       {!hideTag && (
@@ -184,18 +187,20 @@ const FormationResume = React.memo(function ({
   }, [activeId]);
 
   return (
-    <Container
-      maxWidth={false}
+    <BoxContainer
+      maxWidth={"xl"}
       css={css`
         background-color: #fff;
+        padding: 1.5rem;
+        padding-right: 1rem;
       `}
     >
       <Grid
         container
-        spacing={2}
         css={css`
           background-color: #fff;
         `}
+        rowSpacing={{ xs: 2, md: 0 }}
       >
         <Grid item xs={12} md={3}>
           <FormationResumeBlock
@@ -251,7 +256,7 @@ const FormationResume = React.memo(function ({
           />
         </Grid>
       </Grid>
-    </Container>
+    </BoxContainer>
   );
 });
 FormationResume.displayName = "FormationResume";
@@ -290,22 +295,11 @@ const FormationResumeHideTagFix = React.memo(function ({ formationDetail }: { fo
             >
               <Box
                 css={css`
-                  padding-left: 1.25rem;
+                  padding-left: 1rem;
                 `}
               >
                 <FormationResume formationDetail={formationDetail} hideTag={hideResumeTag} />
               </Box>
-
-              <Divider
-                variant="middle"
-                css={css`
-                  margin-bottom: 0;
-                  margin-top: 0;
-                  ${theme.breakpoints.up("md")} {
-                    margin-left: 2.5rem;
-                  }
-                `}
-              />
             </BoxContainer>
           </Box>
         </Box>
