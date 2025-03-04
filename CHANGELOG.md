@@ -1,3 +1,12 @@
+# [1.26.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.25.0...v1.26.0) (2025-03-04)
+
+
+### Features
+
+* académie dans les zone max de recommandations  ([#42](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/42)) ([b56b911](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/b56b9119582a074aec90e0958982e7468528e19c))
+* automatisation de la récupération des metiers ([#39](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/39)) ([f347082](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f3470824109fff3b0d215c13b983d92e01dcc1ad))
+* tag type de formations ([#41](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/41)) ([ca6cdd8](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/ca6cdd8c4eea8ed522e9b64e8100798f656911be))
+
 # [1.25.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.24.0...v1.25.0) (2025-02-27)
 
 
