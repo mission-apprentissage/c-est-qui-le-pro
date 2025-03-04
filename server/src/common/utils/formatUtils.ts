@@ -44,6 +44,7 @@ export function formatLibelle(libelle: string): string {
       // Special case for DU word
       .replace(/^DU/gi, "DU")
       .replace(/DU$/gi, "DU")
+      .replace("2de", "seconde")
   );
 }
 

@@ -2,16 +2,16 @@
 "use client";
 import React, { useEffect } from "react";
 import { css, Theme } from "@emotion/react";
-import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Stack, useTheme } from "@mui/material";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
-import { FormationDetail } from "shared";
+import { DiplomeTypeLibelle, FormationDetail } from "shared";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
 import PortesOuvertesHeader from "./PortesOuvertesHeader";
 import FormationResume from "./FormationResume";
-import { TagStatutPublic, TagStatutPrive, TagDuree } from "#/app/components/Tag";
+import { TagStatutPublic, TagStatutPrive, TagDuree, TagDiplome } from "#/app/components/Tag";
 import { useSize } from "#/app/(accompagnateur)/hooks/useSize";
 import { modalMinistage } from "#/app/(accompagnateur)/components/DialogMinistage";
 import FormationRoute from "./FormationRoute";
@@ -55,6 +55,9 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
         `}
       >
         <Stack spacing={1} direction={"row"}>
+          {formation.niveauDiplome && DiplomeTypeLibelle[formation.niveauDiplome] && (
+            <TagDiplome>{DiplomeTypeLibelle[formation.niveauDiplome]}</TagDiplome>
+          )}
           {etablissement.statut &&
             (etablissement.statut === "public" ? (
               <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
