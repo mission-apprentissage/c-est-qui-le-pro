@@ -41,7 +41,12 @@ export function FormationSalaire({ formation }: { formation: Formation }) {
       <MarginBottomNegative>
         <Typography variant="h3">Pour cette formation, à quoi ressemble le salaire en début de carrière ?</Typography>
         <Typography variant="body4">
-          <i className={fr.cx("ri-map-pin-2-line")}></i>
+          <i
+            style={{
+              marginRight: "4px",
+            }}
+            className={fr.cx("ri-map-pin-2-line")}
+          ></i>
           Sur toute la France
         </Typography>
         <SalaryCenterBox>
