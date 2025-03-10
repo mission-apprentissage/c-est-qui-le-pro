@@ -111,6 +111,28 @@ class ExpositionApi extends RateLimitedApi {
       return response;
     });
   }
+
+  async fetchNationalesStats(page = 1, itemsPerPage = 1000, millesime = null) {
+    return this.execute(async () => {
+      if (!this.isAuthenticated() || this.isAccessTokenExpired()) {
+        await this.login();
+      }
+
+      const response = await fetchJsonWithRetry(
+        `${ExpositionApi.baseApiUrl}/inserjeunes/certifications?page=${page}&items_par_page=${itemsPerPage}${
+          millesime ? `&millesimes=${millesime}` : ""
+        }`,
+        {
+          headers: {
+            ...this.getAuthHeaders(),
+          },
+        },
+        { ...this.retry }
+      );
+
+      return response;
+    });
+  }
 }
 
 export { ExpositionApi };

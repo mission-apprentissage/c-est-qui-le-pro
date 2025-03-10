@@ -23,3 +23,7 @@ export function formatAccessTime(time: number) {
 export function formatStatut(etablissement: Etablissement): string {
   return etablissement.statut + (etablissement.statutDetail ? ` ${etablissement.statutDetail}` : "");
 }
+
+export function formatSalaire(salaire: number) {
+  return salaire.toLocaleString().replace(/,/g, " ");
+}
