@@ -43,7 +43,7 @@ export const SalaryCenterBox = styled(Box)`
   align-items: center;
   flex-direction: column;
   color: ${fr.colors.decisions.text.title.blueFrance.default};
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 `;
 
 export const SalaryValueTypography = styled(Typography)`
@@ -94,14 +94,17 @@ export const FlexRightBlueBox = styled(Box)`
   display: flex;
   justify-content: right;
   color: ${fr.colors.decisions.text.title.blueFrance.default};
+  margin-top: 2.625rem;
 `;
 
-export const SalaryPositionBox = styled(Box)<{ positionSalary: number }>`
+export const SalaryPositionBox = styled(Box, {
+  shouldForwardProp: (prop) => !["bubbleColor", "positionSalary"].includes(prop),
+})<{ positionSalary: number; bubbleColor: string }>`
   margin-left: ${(props) => props.positionSalary * 100}%;
   transform: translateX(-50%);
 
   position: relative;
-  background-color: #1a9d7c;
+  background-color: ${(props) => props.bubbleColor};
   color: white;
   border-radius: 10px;
   padding: 10px 15px;
@@ -119,7 +122,7 @@ export const SalaryPositionBox = styled(Box)<{ positionSalary: number }>`
     height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 10px solid #1a9d7c;
+    border-top: 10px solid ${(props) => props.bubbleColor};
   }
 `;
 
@@ -130,6 +133,7 @@ export const FlexBox = styled(Box)`
 export const FlexSpaceBetweenBox = styled(Box)`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
 `;
 
 export const SalaryGradientBar = styled(Box)`

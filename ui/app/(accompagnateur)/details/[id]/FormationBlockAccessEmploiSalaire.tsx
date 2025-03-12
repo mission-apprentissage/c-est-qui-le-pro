@@ -25,6 +25,9 @@ import {
   FlexCenterColumnBox,
   BlueLink,
 } from "./FormationBlockAccesEmploi.styled";
+import { css } from "@emotion/react";
+import { getColorAtPosition } from "#/app/utils/color";
+import { createPortal } from "react-dom";
 
 export function FormationSalaire({ formation }: { formation: Formation }) {
   if (
@@ -39,16 +42,25 @@ export function FormationSalaire({ formation }: { formation: Formation }) {
     <>
       <BlockDivider />
       <MarginBottomNegative>
-        <Typography variant="h3">Pour cette formation, à quoi ressemble le salaire en début de carrière ?</Typography>
-        <Typography variant="body4">
-          <i
-            style={{
-              marginRight: "4px",
-            }}
-            className={fr.cx("ri-map-pin-2-line")}
-          ></i>
-          Sur toute la France
-        </Typography>
+        <Box>
+          <Typography
+            variant="h3"
+            css={css`
+              margin-bottom: 16px;
+            `}
+          >
+            À quoi ressemble le salaire en début de carrière ?
+          </Typography>
+          <Typography variant="body4">
+            <i
+              style={{
+                marginRight: "4px",
+              }}
+              className={fr.cx("ri-map-pin-2-line")}
+            ></i>
+            Sur toute la France
+          </Typography>
+        </Box>
         <SalaryCenterBox>
           <SalaryValueTypography>
             {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q2)} €
@@ -77,17 +89,19 @@ export function FormationSalaire({ formation }: { formation: Formation }) {
         </Box>
 
         <FlexRightBlueBox>
-          <Button priority="tertiary no outline" {...modalSalaireMedian.buttonProps}>
+          <Button priority="tertiary no outline" onClick={modalSalaireMedian.open}>
             <Typography variant="subtitle4">En savoir plus ?</Typography>
           </Button>
         </FlexRightBlueBox>
       </MarginBottomNegative>
-      <DialogSalaireMedian />
+      {createPortal(<DialogSalaireMedian />, document.body)}
     </>
   );
 }
 
 export function FormationSalaireGlobal({ formation }: { formation: Formation }) {
+  const gradient = "linear-gradient(90deg, #0063cb 0%, #178b8a 57%, #28a959 99.5%)";
+
   if (
     !formation.indicateurPoursuite?.salaire_12_mois_q2_q0 ||
     !formation.indicateurPoursuite?.salaire_12_mois_q2 ||
@@ -96,8 +110,12 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
     return;
   }
 
+  const extremum = Math.min(
+    Math.max(formation.indicateurPoursuite?.salaire_12_mois_q2, formation.indicateurPoursuite?.salaire_12_mois_q2_q0),
+    formation.indicateurPoursuite?.salaire_12_mois_q2_q4
+  );
   const position =
-    (formation.indicateurPoursuite?.salaire_12_mois_q2 - formation.indicateurPoursuite?.salaire_12_mois_q2_q0) /
+    (extremum - formation.indicateurPoursuite?.salaire_12_mois_q2_q0) /
     (formation.indicateurPoursuite?.salaire_12_mois_q2_q4 - formation.indicateurPoursuite?.salaire_12_mois_q2_q0);
 
   return (
@@ -105,14 +123,15 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
       <BlockDivider />
       <MarginBottomNegative>
         <Typography variant="h3">
-          Où se situe ce salaire médian en début de carrière par rapport aux autres formations en{" "}
+          Où se situe ce salaire par rapport aux autres salaire en{" "}
           {formation.niveauDiplome &&
             DiplomeTypeLibelle[formation.niveauDiplome] &&
-            DiplomeTypeLibelle[formation.niveauDiplome]}
+            DiplomeTypeLibelle[formation.niveauDiplome]}{" "}
+          ?
         </Typography>
         <Box>
           <FlexBox>
-            <SalaryPositionBox positionSalary={position}>
+            <SalaryPositionBox positionSalary={position} bubbleColor={getColorAtPosition(gradient, position)}>
               <Typography variant="subtitle4">
                 {formatSalaire(formation.indicateurPoursuite?.salaire_12_mois_q2)}&nbsp;€
               </Typography>
@@ -125,12 +144,12 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
           <SalaryGradientBar></SalaryGradientBar>
         </Box>
         <FlexRightBlueBox>
-          <Button priority="tertiary no outline" {...modalSalaireGlobal.buttonProps}>
+          <Button priority="tertiary no outline" onClick={modalSalaireGlobal.open}>
             <Typography variant="subtitle4">En savoir plus ?</Typography>
           </Button>
         </FlexRightBlueBox>
       </MarginBottomNegative>
-      <DialogSalaireGlobal />
+      {createPortal(<DialogSalaireGlobal />, document.body)}
       <BlockDivider />
       <FlexCenterColumnBox>
         <Typography variant="body3">

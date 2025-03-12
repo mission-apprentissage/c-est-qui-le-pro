@@ -81,22 +81,22 @@ export class IndicateurPoursuiteNationalRepository extends SqlRepository<DB, "in
     let query = this.kdb
       .selectFrom("indicateurPoursuiteNational")
       .select(["millesime"])
-      .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q0"))
+      // We remove the 10% extremum
+      .select(sql<number>`PERCENTILE_CONT(0.1) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q2"))
       .select(sql<number>`PERCENTILE_CONT(0.75) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q3"))
-      .select(sql<number>`PERCENTILE_CONT(1) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q4"))
-
-      .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q0"))
+      .select(sql<number>`PERCENTILE_CONT(0.9) WITHIN GROUP(ORDER BY salaire_12_mois_q1)`.as("salaire_12_mois_q1_q4"))
+      .select(sql<number>`PERCENTILE_CONT(0.0) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q2"))
       .select(sql<number>`PERCENTILE_CONT(0.75) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q3"))
-      .select(sql<number>`PERCENTILE_CONT(1) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q4"))
-      .select(sql<number>`PERCENTILE_CONT(0) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q0"))
+      .select(sql<number>`PERCENTILE_CONT(0.9) WITHIN GROUP(ORDER BY salaire_12_mois_q2)`.as("salaire_12_mois_q2_q4"))
+      .select(sql<number>`PERCENTILE_CONT(0.1) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q0"))
       .select(sql<number>`PERCENTILE_CONT(0.25) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q1"))
       .select(sql<number>`PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q2"))
       .select(sql<number>`PERCENTILE_CONT(0.75) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q3"))
-      .select(sql<number>`PERCENTILE_CONT(1) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q4"))
+      .select(sql<number>`PERCENTILE_CONT(0.9) WITHIN GROUP(ORDER BY salaire_12_mois_q3)`.as("salaire_12_mois_q3_q4"))
 
       .where("salaire_12_mois_q1", "is not", null)
       .where(this.kdb.fn("SUBSTR", ["cfd", sql.val(1), sql.val(3)]), "in", DiplomeType[type]);

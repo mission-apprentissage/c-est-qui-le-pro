@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { createModal } from "@codegouvfr/react-dsfr/Modal";
+import { createModal } from "#/app/components/Modal";
 
 export const modalSalaireGlobal = createModal({
   id: "salaire-global-modal",
@@ -11,7 +11,19 @@ export const modalSalaireGlobal = createModal({
 export default function DialogSalaireGlobal() {
   return (
     <>
-      <modalSalaireGlobal.Component topAnchor={true} title="À propos de la comparaison avec les autres salaires médian">
+      <modalSalaireGlobal.Component
+        topAnchor={false}
+        title="À propos de la comparaison avec les autres salaires médian"
+        buttons={[
+          {
+            doClosesModal: false,
+            children: "Ok",
+            onClick: async () => {
+              modalSalaireGlobal.close();
+            },
+          },
+        ]}
+      >
         <p style={{ marginBottom: fr.spacing("8v") }}>
           Attention, ces salaires sont indicatifs et observés à l&apos;échelle de la France. Il existe une grande
           variabilité selon les territoires, les conditions de travail et les entreprises.
