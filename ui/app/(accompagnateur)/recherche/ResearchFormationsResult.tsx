@@ -18,7 +18,6 @@ import { useFormationsSearch } from "../context/FormationsSearchContext";
 import { capitalize, isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
-import MultiSelect from "#/app/components/form/MultiSelect";
 import { FORMATION_DOMAINE } from "#/app/services/formation";
 
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
@@ -168,16 +167,6 @@ export default function ResearchFormationsResult({
         >
           <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
             <FormationsFilterTag selected={tag} />
-            <MultiSelect
-              maxHeight={"330px"}
-              options={FORMATION_DOMAINE.filter(({ domaine }) => domaine !== FormationDomaine["tout"]).map(
-                ({ domaine, icon }) => ({
-                  option: capitalize(domaine),
-                  icon: icon,
-                  value: domaine,
-                })
-              )}
-            />
           </Stack>
 
           {!formations?.length ? (
