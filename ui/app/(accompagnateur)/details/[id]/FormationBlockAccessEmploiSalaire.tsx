@@ -123,7 +123,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
       <BlockDivider />
       <MarginBottomNegative>
         <Typography variant="h3">
-          Où se situe ce salaire par rapport aux autres salaire en{" "}
+          Où se situe ce salaire par rapport aux autres salaires en{" "}
           {formation.niveauDiplome &&
             DiplomeTypeLibelle[formation.niveauDiplome] &&
             DiplomeTypeLibelle[formation.niveauDiplome]}{" "}
@@ -157,9 +157,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
           <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
             InserJeunes
           </BlueLink>{" "}
-          promotions {formation.indicateurPoursuite.millesimeSalaire}
-        </Typography>
-        <Typography variant="body3">
+          promotion {formation.indicateurPoursuite.millesimeSalaire}.{" "}
           <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
             D&apos;où viennent ces données ?
           </BlueLink>

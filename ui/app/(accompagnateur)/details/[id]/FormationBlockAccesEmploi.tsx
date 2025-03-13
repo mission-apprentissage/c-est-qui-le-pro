@@ -11,6 +11,7 @@ import { METIER_TRANSITION, sortMetier } from "#/app/services/metier";
 import { BlockDivider, CenteredGrid, ContentContainer } from "./FormationBlock.styled";
 import { TransitionIcon, MetierCard, TransitionTag, MetierContainer } from "./FormationBlockAccesEmploi.styled";
 import { FormationSalaire, FormationSalaireGlobal } from "./FormationBlockAccessEmploiSalaire";
+import { css } from "@emotion/react";
 
 function TagTransition({ metier, type }: { metier: Metier; type: MetierTransitionType }) {
   return (
@@ -88,13 +89,33 @@ export default function FormationBlockAccesEmploi({
       <ContentContainer>
         <Box>
           {formation.isAnneeCommune ? (
-            <Typography variant="h3">
+            <Typography
+              variant="h3"
+              css={css`
+                margin-bottom: 16px;
+              `}
+            >
               Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
             </Typography>
           ) : (
-            <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
+            <Typography
+              variant="h3"
+              css={css`
+                margin-bottom: 16px;
+              `}
+            >
+              Que sont devenus les anciens élèves 6 mois après cette formation ?
+            </Typography>
           )}
-          <Typography>{etablissement.libelle}</Typography>
+          <Typography>
+            <i
+              style={{
+                marginRight: "4px",
+              }}
+              className={fr.cx("ri-map-pin-2-line")}
+            ></i>
+            {etablissement.libelle}
+          </Typography>
           <WidgetInserJeunes etablissement={etablissement} formation={formation} />
         </Box>
         <FormationSalaire formation={formation} />

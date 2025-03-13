@@ -13,7 +13,7 @@ export default function DialogSalaireGlobal() {
     <>
       <modalSalaireGlobal.Component
         topAnchor={false}
-        title="À propos de la comparaison avec les autres salaires médian"
+        title="À propos de la comparaison avec les autres salaires médians"
         buttons={[
           {
             doClosesModal: false,
@@ -30,7 +30,7 @@ export default function DialogSalaireGlobal() {
           <br />
           <br />
           Ici le <b>salaire médian</b> est positionné sur une échelle allant du plus bas salaire médian au plus haut
-          salaire médian, observés pour des formations délivrant un diplôme équivalent. Le graphique permet donc de
+          salaire médian, observés pour des formations délivrant un diplôme équivalent. Le graphique permet donc de{" "}
           <b>
             comparer le salaire médian observé en sortie de formation aux autres formations délivrant un diplôme
             équivalent

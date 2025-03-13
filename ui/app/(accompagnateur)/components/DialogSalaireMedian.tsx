@@ -25,8 +25,9 @@ export default function DialogSalaireMedian() {
         ]}
       >
         <p style={{ marginBottom: fr.spacing("8v") }}>
-          Attention, ces salaires sont indicatifs et observés à l&apos;échelle de la France.
-          <br /> Il existe une grande variabilité selon les territoires, les conditions de travail et les entreprises.
+          Attention, ces salaires sont indicatifs et observés à l&apos;échelle de la France. Il existe une grande
+          variabilité selon les territoires, les conditions de travail et les entreprises.
+          <br />
           <br />
           Les données affichées présentent :
         </p>
