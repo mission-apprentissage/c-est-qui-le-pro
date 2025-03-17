@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.26.0...v1.27.0) (2025-03-17)
+
+
+### Features
+
+* affichage des salaires ([#44](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/44)) ([5b32429](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/5b32429a60f29291468ebe5a0a01a2706ce2334a))
+
 # [1.26.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.25.0...v1.26.0) (2025-03-04)
 
 
