@@ -155,8 +155,6 @@ function MultiSelectContainerMobile({
     originalApply();
   };
 
-  useOnClickOutside(ref, apply);
-
   return (
     <Box ref={ref}>
       <MobileContainer>

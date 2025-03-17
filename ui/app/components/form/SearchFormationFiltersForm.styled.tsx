@@ -8,8 +8,8 @@ export const MobileContainer = styled(Box)`
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background-color: white;
   z-index: 9999;
   display: flex;
