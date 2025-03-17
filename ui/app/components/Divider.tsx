@@ -23,6 +23,8 @@ export default function CustomDivider({
         margin-bottom: ${margin !== undefined ? margin : fr.spacing("5v")};
         ${theme.breakpoints.down("md")} {
           margin: 0;
+          margin-top: ${margin !== undefined ? margin : "0"};
+          margin-bottom: ${margin !== undefined ? margin : "0"};
         }
       `}
       {...props}

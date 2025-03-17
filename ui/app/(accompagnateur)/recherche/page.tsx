@@ -11,17 +11,15 @@ import ErrorUserGeolocation from "../errors/ErrorUserGeolocation";
 import ErrorAddressInvalid from "../errors/ErrorAddressInvalid";
 import UserGeolocatioDenied from "../components/UserGeolocatioDenied";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
-import { capitalize } from "lodash-es";
 import { FormationDomaine } from "shared";
-import { FORMATION_DOMAINE } from "#/app/services/formation";
-import OptionsCarousel from "#/app/components/form/OptionsCarousel";
 import { myPosition } from "#/app/components/form/AddressField";
 import { useRouter } from "next/navigation";
+import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
 
 function ResearchFormationsParameter() {
   const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
-  const { address, tag, domaine, formation } = params ?? {};
+  const { address, tag, domaines, formation } = params ?? {};
 
   useEffect(() => {
     if (!address) {
@@ -90,36 +88,21 @@ function ResearchFormationsParameter() {
           lg={12}
           xl={12}
           sx={{
-            border: "1px solid #DDDDDD",
-            boxShadow: "0 4px 4px -4px #00000040",
+            border: { sm: "none", md: "1px solid #DDDDDD" },
+            boxShadow: { sm: "none", md: "0 4px 4px -4px #00000040" },
             padding: { md: "1.5rem", xs: "1rem" },
-            paddingLeft: { md: "1.75rem" },
-            paddingRight: { md: "1.75rem" },
-            zIndex: 99,
+            paddingLeft: { md: "2.5rem" },
+            paddingRight: { md: "2.5rem" },
+            paddingBottom: { sm: "0", md: "1.5rem" },
+            zIndex: 999,
           }}
         >
-          <OptionsCarousel
-            defaultValue={FormationDomaine["tout"]}
-            selected={domaine ? [domaine] : []}
-            options={FORMATION_DOMAINE.map(({ domaine, icon }) => ({
-              option: capitalize(domaine),
-              icon: icon,
-              value: domaine,
-            }))}
-            onClick={(selected) => {
-              if (!params) {
-                return;
-              }
-
-              updateParams({
-                ...params,
-                domaine: selected === FormationDomaine["tout"] || selected === domaine ? undefined : selected,
-              });
-            }}
-          />
+          <SearchFormationFiltersForm />
         </Grid>
       </Grid>
-      {data && <ResearchFormationsResult location={data} tag={tag} domaine={domaine} formation={formation} page={1} />}
+      {data && (
+        <ResearchFormationsResult location={data} tag={tag} domaines={domaines} formation={formation} page={1} />
+      )}
     </>
   );
 }

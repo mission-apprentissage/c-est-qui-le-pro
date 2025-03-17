@@ -1,7 +1,7 @@
 import cleanDeep from "clean-deep";
 
 export function formatArrayParameters(value) {
-  return value.split ? value.split(/,|\|/) : [value];
+  return value.split ? value.split(/\|/) : [value];
 }
 
 export function stripNull(data) {

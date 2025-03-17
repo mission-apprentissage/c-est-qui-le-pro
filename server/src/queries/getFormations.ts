@@ -213,7 +213,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   };
 }
 
-async function buildFiltersFormationSQL({ cfds, domaine }) {
+async function buildFiltersFormationSQL({ cfds, domaines }) {
   let queryFormation = kdb
     .selectFrom("formation")
     .$call(FormationRepository._base())
@@ -224,7 +224,7 @@ async function buildFiltersFormationSQL({ cfds, domaine }) {
     queryFormation = queryFormation.where("cfd", "in", cfds);
   }
 
-  if (!domaine) {
+  if (!domaines || domaines.length === 0) {
     return { query: kdb.selectFrom(queryFormation.as("formation")).selectAll() };
   }
 
@@ -235,7 +235,7 @@ async function buildFiltersFormationSQL({ cfds, domaine }) {
           .selectFrom("formationDomaine")
           .select("formationId")
           .innerJoin("domaine", "domaine.id", "formationDomaine.domaineId")
-          .where("domaine.domaine", "in", [domaine])
+          .where("domaine.domaine", "in", domaines)
           .groupBy("formationId")
           .as("domaineFilter")
       )
@@ -256,7 +256,7 @@ async function getFiltersId(formation) {
 export async function getFormationsSQL(
   {
     filtersEtablissement = {},
-    filtersFormation = { cfds: null, domaine: null },
+    filtersFormation = { cfds: null, domaines: null },
     tag = null,
     millesime,
     formation = null,

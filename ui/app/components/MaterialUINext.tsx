@@ -13,6 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Stack from "@mui/material/Stack";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import Checkbox from "@mui/material/Checkbox";
 import Icon from "@mui/material/Icon";
 import styled from "@emotion/styled";
 
@@ -39,4 +40,5 @@ export {
   CircularProgress,
   Divider,
   Icon,
+  Checkbox,
 };

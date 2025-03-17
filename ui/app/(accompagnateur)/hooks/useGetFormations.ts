@@ -10,6 +10,7 @@ export default function useGetFormations({
   longitude,
   tag,
   domaine,
+  domaines,
   formation,
   uais,
   cfds,
@@ -21,6 +22,7 @@ export default function useGetFormations({
   longitude?: number;
   tag?: FormationTag | null;
   domaine?: FormationDomaine | null;
+  domaines?: FormationDomaine[];
   formation?: string | null;
   uais?: string[];
   cfds?: string[];
@@ -47,6 +49,7 @@ export default function useGetFormations({
       longitude,
       tag,
       domaine,
+      domaines?.toString(),
       formation,
       page,
       uais?.toString(),
@@ -62,6 +65,7 @@ export default function useGetFormations({
           timeLimit: 5400,
           tag,
           domaine,
+          domaines,
           formation,
           page: pageParam ?? 1,
           items_par_page,

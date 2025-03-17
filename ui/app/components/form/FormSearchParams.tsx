@@ -4,14 +4,12 @@ import { useForm, Control, FieldErrors, UseFormRegister } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FieldValues } from "react-hook-form";
-import { flatten, get, isNil } from "lodash-es";
-import { searchParamsToObject } from "#/app/utils/searchParams";
-import { RefObject, Suspense, useEffect, useRef, useState } from "react";
+import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
+import { RefObject, Suspense, useRef } from "react";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
   defaultValues: FormData;
-  forceValues?: Partial<FormData>;
   dynamicValues?: Array<keyof FormData>; // Value updated outside the form
   schema: yup.ObjectSchema<FormData>;
   children: ({
@@ -31,7 +29,6 @@ type FormSearchParamsProps<FormData extends FieldValues> = {
 export function FormSearchParams<FormData extends FieldValues>({
   url,
   defaultValues,
-  forceValues,
   dynamicValues,
   schema,
   children,
@@ -66,14 +63,7 @@ export function FormSearchParams<FormData extends FieldValues>({
 
     onSubmit && onSubmit(dataWithDynamic);
 
-    const entries = Object.entries(schema.fields).map(([key, fieldSchema]) => {
-      if (fieldSchema.type === "array") {
-        return [get(forceValues, key, dataWithDynamic[key]).map((v: any) => [key, v])];
-      }
-      return [[key, get(forceValues, key, dataWithDynamic[key])]];
-    });
-
-    const urlParams = new URLSearchParams(flatten(entries).filter(([_, value]) => !isNil(value)));
+    const urlParams = paramsToString(dataWithDynamic);
     router.push(`${url}?${urlParams}`);
   });
 
@@ -92,13 +82,12 @@ export function FormSearchParams<FormData extends FieldValues>({
 export default function FormSearchParamsWithSuspense<FormData extends FieldValues>({
   url,
   defaultValues,
-  forceValues,
   schema,
   children,
 }: FormSearchParamsProps<FormData>) {
   return (
     <Suspense>
-      <FormSearchParams url={url} defaultValues={defaultValues} schema={schema} forceValues={forceValues}>
+      <FormSearchParams url={url} defaultValues={defaultValues} schema={schema}>
         {children}
       </FormSearchParams>
     </Suspense>

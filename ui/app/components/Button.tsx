@@ -2,10 +2,11 @@
 import styled from "@emotion/styled";
 import Button, { ButtonProps as DSFRButtonProps } from "@codegouvfr/react-dsfr/Button";
 import { isString } from "lodash-es";
+import { fr } from "@codegouvfr/react-dsfr";
 
 export type ButtonProps = {
   rounded?: boolean | string;
-  variant?: "white" | "white-black";
+  variant?: "white" | "white-black" | "blue-france-hover" | "black";
   smallIconOnly?: boolean;
   iconOnly?: boolean;
 } & DSFRButtonProps;
@@ -33,6 +34,13 @@ export default styled(ButtonBase, {
         border-color: #000000;
         box-shadow: inset 0 0 0 1px #000000;
         padding: 16px;
+        `;
+      case "blue-france-hover":
+        return `background-color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
+        --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};`;
+      case "black":
+        return `
+        color: #000000;
         `;
       default:
         return "";

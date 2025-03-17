@@ -10,7 +10,7 @@ import { usePlausible } from "next-plausible";
 type FormationsSearchParams = {
   address: string;
   tag?: FormationTag;
-  domaine?: FormationDomaine;
+  domaines?: FormationDomaine[];
   formation?: string;
 };
 
@@ -29,7 +29,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
   const { push } = useMatomo();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const params = searchParamsToObject(searchParams, { address: null, tag: null, domaine: null }, schemaFormation);
+  const params = searchParamsToObject(searchParams, { address: null, tag: null, domaines: null }, schemaFormation);
 
   useEffect(() => {
     Object.entries(omit(params, ["address"])).forEach(([key, value]) => {
@@ -53,7 +53,7 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
   const updateParams = useCallback(
     (params: FormationsSearchParams) => {
       const urlSearchParams = paramsToString(params);
-      router.push(`?${urlSearchParams}`);
+      router.push(`?${urlSearchParams}`, { scroll: false });
     },
     [router]
   );
