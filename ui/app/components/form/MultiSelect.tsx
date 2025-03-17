@@ -1,10 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import { useOnClickOutside } from "usehooks-ts";
-import { Box, Typography } from "../MaterialUINext";
-import { css } from "@emotion/react";
+import { Box } from "../MaterialUINext";
 import { useCallback, useId, useRef, useState } from "react";
 import Button from "../Button";
+import {
+  ActionBar,
+  DropdownMenu,
+  IconContainer,
+  LabelText,
+  MobileContainer,
+  OptionsContainer,
+  SelectContainer,
+  SelectHeader,
+  ShowMoreText,
+  StyledOptionBox,
+  ClearButtonText,
+  EmptyIconSpace,
+} from "./MultiSelect.styled";
 
 type OptionProps = {
   icon?: never | FrIconClassName | RiIconClassName;
@@ -50,25 +63,9 @@ function Option({
   const id = useId();
 
   return (
-    <Box
+    <StyledOptionBox
       key={option}
-      css={css`
-        border: ${checked ? "1px solid var(--border-active-blue-france)" : "1px solid var(--border-default-grey)"};
-        display: flex;
-        flex-direction: row;
-        padding-right: 1.5rem;
-        padding-left: 3rem;
-        align-items: center;
-        margin-bottom: 0.5rem;
-        font-size: 1rem;
-        font-weight: 500;
-        line-height: 1.5rem;
-        cursor: pointer;
-
-        &:hover {
-          background-color: var(--grey-1000-50-hover);
-        }
-      `}
+      checked={checked}
       onClick={(e) => {
         onChange(!checked);
       }}
@@ -77,35 +74,10 @@ function Option({
       <label htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
       </label>
-      <Box
-        css={css`
-          margin-left: auto;
-          padding: 1rem;
-          padding-left: 1.5rem;
-          padding-right: 0rem;
-          position: relative;
-          &:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 5%;
-            height: 90%;
-            width: 1px;
-            ${icon && "border-left: 1px solid #dddddd;"}
-          }
-        `}
-      >
-        {icon ? (
-          <i className={fr.cx(icon, "fr-icon--lg")}></i>
-        ) : (
-          <Box
-            css={css`
-              height: 2rem;
-            `}
-          ></Box>
-        )}
-      </Box>
-    </Box>
+      <IconContainer hasIcon={!!icon}>
+        {icon ? <i className={fr.cx(icon, "fr-icon--lg")}></i> : <EmptyIconSpace />}
+      </IconContainer>
+    </StyledOptionBox>
   );
 }
 
@@ -130,62 +102,15 @@ function MultiSelectContainer({
   useOnClickOutside(ref, apply);
 
   return (
-    <Box
-      ref={ref}
-      css={css`
-        ${width && `width: ${width};`}
-      `}
-    >
-      <Box
-        css={css`
-          display: flex;
-          flex-direction: row;
-          gap: 0.25rem;
-
-          ${isOpen && `background-color: ${fr.colors.decisions.background.open.blueFrance.default};`}
-          padding: 0.5rem;
-          border: 1px solid #dddddd;
-
-          &:hover {
-            background-color: ${fr.colors.decisions.background.open.blueFrance.default};
-            cursor: pointer;
-          }
-        `}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Typography
-          variant="body4"
-          css={css`
-            color: ${fr.colors.decisions.background.actionHigh.blueFrance.default};
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            flex-grow: 1;
-          `}
-        >
-          {label}
-        </Typography>
+    <SelectContainer ref={ref} width={width}>
+      <SelectHeader isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+        <LabelText variant="body4">{label}</LabelText>
         <Box>
           {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
         </Box>
-      </Box>
-      <Box
-        css={css`
-          box-shadow: 0px 6px 18px rgba(0, 0, 18, 0.16);
-          width: 412px;
-          position: absolute;
-          z-index: 999;
-          background-color: #ffffff;
-          display: ${isOpen ? "block;" : "none;"};
-          padding: 2rem;
-        `}
-      >
-        <Box
-          className={fr.cx("fr-checkbox-group")}
-          css={css`
-            ${maxHeight && `height: ${maxHeight}; overflow-y: scroll;`}
-          `}
-        >
+      </SelectHeader>
+      <DropdownMenu isOpen={isOpen}>
+        <OptionsContainer className={fr.cx("fr-checkbox-group")} maxHeight={maxHeight}>
           {options.map((option, index) => {
             return (
               <Option
@@ -197,28 +122,11 @@ function MultiSelectContainer({
               />
             );
           })}
-        </Box>
-        <Box
-          css={css`
-            border-top: 1px solid #dddddd;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-
-            padding-top: 2rem;
-          `}
-        >
+        </OptionsContainer>
+        <ActionBar>
           <Box>
             <Button priority="tertiary no outline" variant="black" onClick={() => reset()}>
-              <Typography
-                variant="body2"
-                css={css`
-                  font-weight: 700;
-                `}
-              >
-                Tout effacer
-              </Typography>
+              <ClearButtonText variant="body2">Tout effacer</ClearButtonText>
             </Button>
           </Box>
           <Box>
@@ -226,9 +134,9 @@ function MultiSelectContainer({
               Appliquer
             </Button>
           </Box>
-        </Box>
-      </Box>
-    </Box>
+        </ActionBar>
+      </DropdownMenu>
+    </SelectContainer>
   );
 }
 
@@ -251,11 +159,7 @@ function MultiSelectContainerMobile({
 
   return (
     <Box ref={ref}>
-      <Box
-        css={css`
-          width: 100%;
-        `}
-      >
+      <MobileContainer>
         <Box className={fr.cx("fr-checkbox-group")}>
           {options.slice(0, maxVisible).map((option, index) => {
             return (
@@ -278,18 +182,12 @@ function MultiSelectContainerMobile({
               setMaxVisible(options.length);
             }}
           >
-            <Typography
-              variant="subtitle4"
-              css={css`
-                margin-top: 1rem;
-                color: var(--text-title-grey);
-              `}
-            >
+            <ShowMoreText variant="subtitle4">
               Afficher plus <i className={fr.cx("ri-arrow-down-line")}></i>
-            </Typography>
+            </ShowMoreText>
           </a>
         )}
-      </Box>
+      </MobileContainer>
     </Box>
   );
 }

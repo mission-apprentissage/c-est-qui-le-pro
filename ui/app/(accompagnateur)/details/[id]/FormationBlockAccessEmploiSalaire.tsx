@@ -13,6 +13,7 @@ import {
   SalaryValueTypography,
   SalaryDistributionBar,
   SalaryDistributionInnerBar,
+  SalaryMedianBox,
   WhiteTypography,
   FlexRowBox,
   FlexCenterWidth40Box,
@@ -129,7 +130,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
             DiplomeTypeLibelle[formation.niveauDiplome]}{" "}
           ?
         </Typography>
-        <Box>
+        <SalaryMedianBox>
           <FlexBox>
             <SalaryPositionBox positionSalary={position} bubbleColor={getColorAtPosition(gradient, position)}>
               <Typography variant="subtitle4">
@@ -142,7 +143,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
             <Typography variant="body3">Le salaire le plus haut</Typography>
           </FlexSpaceBetweenBox>
           <SalaryGradientBar></SalaryGradientBar>
-        </Box>
+        </SalaryMedianBox>
         <FlexRightBlueBox>
           <Button priority="tertiary no outline" onClick={modalSalaireGlobal.open}>
             <Typography variant="subtitle4">En savoir plus ?</Typography>

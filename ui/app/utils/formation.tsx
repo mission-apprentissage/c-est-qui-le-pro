@@ -25,5 +25,5 @@ export function formatStatut(etablissement: Etablissement): string {
 }
 
 export function formatSalaire(salaire: number) {
-  return salaire.toLocaleString().replace(/,/g, " ");
+  return salaire.toLocaleString().replace(/,/g, " ");
 }

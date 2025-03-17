@@ -1,10 +1,10 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material/styles";
 import { fr } from "@codegouvfr/react-dsfr";
 import Card from "#/app/components/Card";
 import Tag from "#/app/components/Tag";
 import { Box, Typography } from "#/app/components/MaterialUINext";
 
-export const TransitionIcon = styled.i`
+export const TransitionIcon = styled("i")`
   &::before {
     --icon-size: 1rem;
   }
@@ -71,6 +71,13 @@ export const SalaryDistributionInnerBar = styled(Box)`
   align-items: center;
 `;
 
+export const SalaryMedianBox = styled(Box)`
+  ${(props) => props.theme.breakpoints.up("xs")} {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+`;
+
 export const WhiteTypography = styled(Typography)`
   color: white;
 `;
@@ -98,7 +105,7 @@ export const FlexRightBlueBox = styled(Box)`
 `;
 
 export const SalaryPositionBox = styled(Box, {
-  shouldForwardProp: (prop) => !["bubbleColor", "positionSalary"].includes(prop),
+  shouldForwardProp: (prop) => !["bubbleColor", "positionSalary"].includes(prop as string),
 })<{ positionSalary: number; bubbleColor: string }>`
   margin-left: ${(props) => props.positionSalary * 100}%;
   transform: translateX(-50%);
@@ -150,6 +157,6 @@ export const FlexCenterColumnBox = styled(Box)`
   flex-direction: column;
 `;
 
-export const BlueLink = styled.a`
+export const BlueLink = styled("a")`
   color: var(--blue-france-sun-113-625);
 `;
