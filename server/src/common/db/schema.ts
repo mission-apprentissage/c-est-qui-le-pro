@@ -198,6 +198,23 @@ export interface IndicateurPoursuiteAnneeCommune {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface IndicateurPoursuiteNational {
+  cfd: string;
+  codeDispositif: string | null;
+  createdAt: Generated<Timestamp>;
+  id: Generated<string>;
+  millesime: string | null;
+  part_en_emploi_6_mois: number | null;
+  salaire_12_mois_q1: number | null;
+  salaire_12_mois_q2: number | null;
+  salaire_12_mois_q3: number | null;
+  taux_autres_6_mois: number | null;
+  taux_en_emploi_6_mois: number | null;
+  taux_en_formation: number | null;
+  updatedAt: Generated<Timestamp>;
+  voie: string;
+}
+
 export interface IndicateurPoursuiteRegional {
   cfd: string;
   codeDispositif: string | null;
@@ -292,6 +309,7 @@ export interface DB {
   indicateurEntree: IndicateurEntree;
   indicateurPoursuite: IndicateurPoursuite;
   indicateurPoursuiteAnneeCommune: IndicateurPoursuiteAnneeCommune;
+  indicateurPoursuiteNational: IndicateurPoursuiteNational;
   indicateurPoursuiteRegional: IndicateurPoursuiteRegional;
   log: Log;
   metric: Metric;

@@ -11,6 +11,7 @@ import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import { cleanString, stripNull } from "../utils/formatters";
 import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
+import FormationRepository from "#src/common/repositories/formation";
 import { merge } from "lodash-es";
 import { FormationTag } from "shared";
 
@@ -32,7 +33,7 @@ export default () => {
         }
       );
 
-      const formation = await FormationEtablissement.getFromCfd(
+      const formationEtablissement = await FormationEtablissement.getFromCfd(
         {
           uai,
           cfd,
@@ -42,17 +43,23 @@ export default () => {
         true
       );
 
-      if (!formation) {
+      if (!formationEtablissement) {
         throw Boom.notFound();
       }
 
+      const formation = await FormationRepository.get({ cfd, codeDispositif, voie }, true);
+
       const accessTime =
         latitude && longitude
-          ? await EtablissementIsochroneRepository.bucketFromCoordinate(formation.etablissement.id, latitude, longitude)
+          ? await EtablissementIsochroneRepository.bucketFromCoordinate(
+              formationEtablissement.etablissement.id,
+              latitude,
+              longitude
+            )
           : null;
 
       addJsonHeaders(res);
-      res.send(stripNull(merge(formation, { etablissement: { accessTime } })));
+      res.send(stripNull(merge(formationEtablissement, { etablissement: { accessTime } }, { formation })));
     })
   );
 

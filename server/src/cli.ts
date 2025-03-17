@@ -29,6 +29,7 @@ import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
 import { importFormationSimilaire } from "./jobs/formations/importFormationSimilaire";
 import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormationsTmp";
 import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndicateurPoursuiteRegionale";
+import { importIndicateurPoursuiteNational } from "./jobs/exposition/importIndicateurPoursuiteNational";
 import { importFamillesMetiers } from "./jobs/formations/importFamillesMetiers";
 import { createSearchIndex } from "./services/formation/search";
 
@@ -69,6 +70,7 @@ const formationEtablissementJobs = [
   { name: "feFamillesMetiers", job: importFamillesMetiers },
   { name: "feIndicateurEntree", job: importIndicateurEntree },
   { name: "feIndicateurPoursuiteRegionale", job: importIndicateurPoursuiteRegionale },
+  { name: "feIndicateurPoursuiteNational", job: importIndicateurPoursuiteNational },
   { name: "feIndicateurPoursuite", job: importIndicateurPoursuite },
   { name: "feIndicateurPoursuiteAnneeCommune", job: importIndicateurPoursuiteAnneeCommune },
   { name: "feFormationTag", job: computeFormationTag },

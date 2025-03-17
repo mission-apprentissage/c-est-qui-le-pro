@@ -2,6 +2,9 @@ import { SqlRepository } from "./base.js";
 import { kdb as defaultKdb, kyselyChainFn } from "../db/db";
 import { DB } from "../db/schema.js";
 import { AnyAliasedColumn, ExpressionBuilder, SelectQueryBuilder, sql } from "kysely";
+import IndicateurPoursuiteNationalRepository from "./indicateurPoursuiteNational.js";
+import { getDiplomeType } from "shared";
+import { omit } from "lodash-es";
 
 export class FormationRepository extends SqlRepository<DB, "formation"> {
   constructor(kdb = defaultKdb) {
@@ -102,7 +105,7 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
     };
   }
 
-  async get({ cfd, codeDispositif, voie }) {
+  async get({ cfd, codeDispositif, voie }, withIndicateur = false) {
     const formation = await this.kdb
       .selectFrom("formation")
       .$call(this._base())
@@ -113,6 +116,55 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
         return codeDispositif ? eb("codeDispositif", "=", codeDispositif) : eb("codeDispositif", "is", null);
       })
       .executeTakeFirst();
+
+    if (withIndicateur) {
+      const indicateurPoursuite =
+        (await this.kdb
+          .selectFrom("indicateurPoursuiteNational")
+          .selectAll()
+          .orderBy("millesime desc")
+          .where("cfd", "=", cfd)
+          .where("voie", "=", voie)
+          .where(({ eb }) => {
+            return codeDispositif ? eb("codeDispositif", "=", codeDispositif) : eb("codeDispositif", "is", null);
+          })
+          .limit(1)
+          .executeTakeFirst()) || null;
+      const indicateurPoursuiteSalaire =
+        (await this.kdb
+          .selectFrom("indicateurPoursuiteNational")
+          .select("salaire_12_mois_q1")
+          .select("salaire_12_mois_q2")
+          .select("salaire_12_mois_q3")
+          .orderBy("millesime desc")
+          .where("salaire_12_mois_q1", "is not", null)
+          .where("cfd", "=", cfd)
+          .where("voie", "=", voie)
+          .where(({ eb }) => {
+            return codeDispositif ? eb("codeDispositif", "=", codeDispositif) : eb("codeDispositif", "is", null);
+          })
+          .limit(1)
+          .executeTakeFirst()) || null;
+
+      // Quartile salaire
+      const diplomeType = getDiplomeType(formation.niveauDiplome);
+      const quartileSalaire = await IndicateurPoursuiteNationalRepository.quartileForSalaire(diplomeType);
+      if (quartileSalaire) {
+        quartileSalaire["millesimeSalaire"] = quartileSalaire["millesime"];
+      }
+
+      return {
+        indicateurPoursuite:
+          !indicateurPoursuite && !indicateurPoursuiteSalaire
+            ? null
+            : {
+                ...(indicateurPoursuite || {}),
+                ...(indicateurPoursuiteSalaire || {}),
+                ...omit(quartileSalaire || {}, ["millesime"]),
+              },
+        ...formation,
+      };
+    }
 
     return formation;
   }

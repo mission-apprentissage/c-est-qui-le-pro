@@ -12,7 +12,18 @@ export const modalMinistage = createModal({
 export default function DialogMinistage() {
   return (
     <>
-      <modalMinistage.Component title="Qu’est ce qu’un mini-stage ?">
+      <modalMinistage.Component
+        title="Qu’est ce qu’un mini-stage ?"
+        buttons={[
+          {
+            doClosesModal: false,
+            children: "Ok",
+            onClick: async () => {
+              modalMinistage.close();
+            },
+          },
+        ]}
+      >
         <p style={{ marginBottom: fr.spacing("8v") }}>
           Le mini-stage est une <b>session d’immersion</b> destinée aux élèves de 3ème et de 2nde professionnelle, d’une
           durée généralement comprise <b>entre une demi-journée et 2 jours</b>, dans une classe de la formation choisie.

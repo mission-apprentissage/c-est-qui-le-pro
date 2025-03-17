@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useCallback, useMemo, useState } from "react";
-import styled from "@emotion/styled";
 import { fr } from "@codegouvfr/react-dsfr";
 import Card from "#/app/components/Card";
 import { capitalize } from "lodash-es";
@@ -9,37 +8,10 @@ import { Etablissement, Formation, Metier, MetierTransitionType } from "shared";
 import WidgetInserJeunes from "../../components/WidgetInserJeunes";
 import Button from "#/app/components/Button";
 import { METIER_TRANSITION, sortMetier } from "#/app/services/metier";
-import Tag from "#/app/components/Tag";
 import { BlockDivider, CenteredGrid, ContentContainer } from "./FormationBlock.styled";
-
-export const TransitionIcon = styled.i`
-  &::before {
-    --icon-size: 1rem;
-  }
-  margin-right: 0.25rem;
-`;
-
-export const MetierCard = styled(Card)`
-  height: 100%;
-  border-radius: 0;
-  padding: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-export const TransitionTag = styled(Tag)`
-  padding: 0.375rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-`;
-
-export const MetierContainer = styled(Box)`
-  display: flex;
-  width: 100%;
-  justify-content: flex-start;
-`;
+import { TransitionIcon, MetierCard, TransitionTag, MetierContainer } from "./FormationBlockAccesEmploi.styled";
+import { FormationSalaire, FormationSalaireGlobal } from "./FormationBlockAccessEmploiSalaire";
+import { css } from "@emotion/react";
 
 function TagTransition({ metier, type }: { metier: Metier; type: MetierTransitionType }) {
   return (
@@ -117,15 +89,37 @@ export default function FormationBlockAccesEmploi({
       <ContentContainer>
         <Box>
           {formation.isAnneeCommune ? (
-            <Typography variant="h3">
+            <Typography
+              variant="h3"
+              css={css`
+                margin-bottom: 16px;
+              `}
+            >
               Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
             </Typography>
           ) : (
-            <Typography variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</Typography>
+            <Typography
+              variant="h3"
+              css={css`
+                margin-bottom: 16px;
+              `}
+            >
+              Que sont devenus les anciens élèves 6 mois après cette formation ?
+            </Typography>
           )}
-          <Typography>{etablissement.libelle}</Typography>
+          <Typography>
+            <i
+              style={{
+                marginRight: "4px",
+              }}
+              className={fr.cx("ri-map-pin-2-line")}
+            ></i>
+            {etablissement.libelle}
+          </Typography>
           <WidgetInserJeunes etablissement={etablissement} formation={formation} />
         </Box>
+        <FormationSalaire formation={formation} />
+        <FormationSalaireGlobal formation={formation} />
         <FormationMetier formation={formation} />
       </ContentContainer>
     </Card>

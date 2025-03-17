@@ -15,9 +15,10 @@ import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
-import { isNil, omit } from "lodash-es";
+import { capitalize, isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
+import { FORMATION_DOMAINE } from "#/app/services/formation";
 
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,

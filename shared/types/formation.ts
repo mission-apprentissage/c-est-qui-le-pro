@@ -100,6 +100,22 @@ type IndicateurPoursuiteRegional = {
   taux_en_emploi_6_mois_q4: number;
 };
 
+type IndicateurPoursuiteNational = {
+  millesime: string;
+  part_en_emploi_6_mois?: number;
+  taux_en_formation?: number;
+  taux_autres_6_mois?: number;
+  millesimeSalaire?: string;
+  salaire_12_mois_q1?: number;
+  salaire_12_mois_q2?: number;
+  salaire_12_mois_q3?: number;
+  salaire_12_mois_q2_q0?: number;
+  salaire_12_mois_q2_q1?: number;
+  salaire_12_mois_q2_q2?: number;
+  salaire_12_mois_q2_q3?: number;
+  salaire_12_mois_q2_q4?: number;
+};
+
 type FormationPoursuite = {
   type?: string;
   libelle: string;
@@ -147,6 +163,7 @@ export type Formation = {
   niveauDiplome?: string;
   codeRncp?: string;
   formationPoursuite?: FormationPoursuite[];
+  indicateurPoursuite?: IndicateurPoursuiteNational;
   metier?: Metier[];
   isAnneeCommune?: boolean;
 };

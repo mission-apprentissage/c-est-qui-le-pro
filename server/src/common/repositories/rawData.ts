@@ -23,6 +23,7 @@ export enum RawDataType {
   RCO_certificationRome = "RCO_certificationRome",
 
   EXPOSITION_regionales = "EXPOSITION_regionales",
+  EXPOSITION_nationales = "EXPOSITION_nationales",
 
   FRANCE_TRAVAIL_metiers = "FRANCE_TRAVAIL_metiers",
 }
@@ -39,6 +40,7 @@ export interface RawData {
   [RawDataType.RCO_certifInfo]: any;
   [RawDataType.RCO_certificationRome]: any;
   [RawDataType.EXPOSITION_regionales]: any;
+  [RawDataType.EXPOSITION_nationales]: any;
   [RawDataType.FRANCE_TRAVAIL_metiers]: any;
 }
 
