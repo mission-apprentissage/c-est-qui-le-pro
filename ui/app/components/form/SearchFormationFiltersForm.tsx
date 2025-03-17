@@ -68,7 +68,7 @@ export default function SearchFormationFiltersForm() {
 
   const submitMobile = () => {
     setIsFocus(false);
-    handleSubmit(onSubmit);
+    handleSubmit(onSubmit)();
   };
 
   useEffect(() => {
