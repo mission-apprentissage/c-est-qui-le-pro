@@ -57,19 +57,19 @@ export async function up(db: Kysely<any>): Promise<void> {
 		END;
 		$$ LANGUAGE plpgsql;
 
-	CREATE TRIGGER refresh_materialized_view_trigger
+	CREATE OR REPLACE TRIGGER refresh_materialized_view_trigger
 		AFTER INSERT OR UPDATE OR DELETE
 		ON "formation"
 		FOR EACH STATEMENT
 		EXECUTE FUNCTION refresh_materialized_view();
 
-	CREATE TRIGGER refresh_materialized_view_trigger
+	CREATE OR REPLACE TRIGGER refresh_materialized_view_trigger
 		AFTER INSERT OR UPDATE OR DELETE
 		ON "formationEtablissement"
 		FOR EACH STATEMENT
 		EXECUTE FUNCTION refresh_materialized_view();
 
-	CREATE TRIGGER refresh_materialized_view_trigger
+	CREATE OR REPLACE TRIGGER refresh_materialized_view_trigger
 		AFTER INSERT OR UPDATE OR DELETE
 		ON "etablissement"
 		FOR EACH STATEMENT
