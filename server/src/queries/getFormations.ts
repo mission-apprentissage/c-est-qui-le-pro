@@ -309,29 +309,22 @@ export async function getFormationsSQL(
             eb
               .selectFrom((eb) =>
                 eb
-                  .selectFrom("formationEtablissement as feMetier")
-                  .innerJoin("formation as fMetier", "feMetier.formationId", "fMetier.id")
-                  .innerJoin("etablissement as eEtablissement", "feMetier.etablissementId", "eEtablissement.id")
-                  .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
-                  .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
-                  .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
-                  .select("fMetier.libelle")
-                  .whereRef("feMetier.etablissementId", "=", "results.etablissementId")
-                  .whereRef("fMetier.familleMetierId", "=", "results.familleMetierId")
-                  .where("fMetier.isAnneeCommune", "=", false)
-                  .where("feMetier.millesime", "&&", [millesime])
-                  .orderBy("fMetier.libelle")
+                  .selectFrom("formationFamilleMetierMView")
+                  .selectAll()
+                  .whereRef("etablissementId", "=", "results.etablissementId")
+                  .whereRef("familleMetierId", "=", "results.familleMetierId")
+                  .where("millesime", "&&", [millesime])
+                  .orderBy("libelle")
                   .as("formationsFamilleMetier")
               )
               .select(
-                sql`json_agg(to_jsonb("formationsFamilleMetier") - 'libelle' ORDER BY "formationsFamilleMetier".libelle)`.as(
+                sql`json_agg(to_jsonb("formationsFamilleMetier") - 'id' - 'libelle' - 'etablissementId' - 'familleMetierId' - 'millesime' ORDER BY "formationsFamilleMetier".libelle)`.as(
                   "formationsFamilleMetier"
                 )
               )
               .as("formationsFamilleMetier"),
           (join) => join.on(sql`true`)
         )
-
         .select(sql`COUNT("accessTime") OVER ()`.as("totalIsochrone"))
         .select(sql`COUNT(*) OVER ()`.as("total"))
         .select(sql<string>`ROW_NUMBER() OVER (ORDER BY  ${queryEtablissement.order})`.as("order"))
