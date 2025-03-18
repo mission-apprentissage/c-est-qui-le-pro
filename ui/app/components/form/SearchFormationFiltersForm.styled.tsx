@@ -63,6 +63,10 @@ export const DesktopFilterContainer = styled(Box)`
 
 export const FilterIcon = styled.i`
   padding-right: 0.5rem;
+
+  &[class^="ri-"]::before {
+    --icon-size: 1.2rem;
+  }
 `;
 
 export const FilterButton = styled(Button)`

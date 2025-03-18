@@ -6,8 +6,7 @@ import styled from "@emotion/styled";
 export const StyledOptionBox = styled(Box, {
   shouldForwardProp: (prop) => !["hasIcon"].includes(prop as string),
 })<{ checked: boolean }>`
-  border: ${({ checked }) =>
-    checked ? "1px solid var(--border-active-blue-france)" : "1px solid var(--border-default-grey)"};
+  border: 1px solid var(--border-default-grey);
   display: flex;
   flex-direction: row;
   padding-right: 1.5rem;
@@ -89,6 +88,11 @@ export const DropdownMenu = styled(Box, {
 
 export const OptionsContainer = styled(Box)<{ maxHeight?: string }>`
   ${({ maxHeight }) => maxHeight && `height: ${maxHeight}; overflow-y: scroll;`}
+
+  & input[type=checkbox] + label::before {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 `;
 
 export const ActionBar = styled(Box)`
