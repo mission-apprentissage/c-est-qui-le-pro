@@ -25,6 +25,7 @@ import {
   SalaryGradientBar,
   FlexCenterColumnBox,
   BlueLink,
+  SalaryEnsembleBox,
 } from "./FormationBlockAccesEmploi.styled";
 import { css } from "@emotion/react";
 import { getColorAtPosition } from "#/app/utils/color";
@@ -62,32 +63,34 @@ export function FormationSalaire({ formation }: { formation: Formation }) {
             Sur toute la France
           </Typography>
         </Box>
-        <SalaryCenterBox>
-          <SalaryValueTypography>
-            {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q2)} €
-          </SalaryValueTypography>
-          <Typography variant="body4">salaire médian net / mois</Typography>
-        </SalaryCenterBox>
-        <Box>
-          <SalaryDistributionBar>
-            <SalaryDistributionInnerBar>
-              <WhiteTypography variant="subtitle4">50% des salariés</WhiteTypography>
-            </SalaryDistributionInnerBar>
-          </SalaryDistributionBar>
-          <FlexRowBox>
-            <FlexCenterWidth40Box>
-              <Typography variant="subtitle4">
-                {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q1)} €
-              </Typography>
-            </FlexCenterWidth40Box>
-            <Width20Box></Width20Box>
-            <FlexCenterWidth40Box>
-              <Typography variant="subtitle4">
-                {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q3)} €
-              </Typography>
-            </FlexCenterWidth40Box>
-          </FlexRowBox>
-        </Box>
+        <SalaryMedianBox>
+          <SalaryCenterBox>
+            <SalaryValueTypography>
+              {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q2)} €
+            </SalaryValueTypography>
+            <Typography variant="body4">salaire médian net / mois</Typography>
+          </SalaryCenterBox>
+          <Box>
+            <SalaryDistributionBar>
+              <SalaryDistributionInnerBar>
+                <WhiteTypography variant="subtitle4">50% des salariés</WhiteTypography>
+              </SalaryDistributionInnerBar>
+            </SalaryDistributionBar>
+            <FlexRowBox>
+              <FlexCenterWidth40Box>
+                <Typography variant="subtitle4">
+                  {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q1)} €
+                </Typography>
+              </FlexCenterWidth40Box>
+              <Width20Box></Width20Box>
+              <FlexCenterWidth40Box>
+                <Typography variant="subtitle4">
+                  {formatSalaire(formation.indicateurPoursuite.salaire_12_mois_q3)} €
+                </Typography>
+              </FlexCenterWidth40Box>
+            </FlexRowBox>
+          </Box>
+        </SalaryMedianBox>
 
         <FlexRightBlueBox>
           <Button priority="tertiary no outline" onClick={modalSalaireMedian.open}>
@@ -130,7 +133,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
             DiplomeTypeLibelle[formation.niveauDiplome]}{" "}
           ?
         </Typography>
-        <SalaryMedianBox>
+        <SalaryEnsembleBox>
           <FlexBox>
             <SalaryPositionBox positionSalary={position} bubbleColor={getColorAtPosition(gradient, position)}>
               <Typography variant="subtitle4">
@@ -143,7 +146,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
             <Typography variant="body3">Le salaire le plus haut</Typography>
           </FlexSpaceBetweenBox>
           <SalaryGradientBar></SalaryGradientBar>
-        </SalaryMedianBox>
+        </SalaryEnsembleBox>
         <FlexRightBlueBox>
           <Button priority="tertiary no outline" onClick={modalSalaireGlobal.open}>
             <Typography variant="subtitle4">En savoir plus ?</Typography>

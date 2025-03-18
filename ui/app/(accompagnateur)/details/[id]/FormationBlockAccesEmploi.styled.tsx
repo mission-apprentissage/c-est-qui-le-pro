@@ -72,7 +72,14 @@ export const SalaryDistributionInnerBar = styled(Box)`
 `;
 
 export const SalaryMedianBox = styled(Box)`
-  ${(props) => props.theme.breakpoints.up("xs")} {
+  ${(props) => props.theme.breakpoints.down("md")} {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+`;
+
+export const SalaryEnsembleBox = styled(Box)`
+  ${(props) => props.theme.breakpoints.down("md")} {
     margin-left: 2rem;
     margin-right: 2rem;
   }
