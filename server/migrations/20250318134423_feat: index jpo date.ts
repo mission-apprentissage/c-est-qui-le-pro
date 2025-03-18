@@ -8,45 +8,56 @@ export async function up(db: Kysely<any>): Promise<void> {
 
 	CREATE OR REPLACE VIEW "formationFamilleMetierView" AS
 		select 
-			row_to_json("fMetier") as "formation", 
-			row_to_json("feMetier") as "formationEtablissement", 
-			row_to_json("eEtablissement") as "etablissement", 
-			"fMetier"."libelle",
-			"feMetier"."id",
-			"feMetier"."etablissementId",
-			"feMetier"."millesime",
-			"fMetier"."familleMetierId"
-		from "formationEtablissement" as "feMetier" 
-		inner join "formation" as "fMetier" on "feMetier"."formationId" = "fMetier"."id" 
-		inner join "etablissement" as "eEtablissement" on "feMetier"."etablissementId" = "eEtablissement"."id" 
-		where "fMetier"."isAnneeCommune" = false
-		order by "fMetier"."libelle";
+			"etablissementId",
+			"familleMetierId",
+			"millesime",
+			json_agg(to_jsonb("formationsFamilleMetier") - 'id' - 'libelle' - 'etablissementId' - 'familleMetierId' - 'millesime' ORDER BY "formationsFamilleMetier".libelle) as "formationsFamilleMetier" 
+		FROM (
+			select 
+				row_to_json("fMetier") as "formation", 
+				row_to_json("feMetier") as "formationEtablissement", 
+				row_to_json("eEtablissement") as "etablissement", 
+				"fMetier"."libelle",
+				"feMetier"."id",
+				"feMetier"."etablissementId",
+				"feMetier"."millesime",
+				"fMetier"."familleMetierId"
+			from "formationEtablissement" as "feMetier" 
+			inner join "formation" as "fMetier" on "feMetier"."formationId" = "fMetier"."id" 
+			inner join "etablissement" as "eEtablissement" on "feMetier"."etablissementId" = "eEtablissement"."id" 
+			where "fMetier"."isAnneeCommune" = false
+			order by "fMetier"."libelle") as "formationsFamilleMetier"
+		GROUP BY "etablissementId", "familleMetierId", "millesime";
 
 	CREATE MATERIALIZED VIEW "formationFamilleMetierMView" AS
 		select 
-			row_to_json("fMetier") as "formation", 
-			row_to_json("feMetier") as "formationEtablissement", 
-			row_to_json("eEtablissement") as "etablissement", 
-			"fMetier"."libelle",
-			"feMetier"."id",
-			"feMetier"."etablissementId",
-			"feMetier"."millesime",
-			"fMetier"."familleMetierId"
-		from "formationEtablissement" as "feMetier" 
-		inner join "formation" as "fMetier" on "feMetier"."formationId" = "fMetier"."id" 
-		inner join "etablissement" as "eEtablissement" on "feMetier"."etablissementId" = "eEtablissement"."id" 
-		where "fMetier"."isAnneeCommune" = false
-		order by "fMetier"."libelle";
+			"etablissementId",
+			"familleMetierId",
+			"millesime",
+			json_agg(to_jsonb("formationsFamilleMetier") - 'id' - 'libelle' - 'etablissementId' - 'familleMetierId' - 'millesime' ORDER BY "formationsFamilleMetier".libelle) as "formationsFamilleMetier" 
+		FROM (
+			select 
+				row_to_json("fMetier") as "formation", 
+				row_to_json("feMetier") as "formationEtablissement", 
+				row_to_json("eEtablissement") as "etablissement", 
+				"fMetier"."libelle",
+				"feMetier"."id",
+				"feMetier"."etablissementId",
+				"feMetier"."millesime",
+				"fMetier"."familleMetierId"
+			from "formationEtablissement" as "feMetier" 
+			inner join "formation" as "fMetier" on "feMetier"."formationId" = "fMetier"."id" 
+			inner join "etablissement" as "eEtablissement" on "feMetier"."etablissementId" = "eEtablissement"."id" 
+			where "fMetier"."isAnneeCommune" = false
+			order by "fMetier"."libelle") as "formationsFamilleMetier"
+		GROUP BY "etablissementId", "familleMetierId", "millesime";
 
 
 	CREATE UNIQUE INDEX "formationFamilleMetierMView_etablissementId_familleMetierId_key" 
-		ON "formationFamilleMetierMView" ("id");
+		ON "formationFamilleMetierMView" ("etablissementId", "familleMetierId");
 
-	CREATE INDEX "formationFamilleMetierMView_etablissementId_familleMetierId_idx" ON "formationFamilleMetierMView"
-  		("etablissementId", "familleMetierId");
-  	CREATE INDEX "formationFamilleMetierMView_libelle_idx" ON "formationFamilleMetierMView"
-  		("libelle");
-	CREATE INDEX "formationFamilleMetierMView_millesime_idx" ON "formationFamilleMetierMView" USING gin("millesime");
+	CREATE INDEX "formationFamilleMetierMView_millesime_etablissementId_familleMetierId_idx" ON "formationFamilleMetierMView" 
+		USING GIN (millesime, "etablissementId", "familleMetierId");
 
 	/* Trigger to refresh the view */
 	CREATE OR REPLACE FUNCTION refresh_materialized_view()
@@ -86,8 +97,7 @@ export async function down(db: Kysely<any>): Promise<void> {
 	DROP INDEX "etablissementIsochrone_etablissementId_idx";
 
 	DROP INDEX "formationFamilleMetierMView_etablissementId_familleMetierId_key";
-	DROP INDEX "formationFamilleMetierMView_libelle_idx";
-	DROP INDEX "formationFamilleMetierMView_millesime_idx";
+	DROP INDEX "formationFamilleMetierMView_millesime_etablissementId_familleMetierId_idx";
 
 	DROP VIEW "formationFamilleMetierView";
 	DROP MATERIALIZED VIEW "formationFamilleMetierMView";

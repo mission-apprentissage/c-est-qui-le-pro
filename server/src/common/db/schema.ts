@@ -117,13 +117,9 @@ export interface FormationEtablissement {
 }
 
 export interface FormationFamilleMetierView {
-  etablissement: Json | null;
   etablissementId: string | null;
   familleMetierId: string | null;
-  formation: Json | null;
-  formationEtablissement: Json | null;
-  id: string | null;
-  libelle: string | null;
+  formationsFamilleMetier: Json | null;
   millesime: string[] | null;
 }
 

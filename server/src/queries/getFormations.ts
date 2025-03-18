@@ -307,21 +307,12 @@ export async function getFormationsSQL(
         .leftJoinLateral(
           (eb) =>
             eb
-              .selectFrom((eb) =>
-                eb
-                  .selectFrom("formationFamilleMetierMView")
-                  .selectAll()
-                  .whereRef("etablissementId", "=", "results.etablissementId")
-                  .whereRef("familleMetierId", "=", "results.familleMetierId")
-                  .where("millesime", "&&", [millesime])
-                  .orderBy("libelle")
-                  .as("formationsFamilleMetier")
-              )
-              .select(
-                sql`json_agg(to_jsonb("formationsFamilleMetier") - 'id' - 'libelle' - 'etablissementId' - 'familleMetierId' - 'millesime' ORDER BY "formationsFamilleMetier".libelle)`.as(
-                  "formationsFamilleMetier"
-                )
-              )
+              .selectFrom("formationFamilleMetierMView")
+              .select("formationsFamilleMetier")
+              .whereRef("etablissementId", "=", "results.etablissementId")
+              .whereRef("familleMetierId", "=", "results.familleMetierId")
+              .where("millesime", "&&", [millesime])
+              .limit(1)
               .as("formationsFamilleMetier"),
           (join) => join.on(sql`true`)
         )
