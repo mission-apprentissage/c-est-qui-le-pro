@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import {
   LeafletHomeIcon,
@@ -21,14 +21,30 @@ export default function FormationsMap({
   etablissements,
   selected,
   onMarkerClick,
+  onMarkerHomeDrag,
 }: {
   latitude: number;
   longitude: number;
   etablissements: any[];
   selected?: FormationDetail | null;
   onMarkerClick?: (etablissement: Etablissement) => void;
+  onMarkerHomeDrag?: (lat: number, lng: number) => void;
 }) {
   const groupRef = useRef<L.FeatureGroup>(null);
+  const markerRef = useRef<L.Marker>(null);
+
+  const homeMarkerEventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current;
+        if (marker != null) {
+          const latLng = marker.getLatLng();
+          onMarkerHomeDrag && onMarkerHomeDrag(latLng.lat, latLng.lng);
+        }
+      },
+    }),
+    []
+  );
 
   return (
     <Map center={[latitude, longitude]}>
@@ -75,7 +91,14 @@ export default function FormationsMap({
           );
         })}
 
-        <Marker icon={LeafletHomeIcon} zIndexOffset={10000} position={[latitude, longitude]}>
+        <Marker
+          ref={markerRef}
+          eventHandlers={homeMarkerEventHandlers}
+          icon={LeafletHomeIcon}
+          zIndexOffset={100000}
+          position={[latitude, longitude]}
+          draggable={true}
+        >
           {/* <Tooltip>
           <Typography variant="subtitle1">Ma position</Typography>
         </Tooltip> */}

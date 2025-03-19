@@ -1,7 +1,7 @@
 "use client";
 import ResearchFormationsResult from "./ResearchFormationsResult";
 import { fetchAddress } from "#/app/services/address";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import FormationsSearchProvider, { useFormationsSearch } from "../context/FormationsSearchContext";
 import SearchHeader from "../components/SearchHeader";
@@ -19,7 +19,12 @@ import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFil
 function ResearchFormationsParameter() {
   const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const { address, tag, domaines, formation, voie } = params ?? {};
+
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
 
   useEffect(() => {
     if (!address) {
@@ -27,11 +32,12 @@ function ResearchFormationsParameter() {
     }
   }, [address]);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isFetching, error } = useQuery({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: 0,
     queryKey: ["coordinate", address],
+    keepPreviousData: !isFirstRender,
     queryFn: async ({ signal }) => {
       if (!address) {
         return null;
@@ -108,6 +114,7 @@ function ResearchFormationsParameter() {
           formation={formation}
           voie={voie}
           page={1}
+          isAddressFetching={isFetching}
         />
       )}
     </>

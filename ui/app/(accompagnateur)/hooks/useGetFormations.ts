@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { formations as formationsQuery } from "#/app/queries/formations/query";
 import { FormationDomaine, FormationTag, FormationVoie } from "shared";
@@ -30,6 +30,7 @@ export default function useGetFormations({
   page?: number;
   items_par_page?: number;
 }) {
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const academie = RegionsService.findAcademieByPostcode(postcode || "");
   const {
     isLoading,
@@ -42,7 +43,7 @@ export default function useGetFormations({
     staleTime: Infinity,
     cacheTime: Infinity,
     retry: false,
-    //keepPreviousData: true,
+    keepPreviousData: !isFirstRender,
     queryKey: [
       "formations",
       latitude,
@@ -86,6 +87,12 @@ export default function useGetFormations({
     useErrorBoundary: true,
   });
 
+  useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false);
+    }
+  }, []);
+
   const fetchNextPage = useCallback(() => {
     hasNextPage && !isFetchingNextPage && !isFetching ? queryFetchNextPage() : null;
   }, [hasNextPage, isFetchingNextPage, isFetching, queryFetchNextPage]);
@@ -101,5 +108,5 @@ export default function useGetFormations({
     return Object.values(etablissements);
   }, [formations]);
 
-  return { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination };
+  return { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, pagination };
 }
