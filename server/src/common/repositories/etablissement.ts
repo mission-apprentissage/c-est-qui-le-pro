@@ -1,5 +1,5 @@
 import { SqlRepository } from "./base.js";
-import { kdb as defaultKdb, kyselyChainFn } from "../db/db.js";
+import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 import { SelectQueryBuilder, sql } from "kysely";
 
@@ -45,20 +45,10 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
         .leftJoinLateral(
           (eb) =>
             eb
-              .selectFrom("etablissementJPODate")
-              .select((eb) => {
-                return [
-                  kyselyChainFn(
-                    eb,
-                    [
-                      { fn: "to_jsonb", args: [] },
-                      { fn: "json_agg", args: [] },
-                    ],
-                    sql`"etablissementJPODate"`
-                  ).as("JPODates"),
-                ];
-              })
-              .whereRef("etablissement.id", "=", "etablissementJPODate.etablissementId")
+              .selectFrom("etablissementJPODatesView")
+              .select("JPODates")
+              .whereRef("etablissement.id", "=", "etablissementJPODatesView.etablissementId")
+              .limit(1)
               .as("JPODates"),
           (join) => join.on(sql`true`)
         );
