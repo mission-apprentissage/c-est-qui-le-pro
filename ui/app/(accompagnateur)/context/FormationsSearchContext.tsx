@@ -1,6 +1,6 @@
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
-import { FormationDomaine, FormationTag } from "shared";
+import { FormationDomaine, FormationTag, FormationVoie } from "shared";
 import { useMatomo } from "../hooks/useMatomo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
@@ -11,6 +11,7 @@ type FormationsSearchParams = {
   address: string;
   tag?: FormationTag;
   domaines?: FormationDomaine[];
+  voie?: FormationVoie[];
   formation?: string;
 };
 

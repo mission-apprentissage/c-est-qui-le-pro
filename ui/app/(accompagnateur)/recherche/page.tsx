@@ -19,7 +19,7 @@ import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFil
 function ResearchFormationsParameter() {
   const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
-  const { address, tag, domaines, formation } = params ?? {};
+  const { address, tag, domaines, formation, voie } = params ?? {};
 
   useEffect(() => {
     if (!address) {
@@ -101,7 +101,14 @@ function ResearchFormationsParameter() {
         </Grid>
       </Grid>
       {data && (
-        <ResearchFormationsResult location={data} tag={tag} domaines={domaines} formation={formation} page={1} />
+        <ResearchFormationsResult
+          location={data}
+          tag={tag}
+          domaines={domaines}
+          formation={formation}
+          voie={voie}
+          page={1}
+        />
       )}
     </>
   );

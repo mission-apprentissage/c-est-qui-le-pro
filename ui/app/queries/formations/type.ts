@@ -1,5 +1,5 @@
 import { object, number, array, string, InferType } from "yup";
-import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN } from "shared";
+import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN, FormationVoie } from "shared";
 
 const getSchema = object({
   longitude: number().min(-180).max(180),
@@ -22,12 +22,11 @@ const getSchema = object({
       return originalValue ? originalValue.split(/[\s,|]+/) : [];
     })
     .of(string().matches(CFD_PATTERN)),
-  domaine: string()
-    .oneOf(Object.values(FormationDomaine))
-    .nullable()
-    .transform((_, value) => {
-      return value === "" ? null : value;
-    }),
+  voie: array()
+    .transform(function (value, originalValue) {
+      return originalValue ? originalValue.split(/[|]+/) : [];
+    })
+    .of(string().oneOf(Object.values(FormationVoie)).required()),
   domaines: array()
     .transform(function (value, originalValue) {
       return originalValue ? originalValue.split(/[|]+/) : [];

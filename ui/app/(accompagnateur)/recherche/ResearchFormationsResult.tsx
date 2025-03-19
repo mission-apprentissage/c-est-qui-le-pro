@@ -10,7 +10,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "../components/FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { FormationTag, FormationDomaine, FormationDetail } from "shared";
+import { FormationTag, FormationDomaine, FormationDetail, FormationVoie } from "shared";
 import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
@@ -87,12 +87,14 @@ export default function ResearchFormationsResult({
   tag,
   domaines,
   formation,
+  voie,
   page = 1,
 }: {
   location: UserLocation;
   tag?: FormationTag | null;
   domaines?: FormationDomaine[];
   formation?: string | null;
+  voie?: FormationVoie[];
   page: number;
 }) {
   const theme = useTheme();
@@ -106,6 +108,7 @@ export default function ResearchFormationsResult({
     tag,
     page,
     domaines,
+    voie,
     postcode: location.postcode,
     formation,
   });

@@ -5,8 +5,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Box, Theme } from "@mui/material";
 import { capitalize, isArray, isNil } from "lodash-es";
 import MultiSelect from "#/app/components/form/MultiSelect";
-import { FORMATION_DOMAINE } from "#/app/services/formation";
-import { Control, Controller, FieldValues, useForm } from "react-hook-form";
+import { FORMATION_DOMAINE, FORMATION_VOIE } from "#/app/services/formation";
+import { Control, Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
 import { schema } from "./SearchFormationForm";
@@ -25,10 +25,141 @@ import {
   MobileHeaderContainer,
   MobileHeaderTitle,
   MobileSubtitle,
+  FilterContainer,
+  FilterContainerMobile,
 } from "./SearchFormationFiltersForm.styled";
 import * as yup from "yup";
 
-const schemaFilters = schema.pick(["domaines"]);
+const schemaFilters = schema.pick(["domaines", "voie"]);
+
+function FilterDomaines({
+  control,
+  isMobile,
+  onApply,
+}: {
+  control: Control<yup.InferType<typeof schemaFilters>>;
+  isMobile: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <Box>
+      {isMobile && <MobileSubtitle variant="subtitle1">Domaines</MobileSubtitle>}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => {
+          return (
+            <MultiSelect
+              isMobile={isMobile}
+              label={
+                value && value.length ? (
+                  <>
+                    <FilterIcon className={FORMATION_DOMAINE.find((f) => f.domaine === value[0])?.icon} />
+                    {value.length === 1 ? capitalize(value[0]) : `${value.length} domaines`}
+                  </>
+                ) : (
+                  <>
+                    <FilterIcon className="ri-anchor-line" />
+                    Tous les domaines
+                  </>
+                )
+              }
+              maxHeight={"380px"}
+              width={"220px"}
+              name="domaines"
+              onChange={onChange}
+              onApply={onApply}
+              value={value || []}
+              options={FORMATION_DOMAINE.filter(({ domaine }) => domaine !== FormationDomaine["tout"]).map(
+                ({ domaine, icon }) => ({
+                  option: capitalize(domaine),
+                  icon: icon,
+                  value: domaine,
+                })
+              )}
+            />
+          );
+        }}
+        name="domaines"
+      />
+    </Box>
+  );
+}
+
+function FilterVoie({
+  control,
+  isMobile,
+  onApply,
+}: {
+  control: Control<yup.InferType<typeof schemaFilters>>;
+  isMobile: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <Box>
+      {isMobile && <MobileSubtitle variant="subtitle1">Enseignement</MobileSubtitle>}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => {
+          const firstVoie = value?.length ? FORMATION_VOIE.find(({ voie }) => voie === value[0]) : null;
+          return (
+            <MultiSelect
+              isMobile={isMobile}
+              label={
+                value && value.length == 1 ? (
+                  <>
+                    <FilterIcon className={firstVoie?.icon} />
+                    {capitalize(firstVoie?.libelleSmall)}
+                  </>
+                ) : (
+                  <>
+                    <FilterIcon className="ri-community-line" />
+                    Alternance & Scolaire
+                  </>
+                )
+              }
+              maxHeight={"100%"}
+              width={"245px"}
+              name="voie"
+              description="L'alternance permet d'allier études et pratique en entreprise tandis que la voie scolaire reste dans la continuité de l’enseignement théorique."
+              onChange={onChange}
+              onApply={onApply}
+              value={value || []}
+              options={FORMATION_VOIE.filter(({ voie }) => voie).map(({ libelle, voie, icon, pictogramme }) => ({
+                option: capitalize(libelle),
+                pictogramme: pictogramme,
+                value: voie || "",
+              }))}
+            />
+          );
+        }}
+        name="voie"
+      />
+    </Box>
+  );
+}
+
+function SearchFormationFiltersElementsMobile({
+  control,
+  isMobile,
+  onApply,
+}: {
+  control: Control<yup.InferType<typeof schemaFilters>>;
+  isMobile: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <FilterContainerMobile>
+      <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
+      <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
+    </FilterContainerMobile>
+  );
+}
 
 function SearchFormationFiltersElements({
   control,
@@ -40,51 +171,10 @@ function SearchFormationFiltersElements({
   onApply: () => void;
 }) {
   return (
-    <Box>
-      <Box>
-        {isMobile && <MobileSubtitle variant="subtitle1">Domaines</MobileSubtitle>}
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => {
-            return (
-              <MultiSelect
-                isMobile={isMobile}
-                label={
-                  value && value.length ? (
-                    <>
-                      <FilterIcon className={FORMATION_DOMAINE.find((f) => f.domaine === value[0])?.icon} />
-                      {value.length === 1 ? capitalize(value[0]) : `${value.length} domaines`}
-                    </>
-                  ) : (
-                    <>
-                      <FilterIcon className="ri-anchor-line" />
-                      Tous les domaines
-                    </>
-                  )
-                }
-                maxHeight={"380px"}
-                width={"220px"}
-                name="domaines"
-                onChange={onChange}
-                onApply={onApply}
-                value={value || []}
-                options={FORMATION_DOMAINE.filter(({ domaine }) => domaine !== FormationDomaine["tout"]).map(
-                  ({ domaine, icon }) => ({
-                    option: capitalize(domaine),
-                    icon: icon,
-                    value: domaine,
-                  })
-                )}
-              />
-            );
-          }}
-          name="domaines"
-        />
-      </Box>
-    </Box>
+    <FilterContainer>
+      <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
+      <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
+    </FilterContainer>
   );
 }
 
@@ -94,6 +184,7 @@ export default function SearchFormationFiltersForm() {
   const { params, updateParams } = useFormationsSearch();
   const defaultValues = {
     domaines: params?.domaines,
+    voie: params?.voie,
   };
 
   const {
@@ -115,7 +206,7 @@ export default function SearchFormationFiltersForm() {
 
   const reset = useCallback(
     (values: typeof defaultValues | null = null) => {
-      resetForm(values || { domaines: [] });
+      resetForm(values || { domaines: [], voie: [] });
     },
     [resetForm]
   );
@@ -125,7 +216,7 @@ export default function SearchFormationFiltersForm() {
       if (!params) {
         return;
       }
-      updateParams({ ...params, domaines: data.domaines });
+      updateParams({ ...params, voie: data.voie, domaines: data.domaines });
     })();
   }, [handleSubmit, updateParams]);
 
@@ -162,7 +253,7 @@ export default function SearchFormationFiltersForm() {
         </MobileHeaderContainer>
         <CustomDivider />
         <MobileContentContainer>
-          <SearchFormationFiltersElements control={control} isMobile={isMobile} onApply={onApply} />
+          <SearchFormationFiltersElementsMobile control={control} isMobile={isMobile} onApply={onApply} />
         </MobileContentContainer>
         <CustomDivider />
         <MobileFooter>

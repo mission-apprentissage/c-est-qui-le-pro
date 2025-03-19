@@ -1,7 +1,10 @@
-import { FormationDomaine, FormationTag } from "shared";
+import Image from "next/image";
+import { FormationDomaine, FormationTag, FormationVoie } from "shared";
 import CalendarIcon from "#/app/components/icon/CalendarIcon";
 import { FrCxArg, FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
 import MoneyIcon from "../components/icon/MoneyIcon";
+import ArtworkSchoolSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/buildings/school.svg";
+import { CompangiePictogramme } from "../components/icon/CompaniePictogramme";
 
 export type FormationTagType = {
   tag: FormationTag;
@@ -63,4 +66,32 @@ export const FORMATION_DOMAINE: {
   { domaine: FormationDomaine["mécanique"], icon: "ri-car-line" },
   { domaine: FormationDomaine["santé, social, sport"], icon: "ri-hand-heart-line" },
   { domaine: FormationDomaine["sciences"], icon: "ri-microscope-line" },
+];
+
+export const FORMATION_VOIE: {
+  voie: FormationVoie | null;
+  icon?: FrIconClassName | RiIconClassName;
+  pictogramme?: () => JSX.Element;
+  libelle: string;
+  libelleSmall: string;
+}[] = [
+  { voie: null, libelle: "Alternance & Scolaire", libelleSmall: "Alternance & Scolaire", icon: "ri-seedling-line" },
+  {
+    voie: FormationVoie.APPRENTISSAGE,
+    libelle: "En alternance",
+    libelleSmall: "En alternance",
+    icon: "ri-community-line",
+    pictogramme: () => {
+      return <CompangiePictogramme />;
+    },
+  },
+  {
+    voie: FormationVoie.SCOLAIRE,
+    libelle: "En voie scolaire (dite aussi formation initiale)",
+    libelleSmall: "En scolaire",
+    icon: "ri-community-line",
+    pictogramme: () => {
+      return <Image src={ArtworkSchoolSvg} width={"56"} height={"56"} alt={""} />;
+    },
+  },
 ];

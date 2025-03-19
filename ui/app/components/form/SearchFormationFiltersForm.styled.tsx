@@ -82,3 +82,14 @@ export const FilterBadge = styled(Box)`
   background: #1212ff;
   border-radius: 8px;
 `;
+
+export const FilterContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+`;
+
+export const FilterContainerMobile = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;

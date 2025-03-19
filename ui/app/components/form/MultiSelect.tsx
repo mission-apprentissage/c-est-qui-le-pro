@@ -16,11 +16,13 @@ import {
   ShowMoreText,
   StyledOptionBox,
   ClearButtonText,
-  EmptyIconSpace,
+  DescriptionContainer,
+  DescriptionContainerMobile,
 } from "./MultiSelect.styled";
 
 type OptionProps = {
   icon?: never | FrIconClassName | RiIconClassName;
+  pictogramme?: () => JSX.Element;
   option: string;
   value: string;
   checked: boolean;
@@ -36,6 +38,7 @@ type MultiSelectProps = {
   width?: string;
   label: JSX.Element;
   name: string;
+  description?: string;
   onChange: (values: string[]) => void;
   onApply?: (values: string[]) => void;
 };
@@ -46,6 +49,7 @@ type MultiSelectContainerProps = {
   label: JSX.Element;
   value: string[];
   name: string;
+  description?: string;
   apply: () => void;
   reset: () => void;
   onChangeOption: (option: Omit<OptionProps, "name" | "checked">, checked: boolean) => void;
@@ -57,6 +61,7 @@ function Option({
   option,
   value,
   icon,
+  pictogramme: Pictogramme,
   name,
   onChange,
 }: OptionProps & { onChange: (checked: boolean) => void }) {
@@ -66,6 +71,7 @@ function Option({
     <StyledOptionBox
       key={option}
       checked={checked}
+      hasPictogramme={!!Pictogramme}
       onClick={(e) => {
         onChange(!checked);
       }}
@@ -74,8 +80,9 @@ function Option({
       <label htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
       </label>
-      <IconContainer hasIcon={!!icon}>
-        {icon ? <i className={fr.cx(icon, "fr-icon--lg")}></i> : <EmptyIconSpace />}
+      <IconContainer hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
+        {icon && <i className={fr.cx(icon, "fr-icon--lg")}></i>}
+        {Pictogramme && <Pictogramme />}
       </IconContainer>
     </StyledOptionBox>
   );
@@ -91,6 +98,7 @@ function MultiSelectContainer({
   onChangeOption,
   name,
   value,
+  description,
 }: MultiSelectContainerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -99,7 +107,9 @@ function MultiSelectContainer({
     originalApply();
   };
 
-  useOnClickOutside(ref, apply);
+  useOnClickOutside(ref, () => {
+    isOpen && apply();
+  });
 
   return (
     <SelectContainer ref={ref} width={width}>
@@ -108,7 +118,8 @@ function MultiSelectContainer({
         {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
       </SelectHeader>
       <DropdownMenu isOpen={isOpen}>
-        <OptionsContainer className={fr.cx("fr-checkbox-group")} maxHeight={maxHeight}>
+        {description && <DescriptionContainer>{description}</DescriptionContainer>}
+        <OptionsContainer className={fr.cx("fr-checkbox-group")} maxHeight={maxHeight} hasDescription={!!description}>
           {options.map((option, index) => {
             return (
               <Option
@@ -144,6 +155,7 @@ function MultiSelectContainerMobile({
   onChangeOption,
   name,
   value,
+  description,
 }: MultiSelectContainerProps) {
   const [maxVisible, setMaxVisible] = useState(7);
   const [isOpen, setIsOpen] = useState(false);
@@ -156,6 +168,8 @@ function MultiSelectContainerMobile({
   return (
     <Box ref={ref}>
       <MobileContainer>
+        {description && <DescriptionContainerMobile>{description}</DescriptionContainerMobile>}
+
         <Box className={fr.cx("fr-checkbox-group")}>
           {options.slice(0, maxVisible).map((option, index) => {
             return (
@@ -215,6 +229,7 @@ export default function MultiSelect(props: MultiSelectProps) {
       reset={reset}
       apply={apply}
       onChangeOption={onChangeOption}
+      description={props.description}
     ></MultiSelectContainerMobile>
   ) : (
     <MultiSelectContainer
@@ -227,6 +242,7 @@ export default function MultiSelect(props: MultiSelectProps) {
       reset={reset}
       apply={apply}
       onChangeOption={onChangeOption}
+      description={props.description}
     ></MultiSelectContainer>
   );
 }

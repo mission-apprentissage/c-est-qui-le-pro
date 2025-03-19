@@ -74,6 +74,12 @@ export function domaines() {
   };
 }
 
+export function voie() {
+  return {
+    voie: arrayOf(Joi.string().required()).default([]),
+  };
+}
+
 export function pagination({ items_par_page, page } = {}) {
   return {
     items_par_page: Joi.number().default(items_par_page ?? 10),
