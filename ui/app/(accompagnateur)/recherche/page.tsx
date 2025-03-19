@@ -126,8 +126,8 @@ export default function Page() {
     <div>
       <Title pageTitle="Recherche de formations" />
       <Suspense>
-        <SearchHeader />
         <FormationsSearchProvider>
+          <SearchHeader />
           <ResearchFormationsParameter />
         </FormationsSearchProvider>
       </Suspense>
