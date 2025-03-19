@@ -56,7 +56,7 @@ export const ClearButtonText = styled(Typography)`
   font-weight: 700;
 `;
 
-export const DesktopFilterContainer = styled(Box)`
+export const MobileFilterButtons = styled(Box)`
   display: flex;
   justify-content: flex-end;
 `;

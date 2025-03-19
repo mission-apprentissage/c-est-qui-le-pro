@@ -57,12 +57,17 @@ export const SelectHeader = styled(Box, {
   flex-direction: row;
   gap: 0.25rem;
   ${({ isOpen }) => isOpen && `background-color: ${fr.colors.decisions.background.open.blueFrance.default};`}
-  padding: 0.5rem;
+  padding: 0.3rem 0.5rem;
   border: 1px solid #dddddd;
 
   &:hover {
     background-color: ${fr.colors.decisions.background.open.blueFrance.default};
+    border: 1px solid ${fr.colors.decisions.background.open.blueFrance.default};
     cursor: pointer;
+  }
+
+  & > i {
+    color: ${fr.colors.decisions.border.actionHigh.blueFrance.default};
   }
 `;
 

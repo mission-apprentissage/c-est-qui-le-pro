@@ -105,9 +105,7 @@ function MultiSelectContainer({
     <SelectContainer ref={ref} width={width}>
       <SelectHeader isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         <LabelText variant="body4">{label}</LabelText>
-        <Box>
-          {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
-        </Box>
+        {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
       </SelectHeader>
       <DropdownMenu isOpen={isOpen}>
         <OptionsContainer className={fr.cx("fr-checkbox-group")} maxHeight={maxHeight}>

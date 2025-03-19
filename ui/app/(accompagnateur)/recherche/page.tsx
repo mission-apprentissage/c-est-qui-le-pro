@@ -90,10 +90,10 @@ function ResearchFormationsParameter() {
           sx={{
             border: { sm: "none", md: "1px solid #DDDDDD" },
             boxShadow: { sm: "none", md: "0 4px 4px -4px #00000040" },
-            padding: { md: "1.5rem", xs: "1rem" },
+            padding: "1rem",
             paddingLeft: { md: "2.5rem" },
             paddingRight: { md: "2.5rem" },
-            paddingBottom: { sm: "0", md: "1.5rem" },
+            paddingBottom: { sm: "0", md: "1rem" },
             zIndex: 999,
           }}
         >
