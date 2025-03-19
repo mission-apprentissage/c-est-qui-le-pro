@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useCallback, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { css } from "@emotion/react";
 import { useInView } from "react-intersection-observer";
 import { Typography, Grid, Grid2 } from "../../components/MaterialUINext";
@@ -18,6 +18,7 @@ import { useFormationsSearch } from "../context/FormationsSearchContext";
 import { isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
+import { fetchReverse } from "#/app/services/address";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
 });
@@ -89,6 +90,7 @@ export default function ResearchFormationsResult({
   formation,
   voie,
   page = 1,
+  isAddressFetching,
 }: {
   location: UserLocation;
   tag?: FormationTag | null;
@@ -96,28 +98,59 @@ export default function ResearchFormationsResult({
   formation?: string | null;
   voie?: FormationVoie[];
   page: number;
+  isAddressFetching?: boolean;
 }) {
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
+  const [latLng, setLatLng] = useState<number[] | null>(null);
+  const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
+  const { params, updateParams } = useFormationsSearch();
+
   const { ref: refInView, inView } = useInView();
 
-  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
-    latitude: location.latitude,
-    longitude: location.longitude,
-    tag,
-    page,
-    domaines,
-    voie,
-    postcode: location.postcode,
-    formation,
-  });
+  const { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, pagination } =
+    useGetFormations({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      tag,
+      page,
+      domaines,
+      voie,
+      postcode: location.postcode,
+      formation,
+    });
 
   React.useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
+
+  useEffect(() => {
+    if (!latLng) {
+      return;
+    }
+
+    setIsNewAddressLoading(true);
+    (async () => {
+      try {
+        const result = await fetchReverse(latLng[0], latLng[1]);
+        if (result?.features?.length > 0) {
+          const address = result.features[0].properties.label;
+          updateParams({ ...params, address: address });
+        }
+      } catch (err) {}
+      // TODO: erreur quand pas d'adresse trouvée
+    })();
+  }, [params, latLng]);
+
+  useEffect(() => {
+    if (!isAddressFetching) {
+      setIsNewAddressLoading(false);
+      setLatLng(null);
+    }
+  }, [isAddressFetching]);
 
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
   const formationsIsochrone = useMemo(() => formations.filter((f) => !isNil(f.etablissement.accessTime)), [formations]);
@@ -167,6 +200,7 @@ export default function ResearchFormationsResult({
             }
           `}
         >
+          {(isNewAddressLoading || isFetching || isAddressFetching) && <Loader withMargin />}
           <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
             <FormationsFilterTag selected={tag} />
           </Stack>
@@ -274,9 +308,12 @@ export default function ResearchFormationsResult({
           {!isDownSm && (
             <FormationsMap
               selected={selected}
-              longitude={location.longitude}
-              latitude={location.latitude}
+              longitude={(latLng && latLng[1]) || location.longitude}
+              latitude={(latLng && latLng[0]) || location.latitude}
               etablissements={etablissements}
+              onMarkerHomeDrag={(lat, lng) => {
+                setLatLng([lat, lng]);
+              }}
               onMarkerClick={(etablissement) => {
                 const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
                 if (formationIndex === -1) {
