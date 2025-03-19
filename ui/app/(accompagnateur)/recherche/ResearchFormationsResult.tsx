@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { useInView } from "react-intersection-observer";
 import { Typography, Grid, Grid2 } from "../../components/MaterialUINext";
@@ -104,6 +104,7 @@ export default function ResearchFormationsResult({
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
   const [latLng, setLatLng] = useState<number[] | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
   const { params, updateParams } = useFormationsSearch();
 
@@ -139,6 +140,9 @@ export default function ResearchFormationsResult({
         if (result?.features?.length > 0) {
           const address = result.features[0].properties.label;
           updateParams({ ...params, address: address });
+        } else {
+          setLatLng(null);
+          setIsNewAddressLoading(false);
         }
       } catch (err) {}
       // TODO: erreur quand pas d'adresse trouvée
@@ -149,6 +153,11 @@ export default function ResearchFormationsResult({
     if (!isAddressFetching) {
       setIsNewAddressLoading(false);
       setLatLng(null);
+
+      var eltPosition = resultRef.current?.getBoundingClientRect();
+      if (eltPosition?.y !== undefined && eltPosition?.y < 0) {
+        resultRef.current?.scrollIntoView();
+      }
     }
   }, [isAddressFetching]);
 
@@ -181,7 +190,7 @@ export default function ResearchFormationsResult({
         <ClientSideScrollRestorer />
       </Suspense>
 
-      <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
+      <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"} ref={resultRef}>
         <Grid2
           md={8}
           lg={8}
