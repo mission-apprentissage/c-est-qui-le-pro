@@ -122,3 +122,14 @@ export const FilterContainerMobile = styled(Box)`
   display: flex;
   flex-direction: column;
 `;
+
+export const FilterContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+`;
+
+export const FilterContainerMobile = styled(Box)`
+  display: flex;
+  flex-direction: column;
+`;
