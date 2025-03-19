@@ -216,7 +216,6 @@ export default function SearchFormationFiltersForm() {
       if (!params) {
         return;
       }
-
       updateParams({ ...params, voie: data.voie, domaines: data.domaines });
     })();
   }, [params, handleSubmit, updateParams]);
