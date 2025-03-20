@@ -15,6 +15,7 @@ import { FormationDomaine } from "shared";
 import { myPosition } from "#/app/components/form/AddressField";
 import { useRouter } from "next/navigation";
 import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
+import { useGetAddress } from "../hooks/useGetAddress";
 
 function ResearchFormationsParameter() {
   const router = useRouter();
@@ -32,18 +33,8 @@ function ResearchFormationsParameter() {
     }
   }, [address]);
 
-  const { data, isLoading, isFetching, error } = useQuery({
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    retry: 0,
-    queryKey: ["coordinate", address],
-    keepPreviousData: !isFirstRender,
-    queryFn: async ({ signal }) => {
-      if (!address) {
-        return null;
-      }
-
-      const addressCoordinate = await fetchAddress(address);
+  const { data, isLoading, isFetching, error } = useGetAddress(address, {
+    select: (addressCoordinate: Awaited<ReturnType<typeof fetchAddress>>) => {
       if (!addressCoordinate?.features) {
         // TODO: manage address fetch error
         throw new ErrorAddressInvalid();

@@ -83,7 +83,116 @@ const FormationResult = React.memo(
 );
 FormationResult.displayName = "FormationResult";
 
-export default function ResearchFormationsResult({
+const FormationResults = React.memo(
+  ({
+    formationsRef,
+    formations,
+    location,
+    setSelected,
+    selected,
+    pagination,
+  }: {
+    formationsRef: React.RefObject<HTMLDivElement>[];
+    formations: FormationDetail[];
+    location: UserLocation;
+    setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
+    selected: null | FormationDetail;
+    pagination:
+      | ({
+          page: number;
+          items_par_page: number;
+          nombre_de_page: number;
+          total: number;
+        } & {
+          totalIsochrone: number;
+        })
+      | null;
+  }) => {
+    const formationsIsochrone = useMemo(
+      () => formations.filter((f) => !isNil(f.etablissement.accessTime)),
+      [formations]
+    );
+    const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
+
+    const totalIsochrone = useMemo(() => pagination?.totalIsochrone || 0, [pagination]);
+    const totalCar = useMemo(
+      () => (pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0),
+      [pagination]
+    );
+
+    return (
+      <>
+        <Grid container rowSpacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
+            </Typography>
+          </Grid>
+
+          {formationsIsochrone.map((formationDetail, index) => {
+            const { formation, formationEtablissement, etablissement } = formationDetail;
+            const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+            return (
+              <FormationResult
+                key={key}
+                latitude={location.latitude}
+                longitude={location.longitude}
+                formationRef={formationsRef[index]}
+                setSelected={setSelected}
+                isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                formationDetail={formationDetail}
+                index={index}
+              />
+            );
+          })}
+        </Grid>
+
+        {formationsCar.length > 0 && (
+          <Grid container spacing={2} style={{ marginTop: "2rem" }}>
+            <Grid item xs={12}>
+              <Typography variant="h6">
+                Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
+              </Typography>
+            </Grid>
+
+            {formationsCar.map((formationDetail, index) => {
+              const mainIndex = formationsIsochrone.length + index;
+              const { formation, formationEtablissement, etablissement } = formationDetail;
+              const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+              return (
+                <FormationResult
+                  key={key}
+                  latitude={location.latitude}
+                  longitude={location.longitude}
+                  formationRef={formationsRef[mainIndex]}
+                  setSelected={setSelected}
+                  isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                  formationDetail={formationDetail}
+                  index={mainIndex}
+                />
+              );
+            })}
+          </Grid>
+        )}
+      </>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Ignore location, we want to refresh only if the formations changed
+    return (
+      prevProps.formations === nextProps.formations &&
+      prevProps.formationsRef === nextProps.formationsRef &&
+      prevProps.pagination === nextProps.pagination &&
+      prevProps.selected === nextProps.selected &&
+      prevProps.setSelected === nextProps.setSelected
+    );
+  }
+);
+FormationResults.displayName = "FormationResults";
+
+export default React.memo(function ResearchFormationsResult({
   location,
   tag,
   domaines,
@@ -103,8 +212,8 @@ export default function ResearchFormationsResult({
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
-  const [latLng, setLatLng] = useState<number[] | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const [latLng, setLatLng] = useState<number[] | null>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
   const { params, updateParams } = useFormationsSearch();
 
@@ -121,6 +230,7 @@ export default function ResearchFormationsResult({
       postcode: location.postcode,
       formation,
     });
+  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
   React.useEffect(() => {
     if (inView) {
@@ -160,13 +270,6 @@ export default function ResearchFormationsResult({
       }
     }
   }, [isAddressFetching]);
-
-  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
-  const formationsIsochrone = useMemo(() => formations.filter((f) => !isNil(f.etablissement.accessTime)), [formations]);
-  const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
-
-  const totalIsochrone = useMemo(() => pagination?.totalIsochrone || 0, [pagination]);
-  const totalCar = useMemo(() => (pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0), [pagination]);
 
   if (isLoading) {
     return (
@@ -240,62 +343,14 @@ export default function ResearchFormationsResult({
               <Typography>Bonne recherche !</Typography>
             </InformationCard>
           ) : (
-            <>
-              <Grid container rowSpacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h6">
-                    À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
-                  </Typography>
-                </Grid>
-
-                {formationsIsochrone.map((formationDetail, index) => {
-                  const { formation, formationEtablissement, etablissement } = formationDetail;
-                  const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
-
-                  return (
-                    <FormationResult
-                      key={key}
-                      latitude={location.latitude}
-                      longitude={location.longitude}
-                      formationRef={formationsRef[index]}
-                      setSelected={setSelected}
-                      isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
-                      formationDetail={formationDetail}
-                      index={index}
-                    />
-                  );
-                })}
-              </Grid>
-
-              {formationsCar.length > 0 && (
-                <Grid container spacing={2} style={{ marginTop: "2rem" }}>
-                  <Grid item xs={12}>
-                    <Typography variant="h6">
-                      Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
-                    </Typography>
-                  </Grid>
-
-                  {formationsCar.map((formationDetail, index) => {
-                    const mainIndex = formationsIsochrone.length + index;
-                    const { formation, formationEtablissement, etablissement } = formationDetail;
-                    const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
-
-                    return (
-                      <FormationResult
-                        key={key}
-                        latitude={location.latitude}
-                        longitude={location.longitude}
-                        formationRef={formationsRef[mainIndex]}
-                        setSelected={setSelected}
-                        isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
-                        formationDetail={formationDetail}
-                        index={mainIndex}
-                      />
-                    );
-                  })}
-                </Grid>
-              )}
-            </>
+            <FormationResults
+              formations={formations}
+              formationsRef={formationsRef}
+              location={location}
+              pagination={pagination}
+              selected={selected}
+              setSelected={setSelected}
+            />
           )}
         </Grid2>
 
@@ -342,4 +397,4 @@ export default function ResearchFormationsResult({
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
     </>
   );
-}
+});
