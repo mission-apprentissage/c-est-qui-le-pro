@@ -16,7 +16,7 @@ export default function FormationTags({ tags }: { tags: FormationTag[] }) {
     return (
       <Tag key={"tag_" + tagData.tag} style={{ color: tagData.color, backgroundColor: tagData.bgColor }}>
         <Typography color={tagData.color} variant="body2" style={{ fontWeight: 700 }}>
-          {tagData.libelle}
+          {tagData.tagLibelle}
         </Typography>
       </Tag>
     );
