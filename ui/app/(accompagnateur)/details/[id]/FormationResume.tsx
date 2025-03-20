@@ -279,7 +279,7 @@ const FormationResumeHideTagFix = React.memo(function ({ formationDetail }: { fo
 
   useEffect(() => {
     setResumeCollapse(hideResumeTag);
-  }, [hideResumeTag]);
+  }, [hideResumeTag, setResumeCollapse]);
 
   return (
     <BoxContainer>

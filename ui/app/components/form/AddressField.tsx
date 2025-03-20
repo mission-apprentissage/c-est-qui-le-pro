@@ -110,6 +110,7 @@ export default function AddressField({
   isMobile,
   defaultValues,
   onOpen,
+  noLabel,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
@@ -229,7 +230,7 @@ export default function AddressField({
             error={!!error}
             helperText={error ? "Vous devez toujours choisir une localisation valide" : ""}
             InputLabelProps={{ shrink: true }}
-            label={isMobile && isFocus ? "" : "Ton adresse, ta ville"}
+            label={noLabel || (isMobile && isFocus) ? "" : "Ton adresse, ta ville"}
             placeholder={"Saisir sa ville, son adresse"}
             className="addressField"
             onFocus={(event) => {

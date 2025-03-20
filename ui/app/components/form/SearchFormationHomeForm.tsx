@@ -1,42 +1,30 @@
 "use client";
-import styled from "@emotion/styled";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Grid } from "#/app/components/MaterialUINext";
 import { Control, Controller, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
 import AddressField, { myPosition } from "./AddressField";
-import Button, { ButtonProps } from "../Button";
+import Button from "../Button";
 import { SearchFormationFormData, schema } from "./SearchFormationForm";
-import { Box, Stack, Theme } from "@mui/material";
+import { Theme } from "@mui/material";
 import useSearchHistory from "#/app/(accompagnateur)/hooks/useSearchHistory";
 import FormationField from "./FormationField";
 import { RefObject, useEffect, useMemo, useState } from "react";
 import { uniq } from "lodash-es";
-import { fr } from "@codegouvfr/react-dsfr";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
-
-const SubmitStyled = styled(Button, {
-  shouldForwardProp: (prop) => !["isFocusMobile"].includes(prop),
-})<ButtonProps & { isFocusMobile?: boolean }>`
-  border-radius: 26px;
-  height: 100%;
-  width: 100%;
-  background-color: var(--blue-france-sun-113-625-hover);
-  font-size: 20px;
-  line-height: 32px;
-  justify-content: center;
-  --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};
-
-  ${({ isFocusMobile }) => {
-    return isFocusMobile
-      ? `border-radius: 36px;
-            padding: 1rem;
-            padding-left: 2rem;
-            padding-right: 2rem;`
-      : "";
-  }}
-`;
+import {
+  DesktopSubmitBox,
+  FieldStack,
+  FormationSubmitBox,
+  FormContainer,
+  MobileCloseButtonContainer,
+  OverlayContainer,
+  OverlayInner,
+  MobileSubmitContainer,
+  SearchGridContainer,
+  SubmitStyled,
+} from "./SearchFormationHomeForm.styled";
 
 function SearchFormationHomeFormElements({
   control,
@@ -48,6 +36,7 @@ function SearchFormationHomeFormElements({
   isBordered,
   setIsFocus,
   isFocus,
+  isHomeSearch,
 }: {
   control: Control<Nullable<SearchFormationFormData>, any>;
   errors: FieldErrors<Nullable<SearchFormationFormData>>;
@@ -58,6 +47,7 @@ function SearchFormationHomeFormElements({
   isBordered: boolean;
   setIsFocus: (isFocus: boolean) => void;
   isFocus: boolean;
+  isHomeSearch: boolean;
 }) {
   const { params } = useFormationsSearch();
   const { history, push: pushHistory } = useSearchHistory();
@@ -76,36 +66,26 @@ function SearchFormationHomeFormElements({
 
   return (
     <>
-      <div style={{ flex: 1 }}>
-        <Grid
+      <FormContainer>
+        <SearchGridContainer
           container
           columnSpacing={!withFormation ? { xs: 0 } : { xs: 0, md: 4 }}
           rowSpacing={withFormation ? { xs: 2, md: 4 } : { xs: 0 }}
-          style={{
-            backgroundColor: "#FFFFFF",
-            ...(isBordered && !withFormation
-              ? { borderRadius: "5px", border: "2px solid var(--blue-france-sun-113-625-hover)" }
-              : {}),
-          }}
+          isBordered={isBordered}
+          withFormation={withFormation}
         >
           <Grid item xs={!withFormation ? 12 : 12} md={!withFormation ? 12 : 5}>
-            <Stack
-              direction="row"
-              spacing={2}
-              style={{
-                position: "relative",
-                backgroundColor: "#FFFFFF",
-                ...(isBordered && withFormation
-                  ? { borderRadius: "5px", border: "2px solid var(--blue-france-sun-113-625-hover)" }
-                  : {}),
-              }}
-            >
+            <FieldStack direction="row" spacing={2} isBordered={isBordered} withFormation={withFormation}>
               <Controller
                 name="address"
                 control={control}
                 render={(form) => (
                   <AddressField
-                    sx={{ padding: "18px", paddingRight: "0px" }}
+                    sx={{
+                      padding: { md: "18px", xs: isHomeSearch ? "18px" : "8px" },
+                      paddingLeft: { xs: "18px", md: "18px" },
+                      paddingRight: "0px",
+                    }}
                     isMobile={isDownSm}
                     InputProps={{
                       disableUnderline: true,
@@ -116,35 +96,21 @@ function SearchFormationHomeFormElements({
                     submitOnChange={!withFormation || !isDownSm}
                     defaultValues={addressHistory}
                     onOpen={() => setIsFocus(true)}
+                    noLabel={!isHomeSearch}
                   />
                 )}
               />
               {!isDownSm && !withFormation && (
-                <Box
-                  sx={{
-                    width: "33%",
-                    padding: "18px",
-                    paddingLeft: "0",
-                    paddingRight: "24px",
-                    display: { xs: "none", md: "block" },
-                  }}
-                >
+                <DesktopSubmitBox>
                   <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
-                </Box>
+                </DesktopSubmitBox>
               )}
-            </Stack>
+            </FieldStack>
           </Grid>
 
           {withFormation && (
             <Grid item xs={12} md={5}>
-              <Stack
-                direction="row"
-                spacing={2}
-                style={{
-                  position: "relative",
-                  backgroundColor: "#FFFFFF",
-                }}
-              >
+              <FieldStack direction="row" spacing={2}>
                 <Controller
                   name="formation"
                   control={control}
@@ -152,7 +118,11 @@ function SearchFormationHomeFormElements({
                     <FormationField
                       submitOnChange={!isDownSm}
                       bordered={isBordered && withFormation}
-                      sx={{ padding: "18px", paddingRight: "0px" }}
+                      sx={{
+                        padding: { md: "18px", xs: isHomeSearch ? "18px" : "8px" },
+                        paddingLeft: { xs: "18px", md: "18px" },
+                        paddingRight: "0px",
+                      }}
                       isMobile={isDownSm}
                       InputProps={{
                         disableUnderline: true,
@@ -162,37 +132,30 @@ function SearchFormationHomeFormElements({
                       formRef={formRef}
                       onOpen={() => setIsFocus(true)}
                       defaultValues={formationHistory}
+                      noLabel={!isHomeSearch}
                     />
                   )}
                 />
-              </Stack>
+              </FieldStack>
             </Grid>
           )}
           {withFormation && !isDownSm && (
             <Grid item md={2} xs={4}>
-              {
-                <Box
-                  sx={{
-                    width: "100%",
-                    paddingTop: "18px",
-                    paddingBottom: "18px",
-                    display: { xs: "block", md: "block" },
-                  }}
-                >
-                  <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
-                </Box>
-              }
+              <FormationSubmitBox>
+                <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
+              </FormationSubmitBox>
             </Grid>
           )}
-        </Grid>
-      </div>
+        </SearchGridContainer>
+      </FormContainer>
+
       {isFocus && isDownSm && (
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <MobileSubmitContainer>
           <div></div>
           <SubmitStyled type={"submit"} isFocusMobile>
             {"Explorer"}
           </SubmitStyled>
-        </div>
+        </MobileSubmitContainer>
       )}
     </>
   );
@@ -203,11 +166,13 @@ export default function SearchFormationHomeForm({
   defaultValues,
   bordered,
   withFormation = false,
+  isHomeSearch = false,
 }: {
   url: string;
   defaultValues: Nullable<SearchFormationFormData>;
   bordered?: boolean;
   withFormation?: boolean;
+  isHomeSearch?: boolean;
 }) {
   const [isFocus, setIsFocus] = useState(false);
   const [isBordered, setIsBordered] = useState(bordered || false);
@@ -229,27 +194,10 @@ export default function SearchFormationHomeForm({
   }, [bordered, isFocus, isDownSm]);
 
   return (
-    <div style={{ ...(isFocus && isDownSm ? { height: "100vh", backgroundColor: "white", width: "100%" } : {}) }}>
-      <div
-        style={{
-          ...(isFocus && isDownSm
-            ? {
-                width: "100%",
-                backgroundColor: "white",
-                position: "fixed",
-                top: "0",
-                left: 0,
-                height: "100%",
-                zIndex: 9999,
-                padding: "1rem",
-                display: "flex",
-                flexFlow: "column",
-              }
-            : {}),
-        }}
-      >
+    <OverlayContainer isFocus={isFocus && isDownSm}>
+      <OverlayInner isFocus={isFocus && isDownSm}>
         {isFocus && isDownSm && (
-          <div style={{ marginBottom: "1rem" }}>
+          <MobileCloseButtonContainer>
             <Button
               iconOnly
               size="large"
@@ -262,7 +210,7 @@ export default function SearchFormationHomeForm({
                 setIsFocus(false);
               }}
             />
-          </div>
+          </MobileCloseButtonContainer>
         )}
         <FormSearchParams
           onSubmit={(data) => {
@@ -276,6 +224,7 @@ export default function SearchFormationHomeForm({
         >
           {({ control, errors, formRef, setValue }) => (
             <SearchFormationHomeFormElements
+              isHomeSearch={isHomeSearch}
               setIsFocus={setIsFocus}
               isFocus={isFocus}
               isBordered={isBordered}
@@ -288,7 +237,7 @@ export default function SearchFormationHomeForm({
             />
           )}
         </FormSearchParams>
-      </div>
-    </div>
+      </OverlayInner>
+    </OverlayContainer>
   );
 }

@@ -45,7 +45,7 @@ export default function FormationsMap({
       },
       click: () => {}, // Prevent marker move when clicking on it
     }),
-    []
+    [onMarkerHomeDrag]
   );
 
   const handleMapClick = useCallback(
