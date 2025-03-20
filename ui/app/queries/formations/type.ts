@@ -14,12 +14,12 @@ const getSchema = object({
     }),
   uais: array()
     .transform(function (value, originalValue) {
-      return originalValue ? originalValue.split(/[\s,]+/) : [];
+      return originalValue ? originalValue.split(/[\s,|]+/) : [];
     })
     .of(string().matches(UAI_PATTERN)),
   cfds: array()
     .transform(function (value, originalValue) {
-      return originalValue ? originalValue.split(/[\s,]+/) : [];
+      return originalValue ? originalValue.split(/[\s,|]+/) : [];
     })
     .of(string().matches(CFD_PATTERN)),
   domaine: string()
@@ -28,6 +28,11 @@ const getSchema = object({
     .transform((_, value) => {
       return value === "" ? null : value;
     }),
+  domaines: array()
+    .transform(function (value, originalValue) {
+      return originalValue ? originalValue.split(/[|]+/) : [];
+    })
+    .of(string().oneOf(Object.values(FormationDomaine)).required()),
   formation: string()
     .nullable()
     .transform((_, value) => {

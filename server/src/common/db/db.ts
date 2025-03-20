@@ -22,6 +22,10 @@ types.setTypeParser(types.builtins.NUMERIC, function (val) {
   return parseFloat(val);
 });
 
+export interface DBWithMaterializedViews extends Omit<DB, "formationFamilleMetierView"> {
+  formationFamilleMetierMView: DB["formationFamilleMetierView"];
+}
+
 export const pool = new Pool({
   connectionString: config.pgsql.uri,
   ssl: config.pgsql.ca ? { rejectUnauthorized: false, ca: config.pgsql.ca } : undefined,
@@ -37,7 +41,7 @@ pool.on("error", (error) => {
   }
 });
 
-export const kdb = new Kysely<DB>({
+export const kdb = new Kysely<DBWithMaterializedViews>({
   dialect: new PostgresDialect({ pool, cursor: Cursor }),
   log: (event) => {
     if (config.sql.logLevel.includes(event.level)) {

@@ -15,11 +15,9 @@ import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
 import FormationAllTags from "../components/FormationAllTags";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
-import { capitalize, isNil, omit } from "lodash-es";
+import { isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
-import { FORMATION_DOMAINE } from "#/app/services/formation";
-
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
 });
@@ -87,13 +85,13 @@ FormationResult.displayName = "FormationResult";
 export default function ResearchFormationsResult({
   location,
   tag,
-  domaine,
+  domaines,
   formation,
   page = 1,
 }: {
   location: UserLocation;
   tag?: FormationTag | null;
-  domaine?: FormationDomaine | null;
+  domaines?: FormationDomaine[];
   formation?: string | null;
   page: number;
 }) {
@@ -107,7 +105,7 @@ export default function ResearchFormationsResult({
     longitude: location.longitude,
     tag,
     page,
-    domaine,
+    domaines,
     postcode: location.postcode,
     formation,
   });
@@ -131,7 +129,7 @@ export default function ResearchFormationsResult({
         display="flex"
         alignItems="center"
         flexDirection={"column"}
-        sx={{ height: "100vh", padding: { md: "2rem", xs: "1rem" }, paddingTop: { md: "5rem", xs: "5rem" } }}
+        sx={{ height: "100vh", padding: { md: "2rem", xs: "1rem" }, paddingTop: { md: "5rem", sm: "5rem" } }}
       >
         <Loader withMargin />
         <Typography variant="h6" textAlign={"center"}>
@@ -156,6 +154,7 @@ export default function ResearchFormationsResult({
           css={css`
             max-width: 784px;
             padding: 1.5rem;
+            padding-top: ${theme.breakpoints.up("md") && "0rem"};
             padding-left: 2.5rem;
             padding-right: 3rem;
             z-index: 500;

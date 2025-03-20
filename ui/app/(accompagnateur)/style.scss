@@ -82,3 +82,11 @@ form[target=_blank]::after {
     color: none;
 }
 
+.fr-checkbox-group--sm input[type=checkbox] + label::before {
+    left: -2.5rem;
+}
+
+.fr-checkbox-group input[type=checkbox] + label::before {
+    left: -3rem;
+    top: inherit;
+}

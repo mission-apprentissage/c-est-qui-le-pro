@@ -12,14 +12,14 @@ export type SearchFormationFormData = {
   address: string;
   formation?: string | null;
   tag?: string;
-  domaine?: string;
+  domaines?: string[];
 };
 
 export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
   .object({
     address: yup.string().required(),
     tag: yup.string(),
-    domaine: yup.string(),
+    domaines: yup.array().of(yup.string().required()),
     formation: yup.string().nullable(),
   })
   .required();
@@ -32,7 +32,7 @@ export default function SearchFormationForm({
   defaultValues: Nullable<SearchFormationFormData>;
 }) {
   return (
-    <FormSearchParams url={url} defaultValues={defaultValues} schema={schema} forceValues={{ tag: "" }}>
+    <FormSearchParams url={url} defaultValues={defaultValues} schema={schema}>
       {({ control, errors }) => {
         return (
           <Grid container spacing={2}>

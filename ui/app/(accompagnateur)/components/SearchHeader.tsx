@@ -11,7 +11,7 @@ export default function SearchHeader() {
           display: "flex",
           justifyContent: "center",
           marginTop: "2rem",
-          marginBottom: "2rem",
+          marginBottom: { xs: "0", md: "2rem" },
         }}
       >
         <Box

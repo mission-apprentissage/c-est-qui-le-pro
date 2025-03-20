@@ -116,6 +116,13 @@ export interface FormationEtablissement {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface FormationFamilleMetierView {
+  etablissementId: string | null;
+  familleMetierId: string | null;
+  formationsFamilleMetier: Json | null;
+  millesime: string[] | null;
+}
+
 export interface FormationPoursuite {
   createdAt: Generated<Timestamp>;
   formationId: string;
@@ -301,6 +308,7 @@ export interface DB {
   formation: Formation;
   formationDomaine: FormationDomaine;
   formationEtablissement: FormationEtablissement;
+  formationFamilleMetierView: FormationFamilleMetierView;
   formationPoursuite: FormationPoursuite;
   formationRome: FormationRome;
   formationSimilaire: FormationSimilaire;
