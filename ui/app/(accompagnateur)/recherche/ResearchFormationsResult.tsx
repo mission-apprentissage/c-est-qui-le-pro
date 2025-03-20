@@ -183,7 +183,6 @@ export default React.memo(function ResearchFormationsResult({
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
-  const resultRef = useRef<HTMLDivElement>(null);
   const [latLng, setLatLng] = useState<number[] | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
