@@ -4,8 +4,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 import { ReactNode, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ZoomControl, useMap, useMapEvent } from "react-leaflet";
-import { DivIcon, LatLngTuple } from "leaflet";
+import { ZoomControl, useMap, useMapEvent, useMapEvents } from "react-leaflet";
+import { DivIcon, LatLngTuple, LeafletMouseEvent } from "leaflet";
 import { renderToString } from "react-dom/server";
 import dynamic from "next/dynamic";
 import HomeIcon from "./icon/HomeIcon";
@@ -81,6 +81,42 @@ function PreventFocus() {
   map.getContainer().focus = () => {};
   return null;
 }
+
+export const MapClickHandler = ({ onClick }: { onClick: (e: LeafletMouseEvent) => void }) => {
+  const popupOpenRef = useRef(false);
+  const map = useMap();
+
+  useEffect(() => {
+    const handlePopupOpen = () => {
+      console.log("popup open");
+      popupOpenRef.current = true;
+    };
+
+    const handlePopupClose = () => {
+      setTimeout(() => {
+        popupOpenRef.current = false;
+      }, 100);
+    };
+
+    map.on("popupopen", handlePopupOpen);
+    map.on("popupclose", handlePopupClose);
+
+    return () => {
+      map.off("popupopen", handlePopupOpen);
+      map.off("popupclose", handlePopupClose);
+    };
+  }, [map]);
+
+  useMapEvents({
+    click: (e) => {
+      if (!popupOpenRef.current) {
+        onClick(e);
+      }
+    },
+  });
+
+  return null;
+};
 
 export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup> }) {
   const [isLoading, setIsLoading] = useState(true);
