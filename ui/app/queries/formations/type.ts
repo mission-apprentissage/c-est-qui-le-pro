@@ -1,5 +1,9 @@
 import { object, number, array, string, InferType } from "yup";
-import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN, FormationVoie } from "shared";
+import { FormationTag, FormationDomaine, UAI_PATTERN, CFD_PATTERN, FormationVoie, DiplomeType } from "shared";
+
+const transformArray = (value: string, originalValue: string) => {
+  return originalValue ? originalValue.split(/[\s,|]+/) : [];
+};
 
 const getSchema = object({
   longitude: number().min(-180).max(180),
@@ -12,21 +16,14 @@ const getSchema = object({
     .transform((_, value) => {
       return value === "" ? null : value;
     }),
-  uais: array()
-    .transform(function (value, originalValue) {
-      return originalValue ? originalValue.split(/[\s,|]+/) : [];
-    })
-    .of(string().matches(UAI_PATTERN)),
-  cfds: array()
-    .transform(function (value, originalValue) {
-      return originalValue ? originalValue.split(/[\s,|]+/) : [];
-    })
-    .of(string().matches(CFD_PATTERN)),
+  uais: array().transform(transformArray).of(string().matches(UAI_PATTERN)),
+  cfds: array().transform(transformArray).of(string().matches(CFD_PATTERN)),
   voie: array()
-    .transform(function (value, originalValue) {
-      return originalValue ? originalValue.split(/[|]+/) : [];
-    })
+    .transform(transformArray)
     .of(string().oneOf(Object.values(FormationVoie)).required()),
+  diplome: array()
+    .transform(transformArray)
+    .of(string().oneOf(Object.keys(DiplomeType)).required()),
   domaines: array()
     .transform(function (value, originalValue) {
       return originalValue ? originalValue.split(/[|]+/) : [];

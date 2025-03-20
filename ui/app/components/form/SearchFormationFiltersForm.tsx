@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Box, Theme } from "@mui/material";
 import { capitalize, isArray, isNil } from "lodash-es";
 import MultiSelect from "#/app/components/form/MultiSelect";
-import { FORMATION_DOMAINE, FORMATION_VOIE } from "#/app/services/formation";
+import { FORMATION_DIPLOME, FORMATION_DOMAINE, FORMATION_VOIE } from "#/app/services/formation";
 import { Control, Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
@@ -30,7 +30,7 @@ import {
 } from "./SearchFormationFiltersForm.styled";
 import * as yup from "yup";
 
-const schemaFilters = schema.pick(["domaines", "voie"]);
+const schemaFilters = schema.pick(["domaines", "voie", "diplome"]);
 
 function FilterDomaines({
   control,
@@ -144,6 +144,63 @@ function FilterVoie({
   );
 }
 
+function FilterDiplome({
+  control,
+  isMobile,
+  onApply,
+}: {
+  control: Control<yup.InferType<typeof schemaFilters>>;
+  isMobile: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <Box>
+      {isMobile && <MobileSubtitle variant="subtitle1">Diplômes</MobileSubtitle>}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => {
+          const firstDiplome = value?.length ? FORMATION_DIPLOME.find(({ diplome }) => diplome === value[0]) : null;
+          return (
+            <MultiSelect
+              isMobile={isMobile}
+              label={
+                value && value.length == 1 ? (
+                  <>
+                    <FilterIcon className="ri-award-fill" />
+                    {firstDiplome?.libelle}
+                  </>
+                ) : (
+                  <>
+                    <FilterIcon className="ri-award-fill" />
+                    CAP & BAC PRO
+                  </>
+                )
+              }
+              maxHeight={"100%"}
+              width={"200px"}
+              widthDropdown="330px"
+              name="diplome"
+              onChange={onChange}
+              onApply={onApply}
+              value={value || []}
+              options={FORMATION_DIPLOME.filter(({ diplome }) => diplome).map(({ libelle, diplome, pictogramme }) => ({
+                withSeparator: false,
+                option: libelle,
+                value: diplome || "",
+                pictogramme: pictogramme,
+              }))}
+            />
+          );
+        }}
+        name="diplome"
+      />
+    </Box>
+  );
+}
+
 function SearchFormationFiltersElementsMobile({
   control,
   isMobile,
@@ -155,6 +212,7 @@ function SearchFormationFiltersElementsMobile({
 }) {
   return (
     <FilterContainerMobile>
+      <FilterDiplome control={control} isMobile={isMobile} onApply={onApply} />
       <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
       <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
     </FilterContainerMobile>
@@ -173,6 +231,7 @@ function SearchFormationFiltersElements({
   return (
     <FilterContainer>
       <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
+      <FilterDiplome control={control} isMobile={isMobile} onApply={onApply} />
       <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
     </FilterContainer>
   );
@@ -185,6 +244,7 @@ export default function SearchFormationFiltersForm() {
   const defaultValues = {
     domaines: params?.domaines,
     voie: params?.voie,
+    diplome: params?.diplome,
   };
 
   const {
@@ -206,7 +266,7 @@ export default function SearchFormationFiltersForm() {
 
   const reset = useCallback(
     (values: typeof defaultValues | null = null) => {
-      resetForm(values || { domaines: [], voie: [] });
+      resetForm(values || { domaines: [], voie: [], diplome: [] });
     },
     [resetForm]
   );

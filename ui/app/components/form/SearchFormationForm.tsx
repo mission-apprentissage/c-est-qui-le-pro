@@ -14,6 +14,7 @@ export type SearchFormationFormData = {
   tag?: string;
   domaines?: string[];
   voie?: string[];
+  diplome?: string[];
 };
 
 export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
@@ -22,6 +23,7 @@ export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
     tag: yup.string(),
     domaines: yup.array().of(yup.string().required()),
     voie: yup.array().of(yup.string().required()),
+    diplome: yup.array().of(yup.string().required()),
     formation: yup.string().nullable(),
   })
   .required();
