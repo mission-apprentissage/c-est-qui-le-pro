@@ -90,3 +90,33 @@ form[target=_blank]::after {
     left: -3rem;
     top: inherit;
 }
+
+
+
+.leaftlet-home-icon svg .home-icon-outline {
+    stroke: rgb(35, 35, 255);;
+    stroke-width: 2;
+    stroke-opacity: 0;
+    transition: stroke-opacity 0.3s ease;
+
+}
+
+.leaftlet-home-icon:hover svg .home-icon-outline {
+    cursor: move;
+    stroke-opacity: 1;
+}
+
+.leaftlet-home-icon:hover::before {
+    content: "Déplacer pour changer d'adresse";
+    position: absolute;
+    width: max-content;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-25px); 
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+  }

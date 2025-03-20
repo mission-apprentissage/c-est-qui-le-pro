@@ -20,7 +20,7 @@ export const LeafletHomeIcon = new DivIcon({
   iconSize: [52, 58],
   iconAnchor: [26, 58],
   popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-white",
+  className: "custom-leaflet-icon leaftlet-home-icon color-white",
   html: renderToString(<HomeIcon />),
 });
 
