@@ -10,38 +10,17 @@ import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "../components/FormationCard";
 import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
-import { FormationTag, FormationDomaine, FormationDetail, FormationVoie } from "shared";
-import { Box, Stack, Theme, useMediaQuery, useTheme } from "@mui/material";
-import FormationAllTags from "../components/FormationAllTags";
+import { FormationDetail } from "shared";
+import { Box, Theme, useMediaQuery, useTheme } from "@mui/material";
 import useGetFormations from "../hooks/useGetFormations";
 import { useFormationsSearch } from "../context/FormationsSearchContext";
-import { isNil, omit } from "lodash-es";
+import { isNil } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
 import { fetchReverse } from "#/app/services/address";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
 });
-
-function FormationsFilterTag({ selected }: { selected?: FormationTag | null }) {
-  const { params, updateParams } = useFormationsSearch();
-
-  return (
-    <FormationAllTags
-      selected={selected}
-      onClick={(selectedTag) => {
-        if (!params) {
-          return;
-        }
-
-        updateParams({
-          ...omit(params, ["tag"]),
-          tag: selectedTag === selected ? undefined : selectedTag,
-        });
-      }}
-    />
-  );
-}
 
 const FormationResult = React.memo(
   ({
@@ -296,7 +275,10 @@ export default React.memo(function ResearchFormationsResult({
           css={css`
             max-width: 784px;
             padding: 1.5rem;
-            padding-top: ${theme.breakpoints.up("md") && "0rem"};
+            padding-top: 0rem;
+            ${theme.breakpoints.up("md")} {
+              padding-top: 2rem;
+            }
             padding-left: 2.5rem;
             padding-right: 3rem;
             z-index: 500;
@@ -307,9 +289,6 @@ export default React.memo(function ResearchFormationsResult({
           `}
         >
           {(isNewAddressLoading || isFetching || isAddressFetching) && <Loader withMargin />}
-          <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
-            <FormationsFilterTag selected={tag} />
-          </Stack>
 
           {!formations?.length ? (
             <InformationCard>

@@ -11,7 +11,7 @@ import Button from "../Button";
 export type SearchFormationFormData = {
   address: string;
   formation?: string | null;
-  tag?: string;
+  tag?: string[];
   domaines?: string[];
   voie?: string[];
   diplome?: string[];
@@ -20,7 +20,7 @@ export type SearchFormationFormData = {
 export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
   .object({
     address: yup.string().required(),
-    tag: yup.string(),
+    tag: yup.array().of(yup.string().required()),
     domaines: yup.array().of(yup.string().required()),
     voie: yup.array().of(yup.string().required()),
     diplome: yup.array().of(yup.string().required()),

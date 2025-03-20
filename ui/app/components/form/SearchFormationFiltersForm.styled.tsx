@@ -87,6 +87,8 @@ export const FilterContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  flex-wrap: wrap;
+  row-gap: 1rem;
 `;
 
 export const FilterContainerMobile = styled(Box)`

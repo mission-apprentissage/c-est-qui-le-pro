@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { mapValues } from "lodash-es";
 import { formatArrayParameters } from "./formatters.ts";
-import { DiplomeType } from "shared";
+import { DiplomeType, FormationTag } from "shared";
 
 const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^(?:CFD:)?([0-9]{8})$/;
@@ -86,6 +86,16 @@ export function diplome() {
     diplome: arrayOf(
       Joi.string()
         .valid(...Object.keys(DiplomeType))
+        .required()
+    ).default([]),
+  };
+}
+
+export function tag() {
+  return {
+    tag: arrayOf(
+      Joi.string()
+        .valid(...Object.values(FormationTag))
         .required()
     ).default([]),
   };

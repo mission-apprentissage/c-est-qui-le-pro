@@ -1,19 +1,11 @@
 import Image from "next/image";
 import { DiplomeType, FormationDomaine, FormationTag, FormationVoie } from "shared";
-import CalendarIcon from "#/app/components/icon/CalendarIcon";
-import { FrCxArg, FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
-import MoneyIcon from "../components/icon/MoneyIcon";
+import { FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
 import ArtworkSchoolSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/buildings/school.svg";
-import { CompangiePictogramme } from "../components/icon/CompaniePictogramme";
+import ContractSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/contract.svg";
+import AvatarSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/avatar.svg";
+import { CompaniePictogramme } from "../components/icon/CompaniePictogramme";
 import Tag from "../components/Tag";
-
-export type FormationTagType = {
-  tag: FormationTag;
-  libelle: string;
-  color: string;
-  bgColor: string;
-  icon: (() => JSX.Element) | FrCxArg;
-};
 
 export const LIBELLE_PRESSION = {
   easy: "Favorable (taux de pression faible)",
@@ -21,21 +13,38 @@ export const LIBELLE_PRESSION = {
   hard: "Très difficile (taux de pression élevé)",
 };
 
+export type FormationTagType = {
+  tag: FormationTag;
+  tagLibelle: string;
+  libelle: string;
+  libelleSmall: string;
+  color: string;
+  bgColor: string;
+  icon: FrIconClassName | RiIconClassName;
+  pictogramme?: () => JSX.Element;
+};
+
 export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
-    libelle: "TAUX D'INSERTION FAVORABLE",
+    tagLibelle: "TAUX D'INSERTION FAVORABLE",
+    libelleSmall: "Emploi",
+    libelle: "Formations offrant de meilleures chances de trouver un emploi en fin d’études (taux d’insertion élevé)",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: MoneyIcon,
+    icon: "ri-community-line",
+    pictogramme: () => <Image src={ContractSvg} width={"56"} height={"56"} alt={""} />,
   },
 
   {
     tag: FormationTag.FAIBLE_TAUX_PRESSION,
-    libelle: "TAUX DE PRESSION FAIBLE",
+    tagLibelle: "TAUX DE PRESSION FAIBLE",
+    libelleSmall: "Admission",
+    libelle: "Formations offrant de meilleures chances d’être admis (taux de pression faible)",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: CalendarIcon,
+    icon: "ri-community-line",
+    pictogramme: () => <Image src={AvatarSvg} width={"56"} height={"56"} alt={""} />,
   },
 ];
 
@@ -83,7 +92,7 @@ export const FORMATION_VOIE: {
     libelleSmall: "En alternance",
     icon: "ri-community-line",
     pictogramme: () => {
-      return <CompangiePictogramme />;
+      return <CompaniePictogramme />;
     },
   },
   {

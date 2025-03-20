@@ -10,12 +10,9 @@ const getSchema = object({
   latitude: number().min(-90).max(90),
   distance: number(),
   timeLimit: number().min(600).max(7200),
-  tag: string()
-    .oneOf(Object.values(FormationTag))
-    .nullable()
-    .transform((_, value) => {
-      return value === "" ? null : value;
-    }),
+  tag: array()
+    .transform(transformArray)
+    .of(string().oneOf(Object.values(FormationTag)).required()),
   uais: array().transform(transformArray).of(string().matches(UAI_PATTERN)),
   cfds: array().transform(transformArray).of(string().matches(CFD_PATTERN)),
   voie: array()

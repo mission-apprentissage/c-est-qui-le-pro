@@ -5,7 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Box, Theme } from "@mui/material";
 import { capitalize, isArray, isNil } from "lodash-es";
 import MultiSelect from "#/app/components/form/MultiSelect";
-import { FORMATION_DIPLOME, FORMATION_DOMAINE, FORMATION_VOIE } from "#/app/services/formation";
+import { FORMATION_DIPLOME, FORMATION_DOMAINE, FORMATION_TAG, FORMATION_VOIE } from "#/app/services/formation";
 import { Control, Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
@@ -30,7 +30,7 @@ import {
 } from "./SearchFormationFiltersForm.styled";
 import * as yup from "yup";
 
-const schemaFilters = schema.pick(["domaines", "voie", "diplome"]);
+const schemaFilters = schema.pick(["domaines", "voie", "diplome", "tag"]);
 
 function FilterDomaines({
   control,
@@ -201,6 +201,63 @@ function FilterDiplome({
   );
 }
 
+function FilterTag({
+  control,
+  isMobile,
+  onApply,
+}: {
+  control: Control<yup.InferType<typeof schemaFilters>>;
+  isMobile: boolean;
+  onApply: () => void;
+}) {
+  return (
+    <Box>
+      {isMobile && <MobileSubtitle variant="subtitle1">Formations à découvrir</MobileSubtitle>}
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => {
+          const firstTag = value?.length ? FORMATION_TAG.find(({ tag }) => tag === value[0]) : null;
+          return (
+            <MultiSelect
+              isMobile={isMobile}
+              label={
+                value && value.length == 1 ? (
+                  <>
+                    <FilterIcon className="ri-thumb-up-line" />
+                    {capitalize(firstTag?.libelleSmall)}
+                  </>
+                ) : (
+                  <>
+                    <FilterIcon className="ri-thumb-up-line" />
+                    {value?.length ? "Emploi & Admission" : "Formations à découvrir"}
+                  </>
+                )
+              }
+              maxHeight={"100%"}
+              width={"260px"}
+              widthDropdown="600px"
+              name="tag"
+              description="Grâce à l’utilisation de statistiques sur les promotions des années précédentes, nous pouvons vous aider à choisir des formations correspondant particulièrement bien à votre projet."
+              onChange={onChange}
+              onApply={onApply}
+              value={value || []}
+              options={FORMATION_TAG.filter(({ tag }) => tag).map(({ libelle, tag, icon, pictogramme }) => ({
+                option: capitalize(libelle),
+                pictogramme: pictogramme,
+                value: tag || "",
+              }))}
+            />
+          );
+        }}
+        name="tag"
+      />
+    </Box>
+  );
+}
+
 function SearchFormationFiltersElementsMobile({
   control,
   isMobile,
@@ -212,6 +269,7 @@ function SearchFormationFiltersElementsMobile({
 }) {
   return (
     <FilterContainerMobile>
+      <FilterTag control={control} isMobile={isMobile} onApply={onApply} />
       <FilterDiplome control={control} isMobile={isMobile} onApply={onApply} />
       <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
       <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
@@ -230,6 +288,7 @@ function SearchFormationFiltersElements({
 }) {
   return (
     <FilterContainer>
+      <FilterTag control={control} isMobile={isMobile} onApply={onApply} />
       <FilterDomaines control={control} isMobile={isMobile} onApply={onApply} />
       <FilterDiplome control={control} isMobile={isMobile} onApply={onApply} />
       <FilterVoie control={control} isMobile={isMobile} onApply={onApply} />
@@ -245,6 +304,7 @@ export default function SearchFormationFiltersForm() {
     domaines: params?.domaines,
     voie: params?.voie,
     diplome: params?.diplome,
+    tag: params?.tag,
   };
 
   const {

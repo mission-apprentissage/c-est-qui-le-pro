@@ -13,7 +13,6 @@ import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
 import FormationRepository from "#src/common/repositories/formation";
 import { merge } from "lodash-es";
-import { FormationTag } from "shared";
 
 export default () => {
   const router = express.Router();
@@ -88,15 +87,12 @@ export default () => {
           latitude: Joi.number().min(-90).max(90).default(null),
           distance: Joi.number().min(0).max(100000).default(null),
           timeLimit: Joi.number().valid().default(null),
-          tag: Joi.string()
-            .empty("")
-            .valid(...Object.values(FormationTag))
-            .default(null),
           ...validators.uais(),
           ...validators.cfds(),
           ...validators.domaines(),
           ...validators.voie(),
           ...validators.diplome(),
+          ...validators.tag(),
           academie: Joi.string().empty("").default(null),
           formation: Joi.string().empty("").default(null),
           ...validators.pagination({ items_par_page: 100 }),

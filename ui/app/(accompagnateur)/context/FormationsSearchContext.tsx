@@ -9,7 +9,7 @@ import { usePlausible } from "next-plausible";
 
 type FormationsSearchParams = {
   address: string;
-  tag?: FormationTag;
+  tag?: FormationTag[];
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];

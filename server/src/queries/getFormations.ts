@@ -16,17 +16,19 @@ import { flatten, pick } from "lodash-es";
 const logger = getLoggerWithContext("query");
 
 export function buildFilterTag(eb, tag) {
-  if (!tag) {
+  if (!tag || tag.length === 0) {
     return eb;
   }
 
-  const formationTag = Object.values(FormationTag).includes(tag);
-  if (!formationTag) {
-    logger.error(`Tag ${tag} inconnu dans les filtres de formations`);
-    return eb;
+  const formationTag = Object.values(FormationTag);
+  for (const t of tag) {
+    if (!formationTag.includes(t)) {
+      logger.error(`Tag ${t} inconnu dans les filtres de formations`);
+      return eb;
+    }
   }
 
-  return eb.where((eb) => eb(sql.val(tag), "=", eb.fn.any("tags")));
+  return eb.where(sql.val(tag), "<@", sql.ref("tags"));
 }
 
 export function getRouteDate() {
