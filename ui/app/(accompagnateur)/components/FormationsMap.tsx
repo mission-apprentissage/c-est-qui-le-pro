@@ -55,6 +55,13 @@ export default function FormationsMap({
     [onMarkerHomeDrag]
   );
 
+  const handleMapClick = useCallback(
+    (e: LeafletMouseEvent) => {
+      onMarkerHomeDrag && onMarkerHomeDrag(e.latlng.lat, e.latlng.lng);
+    },
+    [onMarkerHomeDrag]
+  );
+
   return (
     <Map center={[latitude, longitude]}>
       <FeatureGroup ref={groupRef}>
