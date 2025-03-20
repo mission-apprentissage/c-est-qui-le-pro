@@ -206,7 +206,6 @@ export default React.memo(function ResearchFormationsResult({
   const [selected, setSelected] = useState<null | FormationDetail>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const [latLng, setLatLng] = useState<number[] | null>(null);
-  const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
   const { params, updateParams } = useFormationsSearch();
   const { tag, domaines, formation, voie, diplome } = params ?? {};
