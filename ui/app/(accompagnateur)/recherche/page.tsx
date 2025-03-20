@@ -28,10 +28,6 @@ function ResearchFormationsParameter() {
   }, []);
 
   useEffect(() => {
-    setIsFirstRender(false);
-  }, []);
-
-  useEffect(() => {
     if (!address) {
       router.push(`/`);
     }
