@@ -114,7 +114,7 @@ function MultiSelectContainer({
 
   return (
     <SelectContainer ref={ref} width={width}>
-      <SelectHeader isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <SelectHeader hasValue={value && value.length > 0} isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         <LabelText variant="body4">{label}</LabelText>
         {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
       </SelectHeader>
@@ -212,11 +212,12 @@ export default function MultiSelect(props: MultiSelectProps) {
     props.onChange([]);
   };
 
+  const { value, onChange } = props;
   const onChangeOption = useCallback(
     (option: Omit<OptionProps, "name" | "checked">, checked: boolean) => {
-      props.onChange(checked ? [...props.value, option.value] : props.value.filter((o) => o !== option.value));
+      onChange(checked ? [...value, option.value] : value.filter((o) => o !== option.value));
     },
-    [props.value]
+    [value, onChange]
   );
 
   return props.isMobile ? (

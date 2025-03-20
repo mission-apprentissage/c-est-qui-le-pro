@@ -300,12 +300,15 @@ export default function SearchFormationFiltersForm() {
   const [isFocus, setIsFocus] = useState(false);
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const { params, updateParams } = useFormationsSearch();
-  const defaultValues = {
-    domaines: params?.domaines,
-    voie: params?.voie,
-    diplome: params?.diplome,
-    tag: params?.tag,
-  };
+  const defaultValues = useMemo(
+    () => ({
+      domaines: params?.domaines,
+      voie: params?.voie,
+      diplome: params?.diplome,
+      tag: params?.tag,
+    }),
+    [params]
+  );
 
   const {
     control,
@@ -321,12 +324,12 @@ export default function SearchFormationFiltersForm() {
   const values = watch();
 
   const hasFilter = useMemo(() => {
-    return Object.values(values).find((v) => (isArray(v) ? v.length > 0 : !isNil(v)));
+    return !!Object.values(values).find((v) => (isArray(v) ? v.length > 0 : !isNil(v)));
   }, [values]);
 
   const reset = useCallback(
     (values: typeof defaultValues | null = null) => {
-      resetForm(values || { domaines: [], voie: [], diplome: [] });
+      resetForm(values || { domaines: [], voie: [], diplome: [], tag: [] });
     },
     [resetForm]
   );
@@ -387,7 +390,13 @@ export default function SearchFormationFiltersForm() {
       </MobileContainer>
     ) : (
       <MobileFilterButtons>
-        <FilterButton priority="tertiary no outline" iconId="ri-equalizer-line" onClick={() => setIsFocus(true)}>
+        <FilterButton
+          rounded
+          hasFilter={hasFilter}
+          priority="tertiary no outline"
+          iconId="ri-equalizer-line"
+          onClick={() => setIsFocus(true)}
+        >
           Filtres
           {hasFilter && <FilterBadge />}
         </FilterButton>

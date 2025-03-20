@@ -61,17 +61,21 @@ export const SelectContainer = styled(Box)<{ width?: string }>`
 `;
 
 export const SelectHeader = styled(Box, {
-  shouldForwardProp: (prop) => !["isOpen"].includes(prop as string),
-})<{ isOpen: boolean }>`
+  shouldForwardProp: (prop) => !["isOpen", "hasValue"].includes(prop as string),
+})<{ isOpen: boolean; hasValue: boolean }>`
   display: flex;
   flex-direction: row;
   gap: 0.25rem;
-  ${({ isOpen }) => isOpen && `background-color: ${fr.colors.decisions.background.open.blueFrance.default};`}
+  ${({ isOpen, hasValue }) =>
+    (isOpen || hasValue) && `background-color: ${fr.colors.decisions.background.open.blueFrance.default};`}
   padding: 0.3rem 0.5rem;
   border: 1px solid #dddddd;
 
   &:hover {
-    background-color: ${fr.colors.decisions.background.open.blueFrance.default};
+    background-color: ${({ hasValue }) =>
+      hasValue
+        ? fr.colors.decisions.background.alt.blueFrance.default
+        : fr.colors.decisions.background.open.blueFrance.default};
     border: 1px solid ${fr.colors.decisions.background.open.blueFrance.default};
     cursor: pointer;
   }
