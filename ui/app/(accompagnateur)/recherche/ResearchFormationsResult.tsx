@@ -194,18 +194,10 @@ FormationResults.displayName = "FormationResults";
 
 export default React.memo(function ResearchFormationsResult({
   location,
-  tag,
-  domaines,
-  formation,
-  voie,
   page = 1,
   isAddressFetching,
 }: {
   location: UserLocation;
-  tag?: FormationTag | null;
-  domaines?: FormationDomaine[];
-  formation?: string | null;
-  voie?: FormationVoie[];
   page: number;
   isAddressFetching?: boolean;
 }) {
@@ -216,6 +208,7 @@ export default React.memo(function ResearchFormationsResult({
   const [latLng, setLatLng] = useState<number[] | null>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
   const { params, updateParams } = useFormationsSearch();
+  const { tag, domaines, formation, voie, diplome } = params ?? {};
 
   const { ref: refInView, inView } = useInView();
 
@@ -227,6 +220,7 @@ export default React.memo(function ResearchFormationsResult({
       page,
       domaines,
       voie,
+      diplome,
       postcode: location.postcode,
       formation,
     });

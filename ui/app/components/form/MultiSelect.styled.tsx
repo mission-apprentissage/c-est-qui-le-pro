@@ -33,8 +33,8 @@ export const StyledOptionBox = styled(Box, {
 `;
 
 export const IconContainer = styled(Box, {
-  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme"].includes(prop as string),
-})<{ hasIcon: boolean; hasPictogramme: boolean }>`
+  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme", "withSeparator"].includes(prop as string),
+})<{ hasIcon: boolean; hasPictogramme: boolean; withSeparator: boolean }>`
   margin-left: auto;
   padding: ${({ hasPictogramme }) => (hasPictogramme ? "0.5rem" : "1rem")};
   padding-left: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
@@ -47,7 +47,8 @@ export const IconContainer = styled(Box, {
     bottom: 5%;
     height: 90%;
     width: 1px;
-    ${({ hasIcon, hasPictogramme }) => (hasIcon || hasPictogramme) && "border-left: 1px solid #dddddd;"}
+    ${({ hasIcon, hasPictogramme, withSeparator }) =>
+      withSeparator && (hasIcon || hasPictogramme) && "border-left: 1px solid #dddddd;"}
   }
 `;
 
@@ -89,10 +90,10 @@ export const LabelText = styled(Typography)`
 `;
 
 export const DropdownMenu = styled(Box, {
-  shouldForwardProp: (prop) => !["isOpen"].includes(prop as string),
-})<{ isOpen: boolean }>`
+  shouldForwardProp: (prop) => !["isOpen", "widthDropdown"].includes(prop as string),
+})<{ isOpen: boolean; widthDropdown?: string }>`
   box-shadow: 0px 6px 18px rgba(0, 0, 18, 0.16);
-  width: 428px;
+  width: ${({ widthDropdown }) => widthDropdown || "428px"};
   position: absolute;
   z-index: 999;
   background-color: #ffffff;

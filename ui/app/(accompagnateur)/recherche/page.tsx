@@ -21,7 +21,7 @@ function ResearchFormationsParameter() {
   const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
   const [isFirstRender, setIsFirstRender] = useState(true);
-  const { address, tag, domaines, formation, voie } = params ?? {};
+  const { address } = params ?? {};
 
   useEffect(() => {
     setIsFirstRender(false);
@@ -97,17 +97,7 @@ function ResearchFormationsParameter() {
           <SearchFormationFiltersForm />
         </Grid>
       </Grid>
-      {data && (
-        <ResearchFormationsResult
-          location={data}
-          tag={tag}
-          domaines={domaines}
-          formation={formation}
-          voie={voie}
-          page={1}
-          isAddressFetching={isFetching}
-        />
-      )}
+      {data && <ResearchFormationsResult location={data} page={1} isAddressFetching={isFetching} />}
     </>
   );
 }

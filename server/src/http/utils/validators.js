@@ -1,6 +1,7 @@
 import Joi from "joi";
 import { mapValues } from "lodash-es";
 import { formatArrayParameters } from "./formatters.ts";
+import { DiplomeType } from "shared";
 
 const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^(?:CFD:)?([0-9]{8})$/;
@@ -77,6 +78,16 @@ export function domaines() {
 export function voie() {
   return {
     voie: arrayOf(Joi.string().required()).default([]),
+  };
+}
+
+export function diplome() {
+  return {
+    diplome: arrayOf(
+      Joi.string()
+        .valid(...Object.keys(DiplomeType))
+        .required()
+    ).default([]),
   };
 }
 

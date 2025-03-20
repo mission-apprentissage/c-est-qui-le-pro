@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { formations as formationsQuery } from "#/app/queries/formations/query";
-import { FormationDomaine, FormationTag, FormationVoie } from "shared";
+import { DiplomeType, FormationDomaine, FormationTag, FormationVoie } from "shared";
 import { RegionsService } from "shared";
 
 export default function useGetFormations({
@@ -11,6 +11,7 @@ export default function useGetFormations({
   tag,
   domaines,
   voie,
+  diplome,
   formation,
   uais,
   cfds,
@@ -23,6 +24,7 @@ export default function useGetFormations({
   tag?: FormationTag | null;
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
+  diplome?: (keyof typeof DiplomeType)[];
   formation?: string | null;
   uais?: string[];
   cfds?: string[];
@@ -50,6 +52,7 @@ export default function useGetFormations({
       longitude,
       tag,
       voie?.toString(),
+      diplome?.toString(),
       domaines?.toString(),
       formation,
       page,
@@ -66,6 +69,7 @@ export default function useGetFormations({
           timeLimit: 5400,
           tag,
           voie,
+          diplome,
           domaines,
           formation,
           page: pageParam ?? 1,

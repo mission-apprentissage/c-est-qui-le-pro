@@ -6,7 +6,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 type Level = "unknow" | "easy" | "average" | "hard";
 
 export type TagProps = {
-  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue" | "filter" | "dark-blue";
+  variant?: "button-white" | "yellow" | "grey" | "purple-light" | "blue" | "filter" | "dark-blue" | "purple";
   active?: boolean;
   level?: Level;
   square?: boolean;
@@ -48,6 +48,8 @@ const TagStyled = styled(Tag, {
         case "dark-blue":
           return `background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
              color: ${fr.colors.decisions.text.title.blueFrance.default};`;
+        case "purple":
+          return `background-color: var(--blue-france-925-125); color: var(--blue-france-sun-113-625);`;
         case "filter":
           return `
           background-color: var(--grey-1000-50);

@@ -27,34 +27,33 @@ type OptionProps = {
   value: string;
   checked: boolean;
   name: string;
+  withSeparator?: boolean;
+};
+
+type MultiSelectCommonProps = {
+  maxHeight?: string;
+  width?: string;
+  widthDropdown?: string;
+  label: JSX.Element;
+  name: string;
+  description?: string;
+  options: Omit<OptionProps, "name" | "checked">[];
 };
 
 type MultiSelectProps = {
   isMobile?: boolean;
   selected?: string[];
   value: string[];
-  options: Omit<OptionProps, "name" | "checked">[];
-  maxHeight?: string;
-  width?: string;
-  label: JSX.Element;
-  name: string;
-  description?: string;
   onChange: (values: string[]) => void;
   onApply?: (values: string[]) => void;
-};
+} & MultiSelectCommonProps;
 
 type MultiSelectContainerProps = {
-  maxHeight?: string;
-  width?: string;
-  label: JSX.Element;
   value: string[];
-  name: string;
-  description?: string;
   apply: () => void;
   reset: () => void;
   onChangeOption: (option: Omit<OptionProps, "name" | "checked">, checked: boolean) => void;
-  options: Omit<OptionProps, "name" | "checked">[];
-};
+} & MultiSelectCommonProps;
 
 function Option({
   checked,
@@ -64,6 +63,7 @@ function Option({
   pictogramme: Pictogramme,
   name,
   onChange,
+  withSeparator = true,
 }: OptionProps & { onChange: (checked: boolean) => void }) {
   const id = useId();
 
@@ -80,7 +80,7 @@ function Option({
       <label htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
       </label>
-      <IconContainer hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
+      <IconContainer withSeparator={withSeparator} hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
         {icon && <i className={fr.cx(icon, "fr-icon--lg")}></i>}
         {Pictogramme && <Pictogramme />}
       </IconContainer>
@@ -92,6 +92,7 @@ function MultiSelectContainer({
   label,
   maxHeight,
   width,
+  widthDropdown,
   reset,
   apply: originalApply,
   options,
@@ -117,7 +118,7 @@ function MultiSelectContainer({
         <LabelText variant="body4">{label}</LabelText>
         {isOpen ? <i className={fr.cx("ri-arrow-up-s-line")}></i> : <i className={fr.cx("ri-arrow-down-s-line")}></i>}
       </SelectHeader>
-      <DropdownMenu isOpen={isOpen}>
+      <DropdownMenu isOpen={isOpen} widthDropdown={widthDropdown}>
         {description && <DescriptionContainer>{description}</DescriptionContainer>}
         <OptionsContainer className={fr.cx("fr-checkbox-group")} maxHeight={maxHeight} hasDescription={!!description}>
           {options.map((option, index) => {
@@ -237,6 +238,7 @@ export default function MultiSelect(props: MultiSelectProps) {
       value={props.value}
       label={props.label}
       width={props.width}
+      widthDropdown={props.widthDropdown}
       options={props.options}
       maxHeight={props.maxHeight}
       reset={reset}
