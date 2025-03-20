@@ -1,3 +1,10 @@
+# [1.28.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.27.0...v1.28.0) (2025-03-20)
+
+
+### Features
+
+* nouveaux filtres par domaines ([#45](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/45)) ([224bd68](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/224bd68ad6c9f0f3fdb3cbc901ea23cda700c4f3))
+
 # [1.27.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.26.0...v1.27.0) (2025-03-17)
 
 
