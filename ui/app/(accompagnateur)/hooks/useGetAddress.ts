@@ -10,7 +10,6 @@ export function useGetAddress(address: string | undefined, options = {}) {
     },
     queryKey: ["address", address],
     queryFn: async () => {
-      console.log(address);
       if (!address) {
         return null;
       }
