@@ -90,12 +90,17 @@ export const FilterButton = styled(Button, {
 
 export const FilterBadge = styled(Box)`
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   right: -5px;
   top: -5px;
   background: #1212ff;
-  border-radius: 8px;
+  border-radius: 9px;
+  color: white;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const FilterContainer = styled(Box)`

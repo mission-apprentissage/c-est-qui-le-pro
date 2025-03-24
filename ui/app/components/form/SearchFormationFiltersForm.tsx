@@ -323,8 +323,10 @@ export default function SearchFormationFiltersForm() {
 
   const values = watch();
 
-  const hasFilter = useMemo(() => {
-    return !!Object.values(values).find((v) => (isArray(v) ? v.length > 0 : !isNil(v)));
+  const nbFilters = useMemo(() => {
+    return Object.values(values)
+      .map((v) => (isArray(v) ? v.length : isNil(v) ? 0 : 1))
+      .reduce((acc, v) => acc + v, 0);
   }, [values]);
 
   const reset = useCallback(
@@ -392,13 +394,13 @@ export default function SearchFormationFiltersForm() {
       <MobileFilterButtons>
         <FilterButton
           rounded
-          hasFilter={hasFilter}
+          hasFilter={nbFilters > 0}
           priority="tertiary no outline"
           iconId="ri-equalizer-line"
           onClick={() => setIsFocus(true)}
         >
           Filtres
-          {hasFilter && <FilterBadge />}
+          {nbFilters > 0 && <FilterBadge>{nbFilters}</FilterBadge>}
         </FilterButton>
       </MobileFilterButtons>
     );
