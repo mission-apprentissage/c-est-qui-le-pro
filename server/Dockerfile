@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+RUN apk add py-setuptools
+
 #Install and cache node_modules
 WORKDIR /base
 COPY package.json .
