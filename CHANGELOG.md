@@ -1,3 +1,10 @@
+# [1.31.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.30.0...v1.31.0) (2025-03-25)
+
+
+### Features
+
+* filtre par debouchés ([#49](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/49)) ([cc6aef6](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/cc6aef6837d13e7930dfdb3084d1b62e69714912))
+
 # [1.30.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.29.0...v1.30.0) (2025-03-25)
 
 
