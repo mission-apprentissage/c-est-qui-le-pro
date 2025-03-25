@@ -1,13 +1,92 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { Box, SxProps, Theme, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import "moment/locale/fr";
-import { useFormationLink } from "../hooks/useFormationLink";
+import { useFormationLink, useSearchFormationLink } from "../hooks/useFormationLink";
 import Link from "#/app/components/Link";
-import { useMemo } from "react";
 import { formatLibelle } from "#/app/utils/formation";
+import React, { useMemo } from "react";
+import { Grid2 } from "#/app/components/MaterialUINext";
+import Button from "#/app/components/Button";
+import { useQueryLocation } from "../hooks/useQueryLocation";
+import { useGetReverseAddress } from "../hooks/useGetAddress";
+import { myPosition } from "#/app/components/form/AddressField";
+import {
+  ActionContainer,
+  ArrowIcon,
+  CardContent,
+  FormationContainer,
+  FormationList,
+  FormationListItem,
+  FormationTitle,
+  FormationTitle2,
+  SectionTitle,
+  StatusIndicator,
+  StyledFormationFamilleMetierCard,
+} from "./FormationFamilleMetier.styled";
+
+const FAMILLE_METIER_TITLE = {
+  bacPro: "Les Bac pro accessibles après cette 2de commune :",
+  anneeCommune: "La 2de commune qui permet d'accéder à ce Bac pro :",
+};
+
+const FormationFamilleMetierBlock = React.memo(function FormationFamilleMetierBlock({
+  formationDetail,
+  style = undefined,
+  className = undefined,
+  address = null,
+}: {
+  formationDetail: FormationFamilleMetierDetail;
+  style?: React.CSSProperties;
+  className?: string;
+  address?: any;
+}) {
+  const { formation } = formationDetail;
+  const formationLink = useFormationLink({
+    formationDetail: formationDetail,
+  });
+
+  const formationSearchLink = useSearchFormationLink({
+    address: address?.label || myPosition,
+    formation: formation.libelle,
+  });
+
+  return (
+    <StyledFormationFamilleMetierCard
+      link={formationLink}
+      linkTarget="_blank"
+      style={style}
+      className={className}
+      type={"formation"}
+    >
+      <CardContent>
+        <StatusIndicator available={!!formationLink} />
+        {formationLink ? (
+          <>
+            <FormationTitle available variant={"subtitle2"}>
+              {formatLibelle(formation.libelle)}
+            </FormationTitle>
+            <ActionContainer>
+              <ArrowIcon className={fr.cx("ri-arrow-right-line")} />
+            </ActionContainer>
+          </>
+        ) : (
+          <>
+            <FormationTitle variant={"body1"}>{formatLibelle(formation.libelle)}</FormationTitle>
+            <ActionContainer>
+              <Link href={formationSearchLink} target="_blank" noDecoration noIcon>
+                <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
+                  Rechercher la formation
+                </Button>
+              </Link>
+            </ActionContainer>
+          </>
+        )}
+      </CardContent>
+    </StyledFormationFamilleMetierCard>
+  );
+});
 
 function FormationFamilleMetier({
   formationDetail,
@@ -22,30 +101,14 @@ function FormationFamilleMetier({
 
   if (!formationLink) {
     return (
-      <li
-        css={css`
-          &::marker {
-            color: ${fr.colors.options.warning._425_625.active};
-          }
-          margin-left: 0.6rem;
-        `}
-      >
+      <FormationListItem available={false}>
         {formationDetail.formation.libelle} (pas disponible dans cet établissement)
-      </li>
+      </FormationListItem>
     );
   }
 
   return (
-    <li
-      css={css`
-        &::marker {
-          color: ${fr.colors.options.success._425_625.active};
-        }
-        margin-left: 0.6rem;
-        color: ${fr.colors.decisions.artwork.major.blueFrance.default};
-        font-weight: 700;
-      `}
-    >
+    <FormationListItem available>
       {withLink ? (
         <Link noIcon noDecoration onClick={(e) => e.stopPropagation()} href={formationLink} target="_blank">
           {formatLibelle(formationDetail.formation.libelle)}
@@ -53,7 +116,70 @@ function FormationFamilleMetier({
       ) : (
         formatLibelle(formationDetail.formation.libelle)
       )}
-    </li>
+    </FormationListItem>
+  );
+}
+
+function FormationFamilleMetierBlocks({
+  title,
+  formationDetail,
+  formations,
+  withLink = false,
+}: {
+  title: string;
+  formationDetail: FormationDetail;
+  formations: FormationFamilleMetierDetail[];
+  withLink?: boolean;
+}) {
+  const location = useQueryLocation();
+  const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
+  const latitude = location.latitude ?? formationDetail.etablissement.latitude ?? 0;
+  const { data: address } = useGetReverseAddress({ latitude, longitude });
+
+  const formationsInEtablissement = useMemo(
+    () => (formations ? formations.filter((detail) => detail.etablissement) : []),
+    [formations]
+  );
+  const formationsNotInEtablissement = useMemo(
+    () => (formations ? formations.filter((detail) => !detail.etablissement) : []),
+    [formations]
+  );
+
+  return (
+    <Box>
+      <Typography variant="h3">{title}</Typography>
+      {formationsInEtablissement.length > 0 && (
+        <>
+          <SectionTitle variant="h5">Dans l&apos;établissement</SectionTitle>
+          <Grid2 container spacing={3}>
+            {formationsInEtablissement.map((detail, index) => {
+              return (
+                <Grid2 xs={12} md={4} key={"formationsFamilleMetier_" + index}>
+                  <FormationFamilleMetierBlock formationDetail={detail} address={address} />
+                </Grid2>
+              );
+            })}
+          </Grid2>
+        </>
+      )}
+
+      {formationsNotInEtablissement.length > 0 && (
+        <>
+          <SectionTitle variant="h5" hasMargin={formationsInEtablissement.length > 0}>
+            Non disponible dans cet établissement
+          </SectionTitle>
+          <Grid2 container spacing={3}>
+            {formationsNotInEtablissement.map((detail, index) => {
+              return (
+                <Grid2 xs={12} md={4} key={"formationsFamilleMetier_" + index}>
+                  <FormationFamilleMetierBlock formationDetail={detail} address={address} />
+                </Grid2>
+              );
+            })}
+          </Grid2>
+        </>
+      )}
+    </Box>
   );
 }
 
@@ -63,52 +189,39 @@ export default function FormationsFamilleMetier({
   withLink = false,
   small = false,
   anneeCommune = false,
+  block = false,
 }: {
   formationDetail: FormationDetail;
-  sx?: SxProps<Theme>;
+  sx?: any;
   withLink?: boolean;
   small?: boolean;
   anneeCommune?: boolean;
+  block?: boolean;
 }) {
+  const title = anneeCommune ? FAMILLE_METIER_TITLE.anneeCommune : FAMILLE_METIER_TITLE.bacPro;
   const formations = useMemo(() => {
     return formationDetail.formationsFamilleMetier?.filter((f) => f.formation.isAnneeCommune === anneeCommune);
   }, [anneeCommune, formationDetail]);
 
   if (!formations || formations.length === 0) {
-    return;
+    return null;
+  }
+
+  if (block) {
+    return (
+      <FormationFamilleMetierBlocks
+        title={title}
+        formationDetail={formationDetail}
+        formations={formations}
+        withLink={withLink}
+      />
+    );
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: fr.colors.decisions.background.alt.blueFrance.default,
-        padding: "1rem 0.75rem",
-        borderRadius: "9px",
-
-        ...sx,
-      }}
-    >
-      <Typography
-        sx={{ fontSize: small ? "0.875rem" : "1rem", fontWeight: 500, paddingBottom: small ? "0.25rem" : "0.5rem" }}
-      >
-        {anneeCommune
-          ? "La 2de commune qui permet d’accéder à ce Bac pro :"
-          : "Les Bac pro accessibles après cette 2de commune :"}
-      </Typography>
-      <ul
-        css={css`
-          margin: 0;
-          & li {
-            font-size: ${small ? "1rem" : "1.125rem"};
-            line-height: ${small ? "1.5rem" : "1.75rem"};
-            padding-bottom: 0;
-          }
-
-          & li:not(:last-child) {
-            margin-bottom: ${small ? "0.25rem" : "0.25rem"};
-          }
-        `}
-      >
+    <FormationContainer small={small} sx={sx}>
+      <FormationTitle2 small={small}>{title}</FormationTitle2>
+      <FormationList small={small}>
         {formations.map((detail, index) => {
           return (
             <FormationFamilleMetier
@@ -118,7 +231,7 @@ export default function FormationsFamilleMetier({
             />
           );
         })}
-      </ul>
-    </Box>
+      </FormationList>
+    </FormationContainer>
   );
 }

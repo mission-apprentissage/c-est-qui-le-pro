@@ -1,5 +1,6 @@
 import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import { useSearchParams } from "next/navigation";
+import { FormationsSearchParams } from "../context/FormationsSearchContext";
 
 export function formationDetailToKey(formationDetail: FormationDetail | FormationFamilleMetierDetail) {
   if (!formationDetail || !formationDetail.etablissement) {
@@ -35,4 +36,15 @@ export const useFormationLink = ({
   });
 
   return `/details/${key}?${parameters}`;
+};
+
+export const useSearchFormationLink = ({
+  formation,
+  address,
+}: Pick<FormationsSearchParams, "formation" | "address">) => {
+  const parameters = new URLSearchParams({
+    ...(formation ? { formation } : {}),
+    ...(address ? { address } : {}),
+  });
+  return `/recherche?${parameters}`;
 };

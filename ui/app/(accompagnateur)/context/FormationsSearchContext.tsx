@@ -7,7 +7,7 @@ import { createContext, useContext, useCallback, useEffect } from "react";
 import { omit } from "lodash-es";
 import { usePlausible } from "next-plausible";
 
-type FormationsSearchParams = {
+export type FormationsSearchParams = {
   address: string;
   tag?: FormationTag[];
   domaines?: FormationDomaine[];
