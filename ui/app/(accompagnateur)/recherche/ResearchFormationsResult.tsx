@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useCallback, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { useInView } from "react-intersection-observer";
 import { Typography, Grid, Grid2 } from "../../components/MaterialUINext";
@@ -18,6 +18,7 @@ import { useFormationsSearch } from "../context/FormationsSearchContext";
 import { isNil, omit } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
+import { fetchReverse } from "#/app/services/address";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
 });
@@ -82,13 +83,123 @@ const FormationResult = React.memo(
 );
 FormationResult.displayName = "FormationResult";
 
-export default function ResearchFormationsResult({
+const FormationResults = React.memo(
+  ({
+    formationsRef,
+    formations,
+    location,
+    setSelected,
+    selected,
+    pagination,
+  }: {
+    formationsRef: React.RefObject<HTMLDivElement>[];
+    formations: FormationDetail[];
+    location: UserLocation;
+    setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
+    selected: null | FormationDetail;
+    pagination:
+      | ({
+          page: number;
+          items_par_page: number;
+          nombre_de_page: number;
+          total: number;
+        } & {
+          totalIsochrone: number;
+        })
+      | null;
+  }) => {
+    const formationsIsochrone = useMemo(
+      () => formations.filter((f) => !isNil(f.etablissement.accessTime)),
+      [formations]
+    );
+    const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
+
+    const totalIsochrone = useMemo(() => pagination?.totalIsochrone || 0, [pagination]);
+    const totalCar = useMemo(
+      () => (pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0),
+      [pagination]
+    );
+
+    return (
+      <>
+        <Grid container rowSpacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
+            </Typography>
+          </Grid>
+
+          {formationsIsochrone.map((formationDetail, index) => {
+            const { formation, formationEtablissement, etablissement } = formationDetail;
+            const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+            return (
+              <FormationResult
+                key={key}
+                latitude={location.latitude}
+                longitude={location.longitude}
+                formationRef={formationsRef[index]}
+                setSelected={setSelected}
+                isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                formationDetail={formationDetail}
+                index={index}
+              />
+            );
+          })}
+        </Grid>
+
+        {formationsCar.length > 0 && (
+          <Grid container spacing={2} style={{ marginTop: "2rem" }}>
+            <Grid item xs={12}>
+              <Typography variant="h6">
+                Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
+              </Typography>
+            </Grid>
+
+            {formationsCar.map((formationDetail, index) => {
+              const mainIndex = formationsIsochrone.length + index;
+              const { formation, formationEtablissement, etablissement } = formationDetail;
+              const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
+
+              return (
+                <FormationResult
+                  key={key}
+                  latitude={location.latitude}
+                  longitude={location.longitude}
+                  formationRef={formationsRef[mainIndex]}
+                  setSelected={setSelected}
+                  isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
+                  formationDetail={formationDetail}
+                  index={mainIndex}
+                />
+              );
+            })}
+          </Grid>
+        )}
+      </>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Ignore location, we want to refresh only if the formations changed
+    return (
+      prevProps.formations === nextProps.formations &&
+      prevProps.formationsRef === nextProps.formationsRef &&
+      prevProps.pagination === nextProps.pagination &&
+      prevProps.selected === nextProps.selected &&
+      prevProps.setSelected === nextProps.setSelected
+    );
+  }
+);
+FormationResults.displayName = "FormationResults";
+
+export default React.memo(function ResearchFormationsResult({
   location,
   tag,
   domaines,
   formation,
   voie,
   page = 1,
+  isAddressFetching,
 }: {
   location: UserLocation;
   tag?: FormationTag | null;
@@ -96,22 +207,30 @@ export default function ResearchFormationsResult({
   formation?: string | null;
   voie?: FormationVoie[];
   page: number;
+  isAddressFetching?: boolean;
 }) {
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const [selected, setSelected] = useState<null | FormationDetail>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+  const [latLng, setLatLng] = useState<number[] | null>(null);
+  const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
+  const { params, updateParams } = useFormationsSearch();
+
   const { ref: refInView, inView } = useInView();
 
-  const { isLoading, fetchNextPage, isFetchingNextPage, formations, etablissements, pagination } = useGetFormations({
-    latitude: location.latitude,
-    longitude: location.longitude,
-    tag,
-    page,
-    domaines,
-    voie,
-    postcode: location.postcode,
-    formation,
-  });
+  const { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, pagination } =
+    useGetFormations({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      tag,
+      page,
+      domaines,
+      voie,
+      postcode: location.postcode,
+      formation,
+    });
+  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
   React.useEffect(() => {
     if (inView) {
@@ -119,12 +238,38 @@ export default function ResearchFormationsResult({
     }
   }, [fetchNextPage, inView]);
 
-  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
-  const formationsIsochrone = useMemo(() => formations.filter((f) => !isNil(f.etablissement.accessTime)), [formations]);
-  const formationsCar = useMemo(() => formations.filter((f) => isNil(f.etablissement.accessTime)), [formations]);
+  useEffect(() => {
+    if (!latLng) {
+      return;
+    }
 
-  const totalIsochrone = useMemo(() => pagination?.totalIsochrone || 0, [pagination]);
-  const totalCar = useMemo(() => (pagination ? pagination.total - (pagination.totalIsochrone || 0) : 0), [pagination]);
+    setIsNewAddressLoading(true);
+    (async () => {
+      try {
+        const result = await fetchReverse(latLng[0], latLng[1]);
+        if (result?.features?.length > 0) {
+          const address = result.features[0].properties.label;
+          updateParams({ ...params, address: address });
+        } else {
+          setLatLng(null);
+          setIsNewAddressLoading(false);
+        }
+      } catch (err) {}
+      // TODO: erreur quand pas d'adresse trouvée
+    })();
+  }, [params, latLng]);
+
+  useEffect(() => {
+    if (!isAddressFetching) {
+      setIsNewAddressLoading(false);
+      setLatLng(null);
+
+      var eltPosition = resultRef.current?.getBoundingClientRect();
+      if (eltPosition?.y !== undefined && eltPosition?.y < 0) {
+        resultRef.current?.scrollIntoView();
+      }
+    }
+  }, [isAddressFetching]);
 
   if (isLoading) {
     return (
@@ -148,7 +293,7 @@ export default function ResearchFormationsResult({
         <ClientSideScrollRestorer />
       </Suspense>
 
-      <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"}>
+      <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"} ref={resultRef}>
         <Grid2
           md={8}
           lg={8}
@@ -167,6 +312,7 @@ export default function ResearchFormationsResult({
             }
           `}
         >
+          {(isNewAddressLoading || isFetching || isAddressFetching) && <Loader withMargin />}
           <Stack direction="row" useFlexGap flexWrap="wrap" spacing={2} style={{ marginBottom: "2rem" }}>
             <FormationsFilterTag selected={tag} />
           </Stack>
@@ -197,62 +343,14 @@ export default function ResearchFormationsResult({
               <Typography>Bonne recherche !</Typography>
             </InformationCard>
           ) : (
-            <>
-              <Grid container rowSpacing={2}>
-                <Grid item xs={12}>
-                  <Typography variant="h6">
-                    À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
-                  </Typography>
-                </Grid>
-
-                {formationsIsochrone.map((formationDetail, index) => {
-                  const { formation, formationEtablissement, etablissement } = formationDetail;
-                  const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
-
-                  return (
-                    <FormationResult
-                      key={key}
-                      latitude={location.latitude}
-                      longitude={location.longitude}
-                      formationRef={formationsRef[index]}
-                      setSelected={setSelected}
-                      isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
-                      formationDetail={formationDetail}
-                      index={index}
-                    />
-                  );
-                })}
-              </Grid>
-
-              {formationsCar.length > 0 && (
-                <Grid container spacing={2} style={{ marginTop: "2rem" }}>
-                  <Grid item xs={12}>
-                    <Typography variant="h6">
-                      Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
-                    </Typography>
-                  </Grid>
-
-                  {formationsCar.map((formationDetail, index) => {
-                    const mainIndex = formationsIsochrone.length + index;
-                    const { formation, formationEtablissement, etablissement } = formationDetail;
-                    const key = `${formation.cfd}-${formation.codeDispositif}-${etablissement.uai}-${formation.voie}`;
-
-                    return (
-                      <FormationResult
-                        key={key}
-                        latitude={location.latitude}
-                        longitude={location.longitude}
-                        formationRef={formationsRef[mainIndex]}
-                        setSelected={setSelected}
-                        isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
-                        formationDetail={formationDetail}
-                        index={mainIndex}
-                      />
-                    );
-                  })}
-                </Grid>
-              )}
-            </>
+            <FormationResults
+              formations={formations}
+              formationsRef={formationsRef}
+              location={location}
+              pagination={pagination}
+              selected={selected}
+              setSelected={setSelected}
+            />
           )}
         </Grid2>
 
@@ -274,9 +372,12 @@ export default function ResearchFormationsResult({
           {!isDownSm && (
             <FormationsMap
               selected={selected}
-              longitude={location.longitude}
-              latitude={location.latitude}
+              longitude={(latLng && latLng[1]) || location.longitude}
+              latitude={(latLng && latLng[0]) || location.latitude}
               etablissements={etablissements}
+              onMarkerHomeDrag={(lat, lng) => {
+                setLatLng([lat, lng]);
+              }}
               onMarkerClick={(etablissement) => {
                 const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
                 if (formationIndex === -1) {
@@ -296,4 +397,4 @@ export default function ResearchFormationsResult({
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
     </>
   );
-}
+});

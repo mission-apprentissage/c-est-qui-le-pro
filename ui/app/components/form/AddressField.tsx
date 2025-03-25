@@ -9,6 +9,7 @@ import { useThrottle } from "@uidotdev/usehooks";
 import Popper, { PopperProps } from "@mui/material/Popper";
 import { fr } from "@codegouvfr/react-dsfr";
 import Link from "../Link";
+import { useGetAddress } from "#/app/(accompagnateur)/hooks/useGetAddress";
 
 export const myPosition = "Autour de moi";
 
@@ -116,33 +117,23 @@ export default function AddressField({
 
   const valueDebounce = useThrottle(value, 300);
 
-  const { isLoading, data: options } = useQuery({
-    keepPreviousData: true,
-    // TODO : type
-    placeholderData: (previousData: any) => {
-      return previousData;
-    },
-    queryKey: ["address", valueDebounce],
-    queryFn: async () => {
-      if (!valueDebounce || valueDebounce === myPosition) {
+  const { isLoading, data: options } = useGetAddress(valueDebounce, {
+    select: (data: Awaited<ReturnType<typeof fetchAddress>>) => {
+      if (!data) {
         return [myPosition, ...(defaultValues ?? [])];
       }
 
-      const result = await fetchAddress(valueDebounce);
-      return result
-        ? [
-            myPosition,
-            ...result.features.map((f: any) => {
-              const label =
-                f.properties.type === "municipality"
-                  ? f.properties.label + " (" + f.properties.postcode + ")"
-                  : f.properties.label;
-              return label;
-            }),
-          ]
-        : [myPosition, ...(defaultValues ?? [])];
+      return [
+        myPosition,
+        ...data.features.map((f: any) => {
+          const label =
+            f.properties.type === "municipality"
+              ? f.properties.label + " (" + f.properties.postcode + ")"
+              : f.properties.label;
+          return label;
+        }),
+      ];
     },
-    cacheTime: Infinity,
   });
 
   return (

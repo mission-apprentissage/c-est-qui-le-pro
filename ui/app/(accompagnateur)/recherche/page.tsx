@@ -1,7 +1,7 @@
 "use client";
 import ResearchFormationsResult from "./ResearchFormationsResult";
 import { fetchAddress } from "#/app/services/address";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import FormationsSearchProvider, { useFormationsSearch } from "../context/FormationsSearchContext";
 import SearchHeader from "../components/SearchHeader";
@@ -15,11 +15,17 @@ import { FormationDomaine } from "shared";
 import { myPosition } from "#/app/components/form/AddressField";
 import { useRouter } from "next/navigation";
 import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
+import { useGetAddress } from "../hooks/useGetAddress";
 
 function ResearchFormationsParameter() {
   const router = useRouter();
   const { params, updateParams } = useFormationsSearch();
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const { address, tag, domaines, formation, voie } = params ?? {};
+
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
 
   useEffect(() => {
     if (!address) {
@@ -27,17 +33,8 @@ function ResearchFormationsParameter() {
     }
   }, [address]);
 
-  const { data, isLoading, error } = useQuery({
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    retry: 0,
-    queryKey: ["coordinate", address],
-    queryFn: async ({ signal }) => {
-      if (!address) {
-        return null;
-      }
-
-      const addressCoordinate = await fetchAddress(address);
+  const { data, isLoading, isFetching, error } = useGetAddress(address, {
+    select: (addressCoordinate: Awaited<ReturnType<typeof fetchAddress>>) => {
       if (!addressCoordinate?.features) {
         // TODO: manage address fetch error
         throw new ErrorAddressInvalid();
@@ -108,6 +105,7 @@ function ResearchFormationsParameter() {
           formation={formation}
           voie={voie}
           page={1}
+          isAddressFetching={isFetching}
         />
       )}
     </>
@@ -119,8 +117,8 @@ export default function Page() {
     <div>
       <Title pageTitle="Recherche de formations" />
       <Suspense>
-        <SearchHeader />
         <FormationsSearchProvider>
+          <SearchHeader />
           <ResearchFormationsParameter />
         </FormationsSearchProvider>
       </Suspense>

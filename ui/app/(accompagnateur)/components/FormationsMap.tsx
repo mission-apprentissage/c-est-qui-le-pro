@@ -1,17 +1,18 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import {
   LeafletHomeIcon,
   LeafletEtablissementIcon,
   LeafletSelectedEtablissementIcon,
   FitBound,
+  MapClickHandler,
 } from "#/app/components/Map";
 import { Etablissement, FormationDetail } from "shared";
 import { FeatureGroup, Marker } from "react-leaflet";
 import EtablissementCard from "./EtablissementCard";
 import DynamicPopup from "./DynamicPopup";
-import L from "leaflet";
+import L, { LeafletMouseEvent } from "leaflet";
 
 const Map = dynamic(() => import("#/app/components/Map"), { ssr: false });
 
@@ -21,14 +22,38 @@ export default function FormationsMap({
   etablissements,
   selected,
   onMarkerClick,
+  onMarkerHomeDrag,
 }: {
   latitude: number;
   longitude: number;
   etablissements: any[];
   selected?: FormationDetail | null;
   onMarkerClick?: (etablissement: Etablissement) => void;
+  onMarkerHomeDrag?: (lat: number, lng: number) => void;
 }) {
   const groupRef = useRef<L.FeatureGroup>(null);
+  const markerRef = useRef<L.Marker>(null);
+
+  const homeMarkerEventHandlers = useMemo(
+    () => ({
+      dragend() {
+        const marker = markerRef.current;
+        if (marker != null) {
+          const latLng = marker.getLatLng();
+          onMarkerHomeDrag && onMarkerHomeDrag(latLng.lat, latLng.lng);
+        }
+      },
+      click: () => {}, // Prevent marker move when clicking on it
+    }),
+    []
+  );
+
+  const handleMapClick = useCallback(
+    (e: LeafletMouseEvent) => {
+      onMarkerHomeDrag && onMarkerHomeDrag(e.latlng.lat, e.latlng.lng);
+    },
+    [onMarkerHomeDrag]
+  );
 
   return (
     <Map center={[latitude, longitude]}>
@@ -75,7 +100,15 @@ export default function FormationsMap({
           );
         })}
 
-        <Marker icon={LeafletHomeIcon} zIndexOffset={10000} position={[latitude, longitude]}>
+        <Marker
+          ref={markerRef}
+          eventHandlers={homeMarkerEventHandlers}
+          icon={LeafletHomeIcon}
+          zIndexOffset={100000}
+          position={[latitude, longitude]}
+          draggable={true}
+          bubblingMouseEvents={false}
+        >
           {/* <Tooltip>
           <Typography variant="subtitle1">Ma position</Typography>
         </Tooltip> */}
@@ -83,6 +116,8 @@ export default function FormationsMap({
       </FeatureGroup>
 
       {etablissements.length && <FitBound key={etablissements.length} groupRef={groupRef} />}
+
+      <MapClickHandler onClick={handleMapClick} />
     </Map>
   );
 }

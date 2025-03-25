@@ -90,3 +90,40 @@ form[target=_blank]::after {
     left: -3rem;
     top: inherit;
 }
+
+
+
+.leaftlet-home-icon svg .home-icon-outline {
+    stroke: rgb(35, 35, 255);;
+    stroke-width: 2;
+    stroke-opacity: 0;
+    transition: stroke-opacity 0.3s ease;
+
+}
+
+.leaftlet-home-icon:hover svg .home-icon-outline {
+    stroke-opacity: 1;
+}
+
+.leaftlet-home-icon:hover {
+    cursor: move;
+}
+
+.leaftlet-home-icon::before {
+    content: "Maison";
+    position: absolute;
+    width: max-content;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px); 
+    color: black;
+    background: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+.leaftlet-home-icon:hover::before {
+    content: "Déplacer";
+}
