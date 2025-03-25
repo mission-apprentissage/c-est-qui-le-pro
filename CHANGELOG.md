@@ -1,3 +1,11 @@
+# [1.29.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.28.0...v1.29.0) (2025-03-25)
+
+
+### Features
+
+* drag and drop sur la carte ([#48](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/48)) ([cd25436](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/cd25436a46ecae9bc3ed55b4fe3efbe19d674c5a))
+* filtres alternance/scolaire ([#47](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/47)) ([739eaf0](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/739eaf0b49796f66ffa04f195e02a2916940bb05))
+
 # [1.28.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.27.0...v1.28.0) (2025-03-20)
 
 
