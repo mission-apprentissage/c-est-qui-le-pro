@@ -1,3 +1,10 @@
+# [1.32.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.31.0...v1.32.0) (2025-03-25)
+
+
+### Features
+
+* affichage de la ville dans les formations similaires ([#50](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/50)) ([b3071bc](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/b3071bc8c05741c3d8c36227dc62561953cc2f21))
+
 # [1.31.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.30.0...v1.31.0) (2025-03-25)
 
 
