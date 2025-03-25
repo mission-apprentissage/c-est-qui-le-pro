@@ -3,6 +3,7 @@ import { DsfrProvider } from "@codegouvfr/react-dsfr/next-appdir/DsfrProvider";
 import MuiDsfrThemeProvider from "#/app/components/MuiDsfrThemeProvider";
 import { Header } from "@codegouvfr/react-dsfr/Header";
 import Providers from "#/app/provider";
+import { JSX } from "react";
 
 export default function Layout({
   title,

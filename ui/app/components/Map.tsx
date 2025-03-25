@@ -117,7 +117,7 @@ export const MapClickHandler = ({ onClick }: { onClick: (e: LeafletMouseEvent) =
   return null;
 };
 
-export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup> }) {
+export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup | null> }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const map = useMapEvent("layeradd", () => {

@@ -2,7 +2,7 @@
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import { useOnClickOutside } from "usehooks-ts";
 import { Box } from "../MaterialUINext";
-import { useCallback, useId, useRef, useState } from "react";
+import { JSX, RefObject, useCallback, useId, useRef, useState } from "react";
 import Button from "../Button";
 import {
   ActionBar,
@@ -105,13 +105,13 @@ function MultiSelectContainer({
   description,
 }: MultiSelectContainerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = useRef(null);
+  const ref = useRef<HTMLElement>(null);
   const apply = () => {
     setIsOpen(false);
     originalApply();
   };
 
-  useOnClickOutside(ref, () => {
+  useOnClickOutside(ref as RefObject<HTMLElement>, () => {
     isOpen && apply();
   });
 

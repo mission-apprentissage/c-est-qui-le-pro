@@ -1,6 +1,7 @@
 import "server-only";
 import { NotionAPI } from "notion-client";
 import { ExtendedRecordMap } from "notion-types";
+import { JSX } from "react";
 
 export const revalidate = 60;
 

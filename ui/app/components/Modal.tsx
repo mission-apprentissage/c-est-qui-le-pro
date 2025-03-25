@@ -1,5 +1,5 @@
 // We recreate the component to fix a bug with sticky header
-import React, { memo, forwardRef, type CSSProperties, type ReactNode } from "react";
+import React, { memo, forwardRef, type CSSProperties, type ReactNode, JSX } from "react";
 import { assert } from "tsafe/assert";
 import { symToStr } from "tsafe/symToStr";
 import type { Equals } from "tsafe";

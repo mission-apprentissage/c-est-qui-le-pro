@@ -32,7 +32,7 @@ const FormationResult = React.memo(
     setSelected,
     index,
   }: {
-    formationRef: React.RefObject<HTMLDivElement>;
+    formationRef: React.RefObject<HTMLDivElement | null>;
     formationDetail: FormationDetail;
     latitude: number;
     longitude: number;
@@ -71,7 +71,7 @@ const FormationResults = React.memo(
     selected,
     pagination,
   }: {
-    formationsRef: React.RefObject<HTMLDivElement>[];
+    formationsRef: React.RefObject<HTMLDivElement | null>[];
     formations: FormationDetail[];
     location: UserLocation;
     setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;

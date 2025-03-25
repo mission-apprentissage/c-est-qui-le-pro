@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { useCallback, useEffect, useState } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import { Typography, Grid, Stack, Box, BoxContainer } from "#/app/components/MaterialUINext";
 import { FrCxArg, fr } from "@codegouvfr/react-dsfr";
 import { Formation, FormationDetail, FormationEtablissement, THRESHOLD_TAUX_PRESSION } from "shared";

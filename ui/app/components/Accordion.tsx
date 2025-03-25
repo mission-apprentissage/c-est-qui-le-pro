@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { JSX, useState } from "react";
 import styled from "@emotion/styled";
 import { Collapse, Grid } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";

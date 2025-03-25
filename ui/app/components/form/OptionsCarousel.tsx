@@ -122,7 +122,9 @@ export default function OptionsCarousel<T>({
 
           return (
             <Box
-              ref={(el) => (refOptions.current[index] = el as HTMLDivElement)}
+              ref={(el) => {
+                refOptions.current[index] = el as HTMLDivElement;
+              }}
               key={option.option}
               style={{ flexShrink: "0" }}
             >
@@ -156,18 +158,19 @@ export default function OptionsCarousel<T>({
                     (currentContainer.offsetWidth + currentContainer.scrollLeft);
 
                   const leftSide = currentRef.offsetLeft - currentContainer.scrollLeft;
+                  const scrollLeft = refContainer.current?.scrollLeft || 0;
 
                   if (rightSide > -50) {
                     if (currentRef.offsetWidth > currentContainer.offsetWidth - 50) {
                       // Mobile
-                      scrollList(refContainer.current.scrollLeft + leftSide - 50);
+                      scrollList(scrollLeft + leftSide - 50);
                     } else {
-                      scrollList(refContainer.current.scrollLeft + rightSide);
+                      scrollList(scrollLeft + rightSide);
                     }
                   }
 
                   if (leftSide < 50) {
-                    scrollList(refContainer.current.scrollLeft + leftSide - 50);
+                    scrollList(scrollLeft + leftSide - 50);
                   }
                   onClick && onClick(option.value);
                 }}

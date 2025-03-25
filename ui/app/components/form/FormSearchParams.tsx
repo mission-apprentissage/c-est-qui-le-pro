@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FieldValues } from "react-hook-form";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
-import { RefObject, Suspense, useRef } from "react";
+import { JSX, RefObject, Suspense, useRef } from "react";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
@@ -21,7 +21,7 @@ type FormSearchParamsProps<FormData extends FieldValues> = {
   }: {
     control: Control<FormData, any>;
     errors: FieldErrors<FormData>;
-    formRef: RefObject<HTMLFormElement>;
+    formRef: RefObject<HTMLFormElement | null>;
     register: UseFormRegister<FormData>;
     setValue: UseFormSetValue<FormData>;
   }) => JSX.Element;

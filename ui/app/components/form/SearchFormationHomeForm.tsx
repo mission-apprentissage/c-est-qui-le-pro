@@ -40,7 +40,7 @@ function SearchFormationHomeFormElements({
 }: {
   control: Control<Nullable<SearchFormationFormData>, any>;
   errors: FieldErrors<Nullable<SearchFormationFormData>>;
-  formRef: RefObject<HTMLFormElement>;
+  formRef: RefObject<HTMLFormElement | null>;
   setValue: UseFormSetValue<Nullable<SearchFormationFormData>>;
   withFormation: boolean;
   isDownSm: boolean;
