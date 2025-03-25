@@ -3,6 +3,7 @@ import Header, { HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { css } from "@emotion/css";
 import { fr } from "@codegouvfr/react-dsfr";
+import { JSX } from "react";
 
 export default function CustomHeader({
   title,

@@ -6,6 +6,7 @@ import ContractSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document
 import AvatarSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/avatar.svg";
 import { CompaniePictogramme } from "../components/icon/CompaniePictogramme";
 import Tag from "../components/Tag";
+import { JSX } from "react";
 
 export const LIBELLE_PRESSION = {
   easy: "Favorable (taux de pression faible)",

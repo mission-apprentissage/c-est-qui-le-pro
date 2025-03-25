@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { Suspense } from "react";
+import { JSX, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { formation } from "#/app/queries/formation/query";
 import Loader from "#/app/components/Loader";

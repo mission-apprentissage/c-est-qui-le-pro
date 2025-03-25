@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Box, Container, Typography } from "./MaterialUINext";
 import { isNil } from "lodash-es";
 import { CardActionArea, CardActionAreaProps, CardProps as MUICardProps } from "@mui/material";
+import { JSX } from "react";
 
 export type CardProps = Omit<MUICardProps, "title"> & {
   title?: string | JSX.Element | null;

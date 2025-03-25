@@ -2,7 +2,7 @@
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import { useOnClickOutside } from "usehooks-ts";
 import { Box } from "../MaterialUINext";
-import { RefObject, useCallback, useId, useRef, useState } from "react";
+import { JSX, RefObject, useCallback, useId, useRef, useState } from "react";
 import Button from "../Button";
 import {
   ActionBar,
