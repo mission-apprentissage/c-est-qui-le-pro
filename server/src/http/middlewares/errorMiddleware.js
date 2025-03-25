@@ -1,4 +1,4 @@
-import Boom from "boom";
+import Boom from "@hapi/boom";
 
 function boomify(rawError) {
   let error;
