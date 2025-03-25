@@ -21,7 +21,7 @@ type FormSearchParamsProps<FormData extends FieldValues> = {
   }: {
     control: Control<FormData, any>;
     errors: FieldErrors<FormData>;
-    formRef: RefObject<HTMLFormElement>;
+    formRef: RefObject<HTMLFormElement | null>;
     register: UseFormRegister<FormData>;
     setValue: UseFormSetValue<FormData>;
   }) => JSX.Element;

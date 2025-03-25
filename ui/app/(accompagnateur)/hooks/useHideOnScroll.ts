@@ -1,7 +1,7 @@
 import { useWindowScroll } from "@uidotdev/usehooks";
 import { useEffect, useState } from "react";
 
-export const useHideOnScroll = (ref: React.RefObject<HTMLElement>, offset: number) => {
+export const useHideOnScroll = (ref: React.RefObject<HTMLElement | null>, offset: number) => {
   const [hide, setHide] = useState(true);
   const [scrollPosition] = useWindowScroll();
 
