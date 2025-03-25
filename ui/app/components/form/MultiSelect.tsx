@@ -18,6 +18,7 @@ import {
   ClearButtonText,
   DescriptionContainer,
   DescriptionContainerMobile,
+  StyledOptionLabel,
 } from "./MultiSelect.styled";
 
 type OptionProps = {
@@ -28,6 +29,7 @@ type OptionProps = {
   checked: boolean;
   name: string;
   withSeparator?: boolean;
+  paddingText?: string;
 };
 
 type MultiSelectCommonProps = {
@@ -64,6 +66,7 @@ function Option({
   name,
   onChange,
   withSeparator = true,
+  paddingText,
 }: OptionProps & { onChange: (checked: boolean) => void }) {
   const id = useId();
 
@@ -77,9 +80,9 @@ function Option({
       }}
     >
       <input onChange={() => {}} type="checkbox" checked={checked} id={`checkbox-${id}`} name={name} value={value} />
-      <label htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
+      <StyledOptionLabel paddingText={paddingText} htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
-      </label>
+      </StyledOptionLabel>
       <IconContainer withSeparator={withSeparator} hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
         {icon && <i className={fr.cx(icon, "fr-icon--lg")}></i>}
         {Pictogramme && <Pictogramme />}

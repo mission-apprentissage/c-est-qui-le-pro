@@ -3,6 +3,12 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { Box, Typography } from "../MaterialUINext";
 import styled from "@emotion/styled";
 
+export const StyledOptionLabel = styled("label", {
+  shouldForwardProp: (prop) => !["paddingText"].includes(prop as string),
+})<{ paddingText?: string }>`
+  ${({ paddingText }) => `padding: ${paddingText} 0;`}
+`;
+
 export const StyledOptionBox = styled(Box, {
   shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme"].includes(prop as string),
 })<{ checked: boolean; hasPictogramme: boolean }>`

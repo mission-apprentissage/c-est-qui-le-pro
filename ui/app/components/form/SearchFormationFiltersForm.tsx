@@ -248,6 +248,7 @@ function FilterTag({
                 option: capitalize(libelle),
                 pictogramme: pictogramme,
                 value: tag || "",
+                paddingText: "1rem",
               }))}
             />
           );
