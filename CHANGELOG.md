@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.29.0...v1.30.0) (2025-03-25)
+
+
+### Features
+
+* filtre par diplomes ([#46](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/46)) ([9e0b5b2](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/9e0b5b24f9da966bfb809dad2763a3f4a01e7b10))
+
 # [1.29.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.28.0...v1.29.0) (2025-03-25)
 
 
