@@ -1,7 +1,7 @@
 import express from "express";
 import { tryCatch } from "#src/http/middlewares/tryCatchMiddleware.js";
 import Joi from "joi";
-import Boom from "boom";
+import Boom from "@hapi/boom";
 import * as validators from "#src/http/utils/validators.js";
 import { validate } from "#src/http/utils/validators.js";
 import { addJsonHeaders } from "#src/http/utils/responseUtils.js";
