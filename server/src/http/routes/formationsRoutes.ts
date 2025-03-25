@@ -75,6 +75,7 @@ export default () => {
         uais,
         cfds,
         domaines,
+        voie,
         academie,
         formation,
         page,
@@ -93,6 +94,7 @@ export default () => {
           ...validators.uais(),
           ...validators.cfds(),
           ...validators.domaines(),
+          ...validators.voie(),
           academie: Joi.string().empty("").default(null),
           formation: Joi.string().empty("").default(null),
           ...validators.pagination({ items_par_page: 100 }),
@@ -105,7 +107,7 @@ export default () => {
       const results = await getFormationsSQL(
         {
           filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
-          filtersFormation: { cfds, domaines },
+          filtersFormation: { cfds, domaines, voie },
           tag,
           millesime,
           formation: cleanString(formation),

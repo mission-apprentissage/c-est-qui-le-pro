@@ -39,21 +39,10 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
         .leftJoinLateral(
           (eb) =>
             eb
-              .selectFrom("formationDomaine")
-              .innerJoin("domaine", "domaine.id", "formationDomaine.domaineId")
-              .select((eb) => {
-                return [
-                  kyselyChainFn(
-                    eb,
-                    [
-                      { fn: "to_jsonb", args: [] },
-                      { fn: "json_agg", args: [] },
-                    ],
-                    sql`domaine.*`
-                  ).as("domaine"),
-                ];
-              })
-              .whereRef("formation.id", "=", "formationDomaine.formationId")
+              .selectFrom("formationDomainesView")
+              .select("domaine")
+              .whereRef("formation.id", "=", "formationDomainesView.formationId")
+              .limit(1)
               .as("domaine"),
           (join) => join.on(sql`true`)
         )

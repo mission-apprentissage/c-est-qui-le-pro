@@ -4,12 +4,12 @@ import { Box, Typography } from "../MaterialUINext";
 import styled from "@emotion/styled";
 
 export const StyledOptionBox = styled(Box, {
-  shouldForwardProp: (prop) => !["hasIcon"].includes(prop as string),
-})<{ checked: boolean }>`
+  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme"].includes(prop as string),
+})<{ checked: boolean; hasPictogramme: boolean }>`
   border: 1px solid var(--border-default-grey);
   display: flex;
   flex-direction: row;
-  padding-right: 1.5rem;
+  padding-right: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
   padding-left: 3rem;
   align-items: center;
   margin-bottom: 0.5rem;
@@ -21,14 +21,23 @@ export const StyledOptionBox = styled(Box, {
   &:hover {
     background-color: var(--grey-1000-50-hover);
   }
+
+  & input[type="checkbox"] + label {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  & input[type="checkbox"] + label::before {
+    left: -2rem;
+  }
 `;
 
 export const IconContainer = styled(Box, {
-  shouldForwardProp: (prop) => !["hasIcon"].includes(prop as string),
-})<{ hasIcon: boolean }>`
+  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme"].includes(prop as string),
+})<{ hasIcon: boolean; hasPictogramme: boolean }>`
   margin-left: auto;
-  padding: 1rem;
-  padding-left: 1.5rem;
+  padding: ${({ hasPictogramme }) => (hasPictogramme ? "0.5rem" : "1rem")};
+  padding-left: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
   padding-right: 0rem;
   position: relative;
   &:before {
@@ -38,7 +47,7 @@ export const IconContainer = styled(Box, {
     bottom: 5%;
     height: 90%;
     width: 1px;
-    ${({ hasIcon }) => hasIcon && "border-left: 1px solid #dddddd;"}
+    ${({ hasIcon, hasPictogramme }) => (hasIcon || hasPictogramme) && "border-left: 1px solid #dddddd;"}
   }
 `;
 
@@ -83,18 +92,22 @@ export const DropdownMenu = styled(Box, {
   shouldForwardProp: (prop) => !["isOpen"].includes(prop as string),
 })<{ isOpen: boolean }>`
   box-shadow: 0px 6px 18px rgba(0, 0, 18, 0.16);
-  width: 412px;
+  width: 428px;
   position: absolute;
   z-index: 999;
   background-color: #ffffff;
   display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-  padding: 2rem;
 `;
 
-export const OptionsContainer = styled(Box)<{ maxHeight?: string }>`
+export const OptionsContainer = styled(Box, {
+  shouldForwardProp: (prop) => !["hasDescription"].includes(prop as string),
+})<{ maxHeight?: string; hasDescription: boolean }>`
   ${({ maxHeight }) => maxHeight && `height: ${maxHeight}; overflow-y: scroll;`}
 
-  & input[type=checkbox] + label::before {
+  padding: 2rem;
+  ${({ hasDescription }) => (hasDescription ? "padding-top: 1rem;" : "")}
+
+  & input[type="checkbox"] + label::before {
     width: 1.2rem;
     height: 1.2rem;
   }
@@ -106,7 +119,7 @@ export const ActionBar = styled(Box)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-top: 2rem;
+  padding: 2rem;
 `;
 
 export const ClearButtonText = styled(Typography)`
@@ -120,4 +133,13 @@ export const MobileContainer = styled(Box)`
 export const ShowMoreText = styled(Typography)`
   margin-top: 1rem;
   color: var(--text-title-grey);
+`;
+
+export const DescriptionContainer = styled(Box)`
+  margin: 0rem 2rem;
+  margin-top: 2rem;
+`;
+
+export const DescriptionContainerMobile = styled(Box)`
+  margin: 1rem 0rem;
 `;

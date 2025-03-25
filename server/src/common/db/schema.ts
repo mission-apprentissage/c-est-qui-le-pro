@@ -69,6 +69,11 @@ export interface EtablissementJPODate {
   updatedAt: Generated<Timestamp>;
 }
 
+export interface EtablissementJPODatesView {
+  etablissementId: string | null;
+  JPODates: Json | null;
+}
+
 export interface FamilleMetier {
   code: string;
   createdAt: Generated<Timestamp>;
@@ -102,6 +107,11 @@ export interface FormationDomaine {
   domaineId: string;
   formationId: string;
   updatedAt: Generated<Timestamp>;
+}
+
+export interface FormationDomainesView {
+  domaine: Json | null;
+  formationId: string | null;
 }
 
 export interface FormationEtablissement {
@@ -304,9 +314,11 @@ export interface DB {
   etablissement: Etablissement;
   etablissementIsochrone: EtablissementIsochrone;
   etablissementJPODate: EtablissementJPODate;
+  etablissementJPODatesView: EtablissementJPODatesView;
   familleMetier: FamilleMetier;
   formation: Formation;
   formationDomaine: FormationDomaine;
+  formationDomainesView: FormationDomainesView;
   formationEtablissement: FormationEtablissement;
   formationFamilleMetierView: FormationFamilleMetierView;
   formationPoursuite: FormationPoursuite;
