@@ -1,17 +1,9 @@
-"use client";
-
-import { Grid } from "#/app/components/MaterialUINext";
-import { Controller } from "react-hook-form";
 import * as yup from "yup";
-import { Nullable } from "#/app/utils/types";
-import FormSearchParams from "./FormSearchParams";
-import AddressField from "./AddressField";
-import Button from "../Button";
 
 export type SearchFormationFormData = {
   address: string;
   formation?: string | null;
-  tag?: string;
+  tag?: string[];
   domaines?: string[];
   voie?: string[];
   diplome?: string[];
@@ -20,46 +12,10 @@ export type SearchFormationFormData = {
 export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
   .object({
     address: yup.string().required(),
-    tag: yup.string(),
+    tag: yup.array().of(yup.string().required()),
     domaines: yup.array().of(yup.string().required()),
     voie: yup.array().of(yup.string().required()),
     diplome: yup.array().of(yup.string().required()),
     formation: yup.string().nullable(),
   })
   .required();
-
-export default function SearchFormationForm({
-  url,
-  defaultValues,
-}: {
-  url: string;
-  defaultValues: Nullable<SearchFormationFormData>;
-}) {
-  return (
-    <FormSearchParams url={url} defaultValues={defaultValues} schema={schema}>
-      {({ control, errors }) => {
-        return (
-          <Grid container spacing={2}>
-            <Grid item md={6} sm={8} xs={12} style={{ position: "relative" }}>
-              <Controller
-                name="address"
-                control={control}
-                render={(form) => <AddressField error={errors?.address} form={form} />}
-              />
-            </Grid>
-            <Grid item md={4} sm={2} xs={6} style={{ textAlign: "left" }}>
-              <Button
-                type={"submit"}
-                smallIconOnly={true}
-                style={{ height: "100%", width: "100%" }}
-                iconId={"fr-icon-search-line"}
-              >
-                {"Rechercher des formations"}
-              </Button>
-            </Grid>
-          </Grid>
-        );
-      }}
-    </FormSearchParams>
-  );
-}

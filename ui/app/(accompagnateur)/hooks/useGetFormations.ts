@@ -21,7 +21,7 @@ export default function useGetFormations({
 }: {
   latitude?: number;
   longitude?: number;
-  tag?: FormationTag | null;
+  tag?: FormationTag[];
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
@@ -50,7 +50,7 @@ export default function useGetFormations({
       "formations",
       latitude,
       longitude,
-      tag,
+      tag?.toString(),
       voie?.toString(),
       diplome?.toString(),
       domaines?.toString(),

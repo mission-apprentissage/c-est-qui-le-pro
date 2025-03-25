@@ -88,7 +88,6 @@ export const MapClickHandler = ({ onClick }: { onClick: (e: LeafletMouseEvent) =
 
   useEffect(() => {
     const handlePopupOpen = () => {
-      console.log("popup open");
       popupOpenRef.current = true;
     };
 

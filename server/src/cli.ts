@@ -32,6 +32,7 @@ import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndi
 import { importIndicateurPoursuiteNational } from "./jobs/exposition/importIndicateurPoursuiteNational";
 import { importFamillesMetiers } from "./jobs/formations/importFamillesMetiers";
 import { createSearchIndex } from "./services/formation/search";
+import { refreshView } from "./jobs/refreshView";
 
 const cli = new Command();
 
@@ -84,6 +85,8 @@ const etablissementJobs = [
 ];
 
 const catalogueApprentissageJobs = [{ name: "caFormations", job: importCAFormations }];
+
+const refreshViewJobs = [{ name: "refreshView", job: refreshView }];
 
 cli
   .command("importBCN")
@@ -148,6 +151,7 @@ cli
       const importEtablissementsStats = await runJobs(etablissementJobs, job);
       const importCatalogueApprentissageStats = await runJobs(catalogueApprentissageJobs, job);
       const importFormationEtablissementStats = await runJobs(formationEtablissementJobs, job);
+      const refreshView = await runJobs(refreshViewJobs, job);
 
       return {
         importBCNStats,
@@ -157,6 +161,7 @@ cli
         importCatalogueApprentissageStats,
         importFormationEtablissementStats,
         importRCOStats,
+        refreshView,
       };
     });
   });

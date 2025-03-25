@@ -3,6 +3,7 @@
 import styled from "@emotion/styled";
 import { Box, Typography } from "@mui/material";
 import Button from "../Button";
+import { fr } from "@codegouvfr/react-dsfr";
 
 export const MobileContainer = styled(Box)`
   position: fixed;
@@ -59,6 +60,9 @@ export const ClearButtonText = styled(Typography)`
 export const MobileFilterButtons = styled(Box)`
   display: flex;
   justify-content: flex-end;
+  padding: 1rem;
+  z-index: 999;
+  background-color: white;
 `;
 
 export const FilterIcon = styled.i`
@@ -69,24 +73,49 @@ export const FilterIcon = styled.i`
   }
 `;
 
-export const FilterButton = styled(Button)`
+export const FilterButton = styled(Button, {
+  shouldForwardProp: (prop) => !["hasFilter"].includes(prop as string),
+})<{ hasFilter: boolean }>`
   position: relative;
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  min-height: 2.25rem;
+  ${({ hasFilter }) =>
+    hasFilter ? `background-color: ${fr.colors.decisions.background.open.blueFrance.default};` : ""}
+
+  &[class*=" ri-"]::before {
+    --icon-size: 1.3rem;
+  }
 `;
 
 export const FilterBadge = styled(Box)`
   position: absolute;
-  width: 16px;
-  height: 16px;
-  right: 0;
-  top: 0;
+  width: 18px;
+  height: 18px;
+  right: -5px;
+  top: -5px;
   background: #1212ff;
-  border-radius: 8px;
+  border-radius: 9px;
+  color: white;
+  font-size: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const FilterContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  flex-wrap: wrap;
+  row-gap: 1rem;
+  border: 1px solid #dddddd;
+  box-shadow: 0 4px 4px -4px #00000040;
+  padding: 1rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  padding-bottom: 1rem;
+  z-index: 999;
 `;
 
 export const FilterContainerMobile = styled(Box)`

@@ -104,6 +104,7 @@ export default function FormationField({
   isMobile,
   bordered,
   submitOnChange,
+  noLabel,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
@@ -188,7 +189,7 @@ export default function FormationField({
             error={!!error}
             helperText={error ? "La formation n'est pas valide" : ""}
             InputLabelProps={{ shrink: true }}
-            label={"Une formation, un type de diplôme"}
+            label={noLabel ? null : "Une formation, un type de diplôme"}
             placeholder={"Exemple : CAP Cuisine"}
             onFocus={(event) => {
               event.target.select();

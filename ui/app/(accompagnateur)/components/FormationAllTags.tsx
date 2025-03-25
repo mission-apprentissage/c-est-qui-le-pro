@@ -13,23 +13,23 @@ function FilterTag({
   onClick,
 }: {
   tagElt: FormationTagType;
-  selected?: FormationTag | null;
+  selected?: FormationTag[] | null;
   onClick?: (tag: FormationTag) => void;
 }) {
   return (
     <Tag
       variant="filter"
       bold
-      active={selected === tagElt.tag}
+      active={!!selected?.find((s) => s === tagElt.tag)}
       nativeButtonProps={{
         onClick: function () {
           onClick && onClick(tagElt.tag);
         },
       }}
     >
-      {typeof tagElt.icon === "function" ? (
+      {typeof tagElt.pictogramme === "function" ? (
         <Box style={{ marginRight: "0.25rem", marginBottom: "-0.25rem" }}>
-          <tagElt.icon />
+          <tagElt.pictogramme />
         </Box>
       ) : (
         <i
@@ -39,7 +39,7 @@ function FilterTag({
       )}
 
       <Typography variant="body2" style={{ fontWeight: 700 }}>
-        {capitalize(tagElt.libelle)}
+        {capitalize(tagElt.tagLibelle)}
       </Typography>
     </Tag>
   );
@@ -49,7 +49,7 @@ export default function FormationAllTags({
   selected,
   onClick,
 }: {
-  selected?: FormationTag | null;
+  selected?: FormationTag[] | null;
   onClick?: (tag: FormationTag) => void;
 }) {
   return FORMATION_TAG.map((tagElt) => {
