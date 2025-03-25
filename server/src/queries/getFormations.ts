@@ -1,7 +1,7 @@
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
 import * as Cache from "#src/common/cache.js";
 import moment from "#src/common/utils/dateUtils";
-import { FormationTag } from "shared";
+import { DiplomeType, FormationTag } from "shared";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { kdb, kyselyChainFn } from "#src/common/db/db.js";
 import { SelectQueryBuilder, sql } from "kysely";
@@ -11,6 +11,7 @@ import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
 import { search } from "#src/services/formation/search.js";
+import { flatten, pick } from "lodash-es";
 
 const logger = getLoggerWithContext("query");
 
@@ -213,7 +214,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   };
 }
 
-async function buildFiltersFormationSQL({ cfds, domaines, voie }) {
+async function buildFiltersFormationSQL({ cfds, domaines, voie, diplome }) {
   let queryFormation = kdb
     .selectFrom("formation")
     .$call(FormationRepository._base())
@@ -226,6 +227,10 @@ async function buildFiltersFormationSQL({ cfds, domaines, voie }) {
 
   if (voie.length > 0) {
     queryFormation = queryFormation.where("voie", "in", voie);
+  }
+
+  if (diplome.length > 0) {
+    queryFormation = queryFormation.where("niveauDiplome", "in", flatten(Object.values(pick(DiplomeType, diplome))));
   }
 
   if (!domaines || domaines.length === 0) {
@@ -260,7 +265,7 @@ async function getFiltersId(formation) {
 export async function getFormationsSQL(
   {
     filtersEtablissement = {},
-    filtersFormation = { cfds: null, domaines: null, voie: null },
+    filtersFormation = { cfds: null, domaines: null, voie: null, diplome: null },
     tag = null,
     millesime,
     formation = null,

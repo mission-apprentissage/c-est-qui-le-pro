@@ -1,10 +1,11 @@
 import Image from "next/image";
-import { FormationDomaine, FormationTag, FormationVoie } from "shared";
+import { DiplomeType, FormationDomaine, FormationTag, FormationVoie } from "shared";
 import CalendarIcon from "#/app/components/icon/CalendarIcon";
 import { FrCxArg, FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
 import MoneyIcon from "../components/icon/MoneyIcon";
 import ArtworkSchoolSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/buildings/school.svg";
 import { CompangiePictogramme } from "../components/icon/CompaniePictogramme";
+import Tag from "../components/Tag";
 
 export type FormationTagType = {
   tag: FormationTag;
@@ -93,5 +94,31 @@ export const FORMATION_VOIE: {
     pictogramme: () => {
       return <Image src={ArtworkSchoolSvg} width={"56"} height={"56"} alt={""} />;
     },
+  },
+];
+
+export const FORMATION_DIPLOME: {
+  diplome: keyof typeof DiplomeType | null;
+  libelle: string;
+  pictogramme?: () => JSX.Element;
+}[] = [
+  { diplome: null, libelle: "CAP & BAC PRO" },
+  {
+    diplome: "CAP",
+    libelle: "CAP",
+    pictogramme: () => (
+      <Tag style={{ margin: "0.5rem 0.5rem" }} variant="purple">
+        2&nbsp;ans
+      </Tag>
+    ),
+  },
+  {
+    diplome: "BAC_PRO",
+    libelle: "BAC PRO",
+    pictogramme: () => (
+      <Tag style={{ margin: "0.5rem 0.5rem" }} variant="purple">
+        3&nbsp;ans
+      </Tag>
+    ),
   },
 ];
