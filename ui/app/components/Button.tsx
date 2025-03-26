@@ -6,7 +6,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 
 export type ButtonProps = {
   rounded?: boolean | string;
-  variant?: "white" | "white-black" | "blue-france-hover" | "black";
+  variant?: "white" | "white-black" | "blue-france-hover" | "blue-france-alt" | "black";
   smallIconOnly?: boolean;
   iconOnly?: boolean;
 } & DSFRButtonProps;
@@ -41,6 +41,13 @@ export default styled(ButtonBase, {
       case "black":
         return `
         color: #000000;
+        `;
+      case "blue-france-alt":
+        return `
+        color: ${fr.colors.decisions.artwork.major.blueFrance.default};
+        background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
+         --hover-tint: #F7F7F7;
+         --active-tint: #F7F7F7;
         `;
       default:
         return "";

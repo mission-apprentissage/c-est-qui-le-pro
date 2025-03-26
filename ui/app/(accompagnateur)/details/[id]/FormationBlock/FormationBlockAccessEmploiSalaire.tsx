@@ -5,7 +5,7 @@ import { DiplomeTypeLibelle, Formation } from "shared";
 import Button from "#/app/components/Button";
 import { BlockDivider } from "./FormationBlock.styled";
 import DialogSalaireMedian, { modalSalaireMedian } from "#/app/(accompagnateur)/components/DialogSalaireMedian";
-import DialogSalaireGlobal, { modalSalaireGlobal } from "../../components/DialogSalaireGlobal";
+import DialogSalaireGlobal, { modalSalaireGlobal } from "#/app/(accompagnateur)/components/DialogSalaireGlobal";
 import { formatSalaire } from "#/app/utils/formation";
 import {
   MarginBottomNegative,

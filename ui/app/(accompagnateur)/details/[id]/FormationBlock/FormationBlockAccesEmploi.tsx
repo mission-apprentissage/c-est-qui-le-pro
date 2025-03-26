@@ -5,7 +5,7 @@ import Card from "#/app/components/Card";
 import { capitalize } from "lodash-es";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
 import { Etablissement, Formation, Metier, MetierTransitionType } from "shared";
-import WidgetInserJeunes from "../../components/WidgetInserJeunes";
+import WidgetInserJeunes from "#/app/(accompagnateur)/components/WidgetInserJeunes";
 import Button from "#/app/components/Button";
 import { METIER_TRANSITION, sortMetier } from "#/app/services/metier";
 import { BlockDivider, CenteredGrid, ContentContainer } from "./FormationBlock.styled";

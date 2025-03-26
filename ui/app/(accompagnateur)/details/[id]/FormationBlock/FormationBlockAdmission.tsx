@@ -3,12 +3,12 @@
 import styled from "@emotion/styled";
 import { Box } from "@mui/material";
 import { Typography } from "#/app/components/MaterialUINext";
-import FormationDescription from "../../components/FormationDescription";
+import FormationDescription from "#/app/(accompagnateur)/components/FormationDescription";
 import { FormationDetail } from "shared";
 import Card from "#/app/components/Card";
 import Button from "#/app/components/Button";
 import Link from "#/app/components/Link";
-import FormationsFamilleMetier from "../../components/FormationFamilleMetier";
+import FormationsFamilleMetier from "#/app/(accompagnateur)/components/FormationFamilleMetier";
 import { BlockDivider, ContentContainer, HighlightBox } from "./FormationBlock.styled";
 import { FormationBlockAdmissionScolaire } from "./FormationBlockAdmissionScolaire";
 
