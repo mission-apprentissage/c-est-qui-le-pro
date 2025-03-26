@@ -154,7 +154,7 @@ function FormationFamilleMetierBlocks({
           <Grid2 container spacing={3}>
             {formationsInEtablissement.map((detail, index) => {
               return (
-                <Grid2 xs={12} md={4} key={"formationsFamilleMetier_" + index}>
+                <Grid2 xs={12} md={6} key={"formationsFamilleMetier_" + index}>
                   <FormationFamilleMetierBlock formationDetail={detail} address={address} />
                 </Grid2>
               );
@@ -171,7 +171,7 @@ function FormationFamilleMetierBlocks({
           <Grid2 container spacing={3}>
             {formationsNotInEtablissement.map((detail, index) => {
               return (
-                <Grid2 xs={12} md={4} key={"formationsFamilleMetier_" + index}>
+                <Grid2 xs={12} md={6} key={"formationsFamilleMetier_" + index}>
                   <FormationFamilleMetierBlock formationDetail={detail} address={address} />
                 </Grid2>
               );
