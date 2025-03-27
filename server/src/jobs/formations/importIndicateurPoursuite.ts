@@ -16,6 +16,7 @@ function formatStats(stats) {
     part_en_emploi_6_mois: stats.taux_en_emploi_6_mois,
     taux_en_formation: stats.taux_en_formation,
     taux_autres_6_mois: stats.taux_autres_6_mois,
+    libelle: stats.libelle,
   };
 }
 

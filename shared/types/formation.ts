@@ -69,25 +69,29 @@ export type IndicateurEntree = {
   effectifs?: number;
 };
 
-type IndicateurPoursuite = {
+export type IndicateurPoursuite = {
   millesime: string;
+  part_en_emploi_6_mois?: number;
   taux_en_emploi_6_mois?: number;
   taux_en_formation?: number;
   taux_autres_6_mois?: number;
 };
 
-type IndicateurPoursuiteAnneeCommune = {
+export type IndicateurPoursuiteAnneeCommune = {
   millesime: string;
   codeCertification: string;
+  libelle?: string;
+  part_en_emploi_6_mois?: number;
   taux_en_emploi_6_mois?: number;
   taux_en_formation?: number;
   taux_autres_6_mois?: number;
 };
 
-type IndicateurPoursuiteRegional = {
+export type IndicateurPoursuiteRegional = {
   millesime: string;
   region: string;
   voie?: string;
+  part_en_emploi_6_mois?: number;
   taux_en_formation_q0: number;
   taux_en_formation_q1: number;
   taux_en_formation_q2: number;
@@ -246,6 +250,7 @@ const formationEtablissementSchema = yup.object().concat(
       .array(
         yup.object({
           millesime: yup.string().required(),
+          libelle: yup.string(),
           codeCertification: yup.string().required(),
           taux_en_emploi_6_mois: yup.number(),
           taux_en_formation: yup.number(),

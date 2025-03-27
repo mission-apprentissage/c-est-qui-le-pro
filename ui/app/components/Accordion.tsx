@@ -12,11 +12,13 @@ const ButtonDiv = styled.div`
 export default function CustomAccordion({
   label,
   children,
+  defaultExpanded = false,
 }: {
   label: JSX.Element;
   children: JSX.Element | JSX.Element[];
+  defaultExpanded?: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(defaultExpanded);
 
   //TODO: add aria control
   return (
@@ -26,7 +28,7 @@ export default function CustomAccordion({
           <Grid item xs={11}>
             {label}
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={1} paddingTop={"0.5rem"}>
             {expanded ? (
               <i className={fr.cx("fr-icon-arrow-up-s-line")} />
             ) : (
