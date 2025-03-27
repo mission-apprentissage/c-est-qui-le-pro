@@ -23,13 +23,12 @@ import {
   FlexBox,
   FlexSpaceBetweenBox,
   SalaryGradientBar,
-  FlexCenterColumnBox,
-  BlueLink,
   SalaryEnsembleBox,
 } from "./FormationBlockAccesEmploi.styled";
 import { css } from "@emotion/react";
 import { getColorAtPosition } from "#/app/utils/color";
 import { createPortal } from "react-dom";
+import { BlueLink, FlexCenterColumnBox } from "#/app/(accompagnateur)/components/InserJeunes.styled";
 
 export function FormationSalaire({ formation }: { formation: Formation }) {
   if (

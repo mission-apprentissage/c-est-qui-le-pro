@@ -207,6 +207,7 @@ export interface IndicateurPoursuiteAnneeCommune {
   createdAt: Generated<Timestamp>;
   formationEtablissementId: string;
   id: Generated<string>;
+  libelle: string | null;
   millesime: string;
   part_en_emploi_6_mois: number | null;
   taux_autres_6_mois: number | null;

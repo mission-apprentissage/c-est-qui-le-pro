@@ -156,14 +156,3 @@ export const SalaryGradientBar = styled(Box)`
   height: 32px;
   margin-bottom: 1.25rem;
 `;
-
-export const FlexCenterColumnBox = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-`;
-
-export const BlueLink = styled("a")`
-  color: var(--blue-france-sun-113-625);
-`;
