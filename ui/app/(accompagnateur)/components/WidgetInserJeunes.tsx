@@ -167,17 +167,11 @@ function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateurPoursui
 }
 
 function WidgetInserJeunesFamilleMetier({
-  etablissement,
   indicateurPoursuiteAnneeCommune,
 }: {
-  etablissement: Etablissement;
   indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[];
 }) {
   const hasStats = !!indicateurPoursuiteAnneeCommune?.length;
-
-  if (!hasStats) {
-    return null;
-  }
 
   return (
     <Box>
@@ -239,7 +233,7 @@ function WidgetFooter({ millesime }: { millesime: string }) {
   );
 }
 
-export default function WidgetInserJeunesNew({ formationDetail }: { formationDetail: FormationDetail }) {
+export default function WidgetInserJeunes({ formationDetail }: { formationDetail: FormationDetail }) {
   const {
     formationEtablissement: { indicateurPoursuiteAnneeCommune, indicateurPoursuite },
   } = formationDetail;
@@ -259,7 +253,6 @@ export default function WidgetInserJeunesNew({ formationDetail }: { formationDet
           <EtablissementLibelle etablissement={formationDetail.etablissement} />
           <ContainerAnneeCommune>
             <WidgetInserJeunesFamilleMetier
-              etablissement={formationDetail.etablissement}
               indicateurPoursuiteAnneeCommune={formationDetail.formationEtablissement.indicateurPoursuiteAnneeCommune}
             />
             <WidgetFooter millesime={millesime} />

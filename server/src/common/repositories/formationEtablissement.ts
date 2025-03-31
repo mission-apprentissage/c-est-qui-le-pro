@@ -197,7 +197,9 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
     return Object.values(
       results.reduce((acc, f) => {
         acc[f.formation.libelle] = {
-          ...(acc[f.formation.libelle] && acc[f.formation.libelle].formationEtablissement ? {} : { ...f }),
+          ...(acc[f.formation.libelle] && acc[f.formation.libelle].formationEtablissement
+            ? acc[f.formation.libelle]
+            : { ...f }),
         };
         return acc;
       }, {})
