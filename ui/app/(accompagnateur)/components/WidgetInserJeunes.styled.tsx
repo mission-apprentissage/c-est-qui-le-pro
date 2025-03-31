@@ -12,6 +12,7 @@ export const ErrorContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  margin-bottom: 1rem;
 `;
 
 export const ErrorList = styled(Box)`
