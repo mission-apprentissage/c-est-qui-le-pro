@@ -17,7 +17,7 @@ import {
   modalInserjeunesAutres,
   modalInserjeunesFormation,
 } from "#/app/(accompagnateur)/components/DialogInserjeunes";
-import { capitalize } from "lodash-es";
+import { capitalize, isNil } from "lodash-es";
 import {
   AccordionContainer,
   AllPersonasContainer,
@@ -115,7 +115,7 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
                   <Persona key={`${key}_${i}`} type={keyTyped} />
                 ))}
               </PersonasContainer>
-              {isDownSm && (
+              {isDownSm && !!indicateurPoursuite[metric.metric] && (
                 <Description color={metric.color} vertical={isDownSm} onClick={modals[keyTyped].open}>
                   <Box>{indicateurPoursuite[metric.metric]}%</Box>
                   <Box>
@@ -133,6 +133,11 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
           {Object.keys(WIDGET_INSERJEUNES_TYPE).map((key) => {
             const keyTyped = key as WidgetInserjeunesTypeMetrics;
             const metric = WIDGET_INSERJEUNES_TYPE[keyTyped];
+
+            if (!indicateurPoursuite[metric.metric]) {
+              return null;
+            }
+
             return (
               <Description key={`indicateur_desription_${key}`} color={metric.color} onClick={modals[keyTyped].open}>
                 <Box>{indicateurPoursuite[metric.metric]}%</Box>
@@ -157,7 +162,7 @@ function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateurPoursui
     <Box>
       {!indicateurPoursuite ? (
         <NoIndicateurs />
-      ) : !indicateurPoursuite?.taux_en_formation ? (
+      ) : isNil(indicateurPoursuite?.taux_en_formation) ? (
         <IndicateursSousSeuil />
       ) : (
         <IndicateursWithPersona indicateurPoursuite={indicateurPoursuite} />
