@@ -5,33 +5,40 @@ import "moment/locale/fr";
 import styled from "@emotion/styled";
 import Card from "#/app/components/Card";
 
-export const StyledFormationFamilleMetierCard = styled(Card)`
+export const StyledFormationFamilleMetierCard = styled(Card)<{ disableHover: boolean }>`
   &.MuiButtonBase-root:hover {
-    background-color: white;
+    ${(props) =>
+      props.disableHover
+        ? "background-color: white;"
+        : `background-color: ${fr.colors.decisions.background.actionLow.blueFrance.default};`}
   }
 
   &.MuiButtonBase-root {
-    background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
+    ${(props) =>
+      props.disableHover ? "" : `background-color: ${fr.colors.decisions.background.alt.blueFrance.default};`}
+    height: 100%;
   }
 
-  & .MuiButtonBase-root {
-    background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
+  & > .MuiBox-root {
+    width: 100%;
+    height: 100%;
   }
 
-  & .MuiCardActionArea-focusHighlight {
-    display: block;
+  & > .MuiBox-root > .MuiContainer-root {
+    padding: 1.25rem;
+    padding-left: 2.25rem;
+    position: relative;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   height: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-`;
-
-export const CardContent = styled(Box)`
-  padding: 1.25rem;
-  padding-left: 2.25rem;
-  position: relative;
 `;
 
 export const StatusIndicator = styled("div", {

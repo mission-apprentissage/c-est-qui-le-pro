@@ -46,8 +46,8 @@ export default styled(ButtonBase, {
         return `
         color: ${fr.colors.decisions.artwork.major.blueFrance.default};
         background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
-         --hover-tint: #F7F7F7;
-         --active-tint: #F7F7F7;
+         --hover-tint: ${fr.colors.decisions.background.actionLow.blueFrance.default};
+         --active-tint: ${fr.colors.decisions.background.actionLow.blueFrance.default};
         `;
       default:
         return "";

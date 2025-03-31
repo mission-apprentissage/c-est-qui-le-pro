@@ -15,7 +15,6 @@ import { myPosition } from "#/app/components/form/AddressField";
 import {
   ActionContainer,
   ArrowIcon,
-  CardContent,
   FormationContainer,
   FormationList,
   FormationListItem,
@@ -54,36 +53,35 @@ const FormationFamilleMetierBlock = React.memo(function FormationFamilleMetierBl
 
   return (
     <StyledFormationFamilleMetierCard
-      link={formationLink}
+      link={formationLink || formationSearchLink}
+      disableHover={!formationLink}
       linkTarget="_blank"
       style={style}
       className={className}
       type={"formation"}
     >
-      <CardContent>
-        <StatusIndicator available={!!formationLink} />
-        {formationLink ? (
-          <>
-            <FormationTitle available variant={"subtitle2"}>
-              {formatLibelle(formation.libelle)}
-            </FormationTitle>
-            <ActionContainer>
-              <ArrowIcon className={fr.cx("ri-arrow-right-line")} />
-            </ActionContainer>
-          </>
-        ) : (
-          <>
-            <FormationTitle variant={"body1"}>{formatLibelle(formation.libelle)}</FormationTitle>
-            <ActionContainer>
-              <Link href={formationSearchLink} target="_blank" noDecoration noIcon>
-                <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
-                  Rechercher la formation
-                </Button>
-              </Link>
-            </ActionContainer>
-          </>
-        )}
-      </CardContent>
+      <StatusIndicator available={!!formationLink} />
+      {formationLink ? (
+        <>
+          <FormationTitle available variant={"subtitle2"}>
+            {formatLibelle(formation.libelle)}
+          </FormationTitle>
+          <ActionContainer>
+            <ArrowIcon className={fr.cx("ri-arrow-right-line")} />
+          </ActionContainer>
+        </>
+      ) : (
+        <>
+          <FormationTitle variant={"body1"}>{formatLibelle(formation.libelle)}</FormationTitle>
+          <ActionContainer>
+            <Link href={formationSearchLink} target="_blank" noDecoration noIcon>
+              <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
+                Rechercher la formation
+              </Button>
+            </Link>
+          </ActionContainer>
+        </>
+      )}
     </StyledFormationFamilleMetierCard>
   );
 });
