@@ -67,7 +67,7 @@ export default styled(Card)<CardProps>`
     switch (type) {
       case "details":
         return `
-         & .MuiContainer-root {
+         & > .MuiContainer-root {
           padding: 0;
         }  
 
@@ -117,16 +117,8 @@ export default styled(Card)<CardProps>`
     return !isNil(selected) && selected ? "background-color: var(--hover);" : "";
   }}
 
-  & .MuiCardActionArea-focusHighlight {
+  & > .MuiCardActionArea-focusHighlight {
     display: none;
-  }
-
-  & .MuiButtonBase-root {
-    background-color: white;
-  }
-
-  & .MuiButtonBase-root:hover {
-    background-color: var(--hover);
   }
 
   &.MuiButtonBase-root:hover {

@@ -2,7 +2,7 @@
 import { Box } from "@mui/material";
 import styled from "@emotion/styled";
 import { Typography, Grid } from "#/app/components/MaterialUINext";
-import FormationDescription from "../../components/FormationDescription";
+import FormationDescription from "#/app/(accompagnateur)/components/FormationDescription";
 import { Formation } from "shared";
 import Link from "#/app/components/Link";
 import Card from "#/app/components/Card";
