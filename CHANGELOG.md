@@ -1,3 +1,10 @@
+# [1.33.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.32.0...v1.33.0) (2025-04-01)
+
+
+### Features
+
+* recherche bac pro specialités ([#53](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/53)) ([92d8b99](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/92d8b99eaf7f1fab0f8d693b0691e1a8d8d07f8a))
+
 # [1.32.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.31.0...v1.32.0) (2025-03-25)
 
 
