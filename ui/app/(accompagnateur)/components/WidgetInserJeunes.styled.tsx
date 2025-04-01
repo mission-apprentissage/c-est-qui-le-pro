@@ -25,7 +25,7 @@ export const AllPersonasContainer = styled(Box, {
 })<{ vertical: boolean }>`
   display: flex;
   flex-direction: ${(props) => (props.vertical ? "column" : "row")};
-  gap: ${(props) => (props.vertical ? "0.75rem" : "1.5rem")};
+  gap: ${(props) => (props.vertical ? "1.5rem" : "1.5rem")};
   justify-content: center;
 `;
 
@@ -90,6 +90,10 @@ export const PersonaContainer = styled(Box)`
   position: relative;
   width: 100%;
   max-width: 48px;
+
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    max-width: 44px;
+  }
 
   & i {
     position: absolute;
