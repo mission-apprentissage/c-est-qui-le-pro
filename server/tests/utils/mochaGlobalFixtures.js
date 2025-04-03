@@ -3,7 +3,7 @@ import nock from "nock"; // eslint-disable-line node/no-unpublished-import
 
 nock.disableNetConnect();
 nock.enableNetConnect((host) => {
-  return host.startsWith("127.0.0.1") || host.indexOf("fastdl.mongodb.org") !== -1;
+  return host.startsWith("127.0.0.1");
 });
 
 export function mochaGlobalSetup() {}

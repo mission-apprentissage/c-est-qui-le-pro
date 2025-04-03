@@ -25,17 +25,16 @@ services:
       - RCO_BUCKET_ACCESS_KEY={{ vault.RCO_BUCKET_ACCESS_KEY }}
       - RCO_BUCKET_SECRET_KEY={{ vault.RCO_BUCKET_SECRET_KEY }}
       - RCO_BUCKET_NAME={{ vault.RCO_BUCKET_NAME }}
+      - TYPESENSE_API_KEY={{ vault.TYPESENSE_API_KEY }}
+      - TYPESENSE_HOST=typesense
       - FRANCE_TRAVAIL_API_CLIENT_ID={{ vault.FRANCE_TRAVAIL_API_CLIENT_ID }}
       - FRANCE_TRAVAIL_API_CLIENT_SECRET={{ vault.FRANCE_TRAVAIL_API_CLIENT_SECRET }}
       - VOLUME_DIR=/data
 
-  mongodb:
+  typesense:
     volumes:
-      - /opt/accompagnateur/data/mongodb/db:/data/db
-      - /opt/accompagnateur/data/mongodb/configdb:/data/configdb
-      - /opt/accompagnateur/data/mongodb/backups:/data/backups
-      - /opt/accompagnateur/.overrides/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
-
+      - /opt/accompagnateur/data/typesense:/data
+    command: "--data-dir /data --api-key={{ vault.TYPESENSE_API_KEY }} --enable-cors"
   metabase:
     volumes:
       - /opt/accompagnateur/data/metabase:/data

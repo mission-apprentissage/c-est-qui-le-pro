@@ -28,6 +28,7 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
         voie: null,
         familleMetierId: null,
         isAnneeCommune: null,
+        sigle: null,
       },
       kdb
     );
@@ -35,69 +36,92 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
 
   _base({ withMetier, withPoursuite } = { withMetier: false, withPoursuite: false }) {
     return <T extends SelectQueryBuilder<DB, "formation", object>>(eb: T) => {
-      return eb
-        .leftJoinLateral(
-          (eb) =>
-            eb
-              .selectFrom("formationDomainesView")
-              .select("domaine")
-              .whereRef("formation.id", "=", "formationDomainesView.formationId")
-              .limit(1)
-              .as("domaine"),
-          (join) => join.on(sql`true`)
-        )
-        .$if(withPoursuite, (eb) =>
-          eb.leftJoinLateral(
+      return (
+        eb
+          .leftJoinLateral(
             (eb) =>
               eb
-                .selectFrom("formationPoursuite")
+                .selectFrom("formationDomainesView")
+                .select("domaine")
+                .whereRef("formation.id", "=", "formationDomainesView.formationId")
+                .limit(1)
+                .as("domaine"),
+            (join) => join.on(sql`true`)
+          )
+          // TODO : remove test keyword
+          .leftJoinLateral(
+            (eb) =>
+              eb
+                .selectFrom("formationKeyword")
                 .select((eb) => {
                   return [
                     kyselyChainFn(
                       eb,
-                      [
-                        { fn: "to_jsonb", args: [] },
-                        { fn: "json_agg", args: [] },
-                      ],
-                      sql`"formationPoursuite".*`
-                    ).as("formationPoursuite"),
+                      [{ fn: "json_agg", args: [] }],
+                      sql`to_jsonb("formationKeyword".*) ORDER BY "weight" DESC`
+                    ).as("keyword"),
                   ];
                 })
-                .whereRef("formation.id", "=", "formationPoursuite.formationId")
-                .as("formationPoursuite"),
+                .whereRef("formation.id", "=", "formationKeyword.formationId")
+                .as("keyword"),
             (join) => join.on(sql`true`)
           )
-        )
-        .$if(withMetier, (eb) =>
-          eb.leftJoinLateral(
-            (eb) =>
-              eb
-                .selectFrom("romeMetier")
-                .innerJoin("formationRome", "romeMetier.rome", "formationRome.rome")
-                .select((eb) => {
-                  return [
-                    kyselyChainFn(
-                      eb,
-                      [
-                        { fn: "to_jsonb", args: [] },
-                        { fn: "json_agg", args: [] },
-                      ],
-                      sql`"romeMetier".*`
-                    ).as("metier"),
-                  ];
-                })
-                .whereRef("formation.id", "=", "formationRome.formationId")
-                .as("metier"),
-            (join) => join.on(sql`true`)
+          .$if(withPoursuite, (eb) =>
+            eb.leftJoinLateral(
+              (eb) =>
+                eb
+                  .selectFrom("formationPoursuite")
+                  .select((eb) => {
+                    return [
+                      kyselyChainFn(
+                        eb,
+                        [
+                          { fn: "to_jsonb", args: [] },
+                          { fn: "json_agg", args: [] },
+                        ],
+                        sql`"formationPoursuite".*`
+                      ).as("formationPoursuite"),
+                    ];
+                  })
+                  .whereRef("formation.id", "=", "formationPoursuite.formationId")
+                  .as("formationPoursuite"),
+              (join) => join.on(sql`true`)
+            )
           )
-        );
+          .$if(withMetier, (eb) =>
+            eb.leftJoinLateral(
+              (eb) =>
+                eb
+                  .selectFrom("romeMetier")
+                  .innerJoin("formationRome", "romeMetier.rome", "formationRome.rome")
+                  .select((eb) => {
+                    return [
+                      kyselyChainFn(
+                        eb,
+                        [
+                          { fn: "to_jsonb", args: [] },
+                          { fn: "json_agg", args: [] },
+                        ],
+                        sql`"romeMetier".*`
+                      ).as("metier"),
+                    ];
+                  })
+                  .whereRef("formation.id", "=", "formationRome.formationId")
+                  .as("metier"),
+              (join) => join.on(sql`true`)
+            )
+          )
+      );
     };
   }
 
-  async get({ cfd, codeDispositif, voie }, withIndicateur = false) {
+  async get(
+    { cfd, codeDispositif, voie },
+    { withIndicateur, withMetier, withPoursuite } = { withIndicateur: false, withMetier: false, withPoursuite: false }
+  ) {
     const formation = await this.kdb
       .selectFrom("formation")
-      .$call(this._base())
+      .$call(this._base({ withMetier, withPoursuite }))
       .selectAll()
       .where("cfd", "=", cfd)
       .where("voie", "=", voie)

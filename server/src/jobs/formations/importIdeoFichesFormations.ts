@@ -33,7 +33,7 @@ async function addPoursuiteEtudes(cfds, formation) {
       data: { libelle_formation_principal: poursuite },
     });
 
-    const dataFormation = checkFormation.data as RawData[RawDataType.ONISEP_ideoFormationsInitiales];
+    const dataFormation = checkFormation?.data as RawData[RawDataType.ONISEP_ideoFormationsInitiales];
 
     if (!checkFormation) {
       logger.error(`La formation de poursuite d'étude "${poursuite}" n'existe pas`);
@@ -84,6 +84,7 @@ export async function importIdeoFichesFormations() {
                 descriptionAcces: cleanDescription(formation.descriptif_acces),
                 descriptionPoursuiteEtudes: cleanDescription(formation.descriptif_poursuite_etudes),
                 onisepIdentifiant: formation.identifiant,
+                sigle: formation.sigle,
               })
             )
             .where("cfd", "in", cfds)
