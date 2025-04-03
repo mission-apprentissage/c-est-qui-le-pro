@@ -139,7 +139,6 @@ class GraphHopperApi extends RateLimitedApi {
     );
 
     const geometriesDiff = geometriesBuffer.map((value) => {
-      //convert featureCollection (not support in geo query in mongodb) to geometryCollection
       return {
         ...value,
         feature: turf.geometryCollection(

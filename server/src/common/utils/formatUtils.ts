@@ -1,3 +1,6 @@
+import diacritics from "diacritics";
+import { DiplomeSynonyms } from "shared";
+
 export function formatLibelle(libelle: string): string {
   const diplomes = [
     "BEI",
@@ -58,4 +61,34 @@ export function formatUrl(url: string | null): string | null {
     return "https://" + urlTrimed;
   }
   return urlTrimed;
+}
+
+export function cleanString(value) {
+  if (!value) {
+    return value;
+  }
+
+  return diacritics.remove(value.replace(/\s+/g, " ").trim());
+}
+
+export function parseSearchQuery(str: string) {
+  if (!str) {
+    return null;
+  }
+
+  const diplome = new Set();
+  let query = cleanString(str);
+  for (const [diplomeType, words] of Object.entries(DiplomeSynonyms)) {
+    const queryClean = query
+      .replace(new RegExp(`\\b(${words.join("|")})\\b`, "g"), "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (queryClean !== query) {
+      diplome.add(diplomeType);
+      query = queryClean;
+    }
+  }
+
+  return { query: query, diplome: Array.from(diplome) };
 }

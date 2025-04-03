@@ -31,8 +31,9 @@ import { importFichesFormationsTmp } from "./jobs/formations/importFichesFormati
 import { importIndicateurPoursuiteRegionale } from "./jobs/exposition/importIndicateurPoursuiteRegionale";
 import { importIndicateurPoursuiteNational } from "./jobs/exposition/importIndicateurPoursuiteNational";
 import { importFamillesMetiers } from "./jobs/formations/importFamillesMetiers";
-import { createSearchIndex } from "./services/formation/search";
+import { createSearchIndex, createSearchIndexReverse } from "./services/formation/search";
 import { refreshView } from "./jobs/refreshView";
+import { importKeyword } from "./jobs/formations/importKeyword";
 
 const cli = new Command();
 
@@ -76,7 +77,9 @@ const formationEtablissementJobs = [
   { name: "feIndicateurPoursuiteAnneeCommune", job: importIndicateurPoursuiteAnneeCommune },
   { name: "feFormationTag", job: computeFormationTag },
   { name: "feFormationSimilaire", job: importFormationSimilaire },
+  { name: "feKeyword", job: importKeyword },
   { name: "feSearchIndex", job: createSearchIndex },
+  { name: "feSearchIndexReverse", job: createSearchIndexReverse },
 ];
 
 const etablissementJobs = [
