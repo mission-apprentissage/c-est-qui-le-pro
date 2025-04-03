@@ -68,7 +68,7 @@ export function cleanString(value) {
     return value;
   }
 
-  return diacritics.remove(value.replace(/\s+/g, " ").trim());
+  return diacritics.remove(value.replace(/\s+/g, " ").trim()).toLowerCase();
 }
 
 export function parseSearchQuery(str: string) {
