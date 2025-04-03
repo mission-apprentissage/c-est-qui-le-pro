@@ -131,6 +131,14 @@ const config = {
       certificationRome: "inserJeune-certification-rome.csv",
     },
   },
+  typesense: {
+    apiKey: env.get("TYPESENSE_API_KEY").default("password").asString(),
+    host: env.get("TYPESENSE_HOST").default("127.0.0.1").asString(),
+    port: env.get("TYPESENSE_PORT").default("8108").asPortNumber(),
+  },
+  keywords: {
+    file: path.join(dataDir, "keywords_formations_cqlp.json"),
+  },
 };
 
 export default config;

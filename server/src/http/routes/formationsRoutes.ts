@@ -8,11 +8,12 @@ import { addJsonHeaders } from "#src/http/utils/responseUtils.js";
 import { getRouteDate, getFormationsSQL } from "#src/queries/getFormations.js";
 import FormationEtablissement from "#src/common/repositories/formationEtablissement";
 import { GraphHopperApi } from "#src/services/graphHopper/graphHopper.js";
-import { cleanString, stripNull } from "../utils/formatters";
+import { stripNull } from "../utils/formatters";
 import { getFormationsSimilaire } from "#src/queries/getFormationSimilaire.js";
 import EtablissementIsochroneRepository from "#src/common/repositories/etablissementIsochrone.js";
 import FormationRepository from "#src/common/repositories/formation";
 import { merge } from "lodash-es";
+import { parseSearchQuery } from "#src/common/utils/formatUtils.js";
 
 export default () => {
   const router = express.Router();
@@ -46,7 +47,10 @@ export default () => {
         throw Boom.notFound();
       }
 
-      const formation = await FormationRepository.get({ cfd, codeDispositif, voie }, true);
+      const formation = await FormationRepository.get(
+        { cfd, codeDispositif, voie },
+        { withMetier: false, withPoursuite: false, withIndicateur: true }
+      );
       const formationsFamilleMetier = await FormationEtablissement.getFormationsFamilleMetier({
         familleMetierId: formation.familleMetierId,
         isAnneeCommune: formation.isAnneeCommune,
@@ -87,6 +91,7 @@ export default () => {
         diplome,
         academie,
         formation,
+        reverse,
         page,
         items_par_page,
       } = await validate(
@@ -104,6 +109,7 @@ export default () => {
           ...validators.tag(),
           academie: Joi.string().empty("").default(null),
           formation: Joi.string().empty("").default(null),
+          reverse: Joi.boolean().empty("").default(true),
           ...validators.pagination({ items_par_page: 100 }),
         }
       );
@@ -111,13 +117,20 @@ export default () => {
       const year = new Date().getFullYear();
       const millesime = [(year - 1).toString(), year.toString()];
 
+      const searchQuery = parseSearchQuery(formation);
+
       const results = await getFormationsSQL(
         {
           filtersEtablissement: { timeLimit, distance, latitude, longitude, uais, academie },
-          filtersFormation: { cfds, domaines, voie, diplome },
+          filtersFormation: {
+            cfds,
+            domaines,
+            voie,
+            diplome: diplome.length > 0 ? diplome : searchQuery ? searchQuery.diplome : [],
+          },
           tag,
           millesime,
-          formation: cleanString(formation),
+          formation: { query: searchQuery ? searchQuery.query : null, reverse },
         },
         {
           limit: items_par_page,

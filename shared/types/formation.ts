@@ -20,6 +20,22 @@ export const DiplomeTypeLibelle: { [key: string]: string } = {
   "553": "BREVET PRO AG",
 };
 
+export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
+  BAC_PRO: [
+    "bac pro",
+    "bac",
+    "baccalaureat",
+    "classe de seconde professionnelle",
+    "seconde professionnelle",
+    "seconde commune",
+    "seconde",
+    "2nd",
+    "2nde",
+  ],
+  CAP: ["certificat d'aptitude professionnelle", "cap", "capa"],
+  BP: ["brevet professionel", "bp"],
+};
+
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
   FAIBLE_TAUX_PRESSION = "faible_taux_pression",
@@ -170,6 +186,8 @@ export type Formation = {
   indicateurPoursuite?: IndicateurPoursuiteNational;
   metier?: Metier[];
   isAnneeCommune?: boolean;
+  // TODO : to remove - test
+  keyword?: any;
 };
 
 type JourneesPortesOuverteDate = {

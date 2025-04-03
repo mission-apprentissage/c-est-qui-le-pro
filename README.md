@@ -55,6 +55,6 @@ Ce package contient le front-end.
 
 #### Base de données
 
-Ce projet utilise `mongodb` version 5.
+Ce projet utilise `PostgreSQL` version 16 avec l'extension `postgis`.
 
 ![](https://avatars1.githubusercontent.com/u/63645182?s=200&v=4)

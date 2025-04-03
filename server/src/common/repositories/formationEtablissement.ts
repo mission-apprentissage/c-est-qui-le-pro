@@ -9,6 +9,7 @@ import { DeleteResult, sql, UpdateResult } from "kysely";
 import { merge } from "lodash-es";
 import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
+import streamToArray from "stream-to-array";
 
 type QueryFormationEtablissement = Partial<WhereObject<DB, "formationEtablissement">>;
 type QueryEtablissement = Partial<WhereObject<DB, "etablissement">>;
@@ -219,15 +220,10 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       .select((eb) => FormationRepository.getKeyAlias(eb))
       .innerJoin("etablissement", "etablissement.id", "etablissementId")
       .innerJoin("formation", "formation.id", "formationId");
+
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
-    const result = queryCond.stream();
-
-    if (!returnStream) {
-      return queryCond.execute();
-    }
-
-    return compose(
-      Readable.from(result),
+    const result = compose(
+      Readable.from(queryCond.stream()),
       transformData((result) => {
         return {
           formation: this.getColumnWithoutAlias("formation", result),
@@ -236,6 +232,12 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         };
       })
     );
+
+    if (!returnStream) {
+      return streamToArray(result);
+    }
+
+    return result;
   }
 
   async getAll() {

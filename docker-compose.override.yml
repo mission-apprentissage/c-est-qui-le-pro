@@ -26,11 +26,13 @@ services:
     environment:
       - ACCOMPAGNATEUR_ENV=dev
       - ACCOMPAGNATEUR_LOG_LEVEL=debug
-  mongodb:
+
+  typesense:
     ports:
-      - "127.0.0.1:27017:27017"
+      - "8108:8108"
+    command: "--data-dir /data --api-key=password --enable-cors"
     volumes:
-      - accompagnateur_mongodb_data:/data:z
+      - accompagnateur_typesense_data:/data:z
 
   postgres:
     image: postgis/postgis:16-3.4
@@ -60,9 +62,6 @@ services:
       - MB_SITE_URL=http://localhost/metabase
 
 volumes:
-  accompagnateur_mongodb_data:
-    driver: local
-    name: accompagnateur_mongodb_data
   accompagnateur_postgres_data:
     driver: local
     name: accompagnateur_postgres_data
@@ -78,3 +77,6 @@ volumes:
   accompagnateur_metabase_data:
     driver: local
     name: accompagnateur_metabase_data
+  accompagnateur_typesense_data:
+    driver: local
+    name: accompagnateur_typesense_data

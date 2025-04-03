@@ -51,15 +51,13 @@ services:
     restart: unless-stopped
     networks:
       - accompagnateur_network
-    depends_on:
-      - mongodb
     environment:
       - ACCOMPAGNATEUR_LOG_DESTINATIONS=stdout,sql
       - ACCOMPAGNATEUR_SQL_LOG_LEVEL=error
 
-  mongodb:
-    image: mongo:5.0.6-focal
-    container_name: accompagnateur_mongodb
+  typesense:
+    image: typesense/typesense:28.0
+    container_name: accompagnateur_typesense
     mem_limit: 2g
     restart: unless-stopped
     networks:
@@ -69,8 +67,6 @@ services:
     image: metabase/metabase:v0.48.6
     container_name: accompagnateur_metabase
     mem_limit: 2g
-    depends_on:
-      - mongodb
     restart: always
     networks:
       - accompagnateur_network
