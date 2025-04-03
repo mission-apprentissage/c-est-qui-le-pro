@@ -36,6 +36,7 @@ const getSchema = object({
     .transform((_, value) => {
       return value === "" ? null : value;
     }),
+  minWeight: number().min(0).max(1000),
   page: number().required().default(0).min(0).integer(),
   items_par_page: number().required().default(10).positive().integer(),
 });

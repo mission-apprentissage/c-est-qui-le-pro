@@ -243,7 +243,7 @@ export async function search(input: string): Promise<null | string[]> {
   return ids;
 }
 
-export async function searchReverse(input: string): Promise<null | string[]> {
+export async function searchReverse(input: string, minWeight: number = 0): Promise<null | string[]> {
   const searchParameters = {
     q: input,
     query_by: "keyword",
@@ -255,7 +255,7 @@ export async function searchReverse(input: string): Promise<null | string[]> {
     //typo_tokens_threshold: 2,
     prioritize_exact_match: true,
     //prefix: false,
-    filter_by: "keyword_weight:>100",
+    filter_by: `keyword_weight:>=${minWeight}`,
   };
 
   const ids = [];

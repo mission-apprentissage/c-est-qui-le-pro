@@ -14,6 +14,7 @@ export type FormationsSearchParams = {
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
   formation?: string;
+  minWeight?: number;
 };
 
 const FormationsSearchContext = createContext<{
