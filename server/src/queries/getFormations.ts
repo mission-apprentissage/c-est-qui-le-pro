@@ -267,13 +267,13 @@ async function buildFiltersFormationSQL({ cfds, domaines, voie, diplome }) {
   };
 }
 
-async function getFiltersId({ query, reverse }) {
+async function getFiltersId({ query, reverse, minWeight }) {
   if (!query) {
     return null;
   }
 
   if (reverse) {
-    return await searchReverse(query);
+    return await searchReverse(query, minWeight);
   }
   return await search(query);
 }
@@ -284,7 +284,7 @@ export async function getFormationsSQL(
     filtersFormation = { cfds: null, domaines: null, voie: null, diplome: null },
     tag = null,
     millesime,
-    formation = { query: null, reverse: false },
+    formation = { query: null, reverse: false, minWeight: 0 },
   },
   pagination = { page: 1, limit: 100 }
 ) {

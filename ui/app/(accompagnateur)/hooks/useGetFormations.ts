@@ -16,6 +16,7 @@ export default function useGetFormations({
   uais,
   cfds,
   postcode,
+  minWeight = 0,
   page,
   items_par_page = 100,
 }: {
@@ -29,6 +30,7 @@ export default function useGetFormations({
   uais?: string[];
   cfds?: string[];
   postcode?: string;
+  minWeight?: number;
   page?: number;
   items_par_page?: number;
 }) {
@@ -59,6 +61,7 @@ export default function useGetFormations({
       uais?.toString(),
       cfds?.toString(),
       academie,
+      minWeight,
     ],
     queryFn: ({ pageParam, signal }) => {
       return formationsQuery(
@@ -77,6 +80,7 @@ export default function useGetFormations({
           cfds,
           uais,
           academie,
+          minWeight,
         },
         { signal }
       );
