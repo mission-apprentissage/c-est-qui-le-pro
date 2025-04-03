@@ -17,5 +17,6 @@ export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
     voie: yup.array().of(yup.string().required()),
     diplome: yup.array().of(yup.string().required()),
     formation: yup.string().nullable(),
+    minWeight: yup.number().min(0).max(1000).nullable(),
   })
   .required();
