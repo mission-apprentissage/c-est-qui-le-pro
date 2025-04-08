@@ -63,8 +63,7 @@ const FormationContent = React.memo(function ({ formationDetail }: { formationDe
           <FormationBlockPoursuite formation={formation} id="poursuite-etudes" css={cssAnchor} />
 
           <FormationBlockAccesEmploi
-            formation={formation}
-            etablissement={etablissement}
+            formationDetail={formationDetail}
             id="acces-emploi"
             css={cssAnchor}
           ></FormationBlockAccesEmploi>

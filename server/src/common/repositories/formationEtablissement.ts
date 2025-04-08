@@ -76,49 +76,6 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
             .as("etablissement"),
         (join) => join.on(sql`true`)
       )
-      // Formation de spécialisation de la famille de métiers
-      .leftJoinLateral(
-        (eb) =>
-          eb
-            .selectFrom((eb) =>
-              eb
-                .selectFrom("formation as fMetier")
-                .leftJoinLateral(
-                  (eb) =>
-                    eb
-                      .selectFrom("formationEtablissement as feMetier")
-                      .innerJoin("etablissement as eEtablissement", "feMetier.etablissementId", "eEtablissement.id")
-                      .whereRef("feMetier.formationId", "=", "fMetier.id")
-                      .whereRef("feMetier.etablissementId", "=", "etablissement.id")
-                      .whereRef("millesime", "&&", "formationEtablissement.millesime")
-                      .select((eb) => eb.fn("row_to_json", [sql`"feMetier"`]).as("formationEtablissement"))
-                      .select((eb) => eb.fn("row_to_json", [sql`"eEtablissement"`]).as("etablissement"))
-                      .select("feMetier.id as formationEtablissementId")
-                      .select(sql.val("1").as("exist"))
-                      .select("feMetier")
-                      .as("feMetier"),
-                  (join) => join.on(sql`true`)
-                )
-                .distinctOn("libelle")
-                .select((eb) => eb.fn("row_to_json", [sql`"fMetier"`]).as("formation"))
-                .select("formationEtablissement")
-                .select("etablissement")
-                .select("libelle")
-                .select("exist")
-                .whereRef("fMetier.familleMetierId", "=", "formation.familleMetierId")
-                .whereRef("isAnneeCommune", "!=", "formation.isAnneeCommune")
-                .orderBy(["fMetier.libelle", "exist"])
-                .as("formationsFamilleMetier")
-            )
-            .select(
-              sql`json_agg(to_jsonb("formationsFamilleMetier") - 'libelle' - 'exist' ORDER BY "exist", "formationsFamilleMetier".libelle)`.as(
-                "formationsFamilleMetier"
-              )
-            )
-            .as("formationsFamilleMetier"),
-        (join) => join.on(sql`true`)
-      )
-      .select("formationsFamilleMetier")
       .where(({ eb, and }) =>
         and([
           ...this._createWhere(eb, query, "formationEtablissement"),
@@ -136,7 +93,6 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
       formation: this.getColumnWithoutAlias("formation", result),
       etablissement: this.getColumnWithoutAlias("etablissement", result),
       formationEtablissement: this.getColumnWithoutAlias("formationEtablissement", result),
-      formationsFamilleMetier: result.formationsFamilleMetier,
     };
   }
 
@@ -206,6 +162,48 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
     }
 
     return formationEtablissement;
+  }
+
+  async getFormationsFamilleMetier({ familleMetierId, isAnneeCommune, uai }) {
+    const formations = await this.kdb
+      .selectFrom("formation")
+      .selectAll()
+      .where("familleMetierId", "=", familleMetierId)
+      .where("isAnneeCommune", "!=", isAnneeCommune)
+      .orderBy("libelle")
+      .execute();
+
+    if (formations.length === 0) {
+      return null;
+    }
+
+    const results = await Promise.all(
+      formations.map(async (formationFamilleMetier) => {
+        return {
+          formation: formationFamilleMetier,
+          ...(await this.getFromCfd(
+            {
+              uai: uai,
+              cfd: formationFamilleMetier.cfd,
+              codeDispositif: formationFamilleMetier.codeDispositif,
+              voie: formationFamilleMetier.voie,
+            },
+            true
+          )),
+        };
+      })
+    );
+
+    return Object.values(
+      results.reduce((acc, f) => {
+        acc[f.formation.libelle] = {
+          ...(acc[f.formation.libelle] && acc[f.formation.libelle].formationEtablissement
+            ? acc[f.formation.libelle]
+            : { ...f }),
+        };
+        return acc;
+      }, {})
+    );
   }
 
   async find(

@@ -4,20 +4,19 @@ import { fr } from "@codegouvfr/react-dsfr";
 import Card from "#/app/components/Card";
 import { capitalize } from "lodash-es";
 import { Box, Grid, Typography } from "#/app/components/MaterialUINext";
-import { Etablissement, Formation, Metier, MetierTransitionType } from "shared";
+import { Formation, FormationDetail, Metier, MetierTransitionType } from "shared";
 import WidgetInserJeunes from "#/app/(accompagnateur)/components/WidgetInserJeunes";
 import Button from "#/app/components/Button";
 import { METIER_TRANSITION, sortMetier } from "#/app/services/metier";
 import { BlockDivider, CenteredGrid, ContentContainer } from "./FormationBlock.styled";
 import { TransitionIcon, MetierCard, TransitionTag, MetierContainer } from "./FormationBlockAccesEmploi.styled";
 import { FormationSalaire, FormationSalaireGlobal } from "./FormationBlockAccessEmploiSalaire";
-import { css } from "@emotion/react";
 
 function TagTransition({ metier, type }: { metier: Metier; type: MetierTransitionType }) {
   return (
     metier[type] && (
       <TransitionTag square variant="blue">
-        <Typography variant="body3">
+        <Typography variant="body3" component={"span"}>
           <TransitionIcon className={fr.cx(METIER_TRANSITION[type].icon)} />
           {METIER_TRANSITION[type].label.toUpperCase()}
         </Typography>
@@ -77,46 +76,18 @@ function FormationMetier({ formation }: { formation: Formation }) {
 }
 
 export default function FormationBlockAccesEmploi({
-  formation,
-  etablissement,
+  formationDetail,
+
   ...cardProps
 }: {
-  formation: Formation;
-  etablissement: Etablissement;
+  formationDetail: FormationDetail;
 } & React.ComponentProps<typeof Card>) {
+  const { formation, etablissement } = formationDetail;
   return (
     <Card type="details" title="L'accès à l'emploi" {...cardProps}>
       <ContentContainer>
         <Box>
-          {formation.isAnneeCommune ? (
-            <Typography
-              variant="h3"
-              css={css`
-                margin-bottom: 16px;
-              `}
-            >
-              Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
-            </Typography>
-          ) : (
-            <Typography
-              variant="h3"
-              css={css`
-                margin-bottom: 16px;
-              `}
-            >
-              Que sont devenus les anciens élèves 6 mois après cette formation ?
-            </Typography>
-          )}
-          <Typography>
-            <i
-              style={{
-                marginRight: "4px",
-              }}
-              className={fr.cx("ri-map-pin-2-line")}
-            ></i>
-            {etablissement.libelle}
-          </Typography>
-          <WidgetInserJeunes etablissement={etablissement} formation={formation} />
+          <WidgetInserJeunes formationDetail={formationDetail} />
         </Box>
         <FormationSalaire formation={formation} />
         <FormationSalaireGlobal formation={formation} />
