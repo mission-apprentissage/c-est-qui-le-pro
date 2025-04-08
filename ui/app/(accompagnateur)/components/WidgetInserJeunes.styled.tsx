@@ -127,10 +127,6 @@ export const StyledEtablissementLibelle = styled(Typography)`
   & i {
     margin-right: 4px;
   }
-
-  ${({ theme }) => theme.breakpoints.down("md")} {
-    margin-left: 0.75rem;
-  }
 `;
 
 export const StyledFormationLibelle = styled(Typography, {
