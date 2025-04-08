@@ -108,6 +108,11 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
         {Object.keys(WIDGET_INSERJEUNES_TYPE).map((key) => {
           const keyTyped = key as WidgetInserjeunesTypeMetrics;
           const metric = WIDGET_INSERJEUNES_TYPE[keyTyped];
+
+          if (metrics[keyTyped] === 0) {
+            return null;
+          }
+
           return (
             <Box key={`indicateur_${key}`}>
               <PersonasContainer>
@@ -221,7 +226,13 @@ function EtablissementLibelle({ etablissement }: { etablissement: Etablissement 
   );
 }
 
-function WidgetFooter({ millesime }: { millesime: string }) {
+export function WidgetFooter({ millesime }: { millesime: string }) {
+  const millesimePart = millesime.split("_");
+
+  if (!millesime) {
+    return null;
+  }
+
   return (
     <FlexCenterColumnBox>
       <Typography variant="body3">
@@ -229,7 +240,7 @@ function WidgetFooter({ millesime }: { millesime: string }) {
         <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
           InserJeunes
         </BlueLink>{" "}
-        promotion {formatMillesime(millesime)}.{" "}
+        promotion{millesimePart.length > 1 ? "s" : ""} {formatMillesime(millesime)}.{" "}
         <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
           D&apos;où viennent ces données ?
         </BlueLink>

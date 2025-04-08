@@ -5,7 +5,11 @@ import { styled } from "@mui/material";
 import Divider from "#/app/components/Divider";
 
 export const StyledTitle = styled(Typography)`
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
+
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    margin-bottom: 0.5rem;
+  }
 `;
 
 export const ErrorContainer = styled(Box)`
@@ -32,6 +36,11 @@ export const AllPersonasContainer = styled(Box, {
 export const PersonasContainer = styled(Box)`
   display: flex;
   flex-direction: row;
+  gap: 0.125rem;
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    line-height: 0;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 export const DescriptionContainer = styled(Box)`
@@ -78,12 +87,16 @@ export const Description = styled(Box, {
       --icon-size: 1.25rem;
     }
   }
+
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    margin-left: 0.5rem;
+  }
 `;
 
 export const IndicateursContainer = styled(Box)`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 `;
 
 export const PersonaContainer = styled(Box)`
@@ -110,9 +123,13 @@ export const PersonaContainer = styled(Box)`
 `;
 
 export const StyledEtablissementLibelle = styled(Typography)`
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   & i {
     margin-right: 4px;
+  }
+
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    margin-left: 0.75rem;
   }
 `;
 
@@ -141,6 +158,9 @@ export const AccordionContainer = styled(Box)`
 
 export const ContainerAnneeCommune = styled(Box)`
   max-width: 650px;
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    margin-left: 0.75rem;
+  }
 `;
 
 export const ContainerFormation = styled(Box)`
@@ -148,4 +168,7 @@ export const ContainerFormation = styled(Box)`
   gap: 1.5rem;
   display: flex;
   flex-direction: column;
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    margin-left: 0.75rem;
+  }
 `;
