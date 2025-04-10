@@ -1,14 +1,20 @@
 #!/bin/sh
 set -e
 
-mkdir -p /home/onyxia/work/
+# Use absolute path
+script_path="/scripts"
+base_path="/home/onyxia/work"
+pbf_path="${base_path}/pbf"
+gtfs_path="${base_path}/gtfs"
 
-if [ -d /home/onyxia/work/pbf ]; then
+mkdir -p "$base_path"
+
+if [ -d $pbf_path ]; then
     echo "PBF files already exist"
 else
     # Download pbf
-    mkdir -p /home/onyxia/work/pbf
-    cd /home/onyxia/work/pbf
+    mkdir -p $pbf_path
+    cd $pbf_path
 
     wget --progress=dot:giga https://download.geofabrik.de/europe/france-latest.osm.pbf
     wget --progress=dot:giga https://download.geofabrik.de/europe/france/martinique-latest.osm.pbf
@@ -20,20 +26,21 @@ else
     # Merge pbf
     echo "Merging PBF files"
     osmium merge france-latest.osm.pbf martinique-latest.osm.pbf guadeloupe-latest.osm.pbf mayotte-latest.osm.pbf guyane-latest.osm.pbf reunion-latest.osm.pbf -o full.osm.pbf
+    rm france-latest.osm.pbf martinique-latest.osm.pbf guadeloupe-latest.osm.pbf mayotte-latest.osm.pbf guyane-latest.osm.pbf reunion-latest.osm.pbf
 fi
 
-if [ -d /home/onyxia/work/gtfs ]; then
+if [ -d $gtfs_path ]; then
     echo "GTFS files already exist"
 else
     # Download and clean gtfs
-    mkdir -p /home/onyxia/work/gtfs
-    cd /home/onyxia/work/gtfs
-    bash /scripts/gtfs.sh
+    mkdir -p $gtfs_path
+    cd $gtfs_path
+    bash "${script_path}/gtfs.sh"
 fi
 
-cp /scripts/config.yml /home/onyxia/work/
-cp /graphhopper/graphhopper-web-9.1.jar /home/onyxia/work/
-cd /home/onyxia/work/
+cp "${script_path}/config.yml" $base_path
+cp /graphhopper/graphhopper-web-9.1.jar $base_path
+cd $base_path
 
 echo "Starting Graphhopper"
 

@@ -1,10 +1,13 @@
 #!/bin/bash
 set -e
 
+OS=$(uname)
+
 function download_and_clean() {
     local url="$1"
     local filename="$2"
     local zip_folder="$3"
+    local coordinate_correction="$4"
 
     wget --progress=dot:giga -O "$filename" "$url"
 
@@ -19,7 +22,30 @@ function download_and_clean() {
         rm -Rf tmp
     fi
 
-    $(go env GOPATH)/bin/gtfsclean -SCRmTcdsOeD "$filename"
+    # Correction of latitude/longitude with a "+" sign
+    if [[ "$coordinate_correction" == "1" ]]; then
+        mkdir tmp
+        unzip "$filename" -d tmp
+        cd tmp
+        if [ "$OS" = "Darwin" ]; then
+            # shapes.txt
+            sed -i '' 's/+\([0-9.]\)/\1/g' shapes.txt
+            # stops.txt
+            sed -i '' 's/+\([0-9.]\)/\1/g' stops.txt
+        else
+            # shapes.txt
+            sed -i 's/+\([0-9.]\)/\1/g' shapes.txt
+            # stops.txt
+            sed -i 's/+\([0-9.]\)/\1/g' stops.txt
+        fi
+
+        zip -0 "$filename" *
+        mv "$filename" ../
+        cd ../
+        rm -Rf tmp
+    fi
+
+    $(go env GOPATH)/bin/gtfsclean -SCRmTcsOeD "$filename"
     cd gtfs-out
     zip -0 "$filename" *
     mv "$filename" ..
@@ -34,16 +60,16 @@ echo "Downloading GTFS files"
 
 # 02 Martinique
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/d910480b-c9a5-4f48-a257-4e1aa799c5c8" "martinique-sud.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/82481c27-2e52-40ef-a563-b011ba487ead" "martinique-nord.zip" 1
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/82481c27-2e52-40ef-a563-b011ba487ead" "martinique-nord.zip" 1 1
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6e599077-0719-44b4-82ad-0da90a282846" "martinique-centre.zip"
-
+exit 1
 # 03 Guyane
 # Pas de source
 
 # 04 La Réunion
 download_and_clean "https://pysae.com/api/v2/groups/car-jaune/gtfs/pub" "reunion-p1.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/fc065c47-8644-4941-a8ca-4d8322a45749" "reunion-p2.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/919b4ca6-11e3-4156-bf59-5c0e7f25d929" "reunion-p3.zip"
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/919b4ca6-11e3-4156-bf59-5c0e7f25d929" "reunion-p3.zip" 0 1
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/8f3642e3-9fc3-45ed-af46-8c532966ace3" "reunion-p4.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/c9c2f609-d0cd-4233-ad1b-cf86b9bf2dc8" "reunion-p5.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6fee690a-f80c-4083-ac19-34341b864fe8" "reunion-p6.zip"
@@ -126,7 +152,9 @@ download_and_clean "https://mobi-iti-pdl.okina.fr/static/mobiiti_technique/gtfs_
 download_and_clean "https://www.korrigo.bzh/ftp/OPENDATA/KORRIGOBRET.gtfs.zip" "bretagne.zip"
 
 # 75 Nouvelle-Aquitaine
-download_and_clean "https://www.pigma.org/public/opendata/nouvelle_aquitaine_mobilites/publication/naq-aggregated-gtfs.zip" "nouvelle-aquitaine.zip"
+# La dernière version du fichier n'est pas valide, utilisation d'une archive
+# download_and_clean "https://www.pigma.org/public/opendata/nouvelle_aquitaine_mobilites/publication/naq-aggregated-gtfs.zip" "nouvelle-aquitaine.zip"
+download_and_clean "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/82321/82321.20250317.121156.855887.zip" "nouvelle-aquitaine.zip"
 
 # 76 Occitanie
 download_and_clean "https://app.mecatran.com/utw/ws/gtfsfeed/static/lio?apiKey=2b160d626f783808095373766f18714901325e45&type=gtfs_lio" "occitanie.zip"
