@@ -6,23 +6,29 @@ OS=$(uname)
 function fix_empty_tranfer_type() {
     if [ -f transfers.txt ]; then
         awk -F, '
-  NR==1 { 
-    for (i=1; i<=NF; i++) {
-      if ($i == "transfer_type") {
-        col = i;
-        break;
-      }
+    BEGIN { OFS="," }
+      
+    NR==1 { 
+        # Find the position of transfer_type column
+        for (i=1; i<=NF; i++) {
+            if ($i == "transfer_type") {
+            col = i;
+            break;
+            }
+        }
+        print;
+        next;
+        }
+        
+        {
+        # Replace empty transfer_type with "0"
+        if ($col == "") {
+            $col = "0";
+            # Force record reconstruction with proper OFS
+            $1=$1;
+        }
+        print;
     }
-    print;
-    next;
-  }
-  {
-    if ($col == "") {
-      $col = "0";
-    }
-    OFS=",";
-    print;
-  }
 ' transfers.txt >transfers.tmp
         mv transfers.tmp transfers.txt
     fi
