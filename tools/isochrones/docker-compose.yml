@@ -7,12 +7,12 @@ services:
     container_name: graphhopper
     build:
       context: graphhopper
-      args:
-        GRAPHHOPPER_MEMORY_LIMIT: ${GRAPHHOPPER_MEMORY_LIMIT:-4g}
     mem_limit: ${GRAPHHOPPER_MEMORY_LIMIT:-4g}
     restart: unless-stopped
     networks:
       - isochrones_network
+    volumes:
+      - graphhopper_data:/data:z
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8989/health"]
       interval: 30s
@@ -48,3 +48,8 @@ services:
 networks:
   isochrones_network:
     name: isochrones_network
+
+volumes:
+  graphhopper_data:
+    driver: local
+    name: graphhopper_data

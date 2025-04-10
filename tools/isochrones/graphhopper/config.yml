@@ -1,6 +1,7 @@
 graphhopper:
   datareader.file: pbf/full.osm.pbf
-  gtfs.file: gtfs/IDFM-gtfs.zip,gtfs/export-ter-gtfs-last.zip,gtfs/KORRIGOBRET.gtfs.zip
+  # gtfs.file: gtfs/IDFM-gtfs.zip,gtfs/export-ter-gtfs-last.zip,gtfs/KORRIGOBRET.gtfs.zip
+  gtfs.file: gtfs/martinique-sud.zip,gtfs/martinique-nord.zip,gtfs/martinique-centre.zip,gtfs/reunion-p1.zip,gtfs/reunion-p2.zip,gtfs/reunion-p3.zip,gtfs/reunion-p4.zip,gtfs/reunion-p5.zip,gtfs/reunion-p6.zip,gtfs/ile-de-france.zip,gtfs/centre-val-de-loire.zip,gtfs/bfc-doubs.zip,gtfs/bfc-cote-dor.zip,gtfs/bfc-nievre.zip,gtfs/bfc-haute-saone.zip,gtfs/bfc-saone-et-loire.zip,gtfs/bfc-jura.zip,gtfs/bfc-yonne.zip,gtfs/normandie.zip,gtfs/hdf-aisne.zip,gtfs/hdf-somme.zip,gtfs/hdf-pas-de-calais.zip,gtfs/hdf-oise-p1.zip,gtfs/hdf-oise-p2.zip,gtfs/hdf-oise-p3.zip,gtfs/hdf-oise-p4.zip,gtfs/hdf-nord-p1.zip,gtfs/hdf-nord-p2.zip,gtfs/hdf-nord-p3a.zip,gtfs/hdf-nord-p3b.zip,gtfs/hdf-nord-p4.zip,gtfs/ge-ardennes.zip,gtfs/ge-aube.zip,gtfs/ge-bas-rhin.zip,gtfs/ge-haute-marne.zip,gtfs/ge-haut-rhin.zip,gtfs/ge-marne.zip,gtfs/ge-meurthe.zip,gtfs/ge-meuse.zip,gtfs/ge-moselle.zip,gtfs/ge-vosges.zip,gtfs/pays-de-la-loire.zip,gtfs/bretagne.zip,gtfs/nouvelle-aquitaine.zip,gtfs/occitanie.zip,gtfs/auvergne.zip,gtfs/provence-p1.zip,gtfs/provence-p2.zip,gtfs/corse-haute.zip,gtfs/corse-sud.zip,gtfs/ter-national.zip
   graph.location: graphs
   profiles:
     - name: foot
