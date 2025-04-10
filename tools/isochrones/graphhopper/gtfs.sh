@@ -81,8 +81,6 @@ function download_and_clean() {
 
 echo "Downloading GTFS files"
 
-download_and_clean "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/82321/82321.20250317.121156.855887.zip" "nouvelle-aquitaine.zip"
-exit 0
 # 01 Guadeloupe
 # Pas de source
 
