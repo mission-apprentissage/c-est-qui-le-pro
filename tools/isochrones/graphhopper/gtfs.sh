@@ -62,7 +62,7 @@ echo "Downloading GTFS files"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/d910480b-c9a5-4f48-a257-4e1aa799c5c8" "martinique-sud.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/82481c27-2e52-40ef-a563-b011ba487ead" "martinique-nord.zip" 1 1
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6e599077-0719-44b4-82ad-0da90a282846" "martinique-centre.zip"
-exit 1
+
 # 03 Guyane
 # Pas de source
 
