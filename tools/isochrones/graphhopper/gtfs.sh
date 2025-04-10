@@ -3,6 +3,31 @@ set -e
 
 OS=$(uname)
 
+function fix_empty_tranfer_type() {
+    if [ -f transfers.txt ]; then
+        awk -F, '
+  NR==1 { 
+    for (i=1; i<=NF; i++) {
+      if ($i == "transfer_type") {
+        col = i;
+        break;
+      }
+    }
+    print;
+    next;
+  }
+  {
+    if ($col == "") {
+      $col = "0";
+    }
+    OFS=",";
+    print;
+  }
+' transfers.txt >transfers.tmp
+        mv transfers.tmp transfers.txt
+    fi
+}
+
 function download_and_clean() {
     local url="$1"
     local filename="$2"
@@ -47,6 +72,7 @@ function download_and_clean() {
 
     $(go env GOPATH)/bin/gtfsclean -SCRmTcsOeD "$filename"
     cd gtfs-out
+    fix_empty_tranfer_type
     zip -0 "$filename" *
     mv "$filename" ..
     cd ..
@@ -55,6 +81,8 @@ function download_and_clean() {
 
 echo "Downloading GTFS files"
 
+download_and_clean "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/82321/82321.20250317.121156.855887.zip" "nouvelle-aquitaine.zip"
+exit 0
 # 01 Guadeloupe
 # Pas de source
 
