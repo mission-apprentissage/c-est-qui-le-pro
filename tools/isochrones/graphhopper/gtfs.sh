@@ -54,7 +54,7 @@ function download_and_clean() {
     fi
 
     # Correction of latitude/longitude with a "+" sign
-    if [[ "$coordinate_correction" == "1" ]]; then
+    if [[ "$coordinate_correction" != "0" ]]; then
         mkdir tmp
         unzip "$filename" -d tmp
         cd tmp
