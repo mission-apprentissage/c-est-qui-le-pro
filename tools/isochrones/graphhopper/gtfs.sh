@@ -59,13 +59,17 @@ function download_and_clean() {
         unzip "$filename" -d tmp
         cd tmp
         if [ "$OS" = "Darwin" ]; then
-            # shapes.txt
-            sed -i '' 's/+\([0-9.]\)/\1/g' shapes.txt
+            if [ -f shapes.txt ]; then
+                # shapes.txt
+                sed -i '' 's/+\([0-9.]\)/\1/g' shapes.txt
+            fi
             # stops.txt
             sed -i '' 's/+\([0-9.]\)/\1/g' stops.txt
         else
-            # shapes.txt
-            sed -i 's/+\([0-9.]\)/\1/g' shapes.txt
+            if [ -f shapes.txt ]; then
+                # shapes.txt
+                sed -i 's/+\([0-9.]\)/\1/g' shapes.txt
+            fi
             # stops.txt
             sed -i 's/+\([0-9.]\)/\1/g' stops.txt
         fi
