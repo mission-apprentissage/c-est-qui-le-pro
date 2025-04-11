@@ -40,7 +40,7 @@ function download_and_clean() {
     local zip_folder="$3"
     local coordinate_correction="$4"
 
-    wget --progress=dot:giga -O "$filename" "$url"
+    wget --retry-on-http-error=all --tries=5 --waitretry=1 --progress=dot:giga -O "$filename" "$url"
 
     # Some GTFS zip has a subfolder
     if [[ "$zip_folder" == "1" ]]; then
@@ -96,7 +96,7 @@ echo "Downloading GTFS files"
 
 # 02 Martinique
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/d910480b-c9a5-4f48-a257-4e1aa799c5c8" "martinique-sud.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/82481c27-2e52-40ef-a563-b011ba487ead" "martinique-nord.zip" 1 1
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/82481c27-2e52-40ef-a563-b011ba487ead" "martinique-nord.zip" 1
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6e599077-0719-44b4-82ad-0da90a282846" "martinique-centre.zip"
 
 # 03 Guyane
@@ -105,7 +105,7 @@ download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6e599077-0719-44b4-82
 # 04 La Réunion
 download_and_clean "https://pysae.com/api/v2/groups/car-jaune/gtfs/pub" "reunion-p1.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/fc065c47-8644-4941-a8ca-4d8322a45749" "reunion-p2.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/919b4ca6-11e3-4156-bf59-5c0e7f25d929" "reunion-p3.zip" 0 1
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/919b4ca6-11e3-4156-bf59-5c0e7f25d929" "reunion-p3.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/8f3642e3-9fc3-45ed-af46-8c532966ace3" "reunion-p4.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/c9c2f609-d0cd-4233-ad1b-cf86b9bf2dc8" "reunion-p5.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/6fee690a-f80c-4083-ac19-34341b864fe8" "reunion-p6.zip"
