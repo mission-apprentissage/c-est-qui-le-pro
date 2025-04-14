@@ -47,6 +47,11 @@ export default () => {
       }
 
       const formation = await FormationRepository.get({ cfd, codeDispositif, voie }, true);
+      const formationsFamilleMetier = await FormationEtablissement.getFormationsFamilleMetier({
+        familleMetierId: formation.familleMetierId,
+        isAnneeCommune: formation.isAnneeCommune,
+        uai: formationEtablissement.etablissement.uai,
+      });
 
       const accessTime =
         latitude && longitude
@@ -58,7 +63,11 @@ export default () => {
           : null;
 
       addJsonHeaders(res);
-      res.send(stripNull(merge(formationEtablissement, { etablissement: { accessTime } }, { formation })));
+      res.send(
+        stripNull(
+          merge(formationEtablissement, { etablissement: { accessTime } }, { formation, formationsFamilleMetier })
+        )
+      );
     })
   );
 

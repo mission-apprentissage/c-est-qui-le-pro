@@ -23,13 +23,13 @@ import {
   FlexBox,
   FlexSpaceBetweenBox,
   SalaryGradientBar,
-  FlexCenterColumnBox,
-  BlueLink,
   SalaryEnsembleBox,
 } from "./FormationBlockAccesEmploi.styled";
 import { css } from "@emotion/react";
 import { getColorAtPosition } from "#/app/utils/color";
 import { createPortal } from "react-dom";
+import { BlueLink, FlexCenterColumnBox } from "#/app/(accompagnateur)/components/InserJeunes.styled";
+import { WidgetFooter } from "#/app/(accompagnateur)/components/WidgetInserJeunes";
 
 export function FormationSalaire({ formation }: { formation: Formation }) {
   if (
@@ -155,18 +155,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
       </MarginBottomNegative>
       {createPortal(<DialogSalaireGlobal />, document.body)}
       <BlockDivider />
-      <FlexCenterColumnBox>
-        <Typography variant="body3">
-          Données issues du dispositif{" "}
-          <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
-            InserJeunes
-          </BlueLink>{" "}
-          promotion {formation.indicateurPoursuite.millesimeSalaire}.{" "}
-          <BlueLink target="_blank" href="https://documentation.exposition.inserjeunes.beta.gouv.fr/">
-            D&apos;où viennent ces données ?
-          </BlueLink>
-        </Typography>
-      </FlexCenterColumnBox>
+      <WidgetFooter millesime={formation.indicateurPoursuite.millesimeSalaire || ""} />
     </>
   );
 }

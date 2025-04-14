@@ -27,3 +27,12 @@ export function formatStatut(etablissement: Etablissement): string {
 export function formatSalaire(salaire: number) {
   return salaire.toLocaleString().replace(/,/g, " ");
 }
+
+export function formatMillesime(str: string) {
+  const part = str.split("_");
+  if (part.length === 1) {
+    return str;
+  }
+
+  return `${part[0]} et ${part[1]}`;
+}
