@@ -1,3 +1,10 @@
+# [1.34.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.33.0...v1.34.0) (2025-04-14)
+
+
+### Features
+
+* internalisation du widget inserjeunes ([#55](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/55)) ([2ac8c76](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/2ac8c76ea14b1444b30e846a2a28669552e9256c))
+
 # [1.33.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.32.0...v1.33.0) (2025-04-01)
 
 
