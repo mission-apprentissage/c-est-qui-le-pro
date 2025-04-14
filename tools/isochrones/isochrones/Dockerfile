@@ -3,8 +3,8 @@ FROM debian:bookworm-slim
 RUN apt-get update
 RUN apt-get -y install jq parallel curl
 
-WORKDIR /data
+WORKDIR /scripts
 
-COPY entrypoint.sh entrypoint.sh
+COPY scripts /scripts
 
-ENTRYPOINT ["bash", "entrypoint.sh", "pt", "bike"]
+ENTRYPOINT ["bash", "/scripts/docker-entrypoint.sh", "pt", "bike"]

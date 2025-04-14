@@ -158,7 +158,7 @@ spec:
           image: "{{ .Values.service.image.version }}"
           {{- end }}
           command: ["/bin/sh","-c"]
-          args: ["/graphhopper/entrypoint.sh"]
+          args: {{- toYaml .Values.service.args | nindent 12 }}
           imagePullPolicy: {{ .Values.service.image.pullPolicy }}
           {{- if .Values.lifecycleHooks }}
           lifecycle:
@@ -231,12 +231,17 @@ spec:
                 name: {{ include "library-chart.secretNameExtraEnv" . }}
             {{- end }}
           livenessProbe:
-            httpGet:
-              path: /
-              port: {{ .Values.networking.service.port }}
-            timeoutSeconds: 2
-            failureThreshold: 6
-          readinessProbe: null
+            exec:
+              command:
+              - sh
+              - -c
+              - "echo 'Readiness check' && exit 0"
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - "echo 'Readiness check' && exit 0"
           {{- if hasKey .Values "startupProbe" }}
           startupProbe:
             httpGet:

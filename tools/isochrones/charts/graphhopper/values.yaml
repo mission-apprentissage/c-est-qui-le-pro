@@ -10,6 +10,20 @@ service:
     custom:
       enabled: true
       version: ghcr.io/mission-apprentissage/graphhopper:latest
+ingress:
+  enabled: true
+  hostname: graphhopper-cqlp.lab.sspcloud.fr
+  tls: true
+  ingressClassName: 'nginx'  # specify your ingress controller class name
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+  userHostname: chart-example-user.local
+  useCertManager: false
+  certManagerClusterIssuer: ''
+  useTlsSecret: false
 security:
   password: changeme
   networkPolicy:
@@ -29,7 +43,6 @@ init:
 extraEnvVars:
   - name: GRAPHHOPPER_MEMORY_LIMIT
     value: "96g"
-  # Add more environment variables as needed
 s3:
   enabled: false
   secretName: ''
@@ -87,7 +100,25 @@ environment:
 kubernetes:
   enabled: true
   role: view
-podAnnotations: {}
+# Pod termination settings
+podTerminationGracePeriod: 300 # 5 minutes grace period
+
+# Container lifecycle hooks
+lifecycleHooks:
+  preStop:
+    exec:
+      command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          PID=$(ps aux | grep graphhopper-web | grep -v grep | awk '{print $1}')
+          [ -n "$PID" ] && kill -15 $PID && sleep 30
+
+# StatefulSet update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    partition: 0
 podSecurityContext:
   fsGroup: 100
 securityContext: {}
@@ -100,16 +131,6 @@ networking:
     enabled: false
     port: 8989
     ports: []
-ingress:
-  enabled: false
-  tls: true
-  ingressClassName: ''
-  annotations: []
-  hostname: chart-example.local
-  userHostname: chart-example-user.local
-  useCertManager: false
-  certManagerClusterIssuer: ''
-  useTlsSecret: false
 route:
   enabled: false
   annotations: []
@@ -127,7 +148,7 @@ resources:
     memory: 143Gi
 persistence:
   enabled: true
-  size: 100Gi
+  size: 200Gi
   accessMode: ReadWriteOnce
 autoscaling:
   enabled: false
@@ -138,8 +159,8 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 startupProbe:
-  failureThreshold: 60
-  initialDelaySeconds: 6400 # time to import data in graphhopper
+  failureThreshold: 720
+  initialDelaySeconds: 10
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 2

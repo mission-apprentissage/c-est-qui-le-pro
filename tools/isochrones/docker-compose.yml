@@ -17,13 +17,14 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8989/health"]
       interval: 30s
       timeout: 10s
+      start_period: 2h
       retries: 5
 
   isochrones:
     image: isochrones
     environment:
       - ISOCHRONE_PARALLEL=${ISOCHRONE_PARALLEL:-16}
-      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2024-12-16T07%3A30%3A00.000Z}
+      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2025-04-14T07%3A30%3A00.000Z}
       - CQLP_API=${CQLP_API:-http://host.docker.internal:5000}
       - COMPUTE_POSTGRES_URI=${POSTGRES_URI}
       - GRAPHHOPPER_URL=${GRAPHHOPPER_URL:-http://graphhopper:8989}
@@ -38,7 +39,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - ./isochrones/data:/data:z
+      - ./isochrones/data:/home/onyxia/work:z
     depends_on:
       graphhopper:
         condition: service_healthy
