@@ -1,3 +1,10 @@
+## [1.34.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.34.0...v1.34.1) (2025-04-14)
+
+
+### Bug Fixes
+
+* missing libelle dans les indicateurs de poursuites ([d57cf63](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/d57cf6313f85f4d5efbab1672c1bff664e9484df))
+
 # [1.34.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.33.0...v1.34.0) (2025-04-14)
 
 
