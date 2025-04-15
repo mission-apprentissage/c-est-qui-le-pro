@@ -232,15 +232,17 @@ spec:
             {{- end }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: {{ .Values.networking.service.port }}
-            timeoutSeconds: 2
-            failureThreshold: 6
+            timeoutSeconds: 120
+            failureThreshold: 5
+            successThreshold: 1
+            periodSeconds: 60
           readinessProbe: null
           {{- if hasKey .Values "startupProbe" }}
           startupProbe:
             httpGet:
-              path: /
+              path: /health
               port: {{ .Values.networking.service.port }}
             {{- toYaml .Values.startupProbe | nindent 12 }}
           {{- end }}

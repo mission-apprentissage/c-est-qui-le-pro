@@ -12,6 +12,6 @@ readonly RESULT_FILE="done_${GRAPHHOPPER_PROFILE}_${TIME}"
 
 mkdir -p isochrones/${GRAPHHOPPER_PROFILE}/${TIME}
 
-curl --no-progress-meter "${GRAPHHOPPER_URL}/isochrone?point=${LATITUDE},${LONGITUDE}&profile=${GRAPHHOPPER_PROFILE}&pt.earliest_departure_time=${DATE}&time_limit=${TIME}&buckets=1&result=multipolygon&reverse_flow=true" >isochrones/${GRAPHHOPPER_PROFILE}/${TIME}/${UAI}.json
+curl --retry 5 --no-progress-meter "${GRAPHHOPPER_URL}/isochrone?point=${LATITUDE},${LONGITUDE}&profile=${GRAPHHOPPER_PROFILE}&pt.earliest_departure_time=${DATE}&time_limit=${TIME}&buckets=1&result=multipolygon&reverse_flow=true" >isochrones/${GRAPHHOPPER_PROFILE}/${TIME}/${UAI}.json
 echo "done: ${UAI}"
 echo "done: ${UAI}" >>${RESULT_FILE}

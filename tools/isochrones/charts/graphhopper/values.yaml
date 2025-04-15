@@ -43,6 +43,8 @@ init:
 extraEnvVars:
   - name: GRAPHHOPPER_MEMORY_LIMIT
     value: "96g"
+  - name: GRAPHHOPPER_CPU_COUNT
+    value: "20"
 s3:
   enabled: false
   secretName: ''
@@ -163,7 +165,7 @@ startupProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
   successThreshold: 1
-  timeoutSeconds: 2
+  timeoutSeconds: 20
 userPreferences:
   darkMode: false
   language: en

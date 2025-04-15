@@ -4,6 +4,7 @@ services:
     image: graphhopper
     environment:
       - GRAPHHOPPER_MEMORY_LIMIT=${GRAPHHOPPER_MEMORY_LIMIT:-4g}
+      - GRAPHHOPPER_CPU_COUNT=${GRAPHHOPPER_CPU_COUNT:-4}
     container_name: graphhopper
     build:
       context: graphhopper
