@@ -16,7 +16,7 @@ export default function useGetFormations({
   uais,
   cfds,
   postcode,
-  minWeight = 0,
+  minWeight = 101,
   page,
   items_par_page = 100,
 }: {
