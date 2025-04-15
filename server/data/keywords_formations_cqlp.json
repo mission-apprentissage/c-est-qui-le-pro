@@ -9248,20 +9248,12 @@
                 "score": 0.1978
             },
             {
-                "mot_clef": "cheval",
-                "score": 0.1946
-            },
-            {
                 "mot_clef": "découpe",
                 "score": 0.1639
             },
             {
                 "mot_clef": "porc",
                 "score": 0.1344
-            },
-            {
-                "mot_clef": "animal",
-                "score": 0.1263
             },
             {
                 "mot_clef": "découpage",
@@ -10693,20 +10685,12 @@
                 "score": 0.1978
             },
             {
-                "mot_clef": "cheval",
-                "score": 0.1946
-            },
-            {
                 "mot_clef": "découpe",
                 "score": 0.1639
             },
             {
                 "mot_clef": "porc",
                 "score": 0.1344
-            },
-            {
-                "mot_clef": "animal",
-                "score": 0.1263
             },
             {
                 "mot_clef": "découpage",
@@ -13621,10 +13605,6 @@
             {
                 "mot_clef": "élève",
                 "score": 0.0631
-            },
-            {
-                "mot_clef": "animal",
-                "score": 0.0603
             },
             {
                 "mot_clef": "style",
@@ -43768,10 +43748,6 @@
             {
                 "mot_clef": "élève",
                 "score": 0.0631
-            },
-            {
-                "mot_clef": "animal",
-                "score": 0.0603
             },
             {
                 "mot_clef": "style",

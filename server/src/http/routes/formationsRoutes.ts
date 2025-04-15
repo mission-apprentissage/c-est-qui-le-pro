@@ -111,7 +111,7 @@ export default () => {
           academie: Joi.string().empty("").default(null),
           formation: Joi.string().empty("").default(null),
           reverse: Joi.boolean().empty("").default(true),
-          minWeight: Joi.number().min(0).max(1000).default(0),
+          minWeight: Joi.number().min(0).max(1000).default(101),
           ...validators.pagination({ items_par_page: 100 }),
         }
       );
