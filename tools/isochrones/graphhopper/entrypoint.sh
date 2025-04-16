@@ -44,4 +44,4 @@ cd $base_path
 
 echo "Starting Graphhopper"
 
-java -XX:ActiveProcessorCount=$GRAPHHOPPER_CPU_COUNT -Xmx$GRAPHHOPPER_MEMORY_LIMIT -Xms$GRAPHHOPPER_MEMORY_LIMIT -jar graphhopper-web-9.1.jar server config.yml
+java -XX:+UseShenandoahGC -XX:ActiveProcessorCount=$GRAPHHOPPER_CPU_COUNT -Xmx$GRAPHHOPPER_MEMORY_LIMIT -Xms$GRAPHHOPPER_MEMORY_LIMIT -jar graphhopper-web-9.1.jar server config.yml

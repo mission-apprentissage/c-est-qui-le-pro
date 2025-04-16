@@ -234,10 +234,10 @@ spec:
             httpGet:
               path: /health
               port: {{ .Values.networking.service.port }}
-            timeoutSeconds: 120
+            timeoutSeconds: 300
             failureThreshold: 5
             successThreshold: 1
-            periodSeconds: 60
+            periodSeconds: 120
           readinessProbe: null
           {{- if hasKey .Values "startupProbe" }}
           startupProbe:

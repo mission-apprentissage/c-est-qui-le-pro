@@ -103,7 +103,7 @@ kubernetes:
   enabled: true
   role: view
 # Pod termination settings
-podTerminationGracePeriod: 300 # 5 minutes grace period
+podTerminationGracePeriod: 1200 # 5 minutes grace period
 
 # Container lifecycle hooks
 lifecycleHooks:

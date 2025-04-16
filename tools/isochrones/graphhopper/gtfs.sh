@@ -274,7 +274,7 @@ download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0d6e6c56-8926-49b3-87
 
 # 32 Hauts-de-France
 download_and_clean "https://media.ilevia.fr/opendata/gtfs.zip" "hdf-urbain-01.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/d4efef07-b80d-4922-af53-1599f5b5628a" "hdf-urbain-02.zip"
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/031c86b2-a1ca-4cc1-b926-77707423d9cb" "hdf-urbain-02.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/15438966-8d3c-4dd9-8905-189379ea4c7d" "hdf-urbain-03.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/99cf5e2f-87c2-4ff1-bc0d-32f04cc213ab" "hdf-urbain-04.zip"
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f51fabfb-9d7a-44b7-bd03-d1032337fb80" "hdf-urbain-05.zip"

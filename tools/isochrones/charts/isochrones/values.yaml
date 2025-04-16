@@ -16,9 +16,9 @@ imagePullSecrets:
   - name: github-registry
 extraEnvVars:
   - name: ISOCHRONE_PARALLEL
-    value: "16"
+    value: "8"
   - name: ISOCHRONE_DATE
-    value: "2025-04-14T06%3A30%3A00.000Z"
+    value: "2025-05-05T06%3A30%3A00.000Z"
   - name: CQLP_API
     value: "http://cestquilepro.inserjeunes.beta.gouv.fr"
   - name: GRAPHHOPPER_URL
