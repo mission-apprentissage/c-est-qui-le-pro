@@ -1,3 +1,10 @@
+# [1.35.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.34.1...v1.35.0) (2025-04-22)
+
+
+### Features
+
+* amélioration de la recherche ([#56](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/56)) ([9bcd4d7](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/9bcd4d7c1c19fe019e278b56dbcca6055f2e2f47))
+
 ## [1.34.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.34.0...v1.34.1) (2025-04-14)
 
 
