@@ -17,9 +17,9 @@ ingress:
   ingressClassName: 'nginx'  # specify your ingress controller class name
   annotations:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-    nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-body-size: "128m"
   userHostname: chart-example-user.local
   useCertManager: false
   certManagerClusterIssuer: ''
