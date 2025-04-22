@@ -10,7 +10,7 @@ import { DB, Etablissement, Formation, FormationEtablissement } from "#src/commo
 import { jsonBuildObject } from "kysely/helpers/postgres";
 import FormationRepository from "#src/common/repositories/formation";
 import config from "#src/config";
-import { search } from "#src/services/formation/search.js";
+import { search, searchReverse } from "#src/services/formation/search.js";
 import { flatten, pick } from "lodash-es";
 
 const logger = getLoggerWithContext("query");
@@ -180,7 +180,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
   if (latitude === null || longitude === null) {
     return {
       query: queryEtablissement.select(sql.val(null).as("accessTime")),
-      order: sql.raw(['"etablissementId"', "id"].filter((d) => d).join(",")),
+      order: () => sql.raw(['"etablissementId"', "id"].filter((d) => d).join(",")),
     };
   }
 
@@ -199,20 +199,32 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
         eb.or([eb("academie", "=", academie), ...(queryIsochrones ? [eb("buckets.time", "is not", null)] : [])])
       )
       .$if(distance || (timeLimit && !queryIsochrones), (qb) => qb.where("etablissement.distance", "<", distance)),
-    order: sql.raw(
-      [
-        queryIsochrones ? '"accessTime"' : null,
-        queryIsochrones ? 'case when "accessTime" is not null then statut else null end DESC' : null,
-        queryIsochrones
-          ? `case when "accessTime" is not null then array_position(array['sous contrat',null,'reconnu par l''Etat', 'hors contrat'], "statutDetail") else null end`
-          : null,
-        "distance",
-        '"etablissementId"',
-        "id",
-      ]
-        .filter((d) => d)
-        .join(",")
-    ),
+    order: (filtersId: string[] | null) =>
+      sql`${queryIsochrones ? sql`${sql.ref("accessTime")},` : sql.raw("")}
+    ${
+      queryIsochrones
+        ? sql`case when ${sql.ref("accessTime")} is not null then statut else null end DESC,`
+        : sql.raw("")
+    }
+    ${
+      queryIsochrones
+        ? sql`case when ${sql.ref(
+            "accessTime"
+          )} is not null then array_position(array['sous contrat',null,'reconnu par l''Etat', 'hors contrat'], ${sql.ref(
+            "statutDetail"
+          )}) else null end,`
+        : sql.raw("")
+    }
+      ${
+        queryIsochrones && filtersId
+          ? sql`case when ${sql.ref("accessTime")} is not null then array_position(${sql.val(filtersId)}, ${sql.ref(
+              "id"
+            )}) else null end,`
+          : sql.raw("")
+      }
+    ${sql.ref("distance")},
+    ${sql.ref("etablissementId")},
+    ${sql.ref("id")}`,
   };
 }
 
@@ -255,13 +267,15 @@ async function buildFiltersFormationSQL({ cfds, domaines, voie, diplome }) {
   };
 }
 
-async function getFiltersId(formation) {
-  if (!formation) {
+async function getFiltersId({ query, reverse, minWeight }) {
+  if (!query) {
     return null;
   }
 
-  // Fuse search
-  return await search(formation);
+  if (reverse) {
+    return await searchReverse(query, minWeight);
+  }
+  return await search(query);
 }
 
 export async function getFormationsSQL(
@@ -270,7 +284,7 @@ export async function getFormationsSQL(
     filtersFormation = { cfds: null, domaines: null, voie: null, diplome: null },
     tag = null,
     millesime,
-    formation = null,
+    formation = { query: null, reverse: false, minWeight: 0 },
   },
   pagination = { page: 1, limit: 100 }
 ) {
@@ -329,12 +343,11 @@ export async function getFormationsSQL(
         )
         .select(sql`COUNT("accessTime") OVER ()`.as("totalIsochrone"))
         .select(sql`COUNT(*) OVER ()`.as("total"))
-        .select(sql<string>`ROW_NUMBER() OVER (ORDER BY  ${queryEtablissement.order})`.as("order"))
+        .select(sql<string>`ROW_NUMBER() OVER (ORDER BY  ${queryEtablissement.order(filtersId)})`.as("order"))
         .selectAll()
         .limit(limit)
         .offset(skip)
-        .orderBy(queryEtablissement.order)
-        //.orderBy("order")
+        .orderBy(queryEtablissement.order(filtersId))
         .as("formations")
     )
     .select((eb) =>

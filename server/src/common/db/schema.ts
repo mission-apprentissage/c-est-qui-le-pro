@@ -98,6 +98,7 @@ export interface Formation {
   mef11: string | null;
   niveauDiplome: Generated<string>;
   onisepIdentifiant: string | null;
+  sigle: string | null;
   updatedAt: Generated<Timestamp>;
   voie: string;
 }
@@ -131,6 +132,14 @@ export interface FormationFamilleMetierView {
   familleMetierId: string | null;
   formationsFamilleMetier: Json | null;
   millesime: string[] | null;
+}
+
+export interface FormationKeyword {
+  createdAt: Generated<Timestamp>;
+  formationId: string;
+  keyword: string;
+  updatedAt: Generated<Timestamp>;
+  weight: Generated<number>;
 }
 
 export interface FormationPoursuite {
@@ -322,6 +331,7 @@ export interface DB {
   formationDomainesView: FormationDomainesView;
   formationEtablissement: FormationEtablissement;
   formationFamilleMetierView: FormationFamilleMetierView;
+  formationKeyword: FormationKeyword;
   formationPoursuite: FormationPoursuite;
   formationRome: FormationRome;
   formationSimilaire: FormationSimilaire;
