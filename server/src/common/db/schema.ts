@@ -92,6 +92,7 @@ export interface Formation {
   descriptionAcces: string | null;
   descriptionPoursuiteEtudes: string | null;
   familleMetierId: string | null;
+  formacode: string | null;
   id: Generated<string>;
   isAnneeCommune: Generated<boolean | null>;
   libelle: string | null;
@@ -203,6 +204,7 @@ export interface IndicateurPoursuite {
   createdAt: Generated<Timestamp>;
   formationEtablissementId: string | null;
   id: Generated<string>;
+  libelle: string | null;
   millesime: string | null;
   part_en_emploi_6_mois: number | null;
   taux_autres_6_mois: number | null;
@@ -315,10 +317,6 @@ export interface SpatialRefSys {
   srtext: string | null;
 }
 
-export interface Test {
-  test: string | null;
-}
-
 export interface DB {
   domaine: Domaine;
   etablissement: Etablissement;
@@ -348,5 +346,4 @@ export interface DB {
   rome: Rome;
   romeMetier: RomeMetier;
   spatial_ref_sys: SpatialRefSys;
-  test: Test;
 }
