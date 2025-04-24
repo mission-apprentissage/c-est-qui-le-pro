@@ -186,8 +186,6 @@ export type Formation = {
   indicateurPoursuite?: IndicateurPoursuiteNational;
   metier?: Metier[];
   isAnneeCommune?: boolean;
-  // TODO : to remove - test
-  keyword?: any;
 };
 
 type JourneesPortesOuverteDate = {

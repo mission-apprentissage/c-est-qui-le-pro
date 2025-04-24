@@ -41,8 +41,6 @@ export default React.memo(function FormationCard({
   css?: SerializedStyles;
   className?: string;
 }) {
-  // TODO: to remove test
-  const [keywordVisible, setKeywordVisible] = useState(false);
   const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
     formationDetail: formationDetail,
@@ -85,26 +83,6 @@ export default React.memo(function FormationCard({
 
           <FormationTags tags={formationEtablissement.tags || []} />
         </Stack>
-
-        {/* {TODO: TO REMOVE test} */}
-        <div
-          style={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setKeywordVisible(!keywordVisible);
-          }}
-        >
-          {!keywordVisible && <div>Voir les keywords (/!\ affiche pas les keywords familles de métiers)</div>}
-          {keywordVisible &&
-            formation.keyword.map((k: any) => {
-              return (
-                <div key={`${k.keyword}_${k.weight}`} style={{ paddingRight: "0.5rem" }}>
-                  {k.keyword} ({k.weight})
-                </div>
-              );
-            })}
-        </div>
 
         <Typography variant="subtitle2" style={{ lineHeight: "28px" }}>
           {formatLibelle(formation.libelle)}

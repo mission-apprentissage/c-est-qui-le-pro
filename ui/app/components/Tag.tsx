@@ -13,7 +13,6 @@ export type TagProps = {
   bold?: boolean | string;
 } & DSFRBTagProps;
 
-// TODO: fix css order
 const TagStyled = styled(Tag, {
   shouldForwardProp: (prop) => !["variant", "square", "level", "active", "bold"].includes(prop),
 })<TagProps>`
