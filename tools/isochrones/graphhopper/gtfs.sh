@@ -204,9 +204,9 @@ download_and_clean "https://www.datasud.fr/fr/dataset/datasets/3743/resource/515
 
 # 94 Corse
 # Haute Corse
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f6fe5d5a-8ad7-4de2-a1b1-ea1f5eacd16a" "corse-haute.zip"
+download_and_clean "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/82994/82994.20250422.060926.444559.zip" "corse-haute.zip"
 # Corse du Sud
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/416261b8-016d-4639-bab5-39a588665fc7" "corse-sud.zip"
+download_and_clean "https://transport-data-gouv-fr-resource-history-prod.cellar-c2.services.clever-cloud.com/82996/82996.20250422.060212.133473.zip" "corse-sud.zip"
 
 # TER national
 download_and_clean "https://eu.ftp.opendatasoft.com/sncf/plandata/export-ter-gtfs-last.zip" "ter-national.zip"
@@ -247,30 +247,30 @@ download_and_clean "https://www.data.gouv.fr/fr/datasets/r/b38a8202-1d7e-4345-96
 download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0163a7b9-f4b1-4d9b-9af1-dcc0e583c3b4" "occitanie-urbain-30.zip"
 
 # 94 Corse
-download_and_clean "https://pysae.com/api/v2/groups/porto-vecchio/gtfs/pub" "corse-urbain-01.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0057a43c-66be-4584-92a3-6e15a7156102" "corse-urbain-02.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/2b6f8e49-4818-4d0a-9c4d-e25baacaf9fc" "corse-urbain-03.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f88dae7d-cf93-4a4b-aa82-9256d5f3cefc" "corse-urbain-04.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/3f08460c-8ec7-4b9e-a244-8855292b9e24" "corse-urbain-05.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/97dffc79-5284-4da7-b4f0-6dcea3b53f01" "corse-urbain-06.zip"
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/3f08460c-8ec7-4b9e-a244-8855292b9e24" "corse-urbain-01.zip" # Réseau urbain Muvitarra
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f88dae7d-cf93-4a4b-aa82-9256d5f3cefc" "corse-urbain-02.zip" # Réseau urbain Via Bastia
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/a84de823-7cb2-4d87-917e-e2dda306d280" "corse-urbain-03.zip" # Réseau urbain A Berlina
+download_and_clean "https://pysae.com/api/v2/groups/porto-vecchio/gtfs/pub" "corse-urbain-04.zip"                      # Réseau urbain A Citadina
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f88c086a-4fe1-4af1-a027-f809d4422b65" "corse-urbain-05.zip" # Réseau urbain A Balanina
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0057a43c-66be-4584-92a3-6e15a7156102" "corse-urbain-06.zip" # Réseau des Chemins de fer Corse
 
 # 27 Bourgogne-Franche-Comté
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/e0dbd217-15cd-4e28-9459-211a27511a34" "bfc-urbain-01.zip"
-download_and_clean "https://api.ginko.voyage/gtfs-ginko.zip" "bfc-urbain-02.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/797c424e-7d28-4e65-84f6-6677e47d8a6e" "bfc-urbain-03.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/b45aa8d8-4bd4-4528-99c7-acfc980fdb09" "bfc-urbain-04.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f11a3766-1fe3-40ff-8d5a-27eacda3d9a7" "bfc-urbain-05.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/4f3f820f-3dd8-4ec5-9e0a-98b4c85f9a99" "bfc-urbain-06.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ad03b8ed-b904-4c23-aa4d-7544ea531a67" "bfc-urbain-07.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0b65dda9-51d3-4d84-811b-8a11629a5e55" "bfc-urbain-08.zip"
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/e0dbd217-15cd-4e28-9459-211a27511a34" "bfc-urbain-01.zip" # Réseau urbain DiviaMobilités
+download_and_clean "https://api.ginko.voyage/gtfs-ginko.zip" "bfc-urbain-02.zip"                                     # Réseau urbain Ginko
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/797c424e-7d28-4e65-84f6-6677e47d8a6e" "bfc-urbain-03.zip" # Réseau urbain Optymo
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/b45aa8d8-4bd4-4528-99c7-acfc980fdb09" "bfc-urbain-04.zip" # Réseau urbain évolitY
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/f11a3766-1fe3-40ff-8d5a-27eacda3d9a7" "bfc-urbain-05.zip" # Réseau urbain Zoom
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/128b06bc-f263-4530-8e03-395402f87256" "bfc-urbain-06.zip" # Réseau urbain MonRéZO
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ad03b8ed-b904-4c23-aa4d-7544ea531a67" "bfc-urbain-07.zip" # Réseau urbain TréMA
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0b65dda9-51d3-4d84-811b-8a11629a5e55" "bfc-urbain-08.zip" # Réseau urbain Tanéo
 #SOUS DOSSIER
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ade0bfc2-0e7a-4087-96dd-a76aeb61d196" "bfc-urbain-09.zip" 1
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/5f2edbfa-9025-467d-b769-80f4b1ec4ba6" "bfc-urbain-10.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/a8c743ee-e2d4-408c-ac4b-6434b6eaadf9" "bfc-urbain-11.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/c00d487c-4766-4ca1-b736-e7de110331d9" "bfc-urbain-12.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0fd67eb8-24a4-4ae0-b98b-b442f74244e1" "bfc-urbain-13.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ec61df69-830c-4ca7-9d78-9a81c515e9de" "bfc-urbain-14.zip"
-download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0d6e6c56-8926-49b3-87e2-13c6f57c136b" "bfc-urbain-15.zip"
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ade0bfc2-0e7a-4087-96dd-a76aeb61d196" "bfc-urbain-09.zip" 1 # Réseau urbain Léo
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/5f2edbfa-9025-467d-b769-80f4b1ec4ba6" "bfc-urbain-10.zip"   # Réseau urbain Intercom
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/a8c743ee-e2d4-408c-ac4b-6434b6eaadf9" "bfc-urbain-11.zip"   # Réseau urbain Grandole Mobilités
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/c00d487c-4766-4ca1-b736-e7de110331d9" "bfc-urbain-12.zip"   # Réseau urbain Côte&Bus
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0fd67eb8-24a4-4ae0-b98b-b442f74244e1" "bfc-urbain-13.zip"   # Réseau urbain TEA
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/ec61df69-830c-4ca7-9d78-9a81c515e9de" "bfc-urbain-14.zip"   # Réseau urbain ECLA Mobilité
+download_and_clean "https://www.data.gouv.fr/fr/datasets/r/0d6e6c56-8926-49b3-87e2-13c6f57c136b" "bfc-urbain-15.zip"   # Réseau urbain moova
 
 # 32 Hauts-de-France
 download_and_clean "https://media.ilevia.fr/opendata/gtfs.zip" "hdf-urbain-01.zip"
