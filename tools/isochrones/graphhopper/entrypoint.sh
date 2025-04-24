@@ -9,6 +9,15 @@ gtfs_path="${base_path}/gtfs"
 
 mkdir -p "$base_path"
 
+if [ -d $gtfs_path ]; then
+    echo "GTFS files already exist"
+else
+    # Download and clean gtfs
+    mkdir -p $gtfs_path
+    cd $gtfs_path
+    bash "${script_path}/gtfs.sh"
+fi
+
 if [ -d $pbf_path ]; then
     echo "PBF files already exist"
 else
@@ -27,15 +36,6 @@ else
     echo "Merging PBF files"
     osmium merge france-latest.osm.pbf martinique-latest.osm.pbf guadeloupe-latest.osm.pbf mayotte-latest.osm.pbf guyane-latest.osm.pbf reunion-latest.osm.pbf -o full.osm.pbf
     rm france-latest.osm.pbf martinique-latest.osm.pbf guadeloupe-latest.osm.pbf mayotte-latest.osm.pbf guyane-latest.osm.pbf reunion-latest.osm.pbf
-fi
-
-if [ -d $gtfs_path ]; then
-    echo "GTFS files already exist"
-else
-    # Download and clean gtfs
-    mkdir -p $gtfs_path
-    cd $gtfs_path
-    bash "${script_path}/gtfs.sh"
 fi
 
 cp "${script_path}/config.yml" $base_path

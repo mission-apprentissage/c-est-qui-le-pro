@@ -40,7 +40,7 @@ function download_and_clean() {
     local zip_folder="$3"
     local coordinate_correction="$4"
 
-    wget --retry-on-http-error=all --tries=5 --waitretry=1 --progress=dot:giga -O "$filename" "$url"
+    wget --retry-on-http-error=404,429,500,502,503,504 --tries=5 --waitretry=5 --progress=dot:giga -O "$filename" "$url"
 
     # Some GTFS zip has a subfolder
     if [[ "$zip_folder" == "1" ]]; then
