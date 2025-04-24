@@ -23,7 +23,8 @@ import { importIdeoFichesFormations } from "./jobs/formations/importIdeoFichesFo
 import { importRCO } from "./jobs/formations/importRCO";
 import { splitIsochrones } from "./jobs/isochrones/splitIsochrones";
 import { importIsochrones } from "./jobs/isochrones/importIsochrones.js";
-import { importCertifInfo } from "./jobs/rco/importRCO.js";
+import { importCertifInfo } from "./jobs/rco/importRCO";
+import { importTransitionEcologique } from "./jobs/rco/importTransitionEcologique";
 import { importRome } from "./jobs/rome/importRome.js";
 import { importRomeMetier } from "./jobs/rome/importRomeMetier.js";
 import { importFormationSimilaire } from "./jobs/formations/importFormationSimilaire";
@@ -61,6 +62,7 @@ const onisepJobs = [
 const RCOJobs = [
   { name: "RCOCertifInfo", job: () => importCertifInfo("certifInfo") },
   { name: "RCOCertificationRome", job: () => importCertifInfo("certificationRome") },
+  { name: "RCOFormacodeTransitionEcologique", job: () => importTransitionEcologique() },
 ];
 
 const formationEtablissementJobs = [

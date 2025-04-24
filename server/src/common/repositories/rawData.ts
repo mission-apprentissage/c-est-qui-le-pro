@@ -21,6 +21,7 @@ export enum RawDataType {
 
   RCO_certifInfo = "RCO_certifInfo",
   RCO_certificationRome = "RCO_certificationRome",
+  RCO_formacodeTransitionEco = "RCO_formacodeTransitionEco",
 
   EXPOSITION_regionales = "EXPOSITION_regionales",
   EXPOSITION_nationales = "EXPOSITION_nationales",
@@ -39,6 +40,13 @@ export interface RawData {
   [RawDataType.ONISEP_ideoMetiers]: any;
   [RawDataType.RCO_certifInfo]: any;
   [RawDataType.RCO_certificationRome]: any;
+  [RawDataType.RCO_formacodeTransitionEco]: {
+    "Code Formacode® V13": number;
+    "libelle-formacode V13": string;
+    "Code Formacode® V14": number;
+    "libelle-formacode V14": string;
+    "Modification (oui/non)": string;
+  };
   [RawDataType.EXPOSITION_regionales]: any;
   [RawDataType.EXPOSITION_nationales]: any;
   [RawDataType.FRANCE_TRAVAIL_metiers]: any;

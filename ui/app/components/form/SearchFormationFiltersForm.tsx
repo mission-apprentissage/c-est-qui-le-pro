@@ -224,23 +224,16 @@ function FilterTag({
             <MultiSelect
               isMobile={isMobile}
               label={
-                value && value.length == 1 ? (
-                  <>
-                    <FilterIcon className="ri-thumb-up-line" />
-                    {capitalize(firstTag?.libelleSmall)}
-                  </>
-                ) : (
-                  <>
-                    <FilterIcon className="ri-thumb-up-line" />
-                    {value?.length ? "Emploi & Admission" : "Formations à découvrir"}
-                  </>
-                )
+                <>
+                  <FilterIcon className="ri-thumb-up-line" />
+                  {"Formations à découvrir"}
+                </>
               }
               maxHeight={"100%"}
               width={"260px"}
               widthDropdown="600px"
               name="tag"
-              description="Grâce à l’utilisation de statistiques sur les promotions des années précédentes, nous pouvons vous aider à choisir des formations correspondant particulièrement bien à votre projet."
+              description="Grâce à l’utilisation de nouvelles données et de statistiques sur les promotions des années précédentes, nous pouvons vous aider à choisir des formations correspondant particulièrement bien à votre projet."
               onChange={onChange}
               onApply={onApply}
               value={value || []}
