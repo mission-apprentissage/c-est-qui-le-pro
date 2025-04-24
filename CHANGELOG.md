@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.35.0...v1.35.1) (2025-04-24)
+
+
+### Bug Fixes
+
+* suppression des tests des mots clés ([#57](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/57)) ([0cba937](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/0cba937e127f2e9edc28a491346ee26da1ed233d))
+
 # [1.35.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.34.1...v1.35.0) (2025-04-22)
 
 
