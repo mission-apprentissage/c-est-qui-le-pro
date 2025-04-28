@@ -1,3 +1,11 @@
+# [1.36.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.35.1...v1.36.0) (2025-04-28)
+
+
+### Features
+
+* vérification des gh_token ([#60](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/60)) ([9ebf870](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/9ebf8702d39661f5c51f1a852c7f11daa4d17b95))
+* vérification des tokens ([#59](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/59)) ([f9c1e4f](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f9c1e4fa61baa09dad6a187b26c45932aad6e974))
+
 ## [1.35.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.35.0...v1.35.1) (2025-04-24)
 
 
