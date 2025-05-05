@@ -30,7 +30,7 @@ export const FORMATION_TAG: FormationTagType[] = [
   {
     tag: FormationTag.TRANSITION_ECOLOGIQUE,
     tagLibelle: "Transition écologique",
-    libelleSmall: "Transition",
+    libelleSmall: "Écologie",
     libelle: "Formations utiles à la transition écologique",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
@@ -44,7 +44,7 @@ export const FORMATION_TAG: FormationTagType[] = [
     libelle: "Formations offrant de meilleures chances de trouver un emploi en fin d’études (taux d’insertion élevé)",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: "ri-community-line",
+    icon: "ri-briefcase-2-fill",
     pictogramme: () => <Image src={ContractSvg} width={"56"} height={"56"} alt={""} />,
   },
 
@@ -55,7 +55,7 @@ export const FORMATION_TAG: FormationTagType[] = [
     libelle: "Formations offrant de meilleures chances d’être admis (taux de pression faible)",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: "ri-community-line",
+    icon: "ri-key-2-fill",
     pictogramme: () => <Image src={AvatarSvg} width={"56"} height={"56"} alt={""} />,
   },
 ];
