@@ -219,15 +219,21 @@ function FilterTag({
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => {
-          const firstTag = value?.length ? FORMATION_TAG.find(({ tag }) => tag === value[0]) : null;
           return (
             <MultiSelect
               isMobile={isMobile}
               label={
-                <>
-                  <FilterIcon className="ri-thumb-up-line" />
-                  {"Formations à découvrir"}
-                </>
+                value && value.length > 0 ? (
+                  <>
+                    <FilterIcon className="ri-thumb-up-line" />
+                    {value.map((v) => FORMATION_TAG.find(({ tag }) => tag === v)?.libelleSmall).join(" & ")}
+                  </>
+                ) : (
+                  <>
+                    <FilterIcon className="ri-thumb-up-line" />
+                    {"Formations à découvrir"}
+                  </>
+                )
               }
               maxHeight={"100%"}
               width={"260px"}

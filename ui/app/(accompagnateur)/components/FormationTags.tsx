@@ -6,7 +6,7 @@ import Tag from "#/app/components/Tag";
 import { FORMATION_TAG } from "#/app/services/formation";
 import { fr } from "@codegouvfr/react-dsfr";
 
-export default function FormationTags({ tags, withIcon = false }: { tags: FormationTag[]; withIcon?: boolean }) {
+export default function FormationTags({ tags, withIcon = true }: { tags: FormationTag[]; withIcon?: boolean }) {
   return tags.map((tag) => {
     const tagData = FORMATION_TAG.find((t) => t.tag === tag);
 
