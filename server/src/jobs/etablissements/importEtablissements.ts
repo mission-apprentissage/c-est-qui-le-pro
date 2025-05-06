@@ -1,5 +1,4 @@
 import { oleoduc, writeData, transformData, filterData } from "oleoduc";
-import transformation from "transform-coordinates";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { omitNil } from "#src/common/utils/objectUtils.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
@@ -9,6 +8,7 @@ import { kdb, kyselyChainFn, upsert } from "#src/common/db/db";
 import { sql } from "kysely";
 import { formatUrl } from "#src/common/utils/formatUtils.js";
 import { RegionsService } from "shared";
+import { transformCoordinate } from "#src/common/utils/geographyUtils";
 
 const logger = getLoggerWithContext("import");
 
@@ -37,8 +37,6 @@ function formatStatutEtablissement(statut) {
 export async function importEtablissements() {
   logger.info(`Importation des établissements`);
   const stats = { total: 0, created: 0, failed: 0 };
-
-  const transform = transformation("EPSG:2154", "EPSG:4326");
 
   await oleoduc(
     await RawDataRepository.search(RawDataType.ACCE),
@@ -131,10 +129,7 @@ export async function importEtablissements() {
     ),
     // Transform coordinate
     transformData(({ data, formated, jPO }) => {
-      const coordinate =
-        data.coordonnee_x && data.coordonnee_y
-          ? transform.forward({ x: parseFloat(data.coordonnee_x), y: parseFloat(data.coordonnee_y) })
-          : null;
+      const coordinate = transformCoordinate(data.departement_insee_3, data.coordonnee_x, data.coordonnee_y);
 
       return {
         data,

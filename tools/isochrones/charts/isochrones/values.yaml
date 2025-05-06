@@ -1,0 +1,138 @@
+
+
+global:
+  suspend: false
+service:
+  image:
+    repository: ghcr.io/mission-apprentissage/cqlp-isochrones
+    tag: latest
+    pullPolicy: Always
+    custom:
+      enabled: true
+      version: ghcr.io/mission-apprentissage/cqlp-isochrones:latest
+  args:
+    - "bash /scripts/docker-entrypoint.sh pt bike"
+imagePullSecrets:
+  - name: github-registry
+extraEnvVars:
+  - name: ISOCHRONE_PARALLEL
+    value: "8"
+  - name: ISOCHRONE_DATE
+    value: "2025-05-05T06%3A30%3A00.000Z"
+  - name: CQLP_API
+    value: "http://cestquilepro.inserjeunes.beta.gouv.fr"
+  - name: GRAPHHOPPER_URL
+    value: "https://graphhopper-cqlp.lab.sspcloud.fr"
+networking:
+  type: ClusterIP
+  clusterIP: None
+  service:
+    port: 8080
+  user:
+    enabled: false
+    port: 8080
+    ports: []
+git:
+  enabled: true
+  secretName: ''
+  name: ''
+  email: ''
+  cache: ''
+  branch: ''
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ''
+environment:
+  user: onyxia
+  group: users
+kubernetes:
+  enabled: true
+  role: view
+resources:
+  requests:
+    cpu: 16000m
+    memory: 32Gi
+  limits:
+    cpu: 30000m
+    memory: 143Gi
+persistence:
+  enabled: true
+  size: 200Gi
+  accessMode: ReadWriteOnce
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+security:
+  password: changeme
+route:
+  enabled: false
+repository:
+  configMapName: ''
+  pipRepository: ''
+  condaRepository: ''
+userPreferences:
+  darkMode: false
+  language: en
+init:
+  standardInitPath: /opt/onyxia-init.sh
+  regionInit: ''
+  regionInitCheckSum: ''
+  personalInit: ''
+  personalInitArgs: ''
+s3:
+  enabled: false
+  secretName: ''
+  accessKeyId: ''
+  endpoint: ''
+  defaultRegion: ''
+  secretAccessKey: ''
+  sessionToken: ''
+  pathStyleAccess: false
+  workingDirectoryPath: ''
+vault:
+  enabled: false
+  secretName: ''
+  token: ''
+  url: ''
+  mount: ''
+  secret: ''
+  directory: ''
+discovery:
+  hive: true
+  mlflow: true
+  metaflow: true
+  chromadb: true
+hive:
+  secretName: ''
+mlflow:
+  secretName: ''
+metaflow:
+  secretName: ''
+chromadb:
+  secretName: ''
+coresite:
+  secretName: ''
+replicaCount: 1
+nameOverride: ''
+fullnameOverride: ''
+podSecurityContext:
+  fsGroup: 100
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+openshiftSCC:
+  enabled: false
+  scc: ''
+proxy:
+  enabled: false
+  noProxy: ''
+  httpProxy: ''
+  httpsProxy: ''
+certificates: {}
+message:
+  fr: ''
+  en: ''

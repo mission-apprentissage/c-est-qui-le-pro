@@ -1,0 +1,57 @@
+version: "3"
+services:
+  graphhopper:
+    image: graphhopper
+    environment:
+      - GRAPHHOPPER_MEMORY_LIMIT=${GRAPHHOPPER_MEMORY_LIMIT:-4g}
+      - GRAPHHOPPER_CPU_COUNT=${GRAPHHOPPER_CPU_COUNT:-4}
+    container_name: graphhopper
+    build:
+      context: graphhopper
+    mem_limit: ${GRAPHHOPPER_MEMORY_LIMIT:-4g}
+    restart: unless-stopped
+    networks:
+      - isochrones_network
+    volumes:
+      - graphhopper_data:/data:z
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8989/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 2h
+      retries: 5
+
+  isochrones:
+    image: isochrones
+    environment:
+      - ISOCHRONE_PARALLEL=${ISOCHRONE_PARALLEL:-16}
+      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2025-04-14T07%3A30%3A00.000Z}
+      - CQLP_API=${CQLP_API:-http://host.docker.internal:5000}
+      - COMPUTE_POSTGRES_URI=${POSTGRES_URI}
+      - GRAPHHOPPER_URL=${GRAPHHOPPER_URL:-http://graphhopper:8989}
+    container_name: isochrones
+    build:
+      context: isochrones
+      args:
+        ISOCHRONES_MEMORY_LIMIT: ${ISOCHRONES_MEMORY_LIMIT:-4g}
+    mem_limit: ${ISOCHRONES_MEMORY_LIMIT:-4g}
+    networks:
+      - isochrones_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./isochrones/data:/home/onyxia/work:z
+    depends_on:
+      graphhopper:
+        condition: service_healthy
+    links:
+      - graphhopper
+
+networks:
+  isochrones_network:
+    name: isochrones_network
+
+volumes:
+  graphhopper_data:
+    driver: local
+    name: graphhopper_data

@@ -1,0 +1,7 @@
+apiVersion: v2
+name: isochrones
+version: 0.1.0
+dependencies:
+- name: library-chart
+  version: 1.6.13
+  repository: https://inseefrlab.github.io/helm-charts-interactive-services

@@ -2,6 +2,8 @@ import { SqlRepository } from "./base.js";
 import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 import { SelectQueryBuilder, sql } from "kysely";
+import { Readable } from "stream";
+import { compose } from "oleoduc";
 
 export class EtablissementRepository extends SqlRepository<DB, "etablissement"> {
   constructor(kdb = defaultKdb) {
@@ -53,6 +55,17 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
           (join) => join.on(sql`true`)
         );
     };
+  }
+
+  async find(where: Partial<DB["etablissement"]>, returnStream = true) {
+    const query = this.kdb.selectFrom(this.tableName).$call(this._base()).selectAll();
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+
+    if (!returnStream) {
+      return queryCond.execute();
+    }
+
+    return compose(Readable.from(queryCond.stream()));
   }
 
   async get({ uai }) {
