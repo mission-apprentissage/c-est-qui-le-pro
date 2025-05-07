@@ -249,7 +249,7 @@ function FilterTag({
                 icon: icon,
                 iconColor: fr.colors.decisions.border.plain.success.default,
                 iconBgColor: fr.colors.decisions.background.contrast.success.default,
-                iconSize: "3rem",
+                iconSize: isMobile ? "2rem" : "2.5rem",
                 value: tag || "",
                 paddingText: "1rem",
               }))}
