@@ -33,6 +33,7 @@ type OptionProps = {
   name: string;
   withSeparator?: boolean;
   paddingText?: string;
+  isMobile?: boolean;
 };
 
 type MultiSelectCommonProps = {
@@ -73,6 +74,7 @@ function Option({
   onChange,
   withSeparator = true,
   paddingText,
+  isMobile = false,
 }: OptionProps & { onChange: (checked: boolean) => void }) {
   const id = useId();
 
@@ -96,6 +98,7 @@ function Option({
         iconColor={iconColor}
         iconSize={iconSize}
         bgColor={iconBgColor}
+        isMobile={isMobile}
       >
         {icon && <i className={fr.cx(icon)}></i>}
         {Pictogramme && <Pictogramme />}
@@ -196,6 +199,7 @@ function MultiSelectContainerMobile({
                 checked={!!value.find((o) => o === option.value)}
                 onChange={(checked) => onChangeOption(option, checked)}
                 key={index}
+                isMobile={true}
               />
             );
           })}

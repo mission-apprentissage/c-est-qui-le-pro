@@ -39,7 +39,7 @@ export const StyledOptionBox = styled(Box, {
 
 export const IconContainer = styled(Box, {
   shouldForwardProp: (prop) =>
-    !["hasIcon", "hasPictogramme", "withSeparator", "iconColor", "bgColor"].includes(prop as string),
+    !["hasIcon", "hasPictogramme", "withSeparator", "iconColor", "bgColor", "isMobile"].includes(prop as string),
 })<{
   hasIcon: boolean;
   hasPictogramme: boolean;
@@ -47,11 +47,12 @@ export const IconContainer = styled(Box, {
   iconColor?: string;
   bgColor?: string;
   iconSize?: string;
+  isMobile?: boolean;
 }>`
   margin-left: auto;
   padding: ${({ hasPictogramme }) => (hasPictogramme ? "0.5rem" : "1rem")};
-  padding-left: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
-  padding-right: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
+  padding-left: ${({ hasPictogramme, isMobile }) => (hasPictogramme ? "1rem" : isMobile ? "0.5rem" : "1.5rem")};
+  padding-right: ${({ hasPictogramme, isMobile }) => (hasPictogramme ? "1rem" : isMobile ? "0.5rem" : "1.5rem")};
   position: relative;
   display: flex;
   align-items: center;
