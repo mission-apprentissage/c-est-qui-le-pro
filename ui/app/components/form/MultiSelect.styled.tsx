@@ -10,8 +10,8 @@ export const StyledOptionLabel = styled("label", {
 `;
 
 export const StyledOptionBox = styled(Box, {
-  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme"].includes(prop as string),
-})<{ checked: boolean; hasPictogramme: boolean }>`
+  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme", "isMobile"].includes(prop as string),
+})<{ checked: boolean; hasPictogramme: boolean; isMobile: boolean }>`
   border: 1px solid var(--border-default-grey);
   display: flex;
   align-items: stretch;
@@ -33,7 +33,7 @@ export const StyledOptionBox = styled(Box, {
   }
 
   & input[type="checkbox"] + label::before {
-    left: -2rem;
+    left: ${({ isMobile }) => (isMobile ? "-2.5rem" : "-2rem")};
   }
 `;
 
