@@ -14,10 +14,9 @@ export const StyledOptionBox = styled(Box, {
 })<{ checked: boolean; hasPictogramme: boolean }>`
   border: 1px solid var(--border-default-grey);
   display: flex;
+  align-items: stretch;
   flex-direction: row;
-  padding-right: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
   padding-left: 3rem;
-  align-items: center;
   margin-bottom: 0.5rem;
   font-size: 1rem;
   font-weight: 500;
@@ -39,13 +38,25 @@ export const StyledOptionBox = styled(Box, {
 `;
 
 export const IconContainer = styled(Box, {
-  shouldForwardProp: (prop) => !["hasIcon", "hasPictogramme", "withSeparator"].includes(prop as string),
-})<{ hasIcon: boolean; hasPictogramme: boolean; withSeparator: boolean }>`
+  shouldForwardProp: (prop) =>
+    !["hasIcon", "hasPictogramme", "withSeparator", "iconColor", "bgColor"].includes(prop as string),
+})<{
+  hasIcon: boolean;
+  hasPictogramme: boolean;
+  withSeparator: boolean;
+  iconColor?: string;
+  bgColor?: string;
+  iconSize?: string;
+}>`
   margin-left: auto;
   padding: ${({ hasPictogramme }) => (hasPictogramme ? "0.5rem" : "1rem")};
   padding-left: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
-  padding-right: 0rem;
+  padding-right: ${({ hasPictogramme }) => (hasPictogramme ? "1rem" : "1.5rem")};
   position: relative;
+  display: flex;
+  align-items: center;
+  ${({ bgColor }) => `background-color: ${bgColor};`}
+
   &:before {
     content: "";
     position: absolute;
@@ -55,6 +66,14 @@ export const IconContainer = styled(Box, {
     width: 1px;
     ${({ hasIcon, hasPictogramme, withSeparator }) =>
       withSeparator && (hasIcon || hasPictogramme) && "border-left: 1px solid #dddddd;"}
+  }
+
+  & > i {
+    ${({ iconColor }) => iconColor && `color: ${iconColor};`}
+  }
+
+  & > i::before {
+    --icon-size: ${({ iconSize }) => iconSize || "2rem"};
   }
 `;
 

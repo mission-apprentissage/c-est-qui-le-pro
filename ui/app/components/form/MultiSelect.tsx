@@ -23,6 +23,9 @@ import {
 
 type OptionProps = {
   icon?: never | FrIconClassName | RiIconClassName;
+  iconColor?: string;
+  iconSize?: string;
+  iconBgColor?: string;
   pictogramme?: () => JSX.Element;
   option: string;
   value: string;
@@ -62,6 +65,9 @@ function Option({
   option,
   value,
   icon,
+  iconColor,
+  iconSize,
+  iconBgColor,
   pictogramme: Pictogramme,
   name,
   onChange,
@@ -83,8 +89,15 @@ function Option({
       <StyledOptionLabel paddingText={paddingText} htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
       </StyledOptionLabel>
-      <IconContainer withSeparator={withSeparator} hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
-        {icon && <i className={fr.cx(icon, "fr-icon--lg")}></i>}
+      <IconContainer
+        withSeparator={withSeparator}
+        hasPictogramme={!!Pictogramme}
+        hasIcon={!!icon}
+        iconColor={iconColor}
+        iconSize={iconSize}
+        bgColor={iconBgColor}
+      >
+        {icon && <i className={fr.cx(icon)}></i>}
         {Pictogramme && <Pictogramme />}
       </IconContainer>
     </StyledOptionBox>
