@@ -23,6 +23,9 @@ import {
 
 type OptionProps = {
   icon?: never | FrIconClassName | RiIconClassName;
+  iconColor?: string;
+  iconSize?: string;
+  iconBgColor?: string;
   pictogramme?: () => JSX.Element;
   option: string;
   value: string;
@@ -30,6 +33,7 @@ type OptionProps = {
   name: string;
   withSeparator?: boolean;
   paddingText?: string;
+  isMobile?: boolean;
 };
 
 type MultiSelectCommonProps = {
@@ -62,11 +66,15 @@ function Option({
   option,
   value,
   icon,
+  iconColor,
+  iconSize,
+  iconBgColor,
   pictogramme: Pictogramme,
   name,
   onChange,
   withSeparator = true,
   paddingText,
+  isMobile = false,
 }: OptionProps & { onChange: (checked: boolean) => void }) {
   const id = useId();
 
@@ -78,13 +86,22 @@ function Option({
       onClick={(e) => {
         onChange(!checked);
       }}
+      isMobile={isMobile}
     >
       <input onChange={() => {}} type="checkbox" checked={checked} id={`checkbox-${id}`} name={name} value={value} />
       <StyledOptionLabel paddingText={paddingText} htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
         {option}
       </StyledOptionLabel>
-      <IconContainer withSeparator={withSeparator} hasPictogramme={!!Pictogramme} hasIcon={!!icon}>
-        {icon && <i className={fr.cx(icon, "fr-icon--lg")}></i>}
+      <IconContainer
+        withSeparator={withSeparator}
+        hasPictogramme={!!Pictogramme}
+        hasIcon={!!icon}
+        iconColor={iconColor}
+        iconSize={iconSize}
+        bgColor={iconBgColor}
+        isMobile={isMobile}
+      >
+        {icon && <i className={fr.cx(icon)}></i>}
         {Pictogramme && <Pictogramme />}
       </IconContainer>
     </StyledOptionBox>
@@ -183,6 +200,7 @@ function MultiSelectContainerMobile({
                 checked={!!value.find((o) => o === option.value)}
                 onChange={(checked) => onChangeOption(option, checked)}
                 key={index}
+                isMobile={true}
               />
             );
           })}

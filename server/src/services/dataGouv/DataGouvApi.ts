@@ -1,9 +1,14 @@
 import { RateLimitedApi } from "#src/common/api/RateLimitedApi";
-import config from "#src/config.ts";
+import asyncRetry from "async-retry";
+import config from "#src/config";
 import { fetchStreamWithRetry } from "#src/common/utils/httpUtils.js";
 
+export type DataGouvOptions = { retry?: asyncRetry.Options<asyncRetry.TErr> };
+
 class DataGouvApi extends RateLimitedApi {
-  constructor(options = {}) {
+  retry: asyncRetry.Options<asyncRetry.TErr> | { retries: number };
+
+  constructor(options: DataGouvOptions = {}) {
     super("DataGouvApi", { nbRequests: 5, durationInSeconds: 1, ...options });
 
     // Disable retry by default

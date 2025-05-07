@@ -1,5 +1,5 @@
 import nock from "nock"; // eslint-disable-line node/no-unpublished-import
-import { DataGouvApi } from "#src/services/dataGouv/DataGouvApi.js";
+import { DataGouvApi } from "#src/services/dataGouv/DataGouvApi";
 import { CatalogueApprentissageApi } from "#src/services/catalogueApprentissage/CatalogueApprentissageApi.js";
 import * as Fixtures from "#tests/utils/fixtures.js";
 

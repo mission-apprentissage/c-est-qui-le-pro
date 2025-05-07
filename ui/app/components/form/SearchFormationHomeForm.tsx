@@ -60,7 +60,6 @@ function SearchFormationHomeFormElements({
   useEffect(() => {
     if (params?.address) {
       setValue("address", params?.address);
-      pushHistory(params);
     }
   }, [setValue, params?.address]);
 

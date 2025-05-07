@@ -82,7 +82,7 @@ function PreventFocus() {
   return null;
 }
 
-export const MapClickHandler = ({ onClick }: { onClick: (e: LeafletMouseEvent) => void }) => {
+export const MapClickHandler = ({ onClick }: { onClick?: (e: LeafletMouseEvent) => void }) => {
   const popupOpenRef = useRef(false);
   const map = useMap();
 
@@ -109,7 +109,7 @@ export const MapClickHandler = ({ onClick }: { onClick: (e: LeafletMouseEvent) =
   useMapEvents({
     click: (e) => {
       if (!popupOpenRef.current) {
-        onClick(e);
+        onClick && onClick(e);
       }
     },
   });

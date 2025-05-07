@@ -76,7 +76,8 @@
     "tsx": "4.17.0",
     "typescript": "5.5.4",
     "typesense": "2.0.3",
-    "unzipper": "0.10.14"
+    "unzipper": "0.10.14",
+    "xlsx": "0.18.5"
   },
   "engines": {
     "node": ">=18.20.2"

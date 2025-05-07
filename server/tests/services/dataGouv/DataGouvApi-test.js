@@ -1,5 +1,5 @@
 import assert from "assert";
-import { DataGouvApi } from "#src/services/dataGouv/DataGouvApi.js";
+import { DataGouvApi } from "#src/services/dataGouv/DataGouvApi";
 import { mockDataGouv } from "#tests/utils/apiMocks.js";
 import streamToArray from "stream-to-array";
 

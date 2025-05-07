@@ -48,13 +48,6 @@ export default function FormationsMap({
     [onMarkerHomeDrag]
   );
 
-  const handleMapClick = useCallback(
-    (e: LeafletMouseEvent) => {
-      onMarkerHomeDrag && onMarkerHomeDrag(e.latlng.lat, e.latlng.lng);
-    },
-    [onMarkerHomeDrag]
-  );
-
   return (
     <Map center={[latitude, longitude]}>
       <FeatureGroup ref={groupRef}>
@@ -108,16 +101,12 @@ export default function FormationsMap({
           position={[latitude, longitude]}
           draggable={true}
           bubblingMouseEvents={false}
-        >
-          {/* <Tooltip>
-          <Typography variant="subtitle1">Ma position</Typography>
-        </Tooltip> */}
-        </Marker>
+        ></Marker>
       </FeatureGroup>
 
       {etablissements.length && <FitBound key={etablissements.length} groupRef={groupRef} />}
 
-      <MapClickHandler onClick={handleMapClick} />
+      <MapClickHandler />
     </Map>
   );
 }
