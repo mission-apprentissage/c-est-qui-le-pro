@@ -29,6 +29,7 @@ import {
   FilterContainerMobile,
 } from "./SearchFormationFiltersForm.styled";
 import * as yup from "yup";
+import { fr } from "@codegouvfr/react-dsfr";
 
 const schemaFilters = schema.pick(["domaines", "voie", "diplome", "tag"]);
 
@@ -245,7 +246,10 @@ function FilterTag({
               value={value || []}
               options={FORMATION_TAG.filter(({ tag }) => tag).map(({ libelle, tag, icon, pictogramme }) => ({
                 option: capitalize(libelle),
-                pictogramme: pictogramme,
+                icon: icon,
+                iconColor: fr.colors.decisions.border.plain.success.default,
+                iconBgColor: fr.colors.decisions.background.contrast.success.default,
+                iconSize: "3rem",
                 value: tag || "",
                 paddingText: "1rem",
               }))}
