@@ -86,6 +86,7 @@ function Option({
       onClick={(e) => {
         onChange(!checked);
       }}
+      isMobile={isMobile}
     >
       <input onChange={() => {}} type="checkbox" checked={checked} id={`checkbox-${id}`} name={name} value={value} />
       <StyledOptionLabel paddingText={paddingText} htmlFor={`checkbox-${id}`} onClick={(e) => e.preventDefault()}>
