@@ -7,7 +7,7 @@ map $http_upgrade $connection_upgrade {
 }
 
 map $http_host $robots {
-    default "noindex, nofollow, nosnippet, noarchive";
+    default "all";
     "~*recette" "noindex, nofollow, nosnippet, noarchive";
     "~*sandbox" "noindex, nofollow, nosnippet, noarchive";
 }
