@@ -47,7 +47,7 @@ export default function ConstructionHeader() {
           <Box>
             <Box>
               <Typography variant="subtitle3">
-                Bonjour, ce service est en cours d’expérimentation et de construction en Bretagne et en Île-de-France.
+                Bonjour, ce service est en cours d’expérimentation et de construction.
                 <br /> Vous pouvez{" "}
                 <Link
                   noIcon

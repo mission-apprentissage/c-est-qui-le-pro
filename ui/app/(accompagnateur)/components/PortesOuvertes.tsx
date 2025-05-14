@@ -67,7 +67,7 @@ export function TagPortesOuvertes({ etablissement }: { etablissement: Etablissem
   }
 
   return (
-    <Tag bold={strPortesOuvertes.ended ? false : true} variant={strPortesOuvertes.ended ? "grey" : "button-white"}>
+    <Tag bold={"500"} variant={strPortesOuvertes.ended ? "grey" : "button-white"}>
       {strPortesOuvertes.str}
     </Tag>
   );
