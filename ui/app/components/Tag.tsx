@@ -92,6 +92,7 @@ const TagStyled = styled(Tag, {
 export const TagStatutPublic = styled(TagStyled)`
   background-color: var(--info-950-100);
   color: var(--blue-france-sun-113-625);
+  font-weight: 500;
 `;
 
 export const TagDiplome = styled(TagStyled)`
@@ -102,6 +103,7 @@ export const TagDiplome = styled(TagStyled)`
 export const TagStatutPrive = styled(TagStyled)`
   background-color: #feebcb;
   color: #7b341e;
+  font-weight: 500;
 `;
 
 export const TagDuree = styled(TagStyled)`
@@ -112,6 +114,7 @@ export const TagDuree = styled(TagStyled)`
 export const TagApprentissage = styled(TagStyled)`
   color: ${fr.colors.decisions.text.default.success.default};
   background-color: ${fr.colors.options.greenMenthe._975_75.default};
+  font-weight: 500;
 `;
 
 export default TagStyled;
