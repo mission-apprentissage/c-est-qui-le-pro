@@ -29,6 +29,7 @@ import {
   FilterContainerMobile,
 } from "./SearchFormationFiltersForm.styled";
 import * as yup from "yup";
+import { fr } from "@codegouvfr/react-dsfr";
 
 const schemaFilters = schema.pick(["domaines", "voie", "diplome", "tag"]);
 
@@ -219,20 +220,19 @@ function FilterTag({
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => {
-          const firstTag = value?.length ? FORMATION_TAG.find(({ tag }) => tag === value[0]) : null;
           return (
             <MultiSelect
               isMobile={isMobile}
               label={
-                value && value.length == 1 ? (
+                value && value.length > 0 ? (
                   <>
                     <FilterIcon className="ri-thumb-up-line" />
-                    {capitalize(firstTag?.libelleSmall)}
+                    {value.map((v) => FORMATION_TAG.find(({ tag }) => tag === v)?.libelleSmall).join(" & ")}
                   </>
                 ) : (
                   <>
                     <FilterIcon className="ri-thumb-up-line" />
-                    {value?.length ? "Emploi & Admission" : "Formations à découvrir"}
+                    {"Formations à découvrir"}
                   </>
                 )
               }
@@ -240,13 +240,16 @@ function FilterTag({
               width={"260px"}
               widthDropdown="600px"
               name="tag"
-              description="Grâce à l’utilisation de statistiques sur les promotions des années précédentes, nous pouvons vous aider à choisir des formations correspondant particulièrement bien à votre projet."
+              description="Grâce à l’utilisation de nouvelles données et de statistiques sur les promotions des années précédentes, nous pouvons vous aider à choisir des formations correspondant particulièrement bien à votre projet."
               onChange={onChange}
               onApply={onApply}
               value={value || []}
               options={FORMATION_TAG.filter(({ tag }) => tag).map(({ libelle, tag, icon, pictogramme }) => ({
                 option: capitalize(libelle),
-                pictogramme: pictogramme,
+                icon: icon,
+                iconColor: fr.colors.decisions.border.plain.success.default,
+                iconBgColor: fr.colors.decisions.background.contrast.success.default,
+                iconSize: isMobile ? "2rem" : "2.5rem",
                 value: tag || "",
                 paddingText: "1rem",
               }))}

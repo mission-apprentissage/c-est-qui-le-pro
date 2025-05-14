@@ -3,8 +3,9 @@ import { flatten } from "lodash-es";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import FormationEtablissementRepository from "#src/common/repositories/formationEtablissement.js";
 import { FormationTag, THRESHOLD_TAUX_PRESSION } from "shared";
-import { computeInserJeunesTag } from "./computeInserJeunesTag.js";
-import { computeIndicateurEntree } from "./computeIndicateurEntree.js";
+import { computeInserJeunesTag } from "./computeInserJeunesTag";
+import { computeIndicateurEntree } from "./computeIndicateurEntree";
+import { computeTransitionEcologique } from "./computeTransitionEcologique";
 
 const logger = getLoggerWithContext("import");
 
@@ -19,6 +20,12 @@ const COMPUTE_FORMATION_TAG = {
     tags: [FormationTag.FAIBLE_TAUX_PRESSION],
     compute: async (formation, { thresholdTauxPression } = { thresholdTauxPression: THRESHOLD_TAUX_PRESSION[0] }) => {
       return computeIndicateurEntree(formation, { thresholdTauxPression });
+    },
+  },
+  transitionEcologique: {
+    tags: [FormationTag.TRANSITION_ECOLOGIQUE],
+    compute: async (formation) => {
+      return computeTransitionEcologique(formation);
     },
   },
 };

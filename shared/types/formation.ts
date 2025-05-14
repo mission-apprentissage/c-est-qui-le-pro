@@ -39,6 +39,7 @@ export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
 export enum FormationTag {
   POUR_TRAVAILLER_RAPIDEMENT = "pour_travailler_rapidement",
   FAIBLE_TAUX_PRESSION = "faible_taux_pression",
+  TRANSITION_ECOLOGIQUE = "transition_ecologique",
 }
 
 // TODO : fetch domaine from API

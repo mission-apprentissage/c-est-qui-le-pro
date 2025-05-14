@@ -6,7 +6,7 @@ import { Box, Stack, useTheme } from "@mui/material";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
-import { DiplomeTypeLibelle, FormationDetail } from "shared";
+import { DiplomeTypeLibelle, FormationDetail, FormationTag } from "shared";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
 import PortesOuvertesHeader from "./PortesOuvertesHeader";
@@ -21,6 +21,7 @@ import { LabelApprentissage } from "#/app/(accompagnateur)/components/Apprentiss
 import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
+import FormationTags from "../../components/FormationTags";
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
@@ -66,6 +67,10 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
             ))}
           {formationEtablissement.duree && <TagDuree>{`En ${formationEtablissement.duree}`}</TagDuree>}
           <LabelApprentissage formation={formation} />
+          <FormationTags
+            withIcon={true}
+            tags={formationEtablissement.tags?.filter((tag) => tag === FormationTag.TRANSITION_ECOLOGIQUE) || []}
+          />
         </Stack>
       </BoxContainer>
       <BoxContainer

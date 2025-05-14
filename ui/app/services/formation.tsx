@@ -4,6 +4,7 @@ import { FrIconClassName, RiIconClassName, fr } from "@codegouvfr/react-dsfr";
 import ArtworkSchoolSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/buildings/school.svg";
 import ContractSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/contract.svg";
 import AvatarSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/avatar.svg";
+import EnvironmentSvg from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/environment.svg";
 import { CompaniePictogramme } from "../components/icon/CompaniePictogramme";
 import Tag from "../components/Tag";
 import { JSX } from "react";
@@ -27,24 +28,34 @@ export type FormationTagType = {
 
 export const FORMATION_TAG: FormationTagType[] = [
   {
-    tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
-    tagLibelle: "TAUX D'INSERTION FAVORABLE",
-    libelleSmall: "Emploi",
-    libelle: "Formations offrant de meilleures chances de trouver un emploi en fin d’études (taux d’insertion élevé)",
+    tag: FormationTag.TRANSITION_ECOLOGIQUE,
+    tagLibelle: "Transition écologique",
+    libelleSmall: "Écologie",
+    libelle: "Formations utiles à la transition écologique",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: "ri-community-line",
+    icon: "ri-plant-fill",
+    pictogramme: () => <Image src={EnvironmentSvg} width={"56"} height={"56"} alt={""} />,
+  },
+  {
+    tag: FormationTag.POUR_TRAVAILLER_RAPIDEMENT,
+    tagLibelle: "Taux d'insertion favorable",
+    libelleSmall: "Emploi",
+    libelle: "Meilleures chances de trouver un emploi en fin d’études (taux d’insertion élevé)",
+    color: fr.colors.decisions.text.default.success.default,
+    bgColor: fr.colors.decisions.background.contrast.success.default,
+    icon: "ri-briefcase-2-fill",
     pictogramme: () => <Image src={ContractSvg} width={"56"} height={"56"} alt={""} />,
   },
 
   {
     tag: FormationTag.FAIBLE_TAUX_PRESSION,
-    tagLibelle: "TAUX DE PRESSION FAIBLE",
+    tagLibelle: "Taux de pression faible",
     libelleSmall: "Admission",
-    libelle: "Formations offrant de meilleures chances d’être admis (taux de pression faible)",
+    libelle: "Meilleures chances d’être admis (taux de pression faible)",
     color: fr.colors.decisions.text.default.success.default,
     bgColor: fr.colors.decisions.background.contrast.success.default,
-    icon: "ri-community-line",
+    icon: "ri-key-2-fill",
     pictogramme: () => <Image src={AvatarSvg} width={"56"} height={"56"} alt={""} />,
   },
 ];
