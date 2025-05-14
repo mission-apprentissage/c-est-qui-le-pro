@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.36.0...v1.37.0) (2025-05-14)
+
+
+### Features
+
+* tag de formations de la transition écologique ([#58](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/58)) ([5346756](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/5346756309b02c127de8abdd3b078ae001f82196))
+
 # [1.36.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.35.1...v1.36.0) (2025-04-28)
 
 
