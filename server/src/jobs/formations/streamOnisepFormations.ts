@@ -57,7 +57,14 @@ async function getBcn(cfd, duree) {
 
   if (bcnMef.length > 1) {
     // If there is many results, only keep the corresponding duration
-    const bcnMefFiltered = bcnMef.filter((data) => data.duree_dispositif === duree && data.annee_dispositif === duree);
+    let bcnMefFiltered = bcnMef.filter((data) => data.duree_dispositif === duree && data.annee_dispositif === duree);
+
+    // QUICK FIX : changement des durées des familles de métiers sur l'Onisep
+    if (bcnMefFiltered.length === 0) {
+      bcnMefFiltered = bcnMef.filter((data) => {
+        return data.duree_dispositif === data.annee_dispositif;
+      });
+    }
 
     if (bcnMefFiltered.length > 1) {
       logger.error(`Plusieurs MEF corespondent à la formation cfd : ${cfd}, durée : ${duree} ans`);
