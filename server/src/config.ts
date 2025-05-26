@@ -29,7 +29,7 @@ const config = {
     ca: env.get("ACCOMPAGNATEUR_POSTGRES_CA").asString(),
   },
   sql: {
-    logLevel: env.get("ACCOMPAGNATEUR_SQL_LOG_LEVEL").asArray(),
+    logLevel: env.get("ACCOMPAGNATEUR_SQL_LOG_LEVEL").default("error").asArray(),
   },
   acce: {
     files: {

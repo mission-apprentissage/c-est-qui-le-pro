@@ -62,7 +62,7 @@ async function getBcn(cfd, duree) {
     // QUICK FIX : changement des durées des familles de métiers sur l'Onisep
     if (bcnMefFiltered.length === 0) {
       bcnMefFiltered = bcnMef.filter((data) => {
-        return data.duree_dispositif === data.annee_dispositif;
+        return !data.date_fermeture && data.duree_dispositif === data.annee_dispositif;
       });
     }
 
@@ -94,7 +94,9 @@ export async function streamOnisepFormations({ stats }) {
     Readable.from(FOR_TYPES),
     transformIntoStream(async (FOR_TYPE) => {
       return await RawDataRepository.search(RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee, {
-        data: { for_type: FOR_TYPE },
+        data: {
+          for_type: FOR_TYPE,
+        },
       });
     }),
 
