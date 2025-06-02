@@ -57,7 +57,14 @@ async function getBcn(cfd, duree) {
 
   if (bcnMef.length > 1) {
     // If there is many results, only keep the corresponding duration
-    const bcnMefFiltered = bcnMef.filter((data) => data.duree_dispositif === duree && data.annee_dispositif === duree);
+    let bcnMefFiltered = bcnMef.filter((data) => data.duree_dispositif === duree && data.annee_dispositif === duree);
+
+    // Fix: Onisep renvoi une durée de deux ans pour les spécialités de famille de métiers, on récupère la 3ème année
+    if (["400", "403"].includes(bcn["niveauFormationDiplome"])) {
+      bcnMefFiltered = bcnMef.filter((data) => {
+        return data.annee_dispositif === "3";
+      });
+    }
 
     if (bcnMefFiltered.length > 1) {
       logger.error(`Plusieurs MEF corespondent à la formation cfd : ${cfd}, durée : ${duree} ans`);
@@ -87,7 +94,9 @@ export async function streamOnisepFormations({ stats }) {
     Readable.from(FOR_TYPES),
     transformIntoStream(async (FOR_TYPE) => {
       return await RawDataRepository.search(RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee, {
-        data: { for_type: FOR_TYPE },
+        data: {
+          for_type: FOR_TYPE,
+        },
       });
     }),
 
