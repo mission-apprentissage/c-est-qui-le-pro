@@ -59,10 +59,10 @@ async function getBcn(cfd, duree) {
     // If there is many results, only keep the corresponding duration
     let bcnMefFiltered = bcnMef.filter((data) => data.duree_dispositif === duree && data.annee_dispositif === duree);
 
-    // QUICK FIX : changement des durées des familles de métiers sur l'Onisep
-    if (bcnMefFiltered.length === 0) {
+    // Fix: Onisep renvoi une durée de deux ans pour les spécialités de famille de métiers, on récupère la 3ème année
+    if (["400", "403"].includes(bcn["niveauFormationDiplome"])) {
       bcnMefFiltered = bcnMef.filter((data) => {
-        return !data.date_fermeture && data.duree_dispositif === data.annee_dispositif;
+        return data.annee_dispositif === "3";
       });
     }
 
