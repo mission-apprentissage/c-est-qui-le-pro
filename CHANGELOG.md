@@ -1,3 +1,10 @@
+## [1.37.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.37.0...v1.37.1) (2025-06-02)
+
+
+### Bug Fixes
+
+* durée des familles de métiers ([#67](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/67)) ([66b9763](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/66b9763a8fd4cc90370b318eacdb2aecd3da53da))
+
 # [1.37.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.36.0...v1.37.0) (2025-05-14)
 
 
