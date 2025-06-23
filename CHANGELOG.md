@@ -1,3 +1,10 @@
+# [1.38.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.37.1...v1.38.0) (2025-06-23)
+
+
+### Features
+
+* maj gh_token et test release ([#69](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/69)) ([665d4ef](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/665d4efb7881f04a791ea7b04da1aa768477055f))
+
 ## [1.37.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.37.0...v1.37.1) (2025-06-02)
 
 
