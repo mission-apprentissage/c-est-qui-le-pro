@@ -7,7 +7,7 @@ import { FormationResumeBlock, FormationResumeBlockProps } from "./FormationResu
 
 function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
   const tauxFormation = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
-  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
+  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional?.byDiplomeType;
 
   const admissionLevel =
     isNil(tauxFormation) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_formation_q0)

@@ -88,6 +88,7 @@ export type IndicateurEntree = {
 
 export type IndicateurPoursuite = {
   millesime: string;
+  libelle?: string;
   part_en_emploi_6_mois?: number;
   taux_en_emploi_6_mois?: number;
   taux_en_formation?: number;
@@ -105,20 +106,30 @@ export type IndicateurPoursuiteAnneeCommune = {
 };
 
 export type IndicateurPoursuiteRegional = {
-  millesime: string;
-  region: string;
-  voie?: string;
-  part_en_emploi_6_mois?: number;
-  taux_en_formation_q0: number;
-  taux_en_formation_q1: number;
-  taux_en_formation_q2: number;
-  taux_en_formation_q3: number;
-  taux_en_formation_q4: number;
-  taux_en_emploi_6_mois_q0: number;
-  taux_en_emploi_6_mois_q1: number;
-  taux_en_emploi_6_mois_q2: number;
-  taux_en_emploi_6_mois_q3: number;
-  taux_en_emploi_6_mois_q4: number;
+  byDiplome?: {
+    libelle?: string;
+    millesime: string;
+    region: string;
+    part_en_emploi_6_mois?: number;
+    taux_en_emploi_6_mois?: number;
+    taux_en_formation?: number;
+    taux_autres_6_mois?: number;
+  };
+  byDiplomeType?: {
+    millesime: string;
+    region: string;
+    voie?: string;
+    taux_en_formation_q0: number;
+    taux_en_formation_q1: number;
+    taux_en_formation_q2: number;
+    taux_en_formation_q3: number;
+    taux_en_formation_q4: number;
+    taux_en_emploi_6_mois_q0: number;
+    taux_en_emploi_6_mois_q1: number;
+    taux_en_emploi_6_mois_q2: number;
+    taux_en_emploi_6_mois_q3: number;
+    taux_en_emploi_6_mois_q4: number;
+  };
 };
 
 type IndicateurPoursuiteNational = {
@@ -258,6 +269,7 @@ const formationEtablissementSchema = yup.object().concat(
     indicateurPoursuite: yup
       .object({
         millesime: yup.string().required(),
+        libelle: yup.string(),
         taux_en_emploi_6_mois: yup.number(),
         taux_en_formation: yup.number(),
         taux_autres_6_mois: yup.number(),
@@ -277,19 +289,32 @@ const formationEtablissementSchema = yup.object().concat(
       .default(undefined),
     indicateurPoursuiteRegional: yup
       .object({
-        millesime: yup.string().required(),
-        region: yup.string().required(),
-        voie: yup.string(),
-        taux_en_formation_q0: yup.number().required(),
-        taux_en_formation_q1: yup.number().required(),
-        taux_en_formation_q2: yup.number().required(),
-        taux_en_formation_q3: yup.number().required(),
-        taux_en_formation_q4: yup.number().required(),
-        taux_en_emploi_6_mois_q0: yup.number().required(),
-        taux_en_emploi_6_mois_q1: yup.number().required(),
-        taux_en_emploi_6_mois_q2: yup.number().required(),
-        taux_en_emploi_6_mois_q3: yup.number().required(),
-        taux_en_emploi_6_mois_q4: yup.number().required(),
+        byDiplome: yup
+          .object({
+            millesime: yup.string().required(),
+            region: yup.string().required(),
+            taux_en_emploi_6_mois: yup.number(),
+            taux_en_formation: yup.number(),
+            taux_autres_6_mois: yup.number(),
+          })
+          .default(undefined),
+        byDiplomeType: yup
+          .object({
+            millesime: yup.string().required(),
+            region: yup.string().required(),
+            voie: yup.string(),
+            taux_en_formation_q0: yup.number().required(),
+            taux_en_formation_q1: yup.number().required(),
+            taux_en_formation_q2: yup.number().required(),
+            taux_en_formation_q3: yup.number().required(),
+            taux_en_formation_q4: yup.number().required(),
+            taux_en_emploi_6_mois_q0: yup.number().required(),
+            taux_en_emploi_6_mois_q1: yup.number().required(),
+            taux_en_emploi_6_mois_q2: yup.number().required(),
+            taux_en_emploi_6_mois_q3: yup.number().required(),
+            taux_en_emploi_6_mois_q4: yup.number().required(),
+          })
+          .default(undefined),
       })
       .default(undefined),
   })

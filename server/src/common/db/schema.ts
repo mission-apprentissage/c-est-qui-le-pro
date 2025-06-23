@@ -249,12 +249,14 @@ export interface IndicateurPoursuiteRegional {
   codeDispositif: string | null;
   createdAt: Generated<Timestamp>;
   id: Generated<string>;
+  libelle: string | null;
   millesime: string | null;
   part_en_emploi_6_mois: number | null;
   region: string;
   taux_autres_6_mois: number | null;
   taux_en_emploi_6_mois: number | null;
   taux_en_formation: number | null;
+  type: Generated<string>;
   updatedAt: Generated<Timestamp>;
   voie: string;
 }
