@@ -11,6 +11,7 @@ export class IndicateurPoursuiteRepository extends SqlRepository<DB, "indicateur
       "indicateurPoursuite",
       {
         id: null,
+        libelle: null,
         formationEtablissementId: null,
         millesime: null,
         taux_en_emploi_6_mois: null,

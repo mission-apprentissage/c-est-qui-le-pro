@@ -16,10 +16,12 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
         codeDispositif: null,
         region: null,
         millesime: null,
+        libelle: null,
         taux_en_emploi_6_mois: null,
         taux_en_formation: null,
         taux_autres_6_mois: null,
         part_en_emploi_6_mois: null,
+        type: null,
         createdAt: null,
         updatedAt: null,
       },
@@ -53,6 +55,7 @@ export class IndicateurPoursuiteRegionalRepository extends SqlRepository<DB, "in
       )
 
       .where("taux_en_formation", "is not", null)
+      .where("type", "=", "self")
       .where(this.kdb.fn("SUBSTR", ["cfd", sql.val(1), sql.val(3)]), "in", DiplomeType[type]);
     query = region ? query.where("region", "=", region) : query;
     query = voie ? query.where("voie", "=", voie) : query;

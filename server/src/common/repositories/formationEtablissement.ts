@@ -10,6 +10,7 @@ import { merge } from "lodash-es";
 import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
 import streamToArray from "stream-to-array";
+import IndicateurPoursuiteRegionalRepository from "./indicateurPoursuiteRegional";
 
 type QueryFormationEtablissement = Partial<WhereObject<DB, "formationEtablissement">>;
 type QueryEtablissement = Partial<WhereObject<DB, "etablissement">>;
@@ -149,7 +150,21 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
 
       const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
       const indicateurPoursuiteRegional = diplomeType
-        ? await IndicateurPoursuiteRepository.quartileFor(diplomeType, formationEtablissement.etablissement.region)
+        ? {
+            byDiplome: await IndicateurPoursuiteRegionalRepository.first(
+              {
+                cfd: formationEtablissement.formation.cfd,
+                voie: formationEtablissement.formation.voie,
+                codeDispositif: formationEtablissement.formation.codeDipositif,
+                region: formationEtablissement.etablissement.region,
+              },
+              [["millesime", "desc"]]
+            ),
+            byDiplomeType: await IndicateurPoursuiteRepository.quartileFor(
+              diplomeType,
+              formationEtablissement.etablissement.region
+            ),
+          }
         : null;
 
       formationEtablissement = merge(formationEtablissement, {
