@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { Etablissement, etablissementSchema } from "./etablissement";
 
 export const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
 export const CFD_PATTERN = /^[0-9A-Z]{8}$/;
@@ -200,43 +201,6 @@ export type Formation = {
   isAnneeCommune?: boolean;
 };
 
-type JourneesPortesOuverteDate = {
-  from?: Date;
-  to?: Date;
-  details?: string;
-  fullDay?: boolean;
-};
-
-export type JourneesPortesOuverte = {
-  dates?: JourneesPortesOuverteDate[];
-  details?: string;
-};
-
-export type Etablissement = {
-  id: string;
-  statut?: string;
-  statutDetail?: string;
-  url?: string;
-  libelle?: string;
-  uai: string;
-  onisepId?: string;
-  journeesPortesOuvertes?: JourneesPortesOuverte;
-
-  JPODates?: JourneesPortesOuverteDate[] | null;
-  JPODetails?: string | null;
-
-  addressStreet?: string;
-  addressPostCode?: string;
-  addressCity?: string;
-  latitude?: number;
-  longitude?: number;
-  accessTime?: number;
-  distance?: number;
-
-  academie: string;
-  region: string;
-};
-
 export type FormationFamilleMetierDetail = {
   formationEtablissement?: FormationEtablissement;
   formation: Formation;
@@ -326,28 +290,6 @@ const formationSchema = yup.object().concat(
     cfd: yup.string().required(),
     libelle: yup.string(),
     voie: yup.string().oneOf(Object.values(FormationVoie)).required(),
-  })
-);
-
-const etablissementSchema = yup.object().concat(
-  yup.object().shape({
-    id: yup.string().required(),
-    uai: yup.string().required(),
-    academie: yup.string().required(),
-    region: yup.string().required(),
-    JPODates: yup
-      .array()
-      .of(
-        yup.object({
-          from: yup.date().transform((value) => new Date(value)),
-          to: yup.date().transform((value) => new Date(value)),
-          details: yup.string(),
-          fullDay: yup.boolean(),
-        })
-      )
-      .nullable()
-      .default(null),
-    JPODetails: yup.string().nullable().default(null),
   })
 );
 

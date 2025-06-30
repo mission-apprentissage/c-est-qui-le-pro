@@ -44,6 +44,7 @@ export interface Etablissement {
   region: Generated<string>;
   statut: string | null;
   statutDetail: string | null;
+  type: Generated<string>;
   uai: string;
   updatedAt: Generated<Timestamp>;
   url: string | null;

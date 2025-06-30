@@ -69,13 +69,19 @@ export const Description = styled(Box, {
     font-weight: bold;
   }
 
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    & > div:last-child {
+      gap: 0.25rem;
+      display: flex;
+      flex-direction: row;
+      flew-wrap: wrap;
+      ${(props) => (props.vertical ? "font-size: 1.125rem;" : "")}
+    }
+  }
+
   & > div:last-child {
-    gap: 0.25rem;
-    display: flex;
-    flex-direction: row;
     font-size: 0.875rem;
     font-weight: 700;
-    flew-wrap: wrap;
     ${(props) => (props.vertical ? "font-size: 1.125rem;" : "")}
 
     & > div {
@@ -119,13 +125,6 @@ export const PersonaContainer = styled(Box)`
     &::before {
       --icon-size: 100%;
     }
-  }
-`;
-
-export const StyledEtablissementLibelle = styled(Typography)`
-  margin-bottom: 1.5rem;
-  & i {
-    margin-right: 4px;
   }
 `;
 

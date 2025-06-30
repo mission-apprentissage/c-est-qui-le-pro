@@ -10,6 +10,8 @@ import {
   IndicateurPoursuiteRegional,
   IndicateurPoursuiteAnneeCommune,
   FormationFamilleMetierDetail,
+  EtablissementTypeLibelle,
+  EtablissementTypeFromValue,
 } from "shared";
 import UnionIcon from "#/app/components/icon/UnionIcon";
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
@@ -39,13 +41,40 @@ import {
   PersonaContainer,
   PersonasContainer,
   StyledDivider,
-  StyledEtablissementLibelle,
   StyledFormationLibelle,
   StyledTitle,
 } from "./WidgetInserJeunes.styled";
 
 function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
   return isNil(indicateurPoursuite?.taux_en_formation);
+}
+
+function formatLibelleTabEtablissement(etablissement: Etablissement) {
+  const prefix = {
+    INCONNU: "cet",
+    GRETA: "ce",
+    AIDE: "ce",
+    EREA: "ce",
+    LYC: "ce",
+    EXP: "cet",
+    CNED: "ce",
+    SGT: "cette",
+    SOC: "cette",
+    PBAC: "cette",
+    HOSP: "cette",
+    SEP: "cette",
+    CONT: "cet",
+    CFPA: "cette",
+    LP: "ce",
+    CFA: "ce",
+    TSGE: "cet",
+    CLG: "ce",
+    EME: "cet",
+  };
+
+  return `Pour ${prefix[EtablissementTypeFromValue[etablissement.type]]} ${
+    EtablissementTypeLibelle[EtablissementTypeFromValue[etablissement.type] || "INCONNU"]
+  }`;
 }
 
 function NoIndicateurs() {
@@ -136,8 +165,7 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
                 <Description color={metric.color} vertical={isDownSm} onClick={modals[keyTyped].open}>
                   <Box>{indicateurPoursuite[metric.metric]}%</Box>
                   <Box>
-                    <Box>{metric.description}</Box>
-                    <i className={fr.cx("ri-information-line")}></i>
+                    {metric.description}&nbsp;<i className={fr.cx("ri-information-line")}></i>
                   </Box>
                 </Description>
               )}
@@ -161,9 +189,10 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
                 <Box>
                   <Box>
                     <i className={fr.cx(metric.icon)}></i>
-                    {metric.description}
+                    <Box>
+                      {metric.description}&nbsp;<i className={fr.cx("ri-information-line")}></i>
+                    </Box>
                   </Box>
-                  <i className={fr.cx("ri-information-line")}></i>
                 </Box>
               </Description>
             );
@@ -189,9 +218,11 @@ export function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateur
 }
 
 function WidgetInserJeunesTab({
+  etablissement,
   indicateurPoursuite,
   indicateurPoursuiteRegional,
 }: {
+  etablissement: Etablissement;
   indicateurPoursuite?: IndicateurPoursuite;
   indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
 }) {
@@ -204,7 +235,7 @@ function WidgetInserJeunesTab({
     }[] = [];
     if (indicateurPoursuite && !isSousSeuil(indicateurPoursuite)) {
       tabs.push({
-        label: "Pour ce lycée",
+        label: formatLibelleTabEtablissement(etablissement),
         iconId: "ri-arrow-right-line",
         isDefault: true,
         content: (
@@ -274,9 +305,11 @@ function formatIndicateurPoursuiteAnneeCommune(
 }
 
 function WidgetInserJeunesFamilleMetier({
+  etablissement,
   indicateurPoursuiteAnneeCommune,
   formationFamilleMetier,
 }: {
+  etablissement: Etablissement;
   indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[];
   formationFamilleMetier?: FormationFamilleMetierDetail[];
 }) {
@@ -307,6 +340,7 @@ function WidgetInserJeunesFamilleMetier({
                 >
                   <AccordionContainer>
                     <WidgetInserJeunesTab
+                      etablissement={etablissement}
                       indicateurPoursuite={indicateurPoursuite.indicateurPoursuite}
                       indicateurPoursuiteRegional={indicateurPoursuite.indicateurPoursuiteRegional}
                     />
@@ -320,15 +354,6 @@ function WidgetInserJeunesFamilleMetier({
         </Box>
       )}
     </Box>
-  );
-}
-
-export function EtablissementLibelle({ etablissement }: { etablissement: Etablissement }) {
-  return (
-    <StyledEtablissementLibelle>
-      <i className={fr.cx("ri-map-pin-2-line")}></i>
-      {etablissement.libelle}
-    </StyledEtablissementLibelle>
   );
 }
 
@@ -376,9 +401,9 @@ export default function WidgetInserJeunes({ formationDetail }: { formationDetail
           <StyledTitle variant="h3">
             Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
           </StyledTitle>
-          <EtablissementLibelle etablissement={etablissement} />
           <ContainerAnneeCommune>
             <WidgetInserJeunesFamilleMetier
+              etablissement={etablissement}
               formationFamilleMetier={formationDetail.formationsFamilleMetier}
               indicateurPoursuiteAnneeCommune={indicateurPoursuiteAnneeCommune}
             />
@@ -388,9 +413,9 @@ export default function WidgetInserJeunes({ formationDetail }: { formationDetail
       ) : (
         <>
           <StyledTitle variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</StyledTitle>
-          <EtablissementLibelle etablissement={etablissement} />
           <ContainerFormation>
             <WidgetInserJeunesTab
+              etablissement={etablissement}
               indicateurPoursuite={indicateurPoursuite}
               indicateurPoursuiteRegional={indicateurPoursuiteRegional}
             />
