@@ -1,4 +1,4 @@
-import { SqlRepository } from "./base.js";
+import { SqlRepository, WhereObject } from "./base.js";
 import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
 import { SelectQueryBuilder, sql } from "kysely";
@@ -28,6 +28,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
         url: null,
         hasFormation: null,
         region: null,
+        type: null,
       },
       kdb
     );
@@ -57,7 +58,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
     };
   }
 
-  async find(where: Partial<DB["etablissement"]>, returnStream = true) {
+  async find(where: Partial<WhereObject<DB, "etablissement">>, returnStream = true) {
     const query = this.kdb.selectFrom(this.tableName).$call(this._base()).selectAll();
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 

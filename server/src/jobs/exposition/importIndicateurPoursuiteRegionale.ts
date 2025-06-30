@@ -83,7 +83,6 @@ async function importIndicateurs() {
     filterData(({ data: { data } }) => {
       return (
         (data?.code_certification_type === "mef11" || data?.code_certification_type === "cfd") &&
-        data?.donnee_source?.type === "self" &&
         !isNil(data.taux_en_emploi_6_mois)
       );
     }),
@@ -104,6 +103,8 @@ async function importIndicateurs() {
           codeDispositif: voie === FormationVoie.SCOLAIRE ? bcnMefData?.dispositif_formation : null,
           millesime: data.millesime,
           region: data.region.code,
+          type: data?.donnee_source?.type,
+          libelle: data.libelle,
           part_en_emploi_6_mois: data.taux_en_emploi_6_mois,
           taux_en_emploi_6_mois: computeTauxEnEmploi(data),
           taux_en_formation: data.taux_en_formation,
@@ -122,7 +123,7 @@ async function importIndicateurs() {
 
           logger.info(
             `Indicateur de poursuite régionale ${Object.values(
-              pick(indicateurPoursuite, ["cfd, voie, codeDipositif, millesime, region"])
+              pick(indicateurPoursuite, ["cfd", "voie", "codeDipositif", "millesime", "region"])
             ).join("/")} ajoutée`
           );
           stats.created++;
@@ -130,7 +131,7 @@ async function importIndicateurs() {
           logger.error(
             e,
             `Impossible d'ajouter les indicateurs de poursuite régionale ${Object.values(
-              pick(indicateurPoursuite, ["cfd, voie, codeDipositif, millesime, region"])
+              pick(indicateurPoursuite, ["cfd", "voie", "codeDipositif", "millesime", "region"])
             ).join("/")}`
           );
           stats.failed++;

@@ -27,7 +27,8 @@ export async function streamCfds(options = {}) {
   return compose(
     mergeStreams(
       await getBCNTable("V_FORMATION_DIPLOME", options), //Apprentissage
-      await getBCNTable("N_FORMATION_DIPLOME", options)
+      await getBCNTable("N_FORMATION_DIPLOME", options),
+      await getBCNTable("N_FORMATION_DIPLOME_ENQUETE_51", options)
     ),
     transformData(async (data) => {
       return {

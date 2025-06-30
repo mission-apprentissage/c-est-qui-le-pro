@@ -51,6 +51,7 @@ export async function importEtablissements() {
           // TODO: validate data
           formated: {
             uai: data.numero_uai,
+            type: data.type_uai,
             libelle: data.appellation_officielle,
             url: formatUrl(data.site_web),
             ...formatStatutEtablissement(data.secteur_public_prive_libe),
