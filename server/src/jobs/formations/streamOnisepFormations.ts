@@ -2,7 +2,7 @@ import { transformData, compose, filterData, transformIntoStream } from "oleoduc
 import { getLoggerWithContext } from "#src/common/logger.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData";
 import { urlOnisepToId } from "#src/services/onisep/utils";
-import { formatDuree } from "./importFormationEtablissement.js";
+import { DIPLOMES_TYPES_ONISEP, formatDuree } from "./importFormationEtablissement.js";
 import { Readable } from "stream";
 
 const logger = getLoggerWithContext("import");
@@ -78,20 +78,8 @@ async function getBcn(cfd, duree) {
 }
 
 export async function streamOnisepFormations({ stats }) {
-  const FOR_TYPES = [
-    "CAP",
-    "CAP agricole",
-    "baccalauréat professionnel",
-    "brevet de technicien",
-    "brevet professionnel agricole",
-    "brevet professionnel de la jeunesse, de l'éducation populaire et du sport",
-    "certificat technique des métiers",
-    "classe de 2de professionnelle",
-    "diplôme professionnel de l'animation et du sport",
-  ];
-
   return compose(
-    Readable.from(FOR_TYPES),
+    Readable.from(DIPLOMES_TYPES_ONISEP),
     transformIntoStream(async (FOR_TYPE) => {
       return await RawDataRepository.search(RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee, {
         data: {

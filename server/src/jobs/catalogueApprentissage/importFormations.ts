@@ -72,6 +72,7 @@ const FIELDS_TO_IMPORT = [
   "affelnet_statut",
   "affelnet_previous_statut",
   "duree",
+  "published",
 ];
 
 export async function importFormations(
