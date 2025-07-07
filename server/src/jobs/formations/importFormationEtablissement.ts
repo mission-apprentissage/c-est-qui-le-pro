@@ -19,7 +19,7 @@ export const formatDuree = (duree) => duree + " an" + (duree !== "1" ? "s" : "")
 
 export const DIPLOMES_TYPES_ONISEP = [
   "baccalauréat professionnel",
-  "brevet de technicien",
+  //"brevet de technicien",
   "brevet professionnel agricole",
   "brevet professionnel de la jeunesse, de l'éducation populaire et du sport",
   "CAP agricole",
@@ -32,7 +32,7 @@ export const DIPLOMES_TYPES_ONISEP = [
 export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
   "BAC PROFESSIONNEL",
   "BAC PROFESSIONNEL AGRICOLE",
-  "BREVET DE TECHNICIEN",
+  //"BREVET DE TECHNICIEN",
   "BREVET PROFESSIONNEL AGRICOLE DE NIVEAU V",
   "BREVET PROFESSIONNEL DE LA JEUNESSE, DE L'EDUCATION POPULAIRE ET DU SPORT",
   "CERTIFICAT D'APTITUDE PROFESSIONNELLE AGRICOLE",
