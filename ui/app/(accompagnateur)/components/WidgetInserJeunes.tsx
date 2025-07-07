@@ -17,7 +17,12 @@ import {
 import UnionIcon from "#/app/components/icon/UnionIcon";
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import { Tabs } from "@codegouvfr/react-dsfr/Tabs";
-import { formatMillesime } from "#/app/utils/formation";
+import {
+  formatIndicateurPoursuiteAnneeCommune,
+  formatMillesime,
+  hasIndicateurEtablissement,
+  hasIndicateurRegional,
+} from "#/app/utils/formation";
 import { BlueLink, FlexCenterColumnBox } from "./InserJeunes.styled";
 import { DialogInserjeunesEmploi, DialogInserjeunesFormation, DialogInserjeunesAutres } from "./DialogInserjeunes";
 import { createPortal } from "react-dom";
@@ -46,7 +51,7 @@ import {
   StyledTitle,
 } from "./WidgetInserJeunes.styled";
 
-function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
+export function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
   return isNil(indicateurPoursuite?.taux_en_formation);
 }
 
@@ -247,42 +252,6 @@ function WidgetInserJeunesTab({
   return <Tabs tabs={tabs}></Tabs>;
 }
 
-function formatIndicateurPoursuiteAnneeCommune(
-  indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[],
-  formationFamilleMetier?: FormationFamilleMetierDetail[]
-) {
-  const indicateurPoursuite: {
-    libelle?: string;
-    codeCertification?: string;
-    indicateurPoursuite?: IndicateurPoursuite;
-    indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
-  }[] = (indicateurPoursuiteAnneeCommune || []).map((indicateurPoursuite, index) => {
-    const regional = formationFamilleMetier?.find((f) => f.formation.mef11 === indicateurPoursuite.codeCertification);
-    return {
-      libelle: indicateurPoursuite.libelle,
-      codeCertification: indicateurPoursuite.codeCertification,
-      indicateurPoursuite,
-      indicateurPoursuiteRegional: regional?.formationEtablissement?.indicateurPoursuiteRegional,
-    };
-  });
-
-  for (const formationDetail of formationFamilleMetier || []) {
-    // Il peut y avoir des données au niveau régional qui n'existent pas dans indicateurPoursuiteAnneeCommune qui est construit à partir du niveau établissement des données IJs
-    if (
-      formationDetail.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome &&
-      !indicateurPoursuite.find((f) => f.codeCertification === formationDetail.formation.mef11)
-    ) {
-      indicateurPoursuite.push({
-        libelle: formationDetail?.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome?.libelle,
-        codeCertification: formationDetail.formation.mef11,
-        indicateurPoursuiteRegional: formationDetail?.formationEtablissement?.indicateurPoursuiteRegional,
-      });
-    }
-  }
-
-  return indicateurPoursuite;
-}
-
 function WidgetInserJeunesFamilleMetier({
   etablissement,
   indicateurPoursuiteAnneeCommune,
@@ -305,8 +274,8 @@ function WidgetInserJeunesFamilleMetier({
         <Box>
           {indicateursPoursuite.map((indicateurPoursuite, index) => {
             const hasData =
-              indicateurPoursuite.indicateurPoursuite?.taux_en_formation !== undefined ||
-              indicateurPoursuite.indicateurPoursuiteRegional?.byDiplome?.taux_en_formation !== undefined;
+              hasIndicateurEtablissement(indicateurPoursuite.indicateurPoursuite) ||
+              hasIndicateurRegional(indicateurPoursuite.indicateurPoursuiteRegional) !== undefined;
             return (
               <Box key={`poursuite_anneee_commune_${index}`}>
                 <CustomAccordion

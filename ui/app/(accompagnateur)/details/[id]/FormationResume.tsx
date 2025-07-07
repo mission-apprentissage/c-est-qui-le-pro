@@ -169,12 +169,13 @@ function FormationResumeBlockAdmission({
 }
 
 const FormationResume = React.memo(function ({
-  formationDetail: { formation, formationEtablissement },
+  formationDetail,
   hideTag,
 }: {
   formationDetail: FormationDetail;
   hideTag?: boolean;
 }) {
+  const { formation, formationEtablissement } = formationDetail;
   const [currentSection, setCurrentSection] = useState("la-formation");
   const { headersSize } = useFormationsDetails();
   const activeId = useScrollspy(
@@ -245,16 +246,14 @@ const FormationResume = React.memo(function ({
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEtude
             hideTag={hideTag}
-            formation={formation}
-            formationEtablissement={formationEtablissement}
+            formationDetail={formationDetail}
             isActive={currentSection === "poursuite-etudes"}
           />
         </Grid>
         <Grid item xs={12} md={3}>
           <FormationResumeBlockEmploi
             hideTag={hideTag}
-            formation={formation}
-            formationEtablissement={formationEtablissement}
+            formationDetail={formationDetail}
             isActive={currentSection === "acces-emploi"}
           />
         </Grid>

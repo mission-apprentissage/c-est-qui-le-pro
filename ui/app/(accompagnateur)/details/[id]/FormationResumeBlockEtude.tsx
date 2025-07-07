@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { Formation, FormationEtablissement } from "shared";
+import { Formation, FormationDetail, FormationEtablissement } from "shared";
 import Tag from "#/app/components/Tag";
 import { isNil } from "lodash-es";
 import { FormationResumeBlock, FormationResumeBlockProps } from "./FormationResume";
+import { hasIndicateurFamilleMetier, hasIndicateurRegional } from "#/app/utils/formation";
+import { useMemo } from "react";
 
 function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
   const tauxFormation = formationEtablissement?.indicateurPoursuite?.taux_en_formation;
@@ -11,7 +13,9 @@ function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEta
 
   const admissionLevel =
     isNil(tauxFormation) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_formation_q0)
-      ? "unknow"
+      ? hasIndicateurRegional(formationEtablissement?.indicateurPoursuiteRegional)
+        ? "regional"
+        : "unknow"
       : tauxFormation >= tauxRegional.taux_en_formation_q3
       ? "easy"
       : tauxFormation > tauxRegional.taux_en_formation_q1
@@ -42,6 +46,13 @@ function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEta
         )}
       </>
       <>
+        {admissionLevel === "regional" && (
+          <Tag square variant="purple-light">
+            Consulter le taux régional
+          </Tag>
+        )}
+      </>
+      <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
             Taux de poursuite d’études indisponible
@@ -52,18 +63,12 @@ function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEta
   );
 }
 
-function FormationResumeBlockEtudeAnneeCommuneTag({
-  formationEtablissement,
-}: {
-  formationEtablissement: FormationEtablissement;
-}) {
-  const hasStatTerminale = formationEtablissement.indicateurPoursuiteAnneeCommune?.find(
-    (stat) => stat.taux_en_formation !== undefined
-  );
+function FormationResumeBlockEtudeAnneeCommuneTag({ formationDetail }: { formationDetail: FormationDetail }) {
+  const hasStat = useMemo(() => hasIndicateurFamilleMetier(formationDetail), [formationDetail]);
 
   return (
     <>
-      {hasStatTerminale ? (
+      {hasStat ? (
         <Tag square variant="dark-blue" bold={"500"}>
           Différente selon le Bac Pro choisi après cette seconde commune
         </Tag>
@@ -77,13 +82,13 @@ function FormationResumeBlockEtudeAnneeCommuneTag({
 }
 
 function FormationResumeBlockEtude({
-  formationEtablissement,
-  formation,
+  formationDetail,
   ...formationResumeBlockProps
 }: {
-  formationEtablissement: FormationEtablissement;
-  formation: Formation;
+  formationDetail: FormationDetail;
 } & Partial<FormationResumeBlockProps>) {
+  const { formationEtablissement, formation } = formationDetail;
+
   return (
     <FormationResumeBlock
       {...formationResumeBlockProps}
@@ -92,7 +97,7 @@ function FormationResumeBlockEtude({
       anchor={"poursuite-etudes"}
     >
       {formation.isAnneeCommune ? (
-        <FormationResumeBlockEtudeAnneeCommuneTag formationEtablissement={formationEtablissement} />
+        <FormationResumeBlockEtudeAnneeCommuneTag formationDetail={formationDetail} />
       ) : (
         <FormationResumeBlockEtudeTag formationEtablissement={formationEtablissement} />
       )}
