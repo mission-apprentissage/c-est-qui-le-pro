@@ -12,6 +12,7 @@ import {
   FormationFamilleMetierDetail,
   EtablissementTypeLibelle,
   EtablissementTypeFromValue,
+  EtablissementTypeLibellePrefix,
 } from "shared";
 import UnionIcon from "#/app/components/icon/UnionIcon";
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
@@ -50,29 +51,7 @@ function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
 }
 
 function formatLibelleTabEtablissement(etablissement: Etablissement) {
-  const prefix = {
-    INCONNU: "cet",
-    GRETA: "ce",
-    AIDE: "ce",
-    EREA: "ce",
-    LYC: "ce",
-    EXP: "cet",
-    CNED: "ce",
-    SGT: "cette",
-    SOC: "cette",
-    PBAC: "cette",
-    HOSP: "cette",
-    SEP: "cette",
-    CONT: "cet",
-    CFPA: "cette",
-    LP: "ce",
-    CFA: "ce",
-    TSGE: "cet",
-    CLG: "ce",
-    EME: "cet",
-  };
-
-  return `Pour ${prefix[EtablissementTypeFromValue[etablissement.type]]} ${
+  return `Pour ${EtablissementTypeLibellePrefix[EtablissementTypeFromValue[etablissement.type]]} ${
     EtablissementTypeLibelle[EtablissementTypeFromValue[etablissement.type] || "INCONNU"]
   }`;
 }
