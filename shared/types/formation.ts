@@ -10,11 +10,15 @@ export const DiplomeType = {
   BAC_PRO: ["400", "403"], // Bac pro et bac pro agricole
   CAP: ["500", "503"], // cap et cap agricole
   BP: ["450", "553"], // BP et BP agricole
+  BT: ["420"], // Brevet de technicien
+  BPJEPS: ["446"],
 };
 
 export const DiplomeTypeLibelle: { [key: string]: string } = {
   "400": "BAC PRO",
   "403": "BAC PRO AG",
+  "420": "BREVET DE TECHNICIEN",
+  "446": "BPJEPS",
   "500": "CAP",
   "503": "CAPA",
   "450": "BREVET PRO",
@@ -35,6 +39,8 @@ export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
   ],
   CAP: ["certificat d'aptitude professionnelle", "cap", "capa"],
   BP: ["brevet professionel", "bp"],
+  BPJEPS: ["bpjeps", "brevet professionnel de la jeunesse, de l'education populaire et du sport"],
+  BT: ["brevet de technicien', 'bt"],
 };
 
 export enum FormationTag {
