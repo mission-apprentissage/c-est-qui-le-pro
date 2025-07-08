@@ -8,7 +8,7 @@ export const StyledTitle = styled(Typography)`
   margin-bottom: 1rem;
 
   ${({ theme }) => theme.breakpoints.down("md")} {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
