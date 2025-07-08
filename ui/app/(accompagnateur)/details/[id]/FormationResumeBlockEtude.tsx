@@ -47,7 +47,7 @@ function FormationResumeBlockEtudeTag({ formationEtablissement }: { formationEta
       </>
       <>
         {admissionLevel === "regional" && (
-          <Tag square variant="purple-light">
+          <Tag square variant="dark-blue" bold={"500"}>
             Consulter le taux régional
           </Tag>
         )}
