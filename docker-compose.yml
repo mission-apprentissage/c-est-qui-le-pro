@@ -64,7 +64,7 @@ services:
       - accompagnateur_network
 
   metabase:
-    image: metabase/metabase:v0.48.6
+    image: metabase/metabase:v0.55.6
     container_name: accompagnateur_metabase
     mem_limit: 2g
     restart: always
