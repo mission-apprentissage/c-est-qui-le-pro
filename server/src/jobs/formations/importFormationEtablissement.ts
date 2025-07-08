@@ -47,7 +47,7 @@ async function streamCAFormations({ stats }) {
   ];
   return compose(
     // On ne renvoi que les formations post 3ème publié
-    mergeStreams(await RawDataRepository.search(RawDataType.CatalogueApprentissage, { published: true })),
+    mergeStreams(await RawDataRepository.search(RawDataType.CatalogueApprentissage, { published: true, annee: "1" })),
     filterData(
       ({ data }) =>
         data.uai_formation &&
