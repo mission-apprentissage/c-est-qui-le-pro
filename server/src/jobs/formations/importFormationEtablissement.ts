@@ -56,7 +56,7 @@ async function streamCAFormations({ stats }) {
     ),
     // On filtre les Bac Pro qui ne dure que 2 ans dans le Catalogue de l'apprentissage : entrée en deuxième année
     filterData(({ data }) => {
-      return data.diplome != "BAC PROFESSIONNEL" || data.diplome != "BAC PROFESSIONNEL AGRICOLE" || data.duree == "3";
+      return (data.diplome != "BAC PROFESSIONNEL" && data.diplome != "BAC PROFESSIONNEL AGRICOLE") || data.duree == "3";
     }),
     transformData(async ({ data }) => {
       stats.total++;
