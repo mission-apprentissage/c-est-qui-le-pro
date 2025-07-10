@@ -39,7 +39,9 @@ export const StyledOptionBox = styled(Box, {
 
 export const IconContainer = styled(Box, {
   shouldForwardProp: (prop) =>
-    !["hasIcon", "hasPictogramme", "withSeparator", "iconColor", "bgColor", "isMobile"].includes(prop as string),
+    !["hasIcon", "iconSize", "hasPictogramme", "withSeparator", "iconColor", "bgColor", "isMobile"].includes(
+      prop as string
+    ),
 })<{
   hasIcon: boolean;
   hasPictogramme: boolean;

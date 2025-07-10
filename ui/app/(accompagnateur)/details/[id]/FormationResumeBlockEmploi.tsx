@@ -1,17 +1,21 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { Formation, FormationEtablissement } from "shared";
+import { FormationDetail, FormationEtablissement } from "shared";
 import Tag from "#/app/components/Tag";
 import { isNil } from "lodash-es";
 import { FormationResumeBlock, FormationResumeBlockProps } from "./FormationResume";
+import { hasIndicateurFamilleMetier, hasIndicateurRegional } from "#/app/utils/formation";
+import { useMemo } from "react";
 
 function FormationResumeBlockEmploiTag({ formationEtablissement }: { formationEtablissement: FormationEtablissement }) {
   const tauxEmploi = formationEtablissement?.indicateurPoursuite?.taux_en_emploi_6_mois;
-  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional;
+  const tauxRegional = formationEtablissement?.indicateurPoursuiteRegional?.byDiplomeType;
 
   const admissionLevel =
     isNil(tauxEmploi) || isNil(tauxRegional) || isNil(tauxRegional?.taux_en_emploi_6_mois_q0)
-      ? "unknow"
+      ? hasIndicateurRegional(formationEtablissement?.indicateurPoursuiteRegional)
+        ? "regional"
+        : "unknow"
       : tauxEmploi >= tauxRegional.taux_en_emploi_6_mois_q3
       ? "easy"
       : tauxEmploi > tauxRegional.taux_en_emploi_6_mois_q1
@@ -42,6 +46,13 @@ function FormationResumeBlockEmploiTag({ formationEtablissement }: { formationEt
         )}
       </>
       <>
+        {admissionLevel === "regional" && (
+          <Tag square variant="dark-blue" bold={"500"}>
+            Consulter le taux régional
+          </Tag>
+        )}
+      </>
+      <>
         {admissionLevel === "unknow" && (
           <Tag square level="unknow">
             Taux d’emploi indisponible
@@ -52,18 +63,12 @@ function FormationResumeBlockEmploiTag({ formationEtablissement }: { formationEt
   );
 }
 
-function FormationResumeBlockEmploiAnneeCommuneTag({
-  formationEtablissement,
-}: {
-  formationEtablissement: FormationEtablissement;
-}) {
-  const hasStatTerminale = formationEtablissement.indicateurPoursuiteAnneeCommune?.find(
-    (stat) => stat.taux_en_emploi_6_mois !== undefined
-  );
+function FormationResumeBlockEmploiAnneeCommuneTag({ formationDetail }: { formationDetail: FormationDetail }) {
+  const hasStat = useMemo(() => hasIndicateurFamilleMetier(formationDetail), [formationDetail]);
 
   return (
     <>
-      {hasStatTerminale ? (
+      {hasStat ? (
         <Tag square variant="dark-blue" bold={"500"}>
           Différent selon le Bac Pro choisi après cette seconde commune
         </Tag>
@@ -77,13 +82,13 @@ function FormationResumeBlockEmploiAnneeCommuneTag({
 }
 
 function FormationResumeBlockEmploi({
-  formation,
-  formationEtablissement,
+  formationDetail,
   ...formationResumeBlockProps
 }: {
-  formation: Formation;
-  formationEtablissement: FormationEtablissement;
+  formationDetail: FormationDetail;
 } & Partial<FormationResumeBlockProps>) {
+  const { formationEtablissement, formation } = formationDetail;
+
   return (
     <FormationResumeBlock
       {...formationResumeBlockProps}
@@ -92,7 +97,7 @@ function FormationResumeBlockEmploi({
       anchor="acces-emploi"
     >
       {formation.isAnneeCommune ? (
-        <FormationResumeBlockEmploiAnneeCommuneTag formationEtablissement={formationEtablissement} />
+        <FormationResumeBlockEmploiAnneeCommuneTag formationDetail={formationDetail} />
       ) : (
         <FormationResumeBlockEmploiTag formationEtablissement={formationEtablissement} />
       )}

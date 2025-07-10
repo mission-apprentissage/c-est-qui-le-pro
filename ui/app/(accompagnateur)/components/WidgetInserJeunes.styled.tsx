@@ -8,7 +8,7 @@ export const StyledTitle = styled(Typography)`
   margin-bottom: 1rem;
 
   ${({ theme }) => theme.breakpoints.down("md")} {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -69,13 +69,19 @@ export const Description = styled(Box, {
     font-weight: bold;
   }
 
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    & > div:last-child {
+      gap: 0.25rem;
+      display: flex;
+      flex-direction: row;
+      flew-wrap: wrap;
+      ${(props) => (props.vertical ? "font-size: 1.125rem;" : "")}
+    }
+  }
+
   & > div:last-child {
-    gap: 0.25rem;
-    display: flex;
-    flex-direction: row;
     font-size: 0.875rem;
     font-weight: 700;
-    flew-wrap: wrap;
     ${(props) => (props.vertical ? "font-size: 1.125rem;" : "")}
 
     & > div {
@@ -122,13 +128,6 @@ export const PersonaContainer = styled(Box)`
   }
 `;
 
-export const StyledEtablissementLibelle = styled(Typography)`
-  margin-bottom: 1.5rem;
-  & i {
-    margin-right: 4px;
-  }
-`;
-
 export const StyledFormationLibelle = styled(Typography, {
   shouldForwardProp: (prop) => !["active"].includes(prop as string),
 })<{ active: boolean }>`
@@ -160,7 +159,7 @@ export const ContainerAnneeCommune = styled(Box)`
 `;
 
 export const ContainerFormation = styled(Box)`
-  max-width: 650px;
+  max-width: 700px;
   gap: 1.5rem;
   display: flex;
   flex-direction: column;

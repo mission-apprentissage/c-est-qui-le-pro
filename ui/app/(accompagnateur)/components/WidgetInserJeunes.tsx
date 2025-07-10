@@ -2,11 +2,27 @@
 "use client";
 import { Box, Typography } from "#/app/components/MaterialUINext";
 import { Theme, useMediaQuery } from "@mui/material";
-import { useMemo } from "react";
-import { Etablissement, FormationDetail, IndicateurPoursuite, IndicateurPoursuiteAnneeCommune } from "shared";
+import { ReactNode, useMemo } from "react";
+import {
+  Etablissement,
+  FormationDetail,
+  IndicateurPoursuite,
+  IndicateurPoursuiteRegional,
+  IndicateurPoursuiteAnneeCommune,
+  FormationFamilleMetierDetail,
+  EtablissementTypeLibelle,
+  EtablissementTypeFromValue,
+  EtablissementTypeLibellePrefix,
+} from "shared";
 import UnionIcon from "#/app/components/icon/UnionIcon";
-import { fr } from "@codegouvfr/react-dsfr";
-import { formatMillesime } from "#/app/utils/formation";
+import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
+import { Tabs } from "@codegouvfr/react-dsfr/Tabs";
+import {
+  formatIndicateurPoursuiteAnneeCommune,
+  formatMillesime,
+  hasIndicateurEtablissement,
+  hasIndicateurRegional,
+} from "#/app/utils/formation";
 import { BlueLink, FlexCenterColumnBox } from "./InserJeunes.styled";
 import { DialogInserjeunesEmploi, DialogInserjeunesFormation, DialogInserjeunesAutres } from "./DialogInserjeunes";
 import { createPortal } from "react-dom";
@@ -31,10 +47,19 @@ import {
   PersonaContainer,
   PersonasContainer,
   StyledDivider,
-  StyledEtablissementLibelle,
   StyledFormationLibelle,
   StyledTitle,
 } from "./WidgetInserJeunes.styled";
+
+export function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
+  return isNil(indicateurPoursuite?.taux_en_formation);
+}
+
+function formatLibelleTabEtablissement(etablissement: Etablissement) {
+  return `Pour ${EtablissementTypeLibellePrefix[EtablissementTypeFromValue[etablissement.type]]} ${
+    EtablissementTypeLibelle[EtablissementTypeFromValue[etablissement.type] || "INCONNU"]
+  }`;
+}
 
 function NoIndicateurs() {
   return (
@@ -124,8 +149,7 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
                 <Description color={metric.color} vertical={isDownSm} onClick={modals[keyTyped].open}>
                   <Box>{indicateurPoursuite[metric.metric]}%</Box>
                   <Box>
-                    <Box>{metric.description}</Box>
-                    <i className={fr.cx("ri-information-line")}></i>
+                    {metric.description}&nbsp;<i className={fr.cx("ri-information-line")}></i>
                   </Box>
                 </Description>
               )}
@@ -149,9 +173,10 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
                 <Box>
                   <Box>
                     <i className={fr.cx(metric.icon)}></i>
-                    {metric.description}
+                    <Box>
+                      {metric.description}&nbsp;<i className={fr.cx("ri-information-line")}></i>
+                    </Box>
                   </Box>
-                  <i className={fr.cx("ri-information-line")}></i>
                 </Box>
               </Description>
             );
@@ -162,12 +187,12 @@ function IndicateursWithPersona({ indicateurPoursuite }: { indicateurPoursuite: 
   );
 }
 
-function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateurPoursuite?: IndicateurPoursuite }) {
+export function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateurPoursuite?: IndicateurPoursuite }) {
   return (
     <Box>
       {!indicateurPoursuite ? (
         <NoIndicateurs />
-      ) : isNil(indicateurPoursuite?.taux_en_formation) ? (
+      ) : isSousSeuil(indicateurPoursuite) ? (
         <IndicateursSousSeuil />
       ) : (
         <IndicateursWithPersona indicateurPoursuite={indicateurPoursuite} />
@@ -176,53 +201,107 @@ function WidgetInserJeunesFormation({ indicateurPoursuite }: { indicateurPoursui
   );
 }
 
-function WidgetInserJeunesFamilleMetier({
-  indicateurPoursuiteAnneeCommune,
+function WidgetInserJeunesTab({
+  etablissement,
+  indicateurPoursuite,
+  indicateurPoursuiteRegional,
 }: {
+  etablissement: Etablissement;
+  indicateurPoursuite?: IndicateurPoursuite;
+  indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
+}) {
+  const tabs = useMemo(() => {
+    let tabs: {
+      isDefault?: boolean;
+      label: ReactNode;
+      iconId?: FrIconClassName | RiIconClassName;
+      content: ReactNode;
+    }[] = [];
+    if (indicateurPoursuite && !isSousSeuil(indicateurPoursuite)) {
+      tabs.push({
+        label: formatLibelleTabEtablissement(etablissement),
+        iconId: "ri-arrow-right-line",
+        isDefault: true,
+        content: (
+          <>
+            <WidgetInserJeunesFormation indicateurPoursuite={indicateurPoursuite} />
+          </>
+        ),
+      });
+    }
+
+    if (indicateurPoursuiteRegional?.byDiplome && !isSousSeuil(indicateurPoursuiteRegional?.byDiplome)) {
+      tabs.push({
+        label: "Sur la région",
+        iconId: "ri-map-pin-2-line",
+        content: (
+          <>
+            <WidgetInserJeunesFormation indicateurPoursuite={indicateurPoursuiteRegional?.byDiplome} />
+          </>
+        ),
+      });
+    }
+
+    return tabs;
+  }, [indicateurPoursuite, indicateurPoursuiteRegional]);
+
+  if (tabs.length === 0) {
+    return <NoIndicateurs />;
+  }
+
+  return <Tabs tabs={tabs}></Tabs>;
+}
+
+function WidgetInserJeunesFamilleMetier({
+  etablissement,
+  indicateurPoursuiteAnneeCommune,
+  formationFamilleMetier,
+}: {
+  etablissement: Etablissement;
   indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[];
+  formationFamilleMetier?: FormationFamilleMetierDetail[];
 }) {
   const hasStats = !!indicateurPoursuiteAnneeCommune?.length;
+  const indicateursPoursuite = useMemo(
+    () => formatIndicateurPoursuiteAnneeCommune(indicateurPoursuiteAnneeCommune, formationFamilleMetier),
+    [indicateurPoursuiteAnneeCommune, formationFamilleMetier]
+  );
 
   return (
     <Box>
       {!hasStats && <NoIndicateurs />}
       {hasStats && (
         <Box>
-          {indicateurPoursuiteAnneeCommune.map((indicateurPoursuite, index) => {
+          {indicateursPoursuite.map((indicateurPoursuite, index) => {
+            const hasData =
+              hasIndicateurEtablissement(indicateurPoursuite.indicateurPoursuite) ||
+              hasIndicateurRegional(indicateurPoursuite.indicateurPoursuiteRegional) !== undefined;
             return (
               <Box key={`poursuite_anneee_commune_${index}`}>
                 <CustomAccordion
-                  defaultExpanded={indicateurPoursuite.part_en_emploi_6_mois !== undefined}
+                  defaultExpanded={hasData}
                   label={
-                    <StyledFormationLibelle
-                      variant="subtitle1"
-                      active={indicateurPoursuite.part_en_emploi_6_mois !== undefined}
-                    >
+                    <StyledFormationLibelle variant="subtitle1" active={hasData}>
                       {index + 1}. Après {capitalize(indicateurPoursuite.libelle)}
                     </StyledFormationLibelle>
                   }
                 >
                   <AccordionContainer>
-                    <WidgetInserJeunesFormation indicateurPoursuite={indicateurPoursuite} />
+                    <WidgetInserJeunesTab
+                      etablissement={etablissement}
+                      indicateurPoursuite={indicateurPoursuite.indicateurPoursuite}
+                      indicateurPoursuiteRegional={indicateurPoursuite.indicateurPoursuiteRegional}
+                    />
                   </AccordionContainer>
                 </CustomAccordion>
 
-                <StyledDivider active={indicateurPoursuite.part_en_emploi_6_mois !== undefined} />
+                <StyledDivider active={hasData} />
               </Box>
             );
           })}
         </Box>
       )}
     </Box>
-  );
-}
-
-function EtablissementLibelle({ etablissement }: { etablissement: Etablissement }) {
-  return (
-    <StyledEtablissementLibelle>
-      <i className={fr.cx("ri-map-pin-2-line")}></i>
-      {etablissement.libelle}
-    </StyledEtablissementLibelle>
   );
 }
 
@@ -250,26 +329,31 @@ export function WidgetFooter({ millesime }: { millesime: string }) {
 }
 
 export default function WidgetInserJeunes({ formationDetail }: { formationDetail: FormationDetail }) {
+  const isAnneeCommune = formationDetail.formation.isAnneeCommune ?? false;
   const {
-    formationEtablissement: { indicateurPoursuiteAnneeCommune, indicateurPoursuite },
+    formationEtablissement: { indicateurPoursuiteAnneeCommune, indicateurPoursuite, indicateurPoursuiteRegional },
+    etablissement,
   } = formationDetail;
   const millesime = indicateurPoursuiteAnneeCommune?.length
     ? indicateurPoursuiteAnneeCommune[0].millesime
     : indicateurPoursuite
     ? indicateurPoursuite.millesime
+    : indicateurPoursuiteRegional?.byDiplome
+    ? indicateurPoursuiteRegional.byDiplome?.millesime
     : "";
 
   return (
     <>
-      {formationDetail.formation.isAnneeCommune ? (
+      {isAnneeCommune ? (
         <>
           <StyledTitle variant="h3">
             Que sont devenus les anciens élèves 6 mois après ces différents BAC PRO ?
           </StyledTitle>
-          <EtablissementLibelle etablissement={formationDetail.etablissement} />
           <ContainerAnneeCommune>
             <WidgetInserJeunesFamilleMetier
-              indicateurPoursuiteAnneeCommune={formationDetail.formationEtablissement.indicateurPoursuiteAnneeCommune}
+              etablissement={etablissement}
+              formationFamilleMetier={formationDetail.formationsFamilleMetier}
+              indicateurPoursuiteAnneeCommune={indicateurPoursuiteAnneeCommune}
             />
             <WidgetFooter millesime={millesime} />
           </ContainerAnneeCommune>
@@ -277,10 +361,11 @@ export default function WidgetInserJeunes({ formationDetail }: { formationDetail
       ) : (
         <>
           <StyledTitle variant="h3">Que sont devenus les anciens élèves 6 mois après cette formation ?</StyledTitle>
-          <EtablissementLibelle etablissement={formationDetail.etablissement} />
           <ContainerFormation>
-            <WidgetInserJeunesFormation
-              indicateurPoursuite={formationDetail.formationEtablissement.indicateurPoursuite}
+            <WidgetInserJeunesTab
+              etablissement={etablissement}
+              indicateurPoursuite={indicateurPoursuite}
+              indicateurPoursuiteRegional={indicateurPoursuiteRegional}
             />
             <WidgetFooter millesime={millesime} />
           </ContainerFormation>

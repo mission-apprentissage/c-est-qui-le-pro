@@ -62,8 +62,13 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return compose(Readable.from(queryCond.stream()));
   }
 
-  async first(where: Partial<WhereObject<DB, F>>) {
-    const query = this.kdb.selectFrom(this.tableName).selectAll();
+  async first(where: Partial<WhereObject<DB, F>>, orderBy: [AnyColumn<DB, F>, "asc" | "desc"][] = []) {
+    let query = this.kdb.selectFrom(this.tableName).selectAll();
+    if (orderBy?.length > 0) {
+      for (const [col, ord] of orderBy) {
+        query = query.orderBy(col, ord);
+      }
+    }
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 
     return queryCond.limit(1).executeTakeFirst();

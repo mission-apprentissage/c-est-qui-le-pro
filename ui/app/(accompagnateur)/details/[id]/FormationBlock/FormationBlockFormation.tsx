@@ -5,7 +5,6 @@ import FormationDescription from "#/app/(accompagnateur)/components/FormationDes
 import { FormationDetail } from "shared";
 import Card from "#/app/components/Card";
 import Link from "#/app/components/Link";
-import WidgetSiriusFormation from "#/app/(accompagnateur)/components/WidgetSiriusFormation";
 import FormationsFamilleMetier from "#/app/(accompagnateur)/components/FormationFamilleMetier";
 import { ContentContainer } from "./FormationBlock.styled";
 
@@ -43,12 +42,6 @@ export default function FormationBlockFormation({
           formationDetail={formationDetail}
           block={formationDetail.formation.isAnneeCommune}
         />
-
-        {formation.voie === "apprentissage" && (
-          <Box>
-            <WidgetSiriusFormation formation={formation} fallbackComponent={<></>} />
-          </Box>
-        )}
       </ContentContainer>
     </Card>
   );
