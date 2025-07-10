@@ -1,3 +1,10 @@
+# [1.39.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.38.0...v1.39.0) (2025-07-10)
+
+
+### Features
+
+* widget ij avec données régionales ([#68](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/68)) ([5fbe6d8](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/5fbe6d874b1c144679f98f0077b77517a37a1d69))
+
 # [1.38.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.37.1...v1.38.0) (2025-06-23)
 
 
