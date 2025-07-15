@@ -187,7 +187,7 @@ export default React.memo(function ResearchFormationsResult({
   const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
   const { params, updateParams } = useFormationsSearch();
-  const { tag, domaines, formation, voie, diplome, minWeight } = params ?? {};
+  const { tag, domaines, recherche, voie, diplome, minWeight } = params ?? {};
 
   const { ref: refInView, inView } = useInView();
 
@@ -201,7 +201,7 @@ export default React.memo(function ResearchFormationsResult({
       voie,
       diplome,
       postcode: location.postcode,
-      formation,
+      recherche,
       minWeight,
     });
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);

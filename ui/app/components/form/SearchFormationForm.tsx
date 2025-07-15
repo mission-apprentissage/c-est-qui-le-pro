@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 export type SearchFormationFormData = {
   address: string;
-  formation?: string | null;
+  recherche?: string | null;
   tag?: string[];
   domaines?: string[];
   voie?: string[];
@@ -16,7 +16,7 @@ export const schema: yup.ObjectSchema<SearchFormationFormData> = yup
     domaines: yup.array().of(yup.string().required()),
     voie: yup.array().of(yup.string().required()),
     diplome: yup.array().of(yup.string().required()),
-    formation: yup.string().nullable(),
+    recherche: yup.string().nullable(),
     minWeight: yup.number().min(0).max(1000).nullable(),
   })
   .required();

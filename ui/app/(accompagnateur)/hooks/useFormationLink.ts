@@ -12,6 +12,16 @@ export function formationDetailToKey(formationDetail: FormationDetail | Formatio
   }-${formationDetail.formation.voie}`;
 }
 
+export function formationDetailToFormation(formationDetail: FormationDetail | FormationFamilleMetierDetail) {
+  if (!formationDetail) {
+    return null;
+  }
+
+  return `${formationDetail.formation.cfd}-${formationDetail.formation.codeDispositif || ""}-${
+    formationDetail.formation.voie
+  }`;
+}
+
 export const useFormationLink = ({
   formationDetail,
   longitude,
@@ -39,11 +49,11 @@ export const useFormationLink = ({
 };
 
 export const useSearchFormationLink = ({
-  formation,
+  recherche,
   address,
-}: Pick<FormationsSearchParams, "formation" | "address">) => {
+}: Pick<FormationsSearchParams, "recherche" | "address">) => {
   const parameters = new URLSearchParams({
-    ...(formation ? { formation } : {}),
+    ...(recherche ? { recherche } : {}),
     ...(address ? { address } : {}),
   });
   return `/recherche?${parameters}`;

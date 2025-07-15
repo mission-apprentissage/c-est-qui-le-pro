@@ -90,7 +90,7 @@ export default () => {
         voie,
         diplome,
         academie,
-        formation,
+        recherche,
         reverse,
         minWeight,
         page,
@@ -109,7 +109,7 @@ export default () => {
           ...validators.diplome(),
           ...validators.tag(),
           academie: Joi.string().empty("").default(null),
-          formation: Joi.string().empty("").default(null),
+          recherche: Joi.string().empty("").default(null),
           reverse: Joi.boolean().empty("").default(true),
           minWeight: Joi.number().min(0).max(1000).default(101),
           ...validators.pagination({ items_par_page: 100 }),
@@ -119,7 +119,7 @@ export default () => {
       const year = new Date().getFullYear();
       const millesime = [(year - 1).toString(), year.toString()];
 
-      const searchQuery = parseSearchQuery(formation);
+      const searchQuery = parseSearchQuery(recherche);
 
       const results = await getFormationsSQL(
         {

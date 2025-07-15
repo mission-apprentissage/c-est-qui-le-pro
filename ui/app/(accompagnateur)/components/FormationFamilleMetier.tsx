@@ -48,7 +48,7 @@ const FormationFamilleMetierBlock = React.memo(function FormationFamilleMetierBl
 
   const formationSearchLink = useSearchFormationLink({
     address: address?.label || myPosition,
-    formation: formation.libelle,
+    recherche: formation.libelle,
   });
 
   return (

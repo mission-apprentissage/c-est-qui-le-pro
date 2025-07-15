@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { FormationDetail } from "shared";
 import { useMatomo } from "../hooks/useMatomo";
-import { formationDetailToKey } from "../hooks/useFormationLink";
+import { formationDetailToFormation, formationDetailToKey } from "../hooks/useFormationLink";
 
 type DetailsHeaderSize = {
   headerHeight: number;
@@ -38,7 +38,8 @@ const FormationDetailsProvider = ({
 
   useEffect(() => {
     matomo.push(["trackEvent", "details", "uai", formationDetail.etablissement.uai]);
-    matomo.push(["trackEvent", "details", "code", formationDetailToKey(formationDetail)]);
+    matomo.push(["trackEvent", "details", "code", formationDetailToFormation(formationDetail)]);
+    matomo.push(["trackEvent", "details", "formation", formationDetailToKey(formationDetail)]);
   }, [matomo, formationDetail]);
 
   const setHeaderSizeCb = useCallback(
