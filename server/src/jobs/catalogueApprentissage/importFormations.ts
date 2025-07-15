@@ -74,6 +74,7 @@ const FIELDS_TO_IMPORT = [
   "duree",
   "published",
   "annee",
+  "cle_ministere_educatif",
 ];
 
 export async function importFormations(
