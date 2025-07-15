@@ -19,7 +19,7 @@ export const formatDuree = (duree) => duree + " an" + (duree !== "1" ? "s" : "")
 
 export const DIPLOMES_TYPES_ONISEP = [
   "baccalauréat professionnel",
-  //"brevet de technicien",
+  "brevet de technicien",
   "brevet professionnel agricole",
   "brevet professionnel de la jeunesse, de l'éducation populaire et du sport",
   "CAP agricole",
@@ -27,6 +27,7 @@ export const DIPLOMES_TYPES_ONISEP = [
   "certificat technique des métiers",
   "classe de 2de professionnelle",
   "diplôme professionnel de l'animation et du sport",
+  "diplôme d'État de la jeunesse, de l'éducation populaire et du sport",
 ];
 
 export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
@@ -39,6 +40,7 @@ export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
   "CERTIFICAT D'APTITUDES PROFESSIONNELLES AGRICOLES",
   "CERTIFICAT D'APTITUDE PROFESSIONNELLE",
   "CERTIFICAT D'APTITUDES PROFESSIONNELLES",
+  "DIPLOME D'ETAT SUPERIEUR DE LA JEUNESSE, DE L'EDUCATION POPULAIRE ET DU SPORT",
 ];
 
 async function streamCAFormations({ stats }) {
