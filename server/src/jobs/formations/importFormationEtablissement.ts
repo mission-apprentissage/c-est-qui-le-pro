@@ -27,7 +27,6 @@ export const DIPLOMES_TYPES_ONISEP = [
   "certificat technique des métiers",
   "classe de 2de professionnelle",
   "diplôme professionnel de l'animation et du sport",
-  "diplôme d'État de la jeunesse, de l'éducation populaire et du sport",
 ];
 
 export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
@@ -40,7 +39,7 @@ export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
   "CERTIFICAT D'APTITUDES PROFESSIONNELLES AGRICOLES",
   "CERTIFICAT D'APTITUDE PROFESSIONNELLE",
   "CERTIFICAT D'APTITUDES PROFESSIONNELLES",
-  "DIPLOME D'ETAT SUPERIEUR DE LA JEUNESSE, DE L'EDUCATION POPULAIRE ET DU SPORT",
+  "TH DE NIV 5 MINISTERE DE LA JEUNESSE ET DES SPORTS",
 ];
 
 async function streamCAFormations({ stats }) {
@@ -147,7 +146,7 @@ export async function importFormationEtablissement() {
     )
   );
 
-  stats.deleted = await FormationEtablissementRepository.removeStale();
+  //stats.deleted = await FormationEtablissementRepository.removeStale();
 
   return stats;
 }
