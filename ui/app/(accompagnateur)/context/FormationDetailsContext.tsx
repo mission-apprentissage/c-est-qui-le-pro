@@ -38,8 +38,8 @@ const FormationDetailsProvider = ({
 
   useEffect(() => {
     matomo.push(["trackEvent", "details", "uai", formationDetail.etablissement.uai]);
-    matomo.push(["trackEvent", "details", "code", formationDetailToFormation(formationDetail)]);
-    matomo.push(["trackEvent", "details", "formation", formationDetailToKey(formationDetail)]);
+    matomo.push(["trackEvent", "details", "formation", formationDetailToFormation(formationDetail)]);
+    matomo.push(["trackEvent", "details", "code", formationDetailToKey(formationDetail)]);
   }, [matomo, formationDetail]);
 
   const setHeaderSizeCb = useCallback(
