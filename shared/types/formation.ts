@@ -12,7 +12,7 @@ export const DiplomeType = {
   BP: ["450", "553"], // BP et BP agricole
   BT: ["420"], // Brevet de technicien
   BPJEPS: ["446"],
-  CPJEPS: ["560"],
+  CPJEPS: ["560", "56J"],
 };
 
 export const DiplomeTypeLibelle: { [key: string]: string } = {
@@ -25,6 +25,7 @@ export const DiplomeTypeLibelle: { [key: string]: string } = {
   "450": "BREVET PRO",
   "553": "BREVET PRO AG",
   "560": "CPJEPS",
+  "56J": "CPJEPS",
 };
 
 export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
