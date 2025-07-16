@@ -55,7 +55,7 @@ function SearchFormationHomeFormElements({
     () => uniq(history.map(({ address }) => address).filter((a) => a !== myPosition)),
     [history]
   );
-  const formationHistory = useMemo(() => uniq(history.map(({ formation }) => formation).filter((f) => f)), [history]);
+  const formationHistory = useMemo(() => uniq(history.map(({ recherche }) => recherche).filter((f) => f)), [history]);
 
   useEffect(() => {
     if (params?.address) {
@@ -111,7 +111,7 @@ function SearchFormationHomeFormElements({
             <Grid item xs={12} md={5}>
               <FieldStack direction="row" spacing={2}>
                 <Controller
-                  name="formation"
+                  name="recherche"
                   control={control}
                   render={(form) => (
                     <FormationField
@@ -126,7 +126,7 @@ function SearchFormationHomeFormElements({
                       InputProps={{
                         disableUnderline: true,
                       }}
-                      error={errors?.formation}
+                      error={errors?.recherche}
                       form={form}
                       formRef={formRef}
                       onOpen={() => setIsFocus(true)}

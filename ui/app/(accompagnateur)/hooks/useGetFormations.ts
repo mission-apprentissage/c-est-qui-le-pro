@@ -12,7 +12,7 @@ export default function useGetFormations({
   domaines,
   voie,
   diplome,
-  formation,
+  recherche,
   uais,
   cfds,
   postcode,
@@ -26,7 +26,7 @@ export default function useGetFormations({
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
-  formation?: string | null;
+  recherche?: string | null;
   uais?: string[];
   cfds?: string[];
   postcode?: string;
@@ -56,7 +56,7 @@ export default function useGetFormations({
       voie?.toString(),
       diplome?.toString(),
       domaines?.toString(),
-      formation,
+      recherche,
       page,
       uais?.toString(),
       cfds?.toString(),
@@ -74,7 +74,7 @@ export default function useGetFormations({
           voie,
           diplome,
           domaines,
-          formation,
+          recherche,
           page: pageParam ?? 1,
           items_par_page,
           cfds,

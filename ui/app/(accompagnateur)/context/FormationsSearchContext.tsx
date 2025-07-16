@@ -13,7 +13,7 @@ export type FormationsSearchParams = {
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
-  formation?: string;
+  recherche?: string;
   minWeight?: number;
 };
 
@@ -36,7 +36,13 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
 
   useEffect(() => {
     Object.entries(omit(params, ["address"])).forEach(([key, value]) => {
-      push(["trackEvent", "recherche", key, value]);
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          push(["trackEvent", "recherche", key, v]);
+        });
+      } else {
+        push(["trackEvent", "recherche", key, value]);
+      }
     });
   }, [push, searchParams, params]);
 

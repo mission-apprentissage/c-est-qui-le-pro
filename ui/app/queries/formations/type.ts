@@ -26,7 +26,7 @@ const getSchema = object({
       return originalValue ? originalValue.split(/[|]+/) : [];
     })
     .of(string().oneOf(Object.values(FormationDomaine)).required()),
-  formation: string()
+  recherche: string()
     .nullable()
     .transform((_, value) => {
       return value === "" ? null : value;
