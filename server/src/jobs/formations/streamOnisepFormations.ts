@@ -66,6 +66,14 @@ async function getBcn(cfd, duree) {
       });
     }
 
+    // Cas particulier : BT Métiers de la musique
+    //On ne peut pas identifier sa terminale de manière automatique
+    if (cfd === "42032302") {
+      bcnMefFiltered = bcnMef.filter((data) => {
+        return data.dispositif_formation === "222";
+      });
+    }
+
     if (bcnMefFiltered.length > 1) {
       logger.error(`Plusieurs MEF corespondent à la formation cfd : ${cfd}, durée : ${duree} ans`);
       return {};

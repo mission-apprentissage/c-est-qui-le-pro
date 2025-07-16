@@ -12,6 +12,7 @@ export const DiplomeType = {
   BP: ["450", "553"], // BP et BP agricole
   BT: ["420"], // Brevet de technicien
   BPJEPS: ["446"],
+  CPJEPS: ["560"],
 };
 
 export const DiplomeTypeLibelle: { [key: string]: string } = {
@@ -23,6 +24,7 @@ export const DiplomeTypeLibelle: { [key: string]: string } = {
   "503": "CAPA",
   "450": "BREVET PRO",
   "553": "BREVET PRO AG",
+  "560": "CPJEPS",
 };
 
 export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
@@ -41,6 +43,7 @@ export const DiplomeSynonyms: { [K in keyof typeof DiplomeType]: string[] } = {
   BP: ["brevet professionel", "bp"],
   BPJEPS: ["bpjeps", "brevet professionnel de la jeunesse, de l'education populaire et du sport"],
   BT: ["brevet de technicien', 'bt"],
+  CPJEPS: ["cpjeps", "certificat professionnel de la jeunesse, de l'education populaire et du sport"],
 };
 
 export enum FormationTag {
