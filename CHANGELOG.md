@@ -1,3 +1,10 @@
+# [1.40.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.39.0...v1.40.0) (2025-07-16)
+
+
+### Features
+
+* ajout de matomo ([#71](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/71)) ([8aeb726](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/8aeb7264c6003285df9bfcf3cea2c5792e4269dd))
+
 # [1.39.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.38.0...v1.39.0) (2025-07-10)
 
 
