@@ -72,6 +72,9 @@ const FIELDS_TO_IMPORT = [
   "affelnet_statut",
   "affelnet_previous_statut",
   "duree",
+  "published",
+  "annee",
+  "cle_ministere_educatif",
 ];
 
 export async function importFormations(

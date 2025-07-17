@@ -8,7 +8,7 @@ import { kdb, upsert } from "#src/common/db/db";
 import { isNil } from "lodash-es";
 import { urlOnisepToId } from "#src/services/onisep/utils.js";
 import { formatLibelle } from "#src/common/utils/formatUtils.js";
-import { FormationVoie } from "shared";
+import { DiplomeTypeLibelle, FormationVoie } from "shared";
 
 const logger = getLoggerWithContext("import");
 
@@ -62,7 +62,9 @@ async function importFromBcnAndOnisep() {
   await oleoduc(
     await RawDataRepository.search(RawDataType.BCN),
     filterData(({ data }) => {
-      return !isNil(data?.diplome?.code) ? ["3", "4"].includes(data.diplome.code) : false;
+      return !isNil(data?.niveauFormationDiplome)
+        ? Object.keys(DiplomeTypeLibelle).includes(data.niveauFormationDiplome)
+        : false;
     }),
     // Keep only last year mef when type is mef
     filterData(async ({ data }) => {

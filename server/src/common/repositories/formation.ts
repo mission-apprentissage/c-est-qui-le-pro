@@ -5,6 +5,7 @@ import { AnyAliasedColumn, ExpressionBuilder, SelectQueryBuilder, sql } from "ky
 import IndicateurPoursuiteNationalRepository from "./indicateurPoursuiteNational.js";
 import { getDiplomeType } from "shared";
 import { omit } from "lodash-es";
+import { logger } from "#src/common/logger.js";
 
 export class FormationRepository extends SqlRepository<DB, "formation"> {
   constructor(kdb = defaultKdb) {
@@ -142,6 +143,10 @@ export class FormationRepository extends SqlRepository<DB, "formation"> {
 
       // Quartile salaire
       const diplomeType = getDiplomeType(formation.niveauDiplome);
+      if (!diplomeType) {
+        logger.error(`Type de diplome ${formation.niveauDiplome} inconnu`);
+      }
+
       const quartileSalaire = await IndicateurPoursuiteNationalRepository.quartileForSalaire(diplomeType);
       if (quartileSalaire) {
         quartileSalaire["millesimeSalaire"] = quartileSalaire["millesime"];
