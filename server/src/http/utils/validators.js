@@ -4,7 +4,7 @@ import { formatArrayParameters } from "./formatters.ts";
 import { DiplomeType, FormationTag } from "shared";
 
 const UAI_PATTERN = /^[0-9]{7}[A-Z]{1}$/;
-export const CFD_PATTERN = /^(?:CFD:)?([0-9]{8})$/;
+export const CFD_PATTERN = /^(?:CFD:)?([0-9A-Z]{8})$/;
 export const MEF11_PATTERN = /^(?:MEFSTAT11:)?([0-9]{11})$/;
 export const SISE_PATTERN = /^SISE:([0-9]{7})$/;
 
