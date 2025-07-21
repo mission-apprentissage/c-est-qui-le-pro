@@ -22,6 +22,7 @@ export default function RootLayout({ title, children }: { title?: string; childr
     >
       <head>
         {title && <title>{title}</title>}
+        <meta name="google-site-verification" content="JTUq7cAyYwThZUY2zhVmeY0RPNyBI_UGBttzpV9nV9w" />
         <StartDsfr />
         <DsfrHead
           Link={Link}
