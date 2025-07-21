@@ -75,6 +75,7 @@ const FIELDS_TO_IMPORT = [
   "published",
   "annee",
   "cle_ministere_educatif",
+  "rncp_intitule",
 ];
 
 export async function importFormations(
