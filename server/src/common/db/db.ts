@@ -62,7 +62,10 @@ function replaceQueryPlaceholders(query: string, values: string[]): string {
   values.forEach((value, index) => {
     // The placeholder in the query will be like $1, $2, etc.
     const placeholder = `$${index + 1}`;
-    modifiedQuery = modifiedQuery.replace(placeholder, `'${value}'`);
+    modifiedQuery = modifiedQuery.replace(
+      placeholder,
+      Array.isArray(value) ? `'{${value.map((v) => `"${v}"`).join(",")}}'` : `'${value}'`
+    );
   });
 
   return modifiedQuery;
