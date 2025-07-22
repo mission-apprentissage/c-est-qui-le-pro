@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.40.0...v1.41.0) (2025-07-22)
+
+
+### Features
+
+* ajout des metas google ([#72](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/72)) ([66ef409](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/66ef409de04842036af2a17362e1351c2f61ddf9))
+
 # [1.40.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.39.0...v1.40.0) (2025-07-16)
 
 
