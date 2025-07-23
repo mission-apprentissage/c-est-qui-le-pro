@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.41.0...v1.42.0) (2025-07-23)
+
+
+### Features
+
+* extension du catalogue ([#70](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/70)) ([f7b31d5](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/f7b31d591f9edfc05e502272573bde1b4d95638d))
+
 # [1.41.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.40.0...v1.41.0) (2025-07-22)
 
 
