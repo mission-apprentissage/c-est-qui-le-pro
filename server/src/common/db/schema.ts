@@ -18,6 +18,8 @@ export type JsonPrimitive = boolean | number | string | null;
 
 export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
 
+export type RomeMetierState = "update_waiting" | "updated";
+
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 export interface Domaine {
@@ -305,6 +307,7 @@ export interface RomeMetier {
   onisepLibelle: string | null;
   onisepLink: string | null;
   rome: string;
+  state: Generated<RomeMetierState>;
   transitionDemographique: boolean;
   transitionEcologique: boolean;
   transitionEcologiqueDetaillee: string | null;

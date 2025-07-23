@@ -1,6 +1,6 @@
 import { oleoduc, writeData, transformData, flattenArray } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import RomeMetierRepository from "#src/common/repositories/romeMetier";
+import RomeMetierRepository, { ROME_METIER_STATE } from "#src/common/repositories/romeMetier";
 import RomeRepository from "#src/common/repositories/rome.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData.js";
 
@@ -8,7 +8,9 @@ const logger = getLoggerWithContext("import");
 
 export async function importRomeMetier() {
   logger.info(`Importation des métiers des ROMEs`);
-  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const stats = { total: 0, created: 0, updated: 0, failed: 0, deleted: 0 };
+
+  await RomeMetierRepository.startUpdate();
 
   await oleoduc(
     await RomeRepository.getAll(),
@@ -55,6 +57,7 @@ export async function importRomeMetier() {
         transitionEcologiqueDetaillee: franceTravailData.transitionEcologiqueDetaillee || null,
         transitionNumerique: franceTravailData.transitionNumerique || false,
         transitionDemographique: franceTravailData.transitionDemographique || false,
+        state: ROME_METIER_STATE.updated,
       };
     }),
     writeData(
@@ -74,6 +77,8 @@ export async function importRomeMetier() {
       { parallel: 1 }
     )
   );
+
+  stats.deleted = await RomeMetierRepository.removeStale();
 
   return stats;
 }

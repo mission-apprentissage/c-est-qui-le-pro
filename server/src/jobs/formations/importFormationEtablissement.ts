@@ -17,19 +17,48 @@ const logger = getLoggerWithContext("import");
 
 export const formatDuree = (duree) => duree + " an" + (duree !== "1" ? "s" : "");
 
+export const DIPLOMES_TYPES_ONISEP = [
+  "baccalauréat professionnel",
+  "brevet de technicien",
+  "brevet professionnel agricole",
+  //"brevet professionnel de la jeunesse, de l'éducation populaire et du sport",
+  "CAP agricole",
+  "CAP",
+  "certificat technique des métiers",
+  "classe de 2de professionnelle",
+  "diplôme professionnel de l'animation et du sport",
+];
+
+export const DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE = [
+  "BAC PROFESSIONNEL",
+  "BAC PROFESSIONNEL AGRICOLE",
+  //"BREVET DE TECHNICIEN",
+  "BREVET PROFESSIONNEL AGRICOLE DE NIVEAU V",
+  //"BREVET PROFESSIONNEL DE LA JEUNESSE, DE L'EDUCATION POPULAIRE ET DU SPORT",
+  "CERTIFICAT D'APTITUDE PROFESSIONNELLE AGRICOLE",
+  "CERTIFICAT D'APTITUDES PROFESSIONNELLES AGRICOLES",
+  "CERTIFICAT D'APTITUDE PROFESSIONNELLE",
+  "CERTIFICAT D'APTITUDES PROFESSIONNELLES",
+  "TH DE NIV 5 MINISTERE DE LA JEUNESSE ET DES SPORTS",
+];
+
 async function streamCAFormations({ stats }) {
   const codesDiplomeToFilter = [
     "561", // CS3
   ];
   return compose(
     // On ne renvoi que les formations post 3ème publié
-    mergeStreams(
-      await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_previous_statut: "publié" }),
-      await RawDataRepository.search(RawDataType.CatalogueApprentissage, { affelnet_statut: "publié" })
-    ),
+    mergeStreams(await RawDataRepository.search(RawDataType.CatalogueApprentissage, { published: true, annee: "1" })),
     filterData(
-      ({ data }) => data.uai_formation && !codesDiplomeToFilter.find((code) => data.cfd.substr(0, 3) === code)
+      ({ data }) =>
+        data.uai_formation &&
+        DIPLOMES_TYPES_CATALOGUE_APPRENTISSAGE.includes(data.diplome) &&
+        !codesDiplomeToFilter.find((code) => data.cfd.substr(0, 3) === code)
     ),
+    // On filtre les Bac Pro qui ne dure que 2 ans dans le Catalogue de l'apprentissage : entrée en deuxième année
+    filterData(({ data }) => {
+      return (data.diplome != "BAC PROFESSIONNEL" && data.diplome != "BAC PROFESSIONNEL AGRICOLE") || data.duree == "3";
+    }),
     transformData(async ({ data }) => {
       stats.total++;
 
@@ -117,7 +146,7 @@ export async function importFormationEtablissement() {
     )
   );
 
-  stats.deleted = await FormationEtablissementRepository.removeStale();
+  //stats.deleted = await FormationEtablissementRepository.removeStale();
 
   return stats;
 }
