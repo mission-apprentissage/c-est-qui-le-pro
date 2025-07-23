@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.42.0...v1.43.0) (2025-07-23)
+
+
+### Features
+
+* suppression de la bannière de construction ([#73](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/73)) ([b08bf88](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/b08bf88d6a8491d8c9950c52557c872d17c42a8e))
+
 # [1.42.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.41.0...v1.42.0) (2025-07-23)
 
 
