@@ -6,7 +6,6 @@ import "./(accompagnateur)/style.scss";
 import Title from "./(accompagnateur)/components/Title";
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
-import ConstructionHeader from "./(accompagnateur)/components/ConstructionHeader";
 import Button from "./components/Button";
 import { JSX } from "react";
 
@@ -32,7 +31,6 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
           title={title}
         >
           <div>
-            <ConstructionHeader />
             {children}
             {/* <ConsentBannerAndConsentManagement /> */}
             <Footer
