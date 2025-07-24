@@ -80,6 +80,7 @@ export function formatIndicateurPoursuiteAnneeCommune(
       indicateurPoursuite.push({
         libelle: formationDetail?.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome?.libelle,
         codeCertification: formationDetail.formation.mef11,
+        indicateurPoursuite: formationDetail?.formationEtablissement?.indicateurPoursuite,
         indicateurPoursuiteRegional: formationDetail?.formationEtablissement?.indicateurPoursuiteRegional,
       });
     }
