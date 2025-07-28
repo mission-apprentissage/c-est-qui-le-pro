@@ -132,22 +132,6 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         .limit(1)
         .executeTakeFirst();
 
-      const indicateurPoursuiteAnneeCommune = formationEtablissement.formation.isAnneeCommune
-        ? await this.kdb
-            .selectFrom("indicateurPoursuiteAnneeCommune")
-            .selectAll()
-            .where("formationEtablissementId", "=", formationEtablissement.formationEtablissement.id)
-            .where("millesime", "=", (eb) =>
-              eb
-                .selectFrom("indicateurPoursuiteAnneeCommune")
-                .select("millesime")
-                .where("formationEtablissementId", "=", formationEtablissement.formationEtablissement.id)
-                .orderBy("millesime desc")
-                .limit(1)
-            )
-            .execute()
-        : null;
-
       const diplomeType = getDiplomeType(formationEtablissement.formation.niveauDiplome);
       const indicateurPoursuiteRegional = diplomeType
         ? {
@@ -171,7 +155,6 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         formationEtablissement: {
           indicateurEntree,
           indicateurPoursuite,
-          indicateurPoursuiteAnneeCommune,
           indicateurPoursuiteRegional,
         },
       });
