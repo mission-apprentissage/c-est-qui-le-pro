@@ -3,7 +3,6 @@ import {
   FormationDetail,
   FormationFamilleMetierDetail,
   IndicateurPoursuite,
-  IndicateurPoursuiteAnneeCommune,
   IndicateurPoursuiteRegional,
 } from "shared";
 
@@ -52,31 +51,16 @@ export function hasIndicateurRegional(indicateurPoursuiteRegional: IndicateurPou
   return indicateurPoursuiteRegional?.byDiplome?.taux_en_formation !== undefined;
 }
 
-export function formatIndicateurPoursuiteAnneeCommune(
-  indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[],
-  formationFamilleMetier?: FormationFamilleMetierDetail[]
-) {
+export function formatIndicateurPoursuiteAnneeCommune(formationFamilleMetier?: FormationFamilleMetierDetail[]) {
   const indicateurPoursuite: {
     libelle?: string;
     codeCertification?: string;
     indicateurPoursuite?: IndicateurPoursuite;
     indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
-  }[] = (indicateurPoursuiteAnneeCommune || []).map((indicateurPoursuite, index) => {
-    const regional = formationFamilleMetier?.find((f) => f.formation.mef11 === indicateurPoursuite.codeCertification);
-    return {
-      libelle: indicateurPoursuite.libelle,
-      codeCertification: indicateurPoursuite.codeCertification,
-      indicateurPoursuite,
-      indicateurPoursuiteRegional: regional?.formationEtablissement?.indicateurPoursuiteRegional,
-    };
-  });
+  }[] = [];
 
   for (const formationDetail of formationFamilleMetier || []) {
-    // Il peut y avoir des données au niveau régional qui n'existent pas dans indicateurPoursuiteAnneeCommune qui est construit à partir du niveau établissement des données IJs
-    if (
-      formationDetail.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome &&
-      !indicateurPoursuite.find((f) => f.codeCertification === formationDetail.formation.mef11)
-    ) {
+    if (formationDetail.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome) {
       indicateurPoursuite.push({
         libelle: formationDetail?.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome?.libelle,
         codeCertification: formationDetail.formation.mef11,
@@ -90,11 +74,8 @@ export function formatIndicateurPoursuiteAnneeCommune(
 }
 
 export function hasIndicateurFamilleMetier(formationDetail: FormationDetail) {
-  const { formationEtablissement, formationsFamilleMetier } = formationDetail;
-  const indicateursPoursuite = formatIndicateurPoursuiteAnneeCommune(
-    formationEtablissement.indicateurPoursuiteAnneeCommune,
-    formationsFamilleMetier
-  );
+  const { formationsFamilleMetier } = formationDetail;
+  const indicateursPoursuite = formatIndicateurPoursuiteAnneeCommune(formationsFamilleMetier);
 
   return !!indicateursPoursuite.find((indicateurPoursuite, index) => {
     return (
@@ -102,4 +83,36 @@ export function hasIndicateurFamilleMetier(formationDetail: FormationDetail) {
       hasIndicateurRegional(indicateurPoursuite.indicateurPoursuiteRegional) !== undefined
     );
   });
+}
+
+export function millesimeIndicateurIJ(formationDetail: FormationDetail) {
+  const { indicateurPoursuite, indicateurPoursuiteRegional } = formationDetail.formationEtablissement;
+  const { formationsFamilleMetier, formation } = formationDetail;
+
+  if (formation.isAnneeCommune) {
+    const formationFamilleMetierWithIndicateur = (formationsFamilleMetier || []).find(
+      (f) =>
+        f.formationEtablissement?.indicateurPoursuite?.millesime ||
+        f.formationEtablissement?.indicateurPoursuiteRegional?.byDiplome
+    );
+
+    if (formationFamilleMetierWithIndicateur?.formationEtablissement) {
+      const {
+        indicateurPoursuite: indicateurPoursuiteFamille,
+        indicateurPoursuiteRegional: indicateurPoursuiteRegionalFamille,
+      } = formationFamilleMetierWithIndicateur?.formationEtablissement;
+
+      return indicateurPoursuiteFamille
+        ? indicateurPoursuiteFamille.millesime
+        : indicateurPoursuiteRegionalFamille?.byDiplome
+        ? indicateurPoursuiteRegionalFamille.byDiplome?.millesime
+        : "";
+    }
+  }
+
+  return indicateurPoursuite
+    ? indicateurPoursuite.millesime
+    : indicateurPoursuiteRegional?.byDiplome
+    ? indicateurPoursuiteRegional.byDiplome?.millesime
+    : "";
 }

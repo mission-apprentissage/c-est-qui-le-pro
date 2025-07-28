@@ -8,7 +8,6 @@ import {
   FormationDetail,
   IndicateurPoursuite,
   IndicateurPoursuiteRegional,
-  IndicateurPoursuiteAnneeCommune,
   FormationFamilleMetierDetail,
   EtablissementTypeLibelle,
   EtablissementTypeFromValue,
@@ -22,6 +21,7 @@ import {
   formatMillesime,
   hasIndicateurEtablissement,
   hasIndicateurRegional,
+  millesimeIndicateurIJ,
 } from "#/app/utils/formation";
 import { BlueLink, FlexCenterColumnBox } from "./InserJeunes.styled";
 import { DialogInserjeunesEmploi, DialogInserjeunesFormation, DialogInserjeunesAutres } from "./DialogInserjeunes";
@@ -254,18 +254,16 @@ function WidgetInserJeunesTab({
 
 function WidgetInserJeunesFamilleMetier({
   etablissement,
-  indicateurPoursuiteAnneeCommune,
   formationFamilleMetier,
 }: {
   etablissement: Etablissement;
-  indicateurPoursuiteAnneeCommune?: IndicateurPoursuiteAnneeCommune[];
   formationFamilleMetier?: FormationFamilleMetierDetail[];
 }) {
-  const hasStats = !!indicateurPoursuiteAnneeCommune?.length;
   const indicateursPoursuite = useMemo(
-    () => formatIndicateurPoursuiteAnneeCommune(indicateurPoursuiteAnneeCommune, formationFamilleMetier),
-    [indicateurPoursuiteAnneeCommune, formationFamilleMetier]
+    () => formatIndicateurPoursuiteAnneeCommune(formationFamilleMetier),
+    [formationFamilleMetier]
   );
+  const hasStats = !!indicateursPoursuite?.length;
 
   return (
     <Box>
@@ -331,16 +329,10 @@ export function WidgetFooter({ millesime }: { millesime: string }) {
 export default function WidgetInserJeunes({ formationDetail }: { formationDetail: FormationDetail }) {
   const isAnneeCommune = formationDetail.formation.isAnneeCommune ?? false;
   const {
-    formationEtablissement: { indicateurPoursuiteAnneeCommune, indicateurPoursuite, indicateurPoursuiteRegional },
+    formationEtablissement: { indicateurPoursuite, indicateurPoursuiteRegional },
     etablissement,
   } = formationDetail;
-  const millesime = indicateurPoursuiteAnneeCommune?.length
-    ? indicateurPoursuiteAnneeCommune[0].millesime
-    : indicateurPoursuite
-    ? indicateurPoursuite.millesime
-    : indicateurPoursuiteRegional?.byDiplome
-    ? indicateurPoursuiteRegional.byDiplome?.millesime
-    : "";
+  const millesime = millesimeIndicateurIJ(formationDetail);
 
   return (
     <>
@@ -353,7 +345,6 @@ export default function WidgetInserJeunes({ formationDetail }: { formationDetail
             <WidgetInserJeunesFamilleMetier
               etablissement={etablissement}
               formationFamilleMetier={formationDetail.formationsFamilleMetier}
-              indicateurPoursuiteAnneeCommune={indicateurPoursuiteAnneeCommune}
             />
             <WidgetFooter millesime={millesime} />
           </ContainerAnneeCommune>
