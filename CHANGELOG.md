@@ -1,3 +1,10 @@
+## [1.43.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.43.0...v1.43.1) (2025-07-28)
+
+
+### Bug Fixes
+
+* widget IJ regional ([#74](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/74)) ([4b13ba5](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/4b13ba56345879b9f980861c3fc4d87a8687c8a0))
+
 # [1.43.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.42.0...v1.43.0) (2025-07-23)
 
 
