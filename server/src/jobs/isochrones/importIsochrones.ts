@@ -14,11 +14,13 @@ export async function importIsochrones({
   buckets,
   connectionString,
   caPath,
+  modalite,
 }: {
   input: string;
   buckets: number[];
   connectionString: string;
   caPath: string;
+  modalite: "transport" | "scolaire";
 }) {
   const ca = caPath ? await fs.promises.readFile(caPath) : null;
   const dialect = new PostgresDialect({
@@ -59,6 +61,7 @@ export async function importIsochrones({
                 eb.fn.any(eb.selectFrom("etablissement").select("id").where("uai", "=", uai))
               );
             })
+            .where("modalite", "=", modalite)
             .returningAll()
             .execute();
           logger.info(`Anciens polygones pour ${uai} supprimés`);
@@ -68,11 +71,16 @@ export async function importIsochrones({
 
         await db
           .insertInto("etablissementIsochrone")
-          .columns(["etablissementId", "bucket", "geom"])
+          .columns(["etablissementId", "bucket", "geom", "modalite"])
           .expression((eb) =>
             eb
               .selectFrom("etablissement")
-              .select((eb) => ["id as etablissementId", eb.val(bucket).as("bucket"), eb.val(data).as("geom")])
+              .select((eb) => [
+                "id as etablissementId",
+                eb.val(bucket).as("bucket"),
+                eb.val(data).as("geom"),
+                eb.val(modalite).as("modalite"),
+              ])
               .where("uai", "=", uai)
           )
           .executeTakeFirst();

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { runScript, runJobs } from "./common/runScript";
 import { importBCN } from "./jobs/bcn/importBCN";
 import { importBCNMEF } from "./jobs/bcn/importBCNMEF";
@@ -222,6 +222,14 @@ cli
   )
   .requiredOption("-d, --db <db>", "URI de connexion PostgreSQL (nécessite PostGIS activé)")
   .requiredOption("-i, --input <input>", "Dossier contenant les isochrones")
+  .addOption(
+    new Option(
+      "-m, --modalite <modalite>",
+      "Modalite : transport/scolaire (transport correspond aux transports en commun hors transports scolaire)"
+    )
+      .choices(["scolaire", "transport"])
+      .makeOptionMandatory(true)
+  )
   .option("-c, --caPath <caPath>", "Fichier du certificat PostgreSQL")
   .requiredOption(
     "-b, --buckets <buckets>",
@@ -229,12 +237,13 @@ cli
     "5400,3600,2700,1800,900"
   )
   .action((options) => {
-    const { input, buckets, db, caPath } = options;
+    const { input, buckets, db, caPath, modalite } = options;
     return importIsochrones({
       input,
       buckets: buckets.split(",").map((b) => parseInt(b)),
       connectionString: db,
       caPath: caPath,
+      modalite: modalite,
     });
   });
 

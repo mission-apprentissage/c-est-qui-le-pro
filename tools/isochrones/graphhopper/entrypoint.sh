@@ -3,6 +3,7 @@ set -e
 
 # Use absolute path
 script_path="/scripts"
+data_path="/data"
 base_path="/home/onyxia/work"
 pbf_path="${base_path}/pbf"
 gtfs_path="${base_path}/gtfs"
@@ -15,7 +16,10 @@ else
     # Download and clean gtfs
     mkdir -p $gtfs_path
     cd $gtfs_path
-    bash "${script_path}/gtfs.sh"
+
+    # On ignore les erreurs dans ce scripts qui peuvent être du à un GTFS indisponible
+    python ${script_path}/gtfs_liste.py --config-path ${script_path}/config.yml --modalite $GTFS_MODALITE --output-dir ${gtfs_path} --csv ${data_path}/transports.csv 2>&1 || true
+    cp "${script_path}/config.yml" $base_path
 fi
 
 if [ -d $pbf_path ]; then
@@ -38,7 +42,6 @@ else
     rm france-latest.osm.pbf martinique-latest.osm.pbf guadeloupe-latest.osm.pbf mayotte-latest.osm.pbf guyane-latest.osm.pbf reunion-latest.osm.pbf
 fi
 
-cp "${script_path}/config.yml" $base_path
 cp /graphhopper/graphhopper-web-9.1.jar $base_path
 cd $base_path
 
