@@ -4,12 +4,12 @@ global:
   suspend: false
 service:
   image:
-    repository: ghcr.io/mission-apprentissage/graphhopper
+    repository: yse0gvzk.c1.gra9.container-registry.ovh.net/private/graphhopper
     tag: latest
     pullPolicy: Always
     custom:
       enabled: true
-      version: ghcr.io/mission-apprentissage/graphhopper:latest
+      version: yse0gvzk.c1.gra9.container-registry.ovh.net/private/graphhopper:latest
 ingress:
   enabled: true
   hostname: graphhopper-cqlp.lab.sspcloud.fr
@@ -33,7 +33,7 @@ security:
     enabled: false
     ip: 0.0.0.0/0
 imagePullSecrets:
-  - name: github-registry
+  - name: my-registry
 init:
   standardInitPath: /opt/onyxia-init.sh
   regionInit: ''
@@ -45,6 +45,8 @@ extraEnvVars:
     value: "96g"
   - name: GRAPHHOPPER_CPU_COUNT
     value: "20"
+  - name: GTFS_MODALITE
+    value: "scolaire"
 s3:
   enabled: false
   secretName: ''

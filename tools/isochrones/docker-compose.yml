@@ -5,6 +5,7 @@ services:
     environment:
       - GRAPHHOPPER_MEMORY_LIMIT=${GRAPHHOPPER_MEMORY_LIMIT:-4g}
       - GRAPHHOPPER_CPU_COUNT=${GRAPHHOPPER_CPU_COUNT:-4}
+      - GTFS_MODALITE=scolaire # scolaire ou transport
     container_name: graphhopper
     build:
       context: graphhopper
@@ -13,7 +14,7 @@ services:
     networks:
       - isochrones_network
     volumes:
-      - graphhopper_data:/data:z
+      - ./graphhopper/data:/home/onyxia/work:z
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8989/health"]
       interval: 30s
