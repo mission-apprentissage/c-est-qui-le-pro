@@ -58,6 +58,7 @@ export interface EtablissementIsochrone {
   etablissementId: string;
   geom: string;
   id: Generated<string>;
+  modalite: Generated<string>;
   updatedAt: Generated<Timestamp>;
 }
 
