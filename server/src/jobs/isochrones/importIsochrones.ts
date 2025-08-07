@@ -13,7 +13,7 @@ const logger = getLoggerWithContext("isochrones");
 function queryScolaire(db: Kysely<DB>, uai: string, data) {
   // Create a geometry from a geometry with geometry not scolaire substract
   return db
-    .selectFrom((eb) =>
+    .selectFrom(() =>
       db
         .selectFrom(() =>
           db
