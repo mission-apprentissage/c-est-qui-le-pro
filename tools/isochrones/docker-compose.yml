@@ -26,8 +26,8 @@ services:
     image: isochrones
     environment:
       - ISOCHRONE_PARALLEL=${ISOCHRONE_PARALLEL:-16}
-      - ISOCHRONE_DATE=${ISOCHRONE_DATE:-2025-04-14T07%3A30%3A00.000Z}
-      - CQLP_API=${CQLP_API:-http://host.docker.internal:5000}
+      - ISOCHRONE_DATES=${ISOCHRONE_DATES:-2025-09-08T06%3A00%3A00.000Z,2025-09-08T06%3A30%3A00.000Z,2025-09-08T07%3A00%3A00.000Z}
+      - CQLP_API=${CQLP_API:-https://cestquilepro.inserjeunes.beta.gouv.fr}
       - COMPUTE_POSTGRES_URI=${POSTGRES_URI}
       - GRAPHHOPPER_URL=${GRAPHHOPPER_URL:-http://graphhopper:8989}
     container_name: isochrones

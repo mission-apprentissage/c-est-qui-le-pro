@@ -61,13 +61,30 @@ helm upgrade --install graphhopper-app . -f values.yaml --namespace user-ananda
 
 Editer les valeurs de `charts/isochrones/values.yaml`:
 
+- service.image.repository : url du registry
+- service.image.custom.version : image reference
+- extraEnvVars : autes valeurs d'environnement (voir le docker-compose.yml)
+- global.suspend: true pour stopper le pod sans supprimer les volumes
+
 ```
 cd charts/isochrones
 helm dependency build
 helm upgrade --install cqlp-isochrones . -f values.yaml --namespace user-ananda
 ```
 
+Une fois les calculs des isochrones terminés, vous pouvez retrouver les données dans `/home/onyxia/work`.
+
+Le pod reste en `running` après les calculs pour pouvoir réupérer/transférer les isochrones.
+
 /!\ N'oubliez pas de nettoyer les resources sur Datalab une fois terminé (suppression des pods)
+
+### Traitement et importation des isochrones
+
+Le traitement des isochrones se fait en utilisant le cli `splitIsochrones` du backend.
+
+Vous pouvez utiliser une instance Postgres de Datalab pour accélérer le traitement des isochrones.
+
+L'importation des isochrones se fait en utilisant le cli `importIsochrones` du backend.
 
 ### Useful commands
 

@@ -41,18 +41,20 @@ pool.on("error", (error) => {
   }
 });
 
+export function formatLog(event) {
+  if (config.sql.logLevel.includes(event.level)) {
+    console.log(`\n====================================\n`);
+    console.log(replaceQueryPlaceholders(event.query.sql, event.query.parameters as string[]));
+    console.log({
+      parameters: event.query.parameters.map((p, index) => `$${index + 1} = ${p}`).join(", "),
+    });
+    console.log({ duration: event.queryDurationMillis });
+  }
+}
+
 export const kdb = new Kysely<DBWithMaterializedViews>({
   dialect: new PostgresDialect({ pool, cursor: Cursor }),
-  log: (event) => {
-    if (config.sql.logLevel.includes(event.level)) {
-      console.log(`\n====================================\n`);
-      console.log(replaceQueryPlaceholders(event.query.sql, event.query.parameters as string[]));
-      console.log({
-        parameters: event.query.parameters.map((p, index) => `$${index + 1} = ${p}`).join(", "),
-      });
-      console.log({ duration: event.queryDurationMillis });
-    }
-  },
+  log: formatLog,
 });
 
 function replaceQueryPlaceholders(query: string, values: string[]): string {

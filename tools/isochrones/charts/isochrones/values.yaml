@@ -11,16 +11,16 @@ service:
       enabled: true
       version: yse0gvzk.c1.gra9.container-registry.ovh.net/private/cqlp-isochrones:latest
   args:
-    - "bash /scripts/docker-entrypoint.sh pt"
+    - "/scripts/docker-entrypoint.sh pt"
 imagePullSecrets:
   - name: my-registry
 extraEnvVars:
   - name: ISOCHRONE_PARALLEL
     value: "8"
-  - name: ISOCHRONE_DATE
-    value: "2025-05-05T06%3A30%3A00.000Z"
+  - name: ISOCHRONE_DATES
+    value: "2025-09-08T06%3A00%3A00.000Z,2025-09-08T06%3A30%3A00.000Z,2025-09-08T07%3A00%3A00.000Z"
   - name: CQLP_API
-    value: "http://cestquilepro.inserjeunes.beta.gouv.fr"
+    value: "https://cestquilepro.inserjeunes.beta.gouv.fr"
   - name: GRAPHHOPPER_URL
     value: "https://graphhopper-cqlp.lab.sspcloud.fr"
 networking:

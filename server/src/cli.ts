@@ -184,30 +184,33 @@ cli
 cli
   .command("splitIsochrones")
   .description(
-    `Simplifie et découpe un ensemble d'isochrones correspondant à plusieurs durées en utilisant PostGIS\n` +
+    `Simplifie et découpe un ensemble d'isochrones correspondant à plusieurs durées et dates en utilisant PostGIS\n` +
       `Le dossier d'entrée contenant les isochrones doit avoir la structure suivante :\n` +
-      `folder/[duration]/[name].json\n` +
-      `Example : \n folder/5400/0010001W.json \n folder/3600/0010001W.json`
+      `folder/[date]/[duration]/[name].json\n` +
+      `Example : \n folder/2025-09-08T06%3A00%3A00.000Z/5400/0010001W.json \n folder/2025-09-08T06%3A00%3A00.000Z/3600/0010001W.json`
   )
   .requiredOption("-d, --db <db>", "URI de connexion PostgreSQL (nécessite PostGIS activé)")
   .requiredOption("-i, --input <input>", "Dossier contenant les isochrones")
   .requiredOption("-o, --output <output>", "Dossier de sortie")
   .requiredOption(
     "-k, --key <key>",
-    "Geometry key path (lodash path format). \n Exemple pour Graphhopper : polygons[0].geometry"
+    "Geometry key path (lodash path format). \n Exemple pour Graphhopper : polygons[0].geometry",
+    "polygons[0].geometry"
   )
   .requiredOption(
     "-b, --buckets <buckets>",
     "Liste des durées des différents buckets en ordre décroissant (séparés par des virgules)",
     "5400,3600,2700,1800,900"
   )
+  .requiredOption("-t, --dates <dates>", "Liste des dates des différents buckets séparés par des virgules")
   .action((options) => {
-    const { input, output, buckets, key, db } = options;
+    const { input, output, buckets, dates, key, db } = options;
     return splitIsochrones({
       input,
       output,
       key,
       buckets: buckets.split(",").map((b) => parseInt(b)),
+      dates: dates.split(","),
       connectionString: db,
     });
   });
