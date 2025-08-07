@@ -8,7 +8,7 @@ import pg from "pg";
 import path from "path";
 
 import { getLoggerWithContext } from "#src/common/logger.js";
-import { kyselyChainFn } from "#src/common/db/db";
+import { formatLog, kyselyChainFn } from "#src/common/db/db";
 
 const logger = getLoggerWithContext("isochrones");
 
@@ -19,25 +19,70 @@ async function createOutputFolder(output, buckets) {
   }
 }
 
-async function getGeometry(input, bucket, file, key) {
-  const data = JSON.parse(await fs.promises.readFile(path.join(input, bucket.toString(), file), "utf8"));
+async function getGeometryForDate(input, date, bucket, file, key) {
+  const data = JSON.parse(await fs.promises.readFile(path.join(input, date, bucket.toString(), file), "utf8"));
   const geometry = get(data, key);
   if (geometry === undefined) {
     throw new Error(`Le fichier ${bucket}/${file} est invalide.`);
   }
-  return { bucket, geometry };
+  return geometry;
+}
+
+async function getGeometry(db, input, dates, bucket, file, key) {
+  const data = await Promise.all(dates.map(async (date) => await getGeometryForDate(input, date, bucket, file, key)));
+
+  if (dates.length === 1) {
+    return { geometry: data[0], bucket };
+  }
+
+  // Merge all geometry for a bucket and multiple dates in one geometry
+  const result = await db
+    .selectFrom(() =>
+      db
+        .selectNoFrom((eb) => {
+          return data.map((geometry, i) => {
+            return kyselyChainFn(
+              eb,
+              [
+                { fn: "ST_GeomFromGeoJSON", args: [] },
+                { fn: "ST_MakeValid", args: [eb.val("method=structure")] },
+              ],
+              sql`${geometry}`
+            ).as(`geometry_${i}`);
+          });
+        })
+        .as("geometry")
+    )
+    .select(({ eb }) => {
+      return kyselyChainFn(
+        eb,
+        [
+          { fn: "ST_Union", args: [] },
+          { fn: "ST_AsGeoJSON", args: [] },
+        ],
+        sql`ARRAY[${sql.join(
+          data.map((_, i) => eb.ref(`geometry_${i}`)),
+          sql`, `
+        )}]`
+      ).as("geometry");
+    })
+    .executeTakeFirst();
+
+  return { geometry: result.geometry, bucket };
 }
 
 export async function splitIsochrones({
   input,
   output,
   buckets,
+  dates,
   key,
   connectionString,
 }: {
   input: string;
   output: string;
   buckets: number[];
+  dates: string[];
   key: string;
   connectionString: string;
 }) {
@@ -45,7 +90,9 @@ export async function splitIsochrones({
   const simplifyPrecision = 0.0001; // ~10m
   const divideMaxVertices = 2048;
 
-  const files = (await fs.promises.readdir(path.join(input, buckets[0].toString()))).filter((s) => s.match(/\.json/));
+  const files = (await fs.promises.readdir(path.join(input, dates[0], buckets[0].toString()))).filter((s) =>
+    s.match(/\.json/)
+  );
   await createOutputFolder(output, buckets);
 
   const dialect = new PostgresDialect({
@@ -53,7 +100,10 @@ export async function splitIsochrones({
       connectionString,
     }),
   });
-  const db = new Kysely({ dialect });
+  const db = new Kysely({ dialect, log: formatLog });
+
+  // Enable PostGis
+  await sql`CREATE EXTENSION IF NOT EXISTS "postgis";`.execute(db);
 
   await oleoduc(
     Readable.from(files),
@@ -61,7 +111,7 @@ export async function splitIsochrones({
     transformData(async (file) => {
       const name = file.replace(/\.json$/, "");
       try {
-        const data = await Promise.all(buckets.map(async (bucket) => getGeometry(input, bucket, file, key)));
+        const data = await Promise.all(buckets.map(async (bucket) => getGeometry(db, input, dates, bucket, file, key)));
         return { uai: name, data };
       } catch (err) {
         logger.error(err.message);
@@ -104,6 +154,7 @@ export async function splitIsochrones({
                       ]
                     : []),
                   { fn: "ST_Subdivide", args: [eb.val(divideMaxVertices)] },
+                  { fn: "ST_MakeValid", args: [] },
                   { fn: "ST_AsGeoJSON", args: [] },
                 ],
                 `buckets.${bucket}`

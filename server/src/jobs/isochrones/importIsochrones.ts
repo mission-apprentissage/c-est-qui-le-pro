@@ -6,6 +6,7 @@ import pg from "pg";
 import path from "path";
 import { getLoggerWithContext } from "#src/common/logger.js";
 import { DB } from "#src/common/db/schema.js";
+import { formatLog } from "#src/common/db/db.js";
 
 const logger = getLoggerWithContext("isochrones");
 
@@ -29,7 +30,7 @@ export async function importIsochrones({
       ssl: ca ? { rejectUnauthorized: false, ca: ca } : undefined,
     }),
   });
-  const db = new Kysely<DB>({ dialect });
+  const db = new Kysely<DB>({ dialect, log: formatLog });
 
   const isRenewed = new Set();
 
