@@ -6,6 +6,7 @@ import {
   AnyColumn,
   OnConflictDatabase,
   OnConflictTables,
+  SelectQueryBuilder,
 } from "kysely";
 import pg from "pg";
 import Cursor from "pg-cursor";
@@ -75,8 +76,16 @@ function replaceQueryPlaceholders(query: string, values: string[]): string {
 
 export function kyselyChainFn<T extends keyof DB>(
   eb,
-  fns: { fn: string; args: (ExpressionWrapper<unknown, never, any> | string | RawBuilder<unknown>)[] }[],
-  val: RawBuilder<unknown> | string | undefined = undefined
+  fns: {
+    fn: string;
+    args: (
+      | ExpressionWrapper<unknown, never, any>
+      | string
+      | RawBuilder<unknown>
+      | SelectQueryBuilder<unknown, never, any>
+    )[];
+  }[],
+  val: RawBuilder<unknown> | string | ExpressionWrapper<unknown, never, any> | undefined = undefined
 ): ExpressionWrapper<DB, T, unknown> {
   return fns.reduce((acc, { fn, args }) => {
     return eb.fn(fn, [...(acc !== undefined ? [acc] : []), ...args]);
