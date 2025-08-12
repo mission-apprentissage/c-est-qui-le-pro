@@ -82,6 +82,11 @@ export const EtablissementTypeLibelle: { [key in EtablissementType]: string } = 
   EME: "établissement",
 };
 
+export enum TransportModalite {
+  SCOLAIRE = "scolaire",
+  TRANSPORT = "transport",
+}
+
 export type Etablissement = {
   id: string;
   statut?: string;
@@ -101,6 +106,7 @@ export type Etablissement = {
   latitude?: number;
   longitude?: number;
   accessTime?: number;
+  modalite?: TransportModalite;
   distance?: number;
 
   academie: string;
@@ -129,6 +135,7 @@ export const etablissementSchema: yup.ObjectSchema<Etablissement> = yup.object()
     latitude: yup.number(),
     longitude: yup.number(),
     accessTime: yup.number(),
+    modalite: yup.string().oneOf(Object.values(TransportModalite)),
     distance: yup.number(),
     JPODates: yup
       .array()
