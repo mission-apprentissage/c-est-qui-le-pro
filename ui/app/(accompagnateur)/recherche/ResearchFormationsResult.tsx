@@ -104,7 +104,7 @@ const FormationResults = React.memo(
         <Grid container rowSpacing={2}>
           <Grid item xs={12}>
             <Typography variant="h6">
-              À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
+              À pied ou en transports en commun & scolaires : {totalIsochrone} {pluralize("formation", totalIsochrone)}
             </Typography>
           </Grid>
 

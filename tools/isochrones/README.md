@@ -2,9 +2,9 @@
 
 Dockerfile et Helm charts pour la création des isochrones.
 
-## Building images and publishing in Private Registry
+## Créer les images docker et les publier sur un registre privé.
 
-### Set private registry url
+### Configuter un registre privé
 
 ```
 export REGISTRY_DOMAIN=url_du_registry
@@ -19,16 +19,16 @@ docker build graphhopper -t ${REGISTRY_URL}/graphhopper:latest --no-cache
 docker push ${REGISTRY_URL}/graphhopper:latest
 ```
 
-### Isochrones scripts
+### Docker pour générer les isochrones
 
 ```
 docker build isochrones -t ${REGISTRY_URL}/cqlp-isochrones:latest --no-cache
 docker push ${REGISTRY_URL}/cqlp-isochrones:latest
 ```
 
-## Deploy on Datalab
+## Exemple de déploiement sur Datalab
 
-### Create a secret to access to the registry
+### Créer un secret pour accèder au registre
 
 ```
 kubectl create secret docker-registry my-registry \
@@ -38,7 +38,7 @@ kubectl create secret docker-registry my-registry \
  --docker-email=YOUR_EMAIL
 ```
 
-### Install Helm charts
+### Déployer une release Helm
 
 ```
 helm repo add inseefrlab https://inseefrlab.github.io/helm-charts-interactive-services
@@ -86,9 +86,21 @@ Vous pouvez utiliser une instance Postgres de Datalab pour accélérer le traite
 
 L'importation des isochrones se fait en utilisant le cli `importIsochrones` du backend.
 
-### Useful commands
+### Commandes utiles
 
-#### bash to a pods
+#### Désinstaller une release helm
+
+Permet de désinstaller une release et de supprimer les pods associés.
+
+```
+helm uninstall cqlp-isochrones
+```
+
+```
+helm uninstall graphhopper-app
+```
+
+#### Obtenir un shell dans un pods
 
 ```
 kubectl exec -it graphhopper-app-0 -- /bin/bash
@@ -98,7 +110,7 @@ kubectl exec -it graphhopper-app-0 -- /bin/bash
 kubectl exec -it cqlp-isochrones-0 -- /bin/bash
 ```
 
-#### Read pods logs
+#### Lire les logs d'un pods
 
 ```
 kubectl logs graphhopper-app-0 -f --tail 100
@@ -108,17 +120,7 @@ kubectl logs graphhopper-app-0 -f --tail 100
 kubectl logs cqlp-isochrones-0 -f --tail 100
 ```
 
-#### Delete helm charts
-
-```
-helm delete graphhopper-app
-```
-
-```
-helm delete cqlp-isochrones
-```
-
-#### Delete pods
+#### Supprimer un pod
 
 ```
 kubectl delete pods graphhopper-app-0
