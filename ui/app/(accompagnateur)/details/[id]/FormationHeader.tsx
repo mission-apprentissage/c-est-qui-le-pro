@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { css, Theme } from "@emotion/react";
 import { Box, Stack, useTheme } from "@mui/material";
+import styled from "@emotion/styled";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useSearchParams } from "next/navigation";
@@ -22,6 +23,19 @@ import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
 import FormationTags from "../../components/FormationTags";
+
+export const StyledButtonLink = styled(Link)`
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+  display: inline-block;
+  background-image: none;
+  border-radius: 0.688rem;
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+  &[href]:hover {
+    background-color: ${fr.colors.decisions.background.altOverlap.grey.default};
+  }
+`;
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
@@ -115,23 +129,13 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
               style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}
             >
               {etablissement.url ? (
-                <Link
-                  css={css`
-                    background-image: none;
-                    &[href]:hover {
-                      background-color: ${fr.colors.decisions.background.alt.grey.default};
-                    }
-                  `}
-                  noIcon
-                  target="_blank"
-                  href={etablissement.url}
-                >
+                <StyledButtonLink css={css``} noIcon target="_blank" href={etablissement.url}>
                   {etablissement.libelle}
                   <i
-                    className={"fr-icon--sm " + fr.cx("ri-external-link-fill")}
-                    style={{ marginLeft: fr.spacing("3v") }}
+                    className={fr.cx("ri-arrow-right-line", "fr-icon--sm")}
+                    style={{ marginLeft: fr.spacing("3v"), marginRight: fr.spacing("2v") }}
                   />
-                </Link>
+                </StyledButtonLink>
               ) : (
                 etablissement.libelle
               )}

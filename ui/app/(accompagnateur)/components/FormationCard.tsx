@@ -100,8 +100,8 @@ export default React.memo(function FormationCard({
             <Grid item xs={10}>
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
-                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-fill")} />
-                  {formatAccessTime(etablissement.accessTime)}
+                  <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-line")} />
+                  {formatAccessTime(etablissement.accessTime, etablissement.modalite)}
                 </Typography>
               ) : (
                 etablissement.distance && (
