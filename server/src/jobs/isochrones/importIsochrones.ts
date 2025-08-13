@@ -12,6 +12,8 @@ const logger = getLoggerWithContext("isochrones");
 
 function queryScolaire(db: Kysely<DB>, uai: string, data) {
   // Create a geometry from a geometry with geometry not scolaire substract
+  const bufferPrecision = 0.0002; // ~20m
+
   return db
     .selectFrom(() =>
       db
@@ -57,6 +59,7 @@ function queryScolaire(db: Kysely<DB>, uai: string, data) {
                                   ),
                                 ],
                               },
+                              { fn: "ST_Buffer", args: [eb.val(bufferPrecision)] }, // On ajoute un buffer pour supprimer les artefacts de précision lorsque l'on fait la différence entre les isochrones
                             ],
                             sql.ref("geometry.geom")
                           ).as("geom");
