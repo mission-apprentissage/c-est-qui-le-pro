@@ -154,7 +154,7 @@ export async function splitIsochrones({
                       ]
                     : []),
                   { fn: "ST_Subdivide", args: [eb.val(divideMaxVertices)] },
-                  { fn: "ST_MakeValid", args: [] },
+                  { fn: "ST_MakeValid", args: [eb.val("method=structure")] },
                   { fn: "ST_AsGeoJSON", args: [] },
                 ],
                 `buckets.${bucket}`
