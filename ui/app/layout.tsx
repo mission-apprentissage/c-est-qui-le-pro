@@ -46,6 +46,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 href: "/",
                 title,
               }}
+              termsLinkProps={{ href: "/mentions-legales" }}
               accessibility="non compliant"
               accessibilityLinkProps={{ href: "/accessibilite" }}
               contentDescription={
@@ -60,6 +61,10 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 </>
               }
               bottomItems={[
+                {
+                  text: "Conditions générales d'utilisation",
+                  linkProps: { href: "/cgu" },
+                },
                 {
                   text: "Documentation",
                   linkProps: { href: "/documentation", target: "_blank" },
