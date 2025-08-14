@@ -43,6 +43,7 @@ function queryScolaire(db: Kysely<DB>, uai: string, data) {
                           return kyselyChainFn(
                             eb,
                             [
+                              { fn: "ST_Buffer", args: [eb.val(bufferPrecision)] }, // On ajoute un buffer pour supprimer les artefacts de précision lorsque l'on fait la différence entre les isochrones
                               { fn: "ST_Union", args: [] },
                               {
                                 fn: "COALESCE",
@@ -59,7 +60,6 @@ function queryScolaire(db: Kysely<DB>, uai: string, data) {
                                   ),
                                 ],
                               },
-                              { fn: "ST_Buffer", args: [eb.val(bufferPrecision)] }, // On ajoute un buffer pour supprimer les artefacts de précision lorsque l'on fait la différence entre les isochrones
                             ],
                             sql.ref("geometry.geom")
                           ).as("geom");
