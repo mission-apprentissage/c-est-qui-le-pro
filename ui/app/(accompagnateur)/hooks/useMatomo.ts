@@ -8,9 +8,11 @@ export const useMatomo = () => {
   const { finalityConsent } = useConsent();
   const pushWithConsent = useCallback(
     (...args: Parameters<typeof push>): void => {
-      if (!finalityConsent?.analytics) {
-        return;
-      }
+      // We use matomo without cookie when we don't have the consent.
+      // No need to filter the events
+      // if (!finalityConsent?.analytics) {
+      //   return;
+      // }
 
       push(args[0]);
     },
