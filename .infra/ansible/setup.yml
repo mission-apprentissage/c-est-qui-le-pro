@@ -1,7 +1,5 @@
 ---
 
-- hosts: all
-  become: true
+- hosts: localhost
   roles:
     - setup
-    - deploy

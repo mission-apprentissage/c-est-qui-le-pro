@@ -1,5 +1,16 @@
 ---
+
 - hosts: all
-  become: true
+  vars:
+    app_name: "cqlp"
+    app_namespace: "{{ APP_NAMESPACE }}"
+    app_version: "{{ APP_VERSION | default('latest') }}"
+    image_to_remove: ["ui", "server"]
+    docker_registry: "{{ setup.DOCKER_REGISTRY}}"
+    docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
+    docker_username: "{{ setup.DOCKER_USERNAME }}"
+    docker_password: "{{ setup.DOCKER_PASSWORD }}"
+    helm_timeout: "600s"
+    helm_wait: true
   roles:
     - clean

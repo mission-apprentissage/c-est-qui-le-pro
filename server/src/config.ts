@@ -8,7 +8,6 @@ const dataVolumeDir = env.get("VOLUME_DIR").default(path.join(currentDir, "..", 
 
 const config = {
   env: env.get("ACCOMPAGNATEUR_ENV").default("local").asString(),
-  publicUrl: env.get("ACCOMPAGNATEUR_PUBLIC_URL").default("http://localhost").asString(),
   log: {
     level: env.get("ACCOMPAGNATEUR_LOG_LEVEL").default("info").asString(),
     format: env.get("ACCOMPAGNATEUR_LOG_FORMAT").default("pretty").asString(),

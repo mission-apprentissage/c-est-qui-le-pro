@@ -1,0 +1,34 @@
+name: Deploying the application
+
+on:
+  workflow_dispatch:
+    inputs:
+      env_name:
+        description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
+        required: true
+      app_version:
+         description: 'Merci de préciser une version (correspondra au tag des images docker)'
+         required: true
+      app_namespace:
+        description: 'Merci de préciser un namespace (ex. recette, production ou nom de la branche)'
+        required: true
+
+jobs:
+  run-ansible:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create vault password file
+        run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
+
+      - name: Run Ansible playbook
+        run: |
+          bash ./infra/scripts/deploy-app.sh \
+            --vault-password-file .vault_pass.txt
+            "${{ github.event.inputs.env_name }}" \
+            "${{ github.event.inputs.app_version }}" \
+            "${{ github.event.inputs.app_namespace }}" \
+            --vault-password-file .vault_pass.txt
+

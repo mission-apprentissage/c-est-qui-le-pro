@@ -1,22 +1,15 @@
-- name: Disable cron to monitor the app and restart it automatically
-  when: monitor == "true"
-  ansible.builtin.cron:
-      name: "monitor-app"
-      disabled: true
-      job: "bash /opt/accompagnateur/monitor-app.sh {{dns_name}} >> /var/log/cron.log 2>&1"
+---
+- name: Building and deploying your application
+  block:
+    - name: Setup environment
+      include_tasks: setup.yml
 
+    - name: Build and push images
+      include_tasks: build.yml
 
-- name: "Deploy branch {{ git_revision }}"
-  shell: "sudo /opt/accompagnateur/start-app.sh {{ git_revision }}"
-  register: output
+    - name: Deploy to Kubernetes
+      include_tasks: deploy.yml
 
-- name: Enable cron to monitor the app and restart it automatically
-  when: monitor == "true"
-  ansible.builtin.cron:
-    name: "monitor-app"
-    job: "bash /opt/accompagnateur/monitor-app.sh {{dns_name}} >> /var/log/cron.log 2>&1"
-    disabled: false
-
-
-- debug:
-    var: output
+  always:
+    - name: Cleanup resources
+      include_tasks: cleanup.yml

@@ -1,0 +1,73 @@
+- name: Generate job identifier
+  set_fact:
+    job_name: "{{ app_name }}-{{ ansible_date_time.epoch }}-job"
+
+- name: Create detached job
+  no_log: true
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: batch/v1
+      kind: Job
+      metadata:
+        name: "{{ job_name }}"
+        namespace: "{{ app_namespace }}"
+        labels:
+          app.kubernetes.io/name: "{{ app_name }}"
+          app.kubernetes.io/instance: "{{ app_name }}"
+          job-type: "cqlp"
+          job-id: "{{ job_name }}"
+        annotations:
+          job.started-by: "{{ ansible_user_id | default('ansible') }}"
+          job.started-at: "{{ ansible_date_time.iso8601 }}"
+          job.command: "{{ command | join(' ') }} {{ job_args | join(' ') }}"
+      spec:
+        backoffLimit: 3
+        activeDeadlineSeconds: "{{ timeout }}"
+        template:
+          metadata:
+            labels:
+              job-id: "{{ job_name }}"
+          spec:
+            ttlSecondsAfterFinished: 86400 # Supprime le job 24h après sa fin
+            restartPolicy: Never
+            imagePullSecrets: 
+              - name: regcred
+            containers:
+            - name: "{{ job_name }}"
+              image: "{{ docker_registry }}{{ docker_registry_path }}{{ app_name }}-server:{{ app_version }}"
+              imagePullPolicy: Always
+              command: "{{ command }}"
+              args: "{{ job_args }}"
+              envFrom:
+              - secretRef:
+                  name: "{{ app_name }}-server-secret"
+              env:
+              - name: JOB_ID
+                value: "{{ job_name }}"
+              - name: JOB_STARTED_AT
+                value: "{{ ansible_date_time.iso8601 }}"
+    wait: false  # Pas d'attente, mode détaché
+  register: job_created
+
+- name: Display job information
+  debug:
+    msg: |
+      ✅ Job launched successfully in detached mode!
+      
+      Job Details:
+      - Name: {{ job_name }}
+      - Namespace: {{ app_namespace }}
+      - Timeout: {{ timeout }} seconds
+      
+      Monitoring Commands:
+      # Check status
+      kubectl get job {{ job_name }} -n {{ app_namespace }}
+      
+      # Watch progress
+      kubectl get job {{ job_name }} -n {{ app_namespace }} -w
+      
+      # Get logs (once pod is running)
+      kubectl logs -f job/{{ job_name }} -n {{ app_namespace }}
+      
+      # Delete job when finished
+      kubectl delete job {{ job_name }} -n {{ app_namespace }}

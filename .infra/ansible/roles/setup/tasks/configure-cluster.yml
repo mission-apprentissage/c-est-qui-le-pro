@@ -1,0 +1,20 @@
+- name: Define the backend configuration at init
+  delegate_to: localhost
+  run_once: true
+  no_log: true
+  environment: 
+    AWS_ACCESS_KEY_ID: "{{ setup.AWS_ACCESS_KEY_ID }}"
+    AWS_SECRET_ACCESS_KEY: "{{ setup.AWS_SECRET_ACCESS_KEY }}"
+    TF_VAR_docker_server: "{{ setup.DOCKER_REGISTRY }}"
+    TF_VAR_docker_username: "{{ setup.DOCKER_USERNAME }}"
+    TF_VAR_docker_password: "{{ setup.DOCKER_PASSWORD }}"
+    TF_VAR_kubeconfig: "{{ setup.KUBECONFIG }}"
+  community.general.terraform:
+    #init_reconfigure: true 
+    project_path: '{{ playbook_dir }}/{{ project_dir }}'
+    state: "{{ state }}"
+    force_init: true
+    backend_config:
+      region: "gra"
+      bucket: "cqlp-terraform"
+      key: "terraform.tfstate"
