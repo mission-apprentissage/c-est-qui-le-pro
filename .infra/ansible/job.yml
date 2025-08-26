@@ -1,0 +1,14 @@
+---
+- name: Launch server job
+  hosts: localhost
+  roles:
+    - job
+  vars:
+    app_name: "cqlp"
+    app_namespace: "{{ APP_NAMESPACE }}"
+    app_version: "{{ APP_VERSION | default('latest') }}"
+    command: ["yarn", "cli"]
+    job_args: ""
+    docker_registry: "{{ setup.DOCKER_REGISTRY}}"
+    docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
+    timeout: 21600  # 6 heures

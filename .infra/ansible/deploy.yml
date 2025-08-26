@@ -1,5 +1,25 @@
 ---
+
 - hosts: all
-  become: true
+  vars:
+    app_name: "cqlp"
+    app_version: "{{ APP_VERSION | default('latest') }}"
+    docker_registry: "{{ setup.DOCKER_REGISTRY}}"
+    docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
+    docker_username: "{{ setup.DOCKER_USERNAME }}"
+    docker_password: "{{ setup.DOCKER_PASSWORD }}"
+    base_dir: "{{ BASE_DIR }}"
+    infra_dir: "{{ INFRA_DIR }}"
+    bake_file: "{{ BAKE_FILE | default(base_dir + '/docker-bake.json') }}"
+    bake_targets: "{{ BAKE_TARGETS | default(['default']) }}"
+    push_images: "{{ PUSH_IMAGES | default(true) }}"
+    app_namespace: "{{ APP_NAMESPACE }}"
+    with_metabase: "{{ (env_type != 'feature') | bool }}"
+    helm_timeout: "600s"
+    helm_wait: true
+    server:
+      port: 5000
+    ui:
+      port: 3000
   roles:
     - deploy

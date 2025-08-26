@@ -1,7 +1,15 @@
-- name: Remove the default ubuntu
-  user:
-    name: "{{item}}"
-    state: absent
-    remove: yes
-  with_items:
-    - ubuntu
+---
+- name: Cleaning your application images and deployment
+  block:
+    - name: Setup environment
+      include_tasks: setup.yml
+
+    - name: Remove application from  Kubernetes
+      include_tasks: remove_app.yml
+
+    - name: Remove images
+      include_tasks: remove_images.yml
+
+  always:
+    - name: Cleanup resources
+      include_tasks: cleanup.yml
