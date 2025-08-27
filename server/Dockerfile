@@ -8,6 +8,7 @@ COPY package.json .
 COPY yarn.lock .
 COPY shared/package.json shared/
 COPY server/package.json server/
+RUN yarn config set network-timeout 600000
 RUN yarn install --frozen-lockfile
 
 COPY ./shared shared

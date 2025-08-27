@@ -19,16 +19,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - uses: azure/setup-helm@v4.3.0
+        id: install
+      - name: Install Ansible
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+          pip install docker
+          pip install kubernetes
       - name: Create vault password file
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
-
+      - name: Set env
+        run: echo "VAULT_PASSWORD_FILE=.vault_pass.txt" >> $GITHUB_ENV
       - name: Run Ansible playbook
         run: |
-          bash ./infra/scripts/deploy-app.sh \
-            --vault-password-file .vault_pass.txt
+          bash .infra/scripts/deploy-app.sh \
             "${{ github.event.inputs.env_name }}" \
             "${{ github.event.inputs.app_version }}" \
-            "${{ github.event.inputs.app_namespace }}" \
-            --vault-password-file .vault_pass.txt
+            "${{ github.event.inputs.app_namespace }}"
 

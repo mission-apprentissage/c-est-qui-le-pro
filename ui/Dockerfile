@@ -15,6 +15,7 @@ COPY package.json .
 COPY yarn.lock .
 COPY shared/package.json shared/
 COPY ui/package.json ui/
+RUN yarn config set network-timeout 600000
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed

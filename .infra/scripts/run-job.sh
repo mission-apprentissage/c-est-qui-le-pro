@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../.."
+readonly BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../.."
 readonly INFRA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 readonly VAULT_DIR="${INFRA_DIR}/vault"
 readonly VAULT_FILE="${VAULT_DIR}/vault.yml"
@@ -14,10 +14,10 @@ shift 3
 
 echo "Lancement d'un job pour le déploiement ${APP_NAMESPACE}..."
 ansible-galaxy collection install community.docker
+ansible-galaxy collection install kubernetes.core
 ansible-playbook -e "APP_NAMESPACE=${APP_NAMESPACE}" -e "APP_VERSION=${APP_VERSION}" \
     --extra-vars "@${VAULT_FILE}" \
     --vault-password-file="${VAULT_PASSWORD_FILE}" \
     -e "job_args='${JOB_ARGS}'" \
     -i "${INFRA_DIR}/env.ini" --limit "local" \
     "${ANSIBLE_DIR}/job.yml"
-cd -

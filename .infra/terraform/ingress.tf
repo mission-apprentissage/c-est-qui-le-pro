@@ -10,7 +10,7 @@ resource "helm_release" "ingress-nginx" {
     yamlencode({
       controller = {
         service = {
-          loadBalancerIP = var.loadBalancerIP
+          loadBalancerIP = var.loadbalancer_ip
           annotations = {
             "loadbalancer.openstack.org/keep-floatingip" = "true"
             "loadbalancer.openstack.org/proxy-protocol"  = "v2"

@@ -1,4 +1,4 @@
-- name: Define the backend configuration at init
+- name: Configure kubernetes cluster
   delegate_to: localhost
   run_once: true
   no_log: true
@@ -9,6 +9,9 @@
     TF_VAR_docker_username: "{{ setup.DOCKER_USERNAME }}"
     TF_VAR_docker_password: "{{ setup.DOCKER_PASSWORD }}"
     TF_VAR_kubeconfig: "{{ setup.KUBECONFIG }}"
+    TF_VAR_loadbalancer_ip: "{{ loadbalancer_ip }}"
+    TF_VAR_monitoring_host: "{{ monitoring_host }}"
+    TF_VAR_monitoring_admin_password: "{{ setup.MONITORING_ADMIN_PASSWORD }}"
   community.general.terraform:
     #init_reconfigure: true 
     project_path: '{{ playbook_dir }}/{{ project_dir }}'
