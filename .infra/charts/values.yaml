@@ -27,7 +27,7 @@ server:
     limits:
       memory: 1Gi
     requests:
-      cpu: 500m
+      cpu: 256m
       memory: 256Mi
 
 ui:
@@ -43,7 +43,7 @@ ui:
     limits:
       memory: 1Gi
     requests:
-      cpu: 500m
+      cpu: 256m
       memory: 256Mi
 
 typesense:
