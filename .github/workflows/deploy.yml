@@ -1,6 +1,8 @@
 name: Deploying the application
 
 on:
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       env_name:
