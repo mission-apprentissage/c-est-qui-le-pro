@@ -1,8 +1,6 @@
 name: Test Manual Trigger
 
 on:
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
     inputs:
       test_input:
