@@ -19,22 +19,22 @@
             tag: "{{ app_version }}"
           server:
             env:
-              secrets: "{{ env_vars.env.server | from_yaml }}"
+              secrets: "{{ env_vars.env.server }}"
             replicaCount: "1"
             service:
               port: "{{ server.port }}"
           ui:
             env:
-              secrets: "{{ env_vars.env.ui | from_yaml }}"
+              secrets: "{{ env_vars.env.ui }}"
             replicaCount: "1"
             service:
               port: "{{ ui.port }}"
           typesense:
             env:
-              secrets: "{{ env_vars.env.typesense | from_yaml }}"
+              secrets: "{{ env_vars.env.typesense }}"
           metabase:
             env:
-              secrets: "{{ env_vars.env.metabase | from_yaml }}"
+              secrets: "{{ env_vars.env.metabase }}"
               config:
                 MB_SITE_URL: "https://{{ dns_name }}/metabase"
           imageCredentials:

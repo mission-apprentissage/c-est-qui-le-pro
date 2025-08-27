@@ -1,6 +1,10 @@
 ---
 - name: Create environment files
   block:
+    - name: Disable deprecation warnings
+      ansible.builtin.set_fact:
+        ansible_deprecation_warnings: false
+      run_once: true
     - name: Create .env.yaml
       template:
         src: "{{infra_dir}}/.env.yaml.tpl"
