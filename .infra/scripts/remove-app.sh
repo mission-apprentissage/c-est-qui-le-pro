@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-#set -euo pipefail
+set -euo pipefail
 
-readonly BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../../.."
+readonly BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../.."
 readonly INFRA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 readonly VAULT_DIR="${INFRA_DIR}/vault"
 readonly VAULT_FILE="${VAULT_DIR}/vault.yml"
@@ -16,9 +16,9 @@ shift 3
 
 echo "Suppression des images Docker et du déploiement pour l'environnement ${ENV_FILTER}..."
 ansible-galaxy collection install community.docker
+ansible-galaxy collection install kubernetes.core
 ansible-playbook -i "${INFRA_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" \
     --vault-password-file="${VAULT_PASSWORD_FILE}" \
     -e "BASE_DIR=${BASE_DIR}" -e "INFRA_DIR=${INFRA_DIR}" -e "APP_NAMESPACE=${APP_NAMESPACE}" \
-    -e "APP_VERSION=${APP_VERSION}" -e "ENV=${ENV}" \
+    -e "APP_VERSION=${APP_VERSION}" -e "ENV=${ENV_FILTER}" \
     --limit "${ENV_FILTER}" "${ANSIBLE_DIR}/clean.yml" "$@"
-cd -

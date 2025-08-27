@@ -10,6 +10,8 @@
       no_log: true
       
     - name: Build and push with Docker Bake
+      args:
+        executable: /bin/bash
       shell: |
         set -euo pipefail
         set -a

@@ -10,10 +10,27 @@ variable "kubeconfig" {
   sensitive   = true
 }
 
-variable "loadBalancerIP" {
+variable "cluster_name" {
+  description = "Cluster name"
+  type        = string
+  default     = "CQLP"
+}
+
+variable "loadbalancer_ip" {
   type        = string
   description = "The IP of the load balancer"
-  default     = "57.128.61.120" # TODO: IP IN tffars
+}
+
+variable "monitoring_host" {
+  type        = string
+  description = "Host for grafana"
+  default     = "grafana.kub.recette.cestquilepro.inserjeunes.incubateur.net"
+}
+
+variable "monitoring_admin_password" {
+  type        = string
+  description = "Admin password for grafana"
+  sensitive   = true
 }
 
 variable "docker_server" {
