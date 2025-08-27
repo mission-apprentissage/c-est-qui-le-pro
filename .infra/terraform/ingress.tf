@@ -69,19 +69,20 @@ resource "helm_release" "ingress-nginx" {
                 nolog,\
                 ctl:ruleRemoveById=920170-920170"
 
-            SecRule REQUEST_FILENAME "@beginsWith /metabase" \
-                "id:1007,\
-                phase:1,\
-                pass,\
-                nolog,\
-                ctl:ruleRemoveById=949110-949110"
-
             SecRule REQUEST_FILENAME "@beginsWith /api" \
                 "id:1008,\
                 phase:1,\
                 pass,\
                 nolog,\
                 ctl:ruleRemoveById=942100-942100"
+
+            # disable this rule for grafana, ssl, metabase
+            SecRule REQUEST_URI "@unconditionalMatch" \
+                "id:1009,\
+                phase:1,\
+                pass,\
+                nolog,\
+                ctl:ruleRemoveById=949110-949110"
           EOF
         }
       }
