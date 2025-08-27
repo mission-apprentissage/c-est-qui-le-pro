@@ -30,6 +30,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
+          pip install requests
           pip install docker
           pip install kubernetes
       - name: Create vault password file
