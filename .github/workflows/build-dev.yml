@@ -1,4 +1,4 @@
-name: Build the application
+name: Build the application (dev)
 
 on:
   pull_request:
@@ -49,4 +49,4 @@ jobs:
         run: |
           bash .infra/scripts/build-app.sh \
             "$ENVIRONMENT" \
-            "${{ github.head_ref || github.ref_name}}"
+            "${{ github.head_ref || github.ref_name }}"
