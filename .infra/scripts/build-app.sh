@@ -10,7 +10,7 @@ readonly ENV_FILTER=${1:?"Merci de préciser un environnement (ex. dev, recette 
 readonly APP_VERSION=${2:?"Merci de préciser une version (utiliser pour le tag de l'image docker, le namespace k8s)"}
 readonly VAULT_PASSWORD_FILE=${VAULT_PASSWORD_FILE:="${INFRA_DIR}/scripts/vault/get-vault-password-client.sh"}
 
-shift 3
+shift 2
 
 echo "Création des images Docker pour ${APP_VERSION}..."
 ansible-galaxy collection install community.docker
