@@ -45,6 +45,6 @@ jobs:
       - name: Deploy with ansible
         run: |
           bash .infra/scripts/deploy-app.sh \
-            "${{ github.event.inputs.env_name || 'dev'}}" \
-            "${{ github.head_ref || github.ref_name}}"
+            "${{ github.event.inputs.env_name || 'dev' }}" \
+            "${{ github.head_ref || github.ref_name }}"
 

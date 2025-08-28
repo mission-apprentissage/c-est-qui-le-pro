@@ -1,4 +1,4 @@
-name: Build the application
+name: Build the application (production)
 
 on:
   push:
@@ -37,4 +37,4 @@ jobs:
         run: |
           bash .infra/scripts/build-app.sh \
             "production" \
-            "${{ github.head_ref || github.ref_name} }"
+            "${{ github.head_ref || github.ref_name }}"
