@@ -5,6 +5,7 @@
       ansible.builtin.set_fact:
         ansible_deprecation_warnings: false
       run_once: true
+
     - name: Create .env.yaml
       template:
         src: "{{infra_dir}}/.env.yaml.tpl"
@@ -17,19 +18,12 @@
         name: env_vars
       no_log: true
 
-    - name: Create .env file
-      template:
-        src: "{{infra_dir}}/.env.tpl"
-        dest: "{{infra_dir}}/.env"
-      vars:
-        env_variables: "{{ env_vars.env.server | combine(env_vars.env.ui) }}"
-      no_log: true
-
     - name: Create temporary kubeconfig
       tempfile:
         state: file
         suffix: .kubeconfig
       register: temp_kubeconfig
+      no_log: true
 
     - name: Decode kubeconfig
       copy:
@@ -40,4 +34,4 @@
 
     - name: Register cleanup items
       set_fact:
-        cleanup_files: "{{ cleanup_files | default([]) + [infra_dir + '/.env.yaml', infra_dir + '/.env', temp_kubeconfig.path] }}"
+        cleanup_files: "{{ cleanup_files | default([]) + [infra_dir + '/.env.yaml', temp_kubeconfig.path] }}"

@@ -1,3 +1,4 @@
+{{- if .Values.metabase.enable -}}
 {{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -51,4 +52,5 @@ spec:
                 port:
                   number: {{ $.Values.metabase.service.port }}
     {{- end }}
+{{- end }}
 {{- end }}

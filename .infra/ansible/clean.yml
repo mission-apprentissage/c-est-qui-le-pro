@@ -3,8 +3,7 @@
 - hosts: all
   vars:
     app_name: "cqlp"
-    app_namespace: "{{ APP_NAMESPACE }}"
-    app_version: "{{ APP_VERSION | default('latest') }}"
+    app_version: "{{ APP_VERSION | lower | regex_replace('[^a-z0-9-]', '-') | regex_replace('^-+', '') | regex_replace('-+$', '') | truncate(63, True, '') }}"
     image_to_remove: ["ui", "server"]
     docker_registry: "{{ setup.DOCKER_REGISTRY}}"
     docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"

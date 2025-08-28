@@ -1,12 +1,11 @@
 ---
 - name: Launch server job
-  hosts: localhost
+  hosts: all
   roles:
     - job
   vars:
     app_name: "cqlp"
-    app_namespace: "{{ APP_NAMESPACE }}"
-    app_version: "{{ APP_VERSION | default('latest') }}"
+    app_version: "{{ APP_VERSION | lower | regex_replace('[^a-z0-9-]', '-') | regex_replace('^-+', '') | regex_replace('-+$', '') | truncate(63, True, '') }}"
     command: ["yarn", "cli"]
     job_args: ""
     docker_registry: "{{ setup.DOCKER_REGISTRY}}"

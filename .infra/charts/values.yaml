@@ -69,6 +69,7 @@ typesense:
     storageClass: ""
 
 metabase:
+  enable: false
   replicaCount: 1
   service:
     type: ClusterIP

@@ -8,12 +8,9 @@ on:
       env_name:
         description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
         required: true
-      app_version:
-         description: 'Merci de préciser une version (correspondra au tag des images docker)'
-         required: true
-      app_namespace:
-        description: 'Merci de préciser un namespace (ex. recette, production ou nom de la branche)'
-        required: true
+      # app_version:
+      #    description: 'Merci de préciser une branch ou un tag (correspondra au tag des images docker)'
+      #    required: true
 
 jobs:
   run-ansible:
@@ -44,10 +41,14 @@ jobs:
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
       - name: Set env
         run: echo "VAULT_PASSWORD_FILE=.vault_pass.txt" >> $GITHUB_ENV
-      - name: Run Ansible playbook
+      - name: Build with ansible
+        run: |
+          bash .infra/scripts/build-app.sh \
+            "${{ github.head_ref || github.ref_name}}" \
+            "${{ github.event.inputs.app_version }}"
+      - name: Deploy with ansible
         run: |
           bash .infra/scripts/deploy-app.sh \
-            "${{ github.event.inputs.env_name }}" \
-            "${{ github.event.inputs.app_version }}" \
-            "${{ github.event.inputs.app_namespace }}"
+            "${{ github.head_ref || github.ref_name}}" \
+            "${{ github.event.inputs.app_version }}"
 

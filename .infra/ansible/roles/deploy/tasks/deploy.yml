@@ -16,7 +16,7 @@
           environment: "{{ env_type }}"
           image:
             repository: "{{ docker_registry }}{{ docker_registry_path }}{{ app_name }}"
-            tag: "{{ app_version }}"
+            tag: "{{ env_type }}-{{ app_version }}"
           server:
             env:
               secrets: "{{ env_vars.env.server }}"
@@ -33,6 +33,7 @@
             env:
               secrets: "{{ env_vars.env.typesense }}"
           metabase:
+            enable: "{{ with_metabase }}"
             env:
               secrets: "{{ env_vars.env.metabase }}"
               config:
