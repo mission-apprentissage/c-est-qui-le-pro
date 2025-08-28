@@ -7,6 +7,7 @@ on:
     inputs:
       env_name:
         description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
+        default: 'dev'
         required: true
       # app_version:
       #    description: 'Merci de préciser une branch ou un tag (correspondra au tag des images docker)'
@@ -44,11 +45,11 @@ jobs:
       - name: Build with ansible
         run: |
           bash .infra/scripts/build-app.sh \
-            "${{ github.head_ref || github.ref_name}}" \
-            "${{ github.event.inputs.app_version }}"
+            "${{ github.event.inputs.env_name }}" \
+            "${{ github.head_ref || github.ref_name}}"
       - name: Deploy with ansible
         run: |
           bash .infra/scripts/deploy-app.sh \
-            "${{ github.head_ref || github.ref_name}}" \
-            "${{ github.event.inputs.app_version }}"
+            "${{ github.event.inputs.env_name }}" \
+            "${{ github.head_ref || github.ref_name}}"
 
