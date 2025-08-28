@@ -1,21 +1,26 @@
-name: Deploying the application
+name: Remove the application from dev environment
 
 on:
+  pull_request:
+    types: [closed]
+    branches: [main, develop]
+  delete:
   workflow_dispatch:
     inputs:
       env_name:
-        description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
+        description: 'Merci de préciser un environnement (ex. recette ou production)'
         required: true
         type: choice
         options:
-          - dev
           - recette
           - production
-        default: 'dev'
+        default: 'recette'
 
 jobs:
-  deploy-app:
+  build-app:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.env_name || 'dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -42,9 +47,8 @@ jobs:
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
       - name: Set env
         run: echo "VAULT_PASSWORD_FILE=.vault_pass.txt" >> $GITHUB_ENV
-      - name: Deploy with ansible
+      - name: Build with ansible (dev)
         run: |
-          bash .infra/scripts/deploy-app.sh \
-            "${{ github.event.inputs.env_name || 'dev'}}" \
-            "${{ github.head_ref || github.ref_name}}"
-
+          bash .infra/scripts/remove-app.sh \
+            "$ENVIRONMENT" \
+            "${{ github.head_ref || github.ref_name} }"
