@@ -1,3 +1,4 @@
+{{- if .Values.metabase.enable }}
 {{- $hasConfig := and .Values.metabase.env.config (kindIs "map" .Values.metabase.env.config) (gt (len .Values.metabase.env.config) 0) }}
 {{- if $hasConfig }}
 apiVersion: v1
@@ -10,5 +11,6 @@ metadata:
 data:
 {{- range $key, $value := .Values.metabase.env.config }}
   {{ $key }}: {{ $value | quote }}
+{{- end }}
 {{- end }}
 {{- end }}

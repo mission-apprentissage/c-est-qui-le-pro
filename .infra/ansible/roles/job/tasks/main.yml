@@ -34,7 +34,7 @@
               - name: regcred
             containers:
             - name: "{{ job_name }}"
-              image: "{{ docker_registry }}{{ docker_registry_path }}{{ app_name }}-server:{{ app_version }}"
+              image: "{{ docker_registry }}{{ docker_registry_path }}{{ app_name }}-server:{{ env_type }}-{{ app_version }}"
               imagePullPolicy: Always
               command: "{{ command }}"
               args: "{{ job_args }}"

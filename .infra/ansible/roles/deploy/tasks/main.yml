@@ -4,9 +4,6 @@
     - name: Setup environment
       include_tasks: setup.yml
 
-    - name: Build and push images
-      include_tasks: build.yml
-
     - name: Deploy to Kubernetes
       include_tasks: deploy.yml
 

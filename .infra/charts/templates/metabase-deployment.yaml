@@ -1,3 +1,4 @@
+{{- if .Values.metabase.enable }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -69,3 +70,4 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "app.fullname" . }}-metabase-pvc
       {{- end }}
+{{- end }}
