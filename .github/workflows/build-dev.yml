@@ -4,9 +4,21 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      env_name:
+        description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
+        required: true
+        type: choice
+        options:
+          - dev
+          - recette
+          - production
+        default: 'dev'
 jobs:
-  run-ansible:
+  build-app:
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.env_name || 'dev' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,13 +45,8 @@ jobs:
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
       - name: Set env
         run: echo "VAULT_PASSWORD_FILE=.vault_pass.txt" >> $GITHUB_ENV
-      - name: Build with ansible (dev)
+      - name: Build with ansible
         run: |
           bash .infra/scripts/build-app.sh \
-            "dev" \
-            "${{ github.head_ref || github.ref_name}}"
-      - name: Build with ansible (recette)
-        run: |
-          bash .infra/scripts/build-app.sh \
-            "recette" \
+            "$ENVIRONMENT" \
             "${{ github.head_ref || github.ref_name}}"

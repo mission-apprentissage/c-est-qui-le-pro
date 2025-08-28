@@ -1,20 +1,11 @@
-name: Deploying the application
+name: Build the application
 
 on:
-  workflow_dispatch:
-    inputs:
-      env_name:
-        description: 'Merci de préciser un environnement (ex. dev, recette ou production)'
-        required: true
-        type: choice
-        options:
-          - dev
-          - recette
-          - production
-        default: 'dev'
-
+  push:
+    tags:        
+      - '*' 
 jobs:
-  deploy-app:
+  build-app:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -42,9 +33,8 @@ jobs:
         run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_pass.txt
       - name: Set env
         run: echo "VAULT_PASSWORD_FILE=.vault_pass.txt" >> $GITHUB_ENV
-      - name: Deploy with ansible
+      - name: Build with ansible (dev)
         run: |
-          bash .infra/scripts/deploy-app.sh \
-            "${{ github.event.inputs.env_name || 'dev'}}" \
-            "${{ github.head_ref || github.ref_name}}"
-
+          bash .infra/scripts/build-app.sh \
+            "production" \
+            "${{ github.head_ref || github.ref_name} }"
