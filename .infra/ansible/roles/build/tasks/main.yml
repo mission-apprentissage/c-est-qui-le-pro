@@ -1,0 +1,12 @@
+---
+- name: Building and deploying your application
+  block:
+    - name: Setup environment
+      include_tasks: setup.yml
+
+    - name: Build and push images
+      include_tasks: build.yml
+
+  always:
+    - name: Cleanup resources
+      include_tasks: cleanup.yml
