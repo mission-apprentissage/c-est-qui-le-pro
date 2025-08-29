@@ -12,7 +12,7 @@ readonly VAULT_PASSWORD_FILE=${VAULT_PASSWORD_FILE:="${INFRA_DIR}/scripts/vault/
 
 shift 2
 
-echo "Création des images Docker et déploiement pour l'environnement ${ENV_FILTER}..."
+echo "Déploiement de l'application version ${APP_VERSION} pour l'environnement ${ENV_FILTER}..."
 ansible-galaxy collection install community.docker
 ansible-galaxy collection install kubernetes.core
 ansible-playbook -i "${INFRA_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" \

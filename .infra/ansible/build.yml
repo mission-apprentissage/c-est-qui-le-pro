@@ -16,5 +16,8 @@
     app_name: "cqlp"
     # Clean app version to use it in namespace, tag and domain
     app_version: "{{ APP_VERSION | lower | regex_replace('[^a-z0-9-]', '-') | regex_replace('^-+', '') | regex_replace('-+$', '') | truncate(63, True, '') }}"
+
+    slack_notification: true
+    slack_channel: "#exposition-ij-alerting"
   roles:
     - build

@@ -11,3 +11,5 @@
     docker_registry: "{{ setup.DOCKER_REGISTRY}}"
     docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
     timeout: 21600  # 6 heures
+    slack_notification: true
+    slack_channel: "#exposition-ij-alerting"

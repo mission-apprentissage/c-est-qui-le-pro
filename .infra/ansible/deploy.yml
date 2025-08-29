@@ -23,5 +23,8 @@
       port: 5000
     ui:
       port: 3000
+
+    slack_notification: true
+    slack_channel: "#exposition-ij-alerting"
   roles:
     - deploy

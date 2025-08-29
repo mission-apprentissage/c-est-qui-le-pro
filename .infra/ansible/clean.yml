@@ -11,5 +11,9 @@
     docker_password: "{{ setup.DOCKER_PASSWORD }}"
     helm_timeout: "600s"
     helm_wait: true
+    delete_namespace: "{{ (env_type == 'dev') | bool }}"
+
+    slack_notification: true
+    slack_channel: "#exposition-ij-alerting"
   roles:
     - clean

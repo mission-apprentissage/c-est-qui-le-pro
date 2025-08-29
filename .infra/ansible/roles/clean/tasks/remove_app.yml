@@ -1,5 +1,7 @@
 ---
 - name: Remove Kubernetes deployment
+  when:
+    delete_namespace
   block:
     - name: Uninstall the application
       kubernetes.core.helm:

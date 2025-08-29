@@ -1,4 +1,4 @@
-name: Build the application (dev)
+name: Build the application (dev or recette)
 
 on:
   pull_request:
