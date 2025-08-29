@@ -16,6 +16,7 @@ shift 2
 readonly JOB_ARGS=$(printf '%s\n' "$@" | jq -R . | jq -s .)
 
 echo "Lancement d'un job pour le déploiement ${APP_VERSION}..."
+ansible-galaxy collection install community.general
 ansible-galaxy collection install community.docker
 ansible-galaxy collection install kubernetes.core
 ansible-playbook -e "ENV=${ENV_FILTER}" -e "APP_VERSION=${APP_VERSION}" \

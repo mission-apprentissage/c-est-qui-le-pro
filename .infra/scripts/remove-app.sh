@@ -14,6 +14,7 @@ shift 2
 
 
 echo "Suppression des images Docker et du déploiement pour ${APP_VERSION} dans l'environnement ${ENV_FILTER}..."
+ansible-galaxy collection install community.general
 ansible-galaxy collection install community.docker
 ansible-galaxy collection install kubernetes.core
 ansible-playbook -i "${INFRA_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" \
