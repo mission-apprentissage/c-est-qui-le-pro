@@ -9,7 +9,7 @@ env:
     NEXT_PUBLIC_LOGROCKET: {{ env_config.ui.NEXT_PUBLIC_LOGROCKET }}
     NEXT_PUBLIC_MATOMO_SITE_ID: {{ env_config.ui.NEXT_PUBLIC_MATOMO_SITE_ID }}
     NEXT_PUBLIC_MATOMO_URL: {{ env_config.ui.NEXT_PUBLIC_MATOMO_URL }}
-    NEXT_PUBLIC_MATOMO_ENABLE: {{ env_config.ui.NEXT_PUBLIC_MATOMO_ENABLE }}
+    NEXT_PUBLIC_MATOMO_ENABLE: "{{ env_config.ui.NEXT_PUBLIC_MATOMO_ENABLE }}"
   server:
     ## Environment
     ENV: "{{ env_name }}"

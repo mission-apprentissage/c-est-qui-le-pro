@@ -19,6 +19,9 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         component: metabase
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/metabase-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/metabase-secret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: metabase

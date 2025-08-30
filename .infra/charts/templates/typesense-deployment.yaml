@@ -18,6 +18,9 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         component: typesense
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/typesense-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/typesense-secret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: typesense

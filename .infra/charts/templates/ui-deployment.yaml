@@ -15,6 +15,9 @@ spec:
       labels:
         {{- include "app.selectorLabels" . | nindent 8 }}
         component: ui
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/ui-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/ui-secret.yaml") . | sha256sum }}
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
