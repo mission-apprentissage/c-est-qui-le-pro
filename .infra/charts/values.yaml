@@ -25,10 +25,10 @@ server:
     secrets: {}   # Variables sensibles
   resources:
     limits:
-      memory: 1Gi
+      memory: 2Gi
     requests:
-      cpu: 256m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
 
 ui:
   replicaCount: 1
@@ -41,10 +41,10 @@ ui:
     secrets: {}   # Variables sensibles
   resources:
     limits:
-      memory: 1Gi
+      memory: 2Gi
     requests:
-      cpu: 256m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
 
 typesense:
   replicaCount: 1
@@ -59,10 +59,10 @@ typesense:
       TYPESENSE_API_KEY: ""
   resources:
     limits:
-      memory: 1Gi
+      memory: 2Gi
     requests:
-      cpu: 256m
-      memory: 128Mi
+      cpu: 250m
+      memory: 256Mi
   persistence:
     enabled: true
     size: 10Gi
@@ -76,14 +76,13 @@ metabase:
     port: 3000  # Port par défaut de Metabase
     targetPort: 3000
   env:
-    config: 
-      MB_DB_FILE: /data/metabase.db
+    config:
   resources:
     limits:
-      memory: 1Gi
+      memory: 2Gi
     requests:
-      cpu: 256m
-      memory: 256Mi
+      cpu: 250m
+      memory: 512Mi
   persistence:
     enabled: true
     size: 10Gi
