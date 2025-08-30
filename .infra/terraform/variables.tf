@@ -21,6 +21,13 @@ variable "loadbalancer_ip" {
   description = "The IP of the load balancer"
 }
 
+variable "slack_oauth" {
+  description = "Slack OAuth"
+  type        = string
+  sensitive   = true
+}
+
+
 variable "monitoring_host" {
   type        = string
   description = "Host for grafana"

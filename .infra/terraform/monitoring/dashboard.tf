@@ -1,4 +1,5 @@
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_addons_prometheus" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -3207,6 +3208,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_addons_prome
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_addons_trivy_operator" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -5962,6 +5964,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_addons_trivy
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_system_api_server" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -7383,6 +7386,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_system_api_s
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_system_coredns" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -9005,6 +9009,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_system_cored
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_global" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -12588,6 +12593,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_global
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_namespaces" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -15645,6 +15651,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_namesp
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_nodes" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {
@@ -19686,6 +19693,7 @@ resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_nodes"
 }
 
 resource "kubernetes_manifest" "configmap_monitoring_dashboards_k8s_views_pods" {
+  depends_on = [helm_release.prometheus]
   manifest = {
     "apiVersion" = "v1"
     "data" = {

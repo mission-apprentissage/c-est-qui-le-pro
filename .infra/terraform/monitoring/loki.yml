@@ -26,6 +26,8 @@ resultsCache:
 
 minio:
   enabled: true
+  persistence:
+    size: 10Gi
       
 deploymentMode: SingleBinary
 

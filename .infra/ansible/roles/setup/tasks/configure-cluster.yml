@@ -12,6 +12,7 @@
     TF_VAR_loadbalancer_ip: "{{ loadbalancer_ip }}"
     TF_VAR_monitoring_host: "{{ monitoring_host }}"
     TF_VAR_monitoring_admin_password: "{{ setup.MONITORING_ADMIN_PASSWORD }}"
+    TF_VAR_slack_oauth: "{{ setup.SLACK_OAUTH}}"
   community.general.terraform:
     #init_reconfigure: true 
     project_path: '{{ playbook_dir }}/{{ project_dir }}'

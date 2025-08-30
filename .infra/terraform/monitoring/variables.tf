@@ -14,3 +14,9 @@ variable "cluster_name" {
   type        = string
   default     = "CQLP"
 }
+
+variable "slack_oauth" {
+  description = "Slack OAuth"
+  type        = string
+  sensitive   = true
+}
