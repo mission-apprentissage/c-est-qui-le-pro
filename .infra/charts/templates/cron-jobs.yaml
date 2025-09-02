@@ -15,6 +15,7 @@ spec:
     spec:
       backoffLimit: 3
       activeDeadlineSeconds: 43200 # 12h
+      ttlSecondsAfterFinished: 604800 # Supprime le job 1 semaine après sa fin
       template:
         metadata:
           name: {{ include "app.fullname" . }}-cronjob-importall

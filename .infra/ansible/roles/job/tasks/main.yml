@@ -26,12 +26,12 @@
           spec:
             backoffLimit: 3
             activeDeadlineSeconds: "{{ timeout }}"
+            ttlSecondsAfterFinished: 604800 # Supprime le job 1 semaine après sa fin
             template:
               metadata:
                 labels:
                   job-id: "{{ job_name }}"
               spec:
-                ttlSecondsAfterFinished: 86400 # Supprime le job 24h après sa fin
                 restartPolicy: Never
                 imagePullSecrets: 
                   - name: regcred
