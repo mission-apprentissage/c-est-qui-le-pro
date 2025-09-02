@@ -27,7 +27,7 @@ server:
     limits:
       memory: 2Gi
     requests:
-      cpu: 500m
+      cpu: 125m
       memory: 512Mi
 
 ui:
@@ -43,7 +43,7 @@ ui:
     limits:
       memory: 2Gi
     requests:
-      cpu: 500m
+      cpu: 125m
       memory: 512Mi
 
 typesense:
@@ -61,7 +61,7 @@ typesense:
     limits:
       memory: 2Gi
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 256Mi
   persistence:
     enabled: true
@@ -81,7 +81,7 @@ metabase:
     limits:
       memory: 2Gi
     requests:
-      cpu: 250m
+      cpu: 125m
       memory: 512Mi
   persistence:
     enabled: true
@@ -94,11 +94,7 @@ ingress:
     # Additional nginx-specific annotations
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
-
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: "300"
     nginx.ingress.kubernetes.io/upstream-fail-timeout: "0"
     nginx.ingress.kubernetes.io/proxy-buffering: "on"
@@ -132,3 +128,7 @@ ingress:
   certManager:
     enabled: true
     clusterIssuer: letsencrypt-prod
+
+cronjob:
+  importall:
+    schedule: "0 4 * * 1"

@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       {{- include "app.selectorLabels" . | nindent 6 }}
+      component: server
   template:
     metadata:
       labels:
