@@ -84,7 +84,7 @@ metabase:
       cpu: 125m
       memory: 512Mi
   persistence:
-    enabled: true
+    enabled: false # We use a postgre database for recette and production
     size: 10Gi
     storageClass: ""
 
