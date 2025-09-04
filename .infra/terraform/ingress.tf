@@ -19,6 +19,22 @@ resource "helm_release" "ingress-nginx" {
           }
         }
 
+        extraVolumes = [
+          {
+            name = "blocked-ips-volume"
+            configMap = {
+              name = "blocked-ips-config"
+            }
+          }
+        ]
+
+        extraVolumeMounts = [
+          {
+            name      = "blocked-ips-volume"
+            mountPath = "/etc/nginx/blocked-ips"
+            readOnly  = true
+          }
+        ]
         config = {
           "enable-modsecurity"           = "true"
           "enable-owasp-modsecurity-crs" = "true"
@@ -33,11 +49,22 @@ resource "helm_release" "ingress-nginx" {
             # Zone de mémoire pour rate limiting
             limit_req_zone $binary_remote_addr zone=flood:10m rate=800r/m;
             limit_req_log_level error;
+
+             # IP Blacklist
+            geo $remote_addr $blocked_ip {
+              default 0;
+              include /etc/nginx/blocked-ips/blocked-ips.conf;
+            }
           EOF
 
           "server-snippet" = <<-EOF
             # Appliquer le rate limiting
             limit_req zone=flood burst=100 nodelay;
+
+            # Ip Blacklist
+            if ($blocked_ip) {
+                return 403 "Access denied - IP blocked";
+            }
           EOF
 
           "modsecurity-snippet" = <<-EOF

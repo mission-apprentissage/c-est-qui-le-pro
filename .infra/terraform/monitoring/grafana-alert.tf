@@ -168,7 +168,7 @@ resource "grafana_rule_group" "alert_job" {
       group_by        = []
       group_wait      = "30s"
       group_interval  = "30s"
-      repeat_interval = "10m"
+      repeat_interval = "2d"
     }
 
     data {
