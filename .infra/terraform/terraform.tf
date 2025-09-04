@@ -14,6 +14,11 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = "~> 1.19.0"
     }
+
+    grafana = {
+      source  = "grafana/grafana"
+      version = "~> 3.0"
+    }
   }
 
   required_version = "~> 1.3"
@@ -35,3 +40,9 @@ provider "kubernetes" {
   client_certificate     = base64decode(local.kubeconfig_yaml.users[0].user.client-certificate-data)
   client_key             = base64decode(local.kubeconfig_yaml.users[0].user.client-key-data)
 }
+
+provider "grafana" {
+  url  = "https://grafana.kub.cestquilepro.inserjeunes.beta.gouv.fr/"
+  auth = "admin:${var.monitoring_admin_password}"
+}
+

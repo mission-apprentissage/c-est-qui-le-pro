@@ -9,6 +9,8 @@ resource "helm_release" "ingress-nginx" {
   values = [
     yamlencode({
       controller = {
+        replicaCount = 2
+
         service = {
           loadBalancerIP = var.loadbalancer_ip
           annotations = {

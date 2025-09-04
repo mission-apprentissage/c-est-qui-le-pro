@@ -28,30 +28,6 @@ resource "helm_release" "prometheus" {
               foldersFromFilesStructure = true
             }
           }
-          alerting = {
-            enabled         = true
-            label           = "grafana_alerting"
-            labelValue      = "1"
-            searchNamespace = "ALL"
-
-            # Alert rules configuration
-            rules = {
-              enabled = true
-              folder  = "/etc/grafana/provisioning/alerting"
-            }
-
-            # Contact points configuration  
-            contactpoints = {
-              enabled = true
-              folder  = "/etc/grafana/provisioning/alerting"
-            }
-
-            # Notification policies configuration
-            policies = {
-              enabled = true
-              folder  = "/etc/grafana/provisioning/alerting"
-            }
-          }
         }
 
         additionalDataSources = [
