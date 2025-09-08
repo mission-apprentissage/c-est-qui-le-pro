@@ -66,6 +66,10 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                   linkProps: { href: "/cgu" },
                 },
                 {
+                  text: "Politique de confidentialité",
+                  linkProps: { href: "/politique-de-confidentialite" },
+                },
+                {
                   text: "Documentation",
                   linkProps: { href: "/documentation", target: "_blank" },
                 },

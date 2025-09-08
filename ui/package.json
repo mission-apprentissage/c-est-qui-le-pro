@@ -60,6 +60,7 @@
     "react-truncate-markup": "^5.1.2",
     "react-virtualized": "^9.22.5",
     "react-virtualized-auto-sizer": "^1.0.24",
+    "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "shared": "*",
     "slick-carousel": "^1.8.1",
