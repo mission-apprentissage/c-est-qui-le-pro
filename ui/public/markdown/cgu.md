@@ -10,7 +10,7 @@ La Plateforme est accessible sans création de compte et est en accès libre. La
 
 ## Article 2 - Objet
 
-La Plateforme C’est qui le pro ? tend à permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
+La Plateforme C’est qui le pro ? est une ressource de service public dont l’objectif de permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
 
 Pour cela, elle vise à faciliter la découverte des formations professionnelles disponibles après le collège et accessibles depuis un lieu donné (collège, domicile d’un élève, etc.). Elle permet en outre d’apporter des éclairages sur les conditions d’accès, le contenu et le devenir des élèves au sein de ces formations.
 
@@ -38,13 +38,13 @@ Les sources des informations diffusées sur la Plateforme sont réputées fiable
 
 L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
 
-L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu, sans contrepartie financière, à la Plateforme. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la Plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
+L’Éditeur fournit les moyens nécessaires et raisonnables pour assurer un accès continu et gratuit à la Plateforme. Il se réserve la liberté de faire évoluer, de modifier ou de suspendre, sans préavis, la Plateforme pour des raisons de maintenance ou pour tout autre motif jugé nécessaire.
 
 ### 5.2 L’Utilisateur
 
 L’Utilisateur s’engage à ne pas commercialiser les données affichées sur la Plateforme.
 
-Toute information transmise par l’Utilisateur est de sa seule responsabilité. Il est rappelé que toute personne procédant à une fausse déclaration pour elle-même ou pour autrui, s’expose, notamment, aux sanctions prévues par l’article 441-1 du Code pénal, prévoyant des peines pouvant aller jusqu’à trois ans d’emprisonnement et 45 000 euros d’amende.
+Toute information transmise par l’Utilisateur est de sa seule responsabilité.
 
 ## Article 6 – Mise à jour des conditions générales d’utilisation
 
