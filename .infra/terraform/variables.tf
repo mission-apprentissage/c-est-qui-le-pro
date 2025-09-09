@@ -27,6 +27,11 @@ variable "slack_oauth" {
   sensitive   = true
 }
 
+variable "slack_channel" {
+  description = "Slack channel"
+  type        = string
+}
+
 
 variable "monitoring_host" {
   type        = string
