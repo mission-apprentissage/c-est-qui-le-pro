@@ -45,9 +45,6 @@ export default function FormationRoute({
             latitude && longitude ? encodeURIComponent(latitude + "," + longitude) : ""
           }&destination=${encodeURIComponent(address)}&travelmode=transit`}
           target="_blank"
-          css={css`
-            padding-left: 1.5rem;
-          `}
         >
           {etablissement.accessTime && (
             <span style={{ marginRight: "1rem" }}>
