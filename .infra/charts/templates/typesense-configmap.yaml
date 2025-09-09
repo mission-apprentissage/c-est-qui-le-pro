@@ -1,0 +1,14 @@
+{{- $hasConfig := and .Values.typesense.env.config (kindIs "map" .Values.typesense.env.config) (gt (len .Values.typesense.env.config) 0) }}
+{{- if $hasConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.fullname" . }}-typesense-config
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+    component: typesense
+data:
+{{- range $key, $value := .Values.typesense.env.config }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}

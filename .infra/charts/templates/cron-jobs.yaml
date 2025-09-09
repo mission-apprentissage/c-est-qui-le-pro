@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "app.fullname" . }}-cronjob-importall
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronjob.importall.schedule | quote }}
+  timeZone: Europe/Paris
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  suspend: false
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      activeDeadlineSeconds: 43200 # 12h
+      ttlSecondsAfterFinished: 604800 # Supprime le job 1 semaine après sa fin
+      template:
+        metadata:
+          name: {{ include "app.fullname" . }}-cronjob-importall
+          labels:
+            {{- include "app.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          {{- if .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml .Values.imagePullSecrets | nindent 12 }}
+          {{- end }}
+          containers:
+          - name: cronjob-importall
+            image: "{{ .Values.image.repository }}-server:{{ .Values.image.tag }}"
+            command: ["yarn", "cli", "importAll"]
+            {{- if .Values.server.env }}
+            {{- $hasConfig := and .Values.server.env.config (kindIs "map" .Values.server.env.config) (gt (len .Values.server.env.config) 0) }}
+            {{- $hasSecrets := and .Values.server.env.secrets (kindIs "map" .Values.server.env.secrets) (gt (len .Values.server.env.secrets) 0) }}
+            {{- if or $hasConfig $hasSecrets }}
+            envFrom:
+              {{- if $hasConfig }}
+              - configMapRef:
+                  name: {{ include "app.fullname" . }}-server-config
+              {{- end }}
+              {{- if $hasSecrets }}
+              - secretRef:
+                  name: {{ include "app.fullname" . }}-server-secret
+              {{- end }}
+            {{- end }}
+            {{- end }}

@@ -1,0 +1,25 @@
+- name: Configure kubernetes cluster
+  delegate_to: localhost
+  run_once: true
+  no_log: true
+  environment: 
+    AWS_ACCESS_KEY_ID: "{{ setup.AWS_ACCESS_KEY_ID }}"
+    AWS_SECRET_ACCESS_KEY: "{{ setup.AWS_SECRET_ACCESS_KEY }}"
+    TF_VAR_docker_server: "{{ setup.DOCKER_REGISTRY }}"
+    TF_VAR_docker_username: "{{ setup.DOCKER_USERNAME }}"
+    TF_VAR_docker_password: "{{ setup.DOCKER_PASSWORD }}"
+    TF_VAR_kubeconfig: "{{ setup.KUBECONFIG }}"
+    TF_VAR_loadbalancer_ip: "{{ loadbalancer_ip }}"
+    TF_VAR_monitoring_host: "{{ monitoring_host }}"
+    TF_VAR_monitoring_admin_password: "{{ setup.MONITORING_ADMIN_PASSWORD }}"
+    TF_VAR_slack_oauth: "{{ setup.SLACK_OAUTH}}"
+    TF_VAR_slack_channel: "{{ slack_channel }}"
+  community.general.terraform:
+    #init_reconfigure: true 
+    project_path: '{{ playbook_dir }}/{{ project_dir }}'
+    state: "{{ state }}"
+    force_init: true
+    backend_config:
+      region: "gra"
+      bucket: "cqlp-terraform"
+      key: "terraform.tfstate"

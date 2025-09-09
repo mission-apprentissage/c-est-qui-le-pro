@@ -1,0 +1,22 @@
+---
+
+- hosts: all
+  vars:
+    docker_registry: "{{ setup.DOCKER_REGISTRY}}"
+    docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
+    docker_username: "{{ setup.DOCKER_USERNAME }}"
+    docker_password: "{{ setup.DOCKER_PASSWORD }}"
+
+    base_dir: "{{ BASE_DIR }}"
+    infra_dir: "{{ INFRA_DIR }}"
+    bake_file: "{{ BAKE_FILE | default(base_dir + '/docker-bake.json') }}"
+    bake_targets: "{{ BAKE_TARGETS | default(['default']) }}"
+    push_images: "{{ PUSH_IMAGES | default(true) }}"
+
+    app_name: "cqlp"
+    # Clean app version to use it in namespace, tag and domain
+    app_version: "{{ APP_VERSION | lower | regex_replace('[^a-z0-9-]', '-') | regex_replace('^-+', '') | regex_replace('-+$', '') | truncate(63, True, '') }}"
+
+    slack_notification: true
+  roles:
+    - build

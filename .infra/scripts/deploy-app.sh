@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly ANSIBLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../ansible"
-readonly ENV_FILTER=${1:?"Merci de préciser un ou plusieurs environnements (ex. recette ou production)"}
-shift
+readonly BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../.."
+readonly INFRA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
+readonly VAULT_DIR="${INFRA_DIR}/vault"
+readonly VAULT_FILE="${VAULT_DIR}/vault.yml"
+readonly ANSIBLE_DIR="${INFRA_DIR}/ansible"
+readonly ENV_FILTER=${1:?"Merci de préciser un environnement (ex. dev, recette ou production)"}
+readonly APP_VERSION=${2:?"Merci de préciser une version (utiliser pour le tag de l'image docker, le namespace k8s)"}
+readonly VAULT_PASSWORD_FILE=${VAULT_PASSWORD_FILE:="${INFRA_DIR}/scripts/vault/get-vault-password-client.sh"}
 
-echo "Déploiement sur l'(es) environnement(s) ${ENV_FILTER}..."
-cd "${ANSIBLE_DIR}"
-ansible_become_default=""
-if [[ $* != *"pass"* ]]; then
-    ansible_become_default="--ask-become-pass"
-fi
-ansible-playbook -i env.ini --limit "${ENV_FILTER}" ${ansible_become_default} deploy.yml "$@"
-cd -
+shift 2
+
+echo "Déploiement de l'application version ${APP_VERSION} pour l'environnement ${ENV_FILTER}..."
+ansible-galaxy collection install community.general
+ansible-galaxy collection install community.docker
+ansible-galaxy collection install kubernetes.core
+ansible-playbook -i "${INFRA_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" \
+     --vault-password-file="${VAULT_PASSWORD_FILE}" \
+    -e "BASE_DIR=${BASE_DIR}" -e "INFRA_DIR=${INFRA_DIR}" \
+    -e "APP_VERSION=${APP_VERSION}" -e "ENV=${ENV_FILTER}" \
+    --limit "${ENV_FILTER}" "${ANSIBLE_DIR}/deploy.yml" "$@"

@@ -1,0 +1,65 @@
+{
+    "variable": {
+        "APP_NAME": {
+            "default": "cqlp"
+        },
+        "TAG": {
+            "default": "latest"
+        },
+        "REGISTRY": {},
+        "REGISTRY_PATH": {},
+        "ACCOMPAGNATEUR_ENV": {},
+        "NEXT_PUBLIC_DOMAIN": {},
+        "NEXT_PUBLIC_EXPOSITION_API_BASE_URL": {},
+        "NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL": {},
+        "NEXT_PUBLIC_LOGROCKET": {},
+        "NEXT_PUBLIC_MATOMO_SITE_ID": {},
+        "NEXT_PUBLIC_MATOMO_URL": {},
+        "NEXT_PUBLIC_MATOMO_ENABLE": {},
+        "BASE_PATH": {}
+    },
+    "group": {
+        "default": {
+            "targets": [
+                "server",
+                "ui"
+            ]
+        }
+    },
+    "target": {
+        "server": {
+            "context": ".",
+            "dockerfile": "server/Dockerfile",
+            "tags": [
+                "${REGISTRY}${REGISTRY_PATH}${APP_NAME}-server:${TAG}"
+            ],
+            "labels": {
+                "org.opencontainers.image.description": "Server"
+            },
+            "args": {
+                "ACCOMPAGNATEUR_ENV": "${ACCOMPAGNATEUR_ENV}"
+            }
+        },
+        "ui": {
+            "context": ".",
+            "dockerfile": "ui/Dockerfile",
+            "tags": [
+                "${REGISTRY}${REGISTRY_PATH}${APP_NAME}-ui:${TAG}"
+            ],
+            "labels": {
+                "org.opencontainers.image.description": "Ui"
+            },
+            "args": {
+                "ACCOMPAGNATEUR_ENV": "${ACCOMPAGNATEUR_ENV}",
+                "NEXT_PUBLIC_DOMAIN": "${NEXT_PUBLIC_DOMAIN}",
+                "NEXT_PUBLIC_EXPOSITION_API_BASE_URL": "${NEXT_PUBLIC_EXPOSITION_API_BASE_URL}",
+                "NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL": "${NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL}",
+                "NEXT_PUBLIC_LOGROCKET": "${NEXT_PUBLIC_LOGROCKET}",
+                "NEXT_PUBLIC_MATOMO_SITE_ID": "${NEXT_PUBLIC_MATOMO_SITE_ID}",
+                "NEXT_PUBLIC_MATOMO_URL": "${NEXT_PUBLIC_MATOMO_URL}",
+                "NEXT_PUBLIC_MATOMO_ENABLE": "${NEXT_PUBLIC_MATOMO_ENABLE}",
+                "BASE_PATH": "${BASE_PATH}"
+            }
+        }
+    }
+}

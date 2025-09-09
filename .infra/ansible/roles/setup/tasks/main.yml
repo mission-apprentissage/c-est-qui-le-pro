@@ -1,32 +1,31 @@
-- import_tasks: configure-system.yml
-  tags: system
-
-- import_tasks: create-users.yml
-  tags: users
-
-- import_tasks: configure-auth.yml
-  tags: auth
-
-- import_tasks: configure-network.yml
-  tags: network
-
-- import_tasks: configure-backup.yml
-  tags: backup
-
-- import_tasks: configure-fail2ban.yml
-  tags: fail2ban
-
-- import_tasks: configure-ips-blacklist.yml
-  tags: ipsblacklist
-
-- import_tasks: install-scripts.yml
-  tags: scripts
-
-- import_tasks: install-app.yml
-  tags: app
-
-- import_tasks: generate-ssl-certificate.yml
-  tags: ssl
-
-- import_tasks: generate-gpg-key.yml
-  tags: gpg
+---
+- name: Configuring cluster
+  block:
+    - import_tasks: configure-cluster.yml
+      tags: system
+    - name: Send to Slack (success)
+      when: slack_notification
+      community.general.slack:
+        token: "{{ setup.SLACK_OAUTH }}"
+        msg: |
+          :white_check_mark: *Cluster setup SUCCESSFUL!*
+          
+          *Details:*
+          • Completed: {{ ansible_date_time.iso8601 }}
+          • Started by: {{ ansible_user | default('ansible') }}
+        channel: "{{ slack_channel }}"
+        username: "Ansible"
+        color: good
+      delegate_to: localhost
+  rescue:
+    - name: Send to Slack (failure)
+      when: slack_notification
+      community.general.slack:
+        token: "{{ setup.SLACK_OAUTH }}"
+        msg: |
+          :x: *Cluster setup "failed*
+          Error: {{ ansible_failed_result.msg | default('Unknown error') }}
+        channel: "{{ slack_channel }}"
+        username: "Ansible"
+        color: danger
+      delegate_to: localhost

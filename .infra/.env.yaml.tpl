@@ -1,0 +1,48 @@
+env:
+  ui:
+    ENV: "{{ env_name }}"
+    ACCOMPAGNATEUR_ENV: "{{ env_name }}"
+    EXPOSITION_API_BASE_URL: {{ env_config.ui.EXPOSITION_API_BASE_URL }}
+    NEXT_PUBLIC_DOMAIN: {{ dns_name }}
+    NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL: {{ env_config.ui.NEXT_PUBLIC_ACCOMPAGNATEUR_API_BASE_URL }}
+    NEXT_PUBLIC_EXPOSITION_API_BASE_URL: {{ env_config.ui.NEXT_PUBLIC_EXPOSITION_API_BASE_URL }}
+    NEXT_PUBLIC_LOGROCKET: {{ env_config.ui.NEXT_PUBLIC_LOGROCKET }}
+    NEXT_PUBLIC_MATOMO_SITE_ID: {{ env_config.ui.NEXT_PUBLIC_MATOMO_SITE_ID }}
+    NEXT_PUBLIC_MATOMO_URL: {{ env_config.ui.NEXT_PUBLIC_MATOMO_URL }}
+    NEXT_PUBLIC_MATOMO_ENABLE: "{{ env_config.ui.NEXT_PUBLIC_MATOMO_ENABLE }}"
+  server:
+    ## Environment
+    ENV: "{{ env_name }}"
+    ACCOMPAGNATEUR_ENV: "{{ env_name }}"
+    ACCOMPAGNATEUR_LOG_LEVEL: {{ env_config.server.ACCOMPAGNATEUR_LOG_LEVEL }}
+    ACCOMPAGNATEUR_LOG_DESTINATIONS: {{ env_config.server.ACCOMPAGNATEUR_LOG_DESTINATIONS }}
+    VOLUME_DIR: {{ env_config.server.VOLUME_DIR }}
+
+    ## PSQL
+    ACCOMPAGNATEUR_POSTGRES_URI: "{{ env_config.ACCOMPAGNATEUR_POSTGRES_URI }}"
+    ACCOMPAGNATEUR_POSTGRES_CA: "{{ env_config.ACCOMPAGNATEUR_POSTGRES_CA }}"
+    DATABASE_URL: "{{ env_config.ACCOMPAGNATEUR_POSTGRES_URI }}"
+
+    ## Product 
+    EXPOSITION_API_USERNAME: "{{ env_config.EXPOSITION_API_USERNAME }}"
+    EXPOSITION_API_PASSWORD: "{{ env_config.EXPOSITION_API_PASSWORD}}"
+    RCO_BUCKET_ENDPOINT: "{{ env_config.RCO_BUCKET_ENDPOINT }}"
+    RCO_BUCKET_REGION: "{{ env_config.RCO_BUCKET_REGION }}"
+    RCO_BUCKET_ACCESS_KEY: "{{ env_config.RCO_BUCKET_ACCESS_KEY }}"
+    RCO_BUCKET_SECRET_KEY: "{{ env_config.RCO_BUCKET_SECRET_KEY }}"
+    RCO_BUCKET_NAME: "{{ env_config.RCO_BUCKET_NAME }}"
+    TYPESENSE_API_KEY: "{{ env_config.TYPESENSE_API_KEY }}"
+    TYPESENSE_HOST: {{ env_config.server.TYPESENSE_HOST }}
+    FRANCE_TRAVAIL_API_CLIENT_ID: "{{ env_config.FRANCE_TRAVAIL_API_CLIENT_ID }}"
+    FRANCE_TRAVAIL_API_CLIENT_SECRET: "{{ env_config.FRANCE_TRAVAIL_API_CLIENT_SECRET }}"
+    CATALOGUE_APPRENTISSAGE_USERNAME: "{{ env_config.CATALOGUE_APPRENTISSAGE_USERNAME }}"
+    CATALOGUE_APPRENTISSAGE_PASSWORD: "{{ env_config.CATALOGUE_APPRENTISSAGE_PASSWORD }}"
+  typesense:
+    TYPESENSE_API_KEY: "{{ env_config.TYPESENSE_API_KEY }}"
+  metabase:
+{% if env_config.MB_DB_CONNECTION_URI is defined %}
+    MB_DB_CONNECTION_URI: "{{ env_config.MB_DB_CONNECTION_URI }}"
+{% endif %}
+{% if env_config.MB_DB_TYPE is defined %}
+    MB_DB_TYPE: "{{ env_config.MB_DB_TYPE }}"
+{% endif %}

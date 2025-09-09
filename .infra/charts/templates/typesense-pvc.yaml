@@ -1,0 +1,22 @@
+{{- if .Values.typesense.persistence.enabled }}
+{{- if not (lookup "v1" "PersistentVolumeClaim" .Release.Namespace (printf "%s-typesense-pvc" (include "app.fullname" .))) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "app.fullname" . }}-typesense-pvc
+  labels:
+    app.kubernetes.io/name: {{ include "app.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: metabase
+    component: typesense
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.typesense.persistence.size }}
+  {{- if .Values.typesense.persistence.storageClass }}
+  storageClassName: {{ .Values.typesense.persistence.storageClass }}
+  {{- end }}
+{{- end }}
+{{- end }}

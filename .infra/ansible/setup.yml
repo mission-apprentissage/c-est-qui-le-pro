@@ -1,7 +1,7 @@
 ---
 
 - hosts: all
-  become: true
   roles:
     - setup
-    - deploy
+  vars:
+    slack_notification: true

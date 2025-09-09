@@ -1,0 +1,23 @@
+cluster:
+  name: ${cluster_name}
+
+destinations:
+  - name: localPrometheus
+    type: prometheus
+    url: http://prometheus-kube-prometheus-prometheus.monitoring:9090
+  - name: localLoki
+    type: loki
+    url: http://loki.monitoring:3100/loki/api/v1/push
+alloy-metrics:
+  enabled: false
+alloy-singleton:
+  enabled: true
+alloy-logs:
+  enabled: true
+
+clusterMetrics:
+  enabled: false
+clusterEvents:
+  enabled: true
+podLogs:
+  enabled: true

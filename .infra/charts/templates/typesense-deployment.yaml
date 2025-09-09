@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}-typesense
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+    component: typesense
+spec:
+  replicas: {{ .Values.typesense.replicaCount }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "app.selectorLabels" . | nindent 6 }}
+      component: typesense
+  template:
+    metadata:
+      labels:
+        {{- include "app.selectorLabels" . | nindent 8 }}
+        component: typesense
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/typesense-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/typesense-secret.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: typesense
+          image: typesense/typesense:28.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: {{ .Values.typesense.service.targetPort }}
+              protocol: TCP
+          {{- if .Values.typesense.env }}
+          {{- $hasConfig := and .Values.typesense.env.config (kindIs "map" .Values.typesense.env.config) (gt (len .Values.typesense.env.config) 0) }}
+          {{- $hasSecrets := and .Values.typesense.env.secrets (kindIs "map" .Values.typesense.env.secrets) (gt (len .Values.typesense.env.secrets) 0) }}
+          {{- if or $hasConfig $hasSecrets }}
+          envFrom:
+            {{- if $hasConfig }}
+            - configMapRef:
+                name: {{ include "app.fullname" . }}-typesense-config
+            {{- end }}
+            {{- if $hasSecrets }}
+            - secretRef:
+                name: {{ include "app.fullname" . }}-typesense-secret
+            {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.typesense.persistence.enabled }}
+          volumeMounts:
+            - name: typesense-data
+              mountPath: /data
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.typesense.resources | nindent 12 }}
+      {{- if .Values.typesense.persistence.enabled }}
+      volumes:
+        - name: typesense-data
+          persistentVolumeClaim:
+            claimName: {{ include "app.fullname" . }}-typesense-pvc
+      {{- end }}
