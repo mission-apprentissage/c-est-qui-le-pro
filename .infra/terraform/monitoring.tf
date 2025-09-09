@@ -3,5 +3,6 @@ module "monitoring" {
   monitoring_host           = var.monitoring_host
   monitoring_admin_password = var.monitoring_admin_password
   slack_oauth               = var.slack_oauth
+  slack_channel             = var.slack_channel
   depends_on                = [helm_release.cert-manager]
 }

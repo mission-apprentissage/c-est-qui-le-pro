@@ -5,4 +5,3 @@
     - setup
   vars:
     slack_notification: true
-    slack_channel: "#exposition-ij-alerting"

@@ -14,6 +14,5 @@
     delete_namespace: "{{ (env_type == 'dev') | bool }}"
 
     slack_notification: true
-    slack_channel: "#exposition-ij-alerting"
   roles:
     - clean

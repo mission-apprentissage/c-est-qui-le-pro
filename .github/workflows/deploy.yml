@@ -12,6 +12,10 @@ on:
           - recette
           - production
         default: 'dev'
+      image_version:
+        description: Version de l'image docker à déployer (sans le nom de l'environnement)
+        type: string
+        required: true
 
 jobs:
   deploy-app:
@@ -46,5 +50,5 @@ jobs:
         run: |
           bash .infra/scripts/deploy-app.sh \
             "${{ github.event.inputs.env_name || 'dev' }}" \
-            "${{ github.head_ref || github.ref_name }}"
+            "${{ github.event.inputs.image_version }}"
 
