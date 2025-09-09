@@ -139,6 +139,7 @@ export default function AddressField({
 
   return (
     <div
+      data-matomo-mask
       data-private
       style={{
         width: "100%",

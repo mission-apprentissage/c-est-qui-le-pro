@@ -8,6 +8,7 @@ import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
 import Button from "./components/Button";
 import { JSX } from "react";
+import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
@@ -32,7 +33,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
         >
           <div>
             {children}
-            {/* <ConsentBannerAndConsentManagement /> */}
+            <ConsentBannerAndConsentManagement />
             <Footer
               brandTop={
                 <>
@@ -45,6 +46,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 href: "/",
                 title,
               }}
+              termsLinkProps={{ href: "/mentions-legales" }}
               accessibility="non compliant"
               accessibilityLinkProps={{ href: "/accessibilite" }}
               contentDescription={
@@ -59,6 +61,14 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 </>
               }
               bottomItems={[
+                {
+                  text: "Conditions générales d'utilisation",
+                  linkProps: { href: "/cgu" },
+                },
+                {
+                  text: "Politique de confidentialité",
+                  linkProps: { href: "/politique-de-confidentialite" },
+                },
                 {
                   text: "Documentation",
                   linkProps: { href: "/documentation", target: "_blank" },

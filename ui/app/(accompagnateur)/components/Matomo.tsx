@@ -22,10 +22,6 @@ export function Matomo() {
   const searchParamsString = searchParams.toString();
 
   useEffect(() => {
-    if (!finalityConsent?.analytics) {
-      return;
-    }
-
     if (process.env.NEXT_PUBLIC_MATOMO_ENABLE !== "true") {
       return;
     }
@@ -33,7 +29,7 @@ export function Matomo() {
     init({
       siteId: process.env.NEXT_PUBLIC_MATOMO_SITE_ID || "",
       url: process.env.NEXT_PUBLIC_MATOMO_URL || "",
-      disableCookies: true,
+      disableCookies: !finalityConsent?.analytics,
       onInitialization: () => {
         const url = pathname + (searchParamsString ? "?" + sanitizeUrl(searchParamsString) : "");
         push(["setCustomUrl", url]);

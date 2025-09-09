@@ -4,10 +4,10 @@ import Title from "../components/Title";
 import { getMarkdown } from "#/common/markdown";
 
 export default async function Page() {
-  const markdown = await getMarkdown("accessibilite");
+  const markdown = await getMarkdown("cgu");
   return (
     <ContainerLegal>
-      <Title pageTitle="Déclaration d’accessibilité" />
+      <Title pageTitle="Conditions générales d'utilisation" />
       <Markdown>{markdown}</Markdown>
     </ContainerLegal>
   );
