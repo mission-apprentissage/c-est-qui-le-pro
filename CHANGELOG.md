@@ -1,3 +1,10 @@
+# [1.44.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.43.1...v1.44.0) (2025-09-09)
+
+
+### Features
+
+* cookies banner, cgu, mentions légales et politique de confidentialite ([#76](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/76)) ([252dd42](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/252dd420f3abfe610cd32f0c70fef88982353fb3))
+
 ## [1.43.1](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.43.0...v1.43.1) (2025-07-28)
 
 
