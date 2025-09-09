@@ -67,6 +67,28 @@ export const ContainerLegal = styled(StyledContainer)`
     line-height: 1.75rem;
     margin-bottom: 1rem;
   }
+
+  & thead {
+    background-color: rgb(246, 246, 246);
+  }
+
+  & thead tr th {
+    border-bottom: 1px solid black;
+  }
+
+  & table {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  & table th,
+  & table td {
+    padding: 1rem;
+  }
+
+  & table tr:nth-child(even) {
+    background-color: #f6f6f6;
+  }
 `;
 
 export default StyledContainer;
