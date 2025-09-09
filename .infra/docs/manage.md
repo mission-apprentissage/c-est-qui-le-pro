@@ -2,7 +2,7 @@
 
 - [Prérequis](#prérequis)
   - [GPG](#gpg)
-- [Configuration d'un nouveau cluster](#configuration-dun-nouveau-dun-cluster)
+- [Configuration d'un nouveau cluster](#configuration-dun-nouveau-cluster)
 - [Déclaration de l'environnement](#déclaration-de-lenvironnement)
 
 ## Prérequis
