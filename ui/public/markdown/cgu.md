@@ -10,7 +10,7 @@ La Plateforme est accessible sans création de compte et est en accès libre. La
 
 ## Article 2 - Objet
 
-La Plateforme C’est qui le pro ? est une ressource de service public dont l’objectif de permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
+La Plateforme C’est qui le pro ? tend à permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
 
 Pour cela, elle vise à faciliter la découverte des formations professionnelles disponibles après le collège et accessibles depuis un lieu donné (collège, domicile d’un élève, etc.). Elle permet en outre d’apporter des éclairages sur les conditions d’accès, le contenu et le devenir des élèves au sein de ces formations.
 
