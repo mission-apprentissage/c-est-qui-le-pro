@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { fr } from "@codegouvfr/react-dsfr";
 import styled from "@emotion/styled";
 import Link, { LinkProps as NextLinkProps } from "next/link";
 

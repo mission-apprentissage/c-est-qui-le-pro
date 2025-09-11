@@ -9,6 +9,7 @@ export type ButtonProps = {
   variant?: "white" | "white-black" | "blue-france-hover" | "blue-france-alt" | "black";
   smallIconOnly?: boolean;
   iconOnly?: boolean;
+  iconSize?: "sm" | "md" | "lg";
 } & DSFRButtonProps;
 
 function ButtonBase({ children, smallIconOnly, ...props }: ButtonProps) {
@@ -20,13 +21,18 @@ function ButtonBase({ children, smallIconOnly, ...props }: ButtonProps) {
 }
 
 export default styled(ButtonBase, {
-  shouldForwardProp: (prop) => !["iconOnly", "rounded", "variant"].includes(prop),
+  shouldForwardProp: (prop) => !["iconOnly", "iconSize", "rounded", "variant"].includes(prop),
 })<ButtonProps>`
   ${({ rounded }) => (rounded ? (isString(rounded) ? `border-radius: ${rounded};` : "border-radius: 16px;") : "")}
   ${({ variant }) => {
     switch (variant) {
       case "white":
-        return `background-color: var(--grey-1000-50);`;
+        return `background-color: var(--grey-1000-50);
+        color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
+        padding: 1rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        font-weight: 700;`;
       case "white-black":
         return `
         background-color: var(--grey-1000-50);
@@ -71,7 +77,13 @@ export default styled(ButtonBase, {
   ${({ iconOnly }) => {
     return iconOnly
       ? `
-      &.fr-btn--lg.fr-btn--icon-left[class^=fr-icon-]::before, &.fr-btn--lg.fr-btn--icon-left[class*=" fr-icon-"]::before, &.fr-btn--lg.fr-btn--icon-left[class^=fr-fi-]::before, &.fr-btn--lg.fr-btn--icon-left[class*=" fr-fi-"]::before, &[class^=fr-icon-]::before, &[class*=" fr-icon-"]::before, &[class^=fr-fi-]::before, &[class*=" fr-fi-"]::before{
+      &.fr-btn--lg.fr-btn--icon-left[class^=fr-icon-]::before,
+      &.fr-btn--lg.fr-btn--icon-left[class*=" fr-icon-"]::before,
+      &.fr-btn--lg.fr-btn--icon-left[class^=fr-fi-]::before,
+      &.fr-btn--lg.fr-btn--icon-left[class*=" fr-fi-"]::before,
+      &[class^=fr-icon-]::before, &[class*=" fr-icon-"]::before,
+      &[class^=fr-fi-]::before, &[class*=" fr-fi-"]::before,
+      &.fr-btn--sm.fr-btn--icon-left[class*=" ri-"]::before{
           margin-right: 0;
           margin-left: 0;
       }
@@ -81,5 +93,15 @@ export default styled(ButtonBase, {
       min-height: 0;
     `
       : "";
+  }}
+
+  ${({ iconSize }) => {
+    const iconSizes = { lg: "1.5rem", md: "1rem", sm: "0.75rem" };
+    return iconSize
+      ? `
+      &.fr-btn--icon-left[class^=ri-]::before, &.fr-btn--icon-left[class*=" ri-"]::before, &.fr-btn--icon-left[class^=fr-fi-]::before, &.fr-btn--icon-left[class*=" fr-fi-"]::before {
+        --icon-size: ${iconSizes[iconSize]};
+      }`
+      : ``;
   }}
 `;

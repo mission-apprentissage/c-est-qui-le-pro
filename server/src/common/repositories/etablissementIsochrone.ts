@@ -12,6 +12,7 @@ export class EtablissementIsochroneRepository extends SqlRepository<DB, "etablis
         etablissementId: null,
         bucket: null,
         geom: null,
+        modalite: null,
         createdAt: null,
         updatedAt: null,
       },
@@ -42,9 +43,10 @@ export class EtablissementIsochroneRepository extends SqlRepository<DB, "etablis
       )
       .where("etablissementId", "=", etablissementId)
       .select("bucket")
+      .select("modalite")
       .executeTakeFirst();
 
-    return result ? result.bucket : null;
+    return result ? { accessTime: result.bucket, modalite: result.modalite } : null;
   }
 }
 

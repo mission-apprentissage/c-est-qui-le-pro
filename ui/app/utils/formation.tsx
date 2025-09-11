@@ -4,6 +4,7 @@ import {
   FormationFamilleMetierDetail,
   IndicateurPoursuite,
   IndicateurPoursuiteRegional,
+  TransportModalite,
 } from "shared";
 
 export function formatLibelle(libelle: string | undefined): string {
@@ -14,16 +15,22 @@ export function formatLibelle(libelle: string | undefined): string {
   return libelle.charAt(0).toUpperCase() + libelle.slice(1);
 }
 
-export function formatAccessTime(time: number) {
+export function formatAccessTime(time: number, modalite?: TransportModalite) {
+  const suffix = modalite === "scolaire" ? " en bus scolaire" : "";
   if (time >= 3600) {
     return (
       <>
         À moins de {Math.floor(time / 3600).toFixed(0)}h{(time % 3600) / 60 || ""}
+        {suffix}
       </>
     );
   }
 
-  return <>À moins de {(time / 60).toFixed(0)} minutes</>;
+  return (
+    <>
+      À moins de {(time / 60).toFixed(0)} minutes{suffix}
+    </>
+  );
 }
 
 export function formatStatut(etablissement: Etablissement): string {

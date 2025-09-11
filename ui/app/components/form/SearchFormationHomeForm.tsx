@@ -1,7 +1,7 @@
 "use client";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Grid } from "#/app/components/MaterialUINext";
-import { Control, Controller, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, FieldErrors, UseFormSetFocus, UseFormSetValue } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
 import AddressField, { myPosition } from "./AddressField";
@@ -25,6 +25,16 @@ import {
   SearchGridContainer,
   SubmitStyled,
 } from "./SearchFormationHomeForm.styled";
+import { fr } from "@codegouvfr/react-dsfr";
+import { FilterIcon } from "./SearchFormationFiltersForm.styled";
+
+function SubmitButton({ isFocusMobile }: { isFocusMobile?: boolean }) {
+  return (
+    <SubmitStyled type={"submit"} isFocusMobile={isFocusMobile}>
+      {"Explorer la carte"} <FilterIcon className={fr.cx("ri-search-line")}></FilterIcon>
+    </SubmitStyled>
+  );
+}
 
 function SearchFormationHomeFormElements({
   control,
@@ -37,6 +47,7 @@ function SearchFormationHomeFormElements({
   setIsFocus,
   isFocus,
   isHomeSearch,
+  setFocus,
 }: {
   control: Control<Nullable<SearchFormationFormData>, any>;
   errors: FieldErrors<Nullable<SearchFormationFormData>>;
@@ -48,6 +59,7 @@ function SearchFormationHomeFormElements({
   setIsFocus: (isFocus: boolean) => void;
   isFocus: boolean;
   isHomeSearch: boolean;
+  setFocus: UseFormSetFocus<SearchFormationFormData>;
 }) {
   const { params } = useFormationsSearch();
   const { history, push: pushHistory } = useSearchHistory();
@@ -80,11 +92,6 @@ function SearchFormationHomeFormElements({
                 control={control}
                 render={(form) => (
                   <AddressField
-                    sx={{
-                      padding: { md: "18px", xs: isHomeSearch ? "18px" : "8px" },
-                      paddingLeft: { xs: "18px", md: "18px" },
-                      paddingRight: "0px",
-                    }}
                     isMobile={isDownSm}
                     InputProps={{
                       disableUnderline: true,
@@ -95,20 +102,23 @@ function SearchFormationHomeFormElements({
                     submitOnChange={!withFormation || !isDownSm}
                     defaultValues={addressHistory}
                     onOpen={() => setIsFocus(true)}
-                    noLabel={!isHomeSearch}
+                    onClose={() => !withFormation && isDownSm && setIsFocus(false)}
+                    noLabel={true}
+                    withMapPin={isHomeSearch}
+                    variant={isHomeSearch ? "home" : "search"}
                   />
                 )}
               />
               {!isDownSm && !withFormation && (
                 <DesktopSubmitBox>
-                  <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
+                  <SubmitButton />
                 </DesktopSubmitBox>
               )}
             </FieldStack>
           </Grid>
 
           {withFormation && (
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={4}>
               <FieldStack direction="row" spacing={2}>
                 <Controller
                   name="recherche"
@@ -139,9 +149,9 @@ function SearchFormationHomeFormElements({
             </Grid>
           )}
           {withFormation && !isDownSm && (
-            <Grid item md={2} xs={4}>
+            <Grid item md={3} xs={4}>
               <FormationSubmitBox>
-                <SubmitStyled type={"submit"}>{"Explorer"}</SubmitStyled>
+                <SubmitButton />
               </FormationSubmitBox>
             </Grid>
           )}
@@ -151,9 +161,7 @@ function SearchFormationHomeFormElements({
       {isFocus && isDownSm && (
         <MobileSubmitContainer>
           <div></div>
-          <SubmitStyled type={"submit"} isFocusMobile>
-            {"Explorer"}
-          </SubmitStyled>
+          <SubmitButton isFocusMobile />
         </MobileSubmitContainer>
       )}
     </>
@@ -221,7 +229,7 @@ export default function SearchFormationHomeForm({
           schema={schema}
           dynamicValues={["domaines", "tag", "voie", "diplome"]}
         >
-          {({ control, errors, formRef, setValue }) => (
+          {({ control, errors, formRef, setValue, setFocus }) => (
             <SearchFormationHomeFormElements
               isHomeSearch={isHomeSearch}
               setIsFocus={setIsFocus}
@@ -233,6 +241,7 @@ export default function SearchFormationHomeForm({
               errors={errors}
               formRef={formRef}
               setValue={setValue}
+              setFocus={setFocus}
             />
           )}
         </FormSearchParams>

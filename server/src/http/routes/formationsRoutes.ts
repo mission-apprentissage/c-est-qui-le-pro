@@ -69,7 +69,7 @@ export default () => {
       addJsonHeaders(res);
       res.send(
         stripNull(
-          merge(formationEtablissement, { etablissement: { accessTime } }, { formation, formationsFamilleMetier })
+          merge(formationEtablissement, { etablissement: { ...accessTime } }, { formation, formationsFamilleMetier })
         )
       );
     })

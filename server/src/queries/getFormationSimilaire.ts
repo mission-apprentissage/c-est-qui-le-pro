@@ -55,6 +55,7 @@ async function buildIsochronesQuery({ timeLimit, latitude, longitude }: FilterEt
       )
       .select("etablissementId as bucketId")
       .select("time")
+      .select("modalite")
       .where("time", "<=", timeLimit)
       .orderBy("time")
       .as("buckets"),
