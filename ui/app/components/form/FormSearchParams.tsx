@@ -1,11 +1,12 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm, Control, FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { useForm, Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormSetFocus } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FieldValues } from "react-hook-form";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
-import { JSX, RefObject, Suspense, useRef } from "react";
+import { JSX, RefObject, Suspense, useEffect, useRef } from "react";
+import { useFocusSearchContext } from "#/app/(accompagnateur)/context/FocusSearchContext";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
@@ -18,12 +19,14 @@ type FormSearchParamsProps<FormData extends FieldValues> = {
     formRef,
     register,
     setValue,
+    setFocus,
   }: {
     control: Control<FormData, any>;
     errors: FieldErrors<FormData>;
     formRef: RefObject<HTMLFormElement | null>;
     register: UseFormRegister<FormData>;
     setValue: UseFormSetValue<FormData>;
+    setFocus: UseFormSetFocus<FormData>;
   }) => JSX.Element;
   onSubmit?: (data: FormData) => void;
 };
@@ -50,10 +53,16 @@ export function FormSearchParams<FormData extends FieldValues>({
     getValues,
     handleSubmit,
     formState: { errors },
+    setFocus,
   } = useForm<FormData>({
     defaultValues: parameters,
     resolver: yupResolver(schema),
   });
+  const { registerSetFocusSearch } = useFocusSearchContext();
+
+  useEffect(() => {
+    registerSetFocusSearch(setFocus);
+  }, [setFocus, registerSetFocusSearch]);
 
   const onSubmitBase = handleSubmit((data) => {
     const dataWithDynamic = Object.assign(
@@ -76,7 +85,7 @@ export function FormSearchParams<FormData extends FieldValues>({
       ref={formRef}
       style={{ flex: "1", display: "flex", flexDirection: "column" }}
     >
-      {children({ control, register, errors, formRef, setValue })}
+      {children({ control, register, errors, formRef, setValue, setFocus })}
     </form>
   );
 }

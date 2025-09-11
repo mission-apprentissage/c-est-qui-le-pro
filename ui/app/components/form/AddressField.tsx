@@ -2,7 +2,6 @@
 import React, { HTMLAttributes, useState } from "react";
 import { Box, TextField, Typography } from "#/app/components/MaterialUINext";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "#/app/components/MaterialUINext";
 import { fetchAddress } from "#/app/services/address";
 import { useThrottle } from "@uidotdev/usehooks";
@@ -42,7 +41,12 @@ const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComp
   );
 });
 
-const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: boolean; isMobile: boolean }) => {
+const CustomPopper = ({
+  isMobile,
+  isFocus,
+  withMapPin,
+  ...props
+}: PopperProps & { isFocus: boolean; isMobile: boolean; withMapPin: boolean }) => {
   const { children, className, placement = "bottom" } = props;
 
   return isFocus && isMobile ? (
@@ -83,14 +87,14 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
       ]}
       placement="bottom-start"
       sx={{
-        marginTop: "18px !important",
+        marginTop: "28px !important",
         marginLeft: { md: "-18px !important" },
         "& .MuiPaper-root": {
           boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.2)",
         },
       }}
       style={{
-        width: "calc(100%)",
+        width: withMapPin ? "calc(100% - 60px)" : "calc(100%)",
       }}
     />
   );
@@ -106,11 +110,13 @@ export default function AddressField({
   FieldProps,
   submitOnChange,
   error,
-  sx,
   isMobile,
   defaultValues,
   onOpen,
+  onClose,
   noLabel,
+  withMapPin,
+  variant,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
@@ -143,7 +149,7 @@ export default function AddressField({
       data-private
       style={{
         width: "100%",
-        borderRadius: "5px",
+        borderRadius: "50px",
         backgroundColor: "white",
         ...(isFocus && isMobile
           ? {
@@ -181,6 +187,7 @@ export default function AddressField({
         }}
         onClose={() => {
           setIsFocus(false);
+          onClose && onClose();
         }}
         filterOptions={(x) => x}
         options={options || []}
@@ -198,9 +205,15 @@ export default function AddressField({
                 margin: "1rem",
               }
             : {}),
-          ...sx,
+          ...{
+            padding: { md: variant == "home" ? "24px" : "18px", xs: variant == "home" ? "18px" : "8px" },
+            paddingLeft: { xs: "18px", md: withMapPin ? "50px" : "18px" },
+            paddingRight: "0px",
+          },
         }}
-        PopperComponent={(props) => <CustomPopper isFocus={isFocus} isMobile={isMobile} {...props} />}
+        PopperComponent={(props) => (
+          <CustomPopper isFocus={isFocus} isMobile={isMobile} withMapPin={withMapPin} {...props} />
+        )}
         ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
         renderOption={(props, option) => {
           const { key, ...rest } = props;
@@ -232,12 +245,13 @@ export default function AddressField({
             helperText={error ? "Vous devez toujours choisir une localisation valide" : ""}
             InputLabelProps={{ shrink: true }}
             label={noLabel || (isMobile && isFocus) ? "" : "Ton adresse, ta ville"}
-            placeholder={"Saisir sa ville, son adresse"}
+            placeholder={"Rechercher avec son adresse, sa ville"}
             className="addressField"
             onFocus={(event) => {
               event.target.select();
               setIsFocus(true);
             }}
+            inputRef={ref}
             InputProps={{
               ...params.InputProps,
               type: "search",
@@ -245,10 +259,17 @@ export default function AddressField({
                 isMobile && isFocus ? (
                   <i
                     onClick={(e) => {
+                      e.preventDefault();
                       setIsFocus(false);
+                      onClose && onClose();
                     }}
                     style={{ marginRight: "1rem" }}
                     className={fr.cx("ri-arrow-left-s-line")}
+                  ></i>
+                ) : withMapPin ? (
+                  <i
+                    style={{ marginRight: "1rem", color: "var(--blue-france-sun-113-625-hover)" }}
+                    className={fr.cx("ri-map-pin-line", "fr-icon--lg")}
                   ></i>
                 ) : (
                   <></>

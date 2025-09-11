@@ -1,7 +1,58 @@
+import { JSX } from "react";
 import ErrorUserGeolocation from "../(accompagnateur)/errors/ErrorUserGeolocation";
 import { myPosition } from "../components/form/AddressField";
+import { fr } from "@codegouvfr/react-dsfr";
+import MarseilleIcon from "../components/icon/MarseilleIcon";
+import LimogesIcon from "../components/icon/LimogesIcon";
+import ParisIcon from "../components/icon/ParisIcon";
+import GuilvinecIcon from "../components/icon/GuilvinecIcon";
+import { StyledSvgIcon } from "../components/icon/Icon.styled";
 
 const API_BASE_URL = "https://api-adresse.data.gouv.fr";
+
+export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX.Element }[] = [
+  {
+    text: "Autour de moi",
+    address: "Autour de moi",
+    icon: () => <i style={{ paddingRight: "0.375rem" }} className={fr.cx("ri-map-pin-line")}></i>,
+  },
+  {
+    text: "Marseille",
+    address: "Marseille (13001)",
+    icon: () => (
+      <StyledSvgIcon>
+        <MarseilleIcon />
+      </StyledSvgIcon>
+    ),
+  },
+  {
+    text: "Limoges",
+    address: "Limoges (87000)",
+    icon: () => (
+      <StyledSvgIcon>
+        <LimogesIcon />
+      </StyledSvgIcon>
+    ),
+  },
+  {
+    text: "Paris",
+    address: "Paris (75001)",
+    icon: () => (
+      <StyledSvgIcon>
+        <ParisIcon />
+      </StyledSvgIcon>
+    ),
+  },
+  {
+    text: "Le Guilvinec",
+    address: "Le Guilvinec (29730)",
+    icon: () => (
+      <StyledSvgIcon>
+        <GuilvinecIcon />
+      </StyledSvgIcon>
+    ),
+  },
+];
 
 export async function fetchAddress(
   address: string,

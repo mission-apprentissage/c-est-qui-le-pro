@@ -15,6 +15,7 @@ export const SubmitStyled = styled(Button, {
   font-size: 20px;
   line-height: 32px;
   justify-content: center;
+  white-space: nowrap;
   --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};
 
   ${({ isFocusMobile }) => {
@@ -40,8 +41,8 @@ export const SearchGridContainer = styled(Grid, {
   ${({ isBordered, withFormation }) =>
     isBordered && !withFormation
       ? `
-      border-radius: 5px; 
-      border: 2px solid var(--blue-france-sun-113-625-hover);
+      border-radius: 50px; 
+      border: 3px solid var(--blue-france-sun-113-625-hover);
     `
       : ""}
 `;
@@ -58,10 +59,17 @@ export const FieldStack = styled(Stack, {
       border: 2px solid var(--blue-france-sun-113-625-hover);
     `
       : ""}
+
+  ${({ isBordered, withFormation }) =>
+    isBordered && !withFormation
+      ? `
+      border-radius: 50px; 
+    `
+      : ""}
 `;
 
 export const DesktopSubmitBox = styled(Box)`
-  width: 33%;
+  width: 45%;
   padding: 18px;
   padding-left: 0;
   padding-right: 24px;

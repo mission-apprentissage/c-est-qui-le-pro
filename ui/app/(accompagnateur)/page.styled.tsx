@@ -1,11 +1,29 @@
 "use client";
 import Container from "#/app/components/Container";
-import { Grid, Typography } from "#/app/components/MaterialUINext";
+import { Box, Grid, Typography, Stack } from "#/app/components/MaterialUINext";
+import Button from "#/app/components/Button";
+import Image from "next/image";
 import { styled } from "@mui/material/styles";
 
-export const MainContainer = styled(Container)`
+export const MainContainer = styled(Box, {
+  shouldForwardProp: (prop) => !["bgColor"].includes(prop as string),
+})<{ bgColor?: "blue" | "white" }>`
+  ${(props) => (props.bgColor === "blue" ? "background-color: var(--blue-france-975-75);" : "")}
+  ${(props) => (props.bgColor === "white" ? "white;" : "")}
+  padding-top: 3.25rem;
+  padding-bottom: 5rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+`;
+
+export const MainBlueContainer = styled(Container)`
   background-color: var(--blue-france-975-75);
-  padding-bottom: 10rem;
+`;
+
+export const MainWhiteContainer = styled(Container)`
+  background-color: white;
 `;
 
 export const MainTitleGrid = styled(Grid)`
@@ -61,4 +79,44 @@ export const SubTitle = styled(Typography)`
 
 export const DescriptionText = styled(Typography)`
   margin-bottom: 1.5rem;
+`;
+
+export const CitySuggestionStack = styled(Stack)`
+  margin-top: 2.5rem;
+`;
+
+export const AddressButton = styled(Button)`
+  padding-right: 0.75rem;
+  padding-left: 0.75rem;
+`;
+
+export const ImageGrid = styled(Grid)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const HomeImage = styled(Image)`
+  width: 100%;
+  max-width: 399px;
+  height: auto;
+`;
+
+export const LogoStack = styled(Stack)`
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+export const PreviewImageBox = styled(Box)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+`;
+
+export const PreviewImage = styled(Image)`
+  width: 100%;
+  max-width: 1108px;
+  height: auto;
 `;
