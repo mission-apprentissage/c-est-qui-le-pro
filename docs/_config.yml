@@ -1,0 +1,28 @@
+title: C'est qui le pro ?
+description: >-
+  C'est qui le pro ? aident les accompagnateurs de l’orientation et les collégiens à découvrir les formations professionnelles les plus adaptées pour l’après 3ᵉ
+
+theme: just-the-docs
+
+color_scheme: beta
+
+callouts:
+  highlight:
+    color: france
+  note:
+    color: tilleulverveine
+
+aux_links:
+  Page beta.gouv:
+    - https://beta.gouv.fr/startups/cestquilepro.html
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: "Retour en haut de page"
+
+gh_edit_link: true
+gh_edit_link_text: "Modifier cette page sur GitHub."
+gh_edit_repository: "https://github.com/mission-apprentissage/c-est-qui-le-pro"
+gh_edit_branch: "main"
+gh_edit_source: "docs"
+gh_edit_view_mode: "tree"

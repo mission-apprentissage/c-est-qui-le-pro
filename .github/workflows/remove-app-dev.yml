@@ -17,7 +17,7 @@ on:
         default: 'recette'
 
 jobs:
-  build-app:
+  remove-app:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ github.event.inputs.env_name || 'dev' }}
