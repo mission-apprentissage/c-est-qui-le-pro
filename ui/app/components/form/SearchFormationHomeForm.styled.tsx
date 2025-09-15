@@ -9,7 +9,6 @@ export const SubmitStyled = styled(Button, {
   shouldForwardProp: (prop) => !["isFocusMobile"].includes(prop),
 })<ButtonProps & { isFocusMobile?: boolean }>`
   border-radius: 26px;
-  height: 100%;
   width: 100%;
   background-color: var(--blue-france-sun-113-625-hover);
   font-size: 20px;
