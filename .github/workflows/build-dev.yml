@@ -15,7 +15,7 @@ on:
           - production
         default: 'dev'
 jobs:
-  build-app:
+  build-dev:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ github.event.inputs.env_name || 'dev' }}
