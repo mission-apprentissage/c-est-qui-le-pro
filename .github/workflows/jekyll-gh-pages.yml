@@ -7,8 +7,6 @@
 name: Deploy Jekyll site to Pages
 
 on:
-  pull_request:
-    branches: [ main ]
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
