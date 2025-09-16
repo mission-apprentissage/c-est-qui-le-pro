@@ -33,8 +33,8 @@ docker push ${REGISTRY_URL}/cqlp-isochrones:latest
 ```
 kubectl create secret docker-registry my-registry \
  --docker-server=${REGISTRY_DOMAIN}\
- --docker-username=YOUR_GITHUB_USERNAME \
- --docker-password=YOUR_GITHUB_PAT \
+ --docker-username=REGISTRY_USERNAME \
+ --docker-password=REGISTRY_PASSWORD \
  --docker-email=YOUR_EMAIL
 ```
 
