@@ -33,7 +33,13 @@ function CitySuggestion() {
       useFlexGap
     >
       {CITIES_SUGGESTION.map((city) => (
-        <Link key={city.text} noIcon noDecoration href={`recherche?address=${encodeURIComponent(city.address)}`}>
+        <Link
+          key={city.text}
+          noIcon
+          noDecoration
+          noActiveBg
+          href={`recherche?address=${encodeURIComponent(city.address)}`}
+        >
           <Button iconSize="lg" size="small" rounded variant="white" priority="tertiary no outline">
             <city.icon />
             {city.text}
