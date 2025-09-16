@@ -263,10 +263,6 @@ export default React.memo(function ResearchFormationsResult({
 
   return (
     <>
-      <Suspense>
-        <ClientSideScrollRestorer />
-      </Suspense>
-
       <Grid2 container spacing={0} direction={isDownSm ? "column-reverse" : "row"} ref={resultRef}>
         <Grid2
           md={8}

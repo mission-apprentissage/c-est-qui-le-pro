@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <Suspense>
       <MainContainer bgColor="blue">
-        <Container maxWidth={"xl"}>
+        <Container nopadding maxWidth={"xl"}>
           <Grid container spacing={"3rem"}>
             <Grid item md={8} xs={12}>
               <MainTitleGrid xs={12}>
@@ -91,11 +91,11 @@ export default function Page({ params }: { params: { id: string } }) {
       </MainContainer>
 
       <MainContainer bgColor="white">
-        <Container maxWidth={"md"}>
+        <Container nopadding maxWidth={"md"}>
           <LogoStack direction={{ xs: "column", md: "row" }} spacing={2}>
-            <Image src={"/assets/logo_cqlp.png"} width="299" height="49" alt={"Logo CQLP"} />
+            <Image src={"/assets/logo_cqlp.svg"} width="299" height="49" alt={"Logo CQLP"} />
             <Typography>et</Typography>
-            <Image src={"/assets/logo_avenir.png"} width="206" height="93" alt={"Logo Avenir"} />
+            <Image src={"/assets/logo_avenir.svg"} width="206" height="93" alt={"Logo Avenir"} />
           </LogoStack>
           <Typography align={"center"}>
             aident les accompagnateurs de l’orientation et les collégiens à découvrir les formations professionnelles

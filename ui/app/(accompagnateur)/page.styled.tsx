@@ -10,11 +10,18 @@ export const MainContainer = styled(Box, {
 })<{ bgColor?: "blue" | "white" }>`
   ${(props) => (props.bgColor === "blue" ? "background-color: var(--blue-france-975-75);" : "")}
   ${(props) => (props.bgColor === "white" ? "white;" : "")}
-  padding-top: 3.25rem;
-  padding-bottom: 5rem;
+  padding-top: 4.75rem;
+  padding-bottom: 6.5rem;
   align-items: center;
   display: flex;
   flex-direction: column;
+  
+  ${({ theme }) => theme.breakpoints.down("md")} {
+    padding: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
 }
 `;
 
@@ -33,52 +40,12 @@ export const MainTitleGrid = styled(Grid)`
   }
 
   ${({ theme }) => theme.breakpoints.down("md")} {
-    padding: 1rem;
+    padding-bottom: 1rem;
   }
 `;
 
 export const MainTitle = styled(Typography)`
   color: var(--blue-france-sun-113-625-hover);
-`;
-
-export const SearchFormGrid = styled(Grid)`
-  background-color: var(--blue-france-sun-113-625-hover);
-  border-radius: 11px;
-  margin-bottom: 3rem;
-
-  ${({ theme }) => theme.breakpoints.up("md")} {
-    padding: 2.875rem;
-    padding-left: 2.25rem;
-  }
-
-  ${({ theme }) => theme.breakpoints.down("md")} {
-    padding: 1rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-    border-radius: 0;
-  }
-`;
-
-export const InfoSectionGrid = styled(Grid)`
-  ${({ theme }) => theme.breakpoints.up("md")} {
-    padding: 0;
-  }
-
-  ${({ theme }) => theme.breakpoints.down("md")} {
-    padding: 1rem;
-  }
-`;
-
-export const SubTitle = styled(Typography)`
-  color: var(--blue-france-sun-113-625-hover);
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-  margin-bottom: 1rem;
-`;
-
-export const DescriptionText = styled(Typography)`
-  margin-bottom: 1.5rem;
 `;
 
 export const CitySuggestionStack = styled(Stack)`

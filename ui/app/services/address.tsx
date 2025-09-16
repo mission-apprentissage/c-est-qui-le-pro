@@ -18,7 +18,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
   },
   {
     text: "Marseille",
-    address: "Marseille (13001)",
+    address: "98 Quai du Port 13002 Marseille",
     icon: () => (
       <StyledSvgIcon>
         <MarseilleIcon />
@@ -27,7 +27,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
   },
   {
     text: "Limoges",
-    address: "Limoges (87000)",
+    address: "5 Rue Jean Pierre Timbaud 87000 Limoges",
     icon: () => (
       <StyledSvgIcon>
         <LimogesIcon />
@@ -36,7 +36,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
   },
   {
     text: "Paris",
-    address: "Paris (75001)",
+    address: "9 rue de Rivoli 75004 Paris",
     icon: () => (
       <StyledSvgIcon>
         <ParisIcon />
@@ -45,7 +45,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
   },
   {
     text: "Le Guilvinec",
-    address: "Le Guilvinec (29730)",
+    address: "33 Rue de la Marine 29730 Guilvinec",
     icon: () => (
       <StyledSvgIcon>
         <GuilvinecIcon />

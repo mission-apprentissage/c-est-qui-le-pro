@@ -53,6 +53,11 @@ function ResearchFormationsParameter() {
 }
 
 export default function Page() {
+  useEffect(() => {
+    // Force scroll to top
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Title pageTitle="Recherche de formations" />
