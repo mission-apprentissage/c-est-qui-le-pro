@@ -1,3 +1,10 @@
+# [1.45.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.44.0...v1.45.0) (2025-09-16)
+
+
+### Features
+
+* nouvelle page home ([#83](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/83)) ([28fa59d](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/28fa59ddf720dc7d7802694b5dbaf30c9919308d))
+
 # [1.44.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.43.1...v1.44.0) (2025-09-09)
 
 
