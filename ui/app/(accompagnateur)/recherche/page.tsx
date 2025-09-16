@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
 import { useGetAddressWithCity } from "../hooks/useGetAddress";
 import { HeaderContainer, LoaderContainer, LoadingMessage } from "./page.styled";
+import FocusSearchProvider from "../context/FocusSearchContext";
 
 function ResearchFormationsParameter() {
   const router = useRouter();
@@ -52,17 +53,24 @@ function ResearchFormationsParameter() {
 }
 
 export default function Page() {
+  useEffect(() => {
+    // Force scroll to top
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Title pageTitle="Recherche de formations" />
       <Suspense>
         <FormationsSearchProvider>
-          <HeaderContainer>
-            <SearchHeader />
-            <SearchFormationFiltersForm />
-          </HeaderContainer>
+          <FocusSearchProvider>
+            <HeaderContainer>
+              <SearchHeader />
+              <SearchFormationFiltersForm />
+            </HeaderContainer>
 
-          <ResearchFormationsParameter />
+            <ResearchFormationsParameter />
+          </FocusSearchProvider>
         </FormationsSearchProvider>
       </Suspense>
     </>
