@@ -36,7 +36,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
   },
   {
     text: "Paris",
-    address: "9 rue de Rivoli 75004 Paris",
+    address: "29 rue de Rivoli 75004 Paris",
     icon: () => (
       <StyledSvgIcon>
         <ParisIcon />
