@@ -100,6 +100,9 @@ const config = {
   onisep: {
     api: {
       baseUrl: env.get("ONISEP_BASE_URL").default("https://api.opendata.onisep.fr/api/1.0").asString(),
+      username: env.get("ONISEP_USERNAME").required().asString(),
+      password: env.get("ONISEP_PASSWORD").required().asString(),
+      applicationId: env.get("ONISEP_APPLICATION_ID").default("68c9688135746648a68b4567").asString(),
     },
     datasets: {
       tablePassageCodesCertifications: "6152ccdf850ef",

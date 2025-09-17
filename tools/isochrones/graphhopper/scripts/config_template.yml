@@ -1,0 +1,28 @@
+graphhopper:
+  datareader.file: pbf/full.osm.pbf
+  gtfs.file:  $gtfs
+  graph.location: graphs
+  profiles:
+    - name: foot
+      custom_model_files:
+       - foot.json
+    - name: bike
+      custom_model_files:
+       - bike.json
+  profiles_ch:
+    - profile: foot
+    - profile: bike
+  graph.encoded_values: foot_access, foot_average_speed, hike_rating, foot_priority, bike_priority, bike_access, roundabout, bike_average_speed,average_slope, hike_rating, country, road_class
+  import.osm.ignored_highways: motorway,trunk # ,primary
+
+  datareader.preferred_language: fr
+
+server:
+  application_connectors:
+    - type: http
+      port: 8989
+      bind_host: 0.0.0.0
+  admin_connectors:
+    - type: http
+      port: 8990
+      bind_host: localhost

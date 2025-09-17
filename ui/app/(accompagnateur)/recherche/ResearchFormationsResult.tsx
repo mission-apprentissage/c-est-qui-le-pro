@@ -104,7 +104,7 @@ const FormationResults = React.memo(
         <Grid container rowSpacing={2}>
           <Grid item xs={12}>
             <Typography variant="h6">
-              À pied ou en transports en commun : {totalIsochrone} {pluralize("formation", totalIsochrone)}
+              À pied ou en transports en commun & scolaires : {totalIsochrone} {pluralize("formation", totalIsochrone)}
             </Typography>
           </Grid>
 
@@ -292,12 +292,9 @@ export default React.memo(function ResearchFormationsResult({
               <Typography variant="subtitle1">
                 Nous n’avons pas trouvé de formation proche correspondant à cette recherche
               </Typography>
-              <Typography>
-                Attention, cet outil est un prototype destiné à être testé en Île-de-France et en Bretagne. En dehors de
-                ces régions, le service proposé sera incomplet et dégradé lors de cette phase d’expérimentation.
-              </Typography>
+              <Typography>Attention, cet outil est en cours de construction.</Typography>
               <br />
-              <Typography>De plus, la liste des formations renvoyées peut être incomplète car : </Typography>
+              <Typography>La liste des formations renvoyées peut être incomplète car : </Typography>
               <ul>
                 <li>certaines formations ne sont pas encore référencées,</li>
                 <li>

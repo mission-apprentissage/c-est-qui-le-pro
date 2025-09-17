@@ -11,3 +11,5 @@ process.env.RCO_BUCKET_NAME = "bucket";
 process.env.FRANCE_TRAVAIL_API_CLIENT_ID = "client_id";
 process.env.FRANCE_TRAVAIL_API_CLIENT_SECRET = "secret";
 process.env.ACCOMPAGNATEUR_POSTGRES_URI = "";
+process.env.ONISEP_USERNAME = "username";
+process.env.ONISEP_PASSWORD = "password";

@@ -6,6 +6,7 @@ import {
   AnyColumn,
   OnConflictDatabase,
   OnConflictTables,
+  SelectQueryBuilder,
 } from "kysely";
 import pg from "pg";
 import Cursor from "pg-cursor";
@@ -41,18 +42,20 @@ pool.on("error", (error) => {
   }
 });
 
+export function formatLog(event) {
+  if (config.sql.logLevel.includes(event.level)) {
+    console.log(`\n====================================\n`);
+    console.log(replaceQueryPlaceholders(event.query.sql, event.query.parameters as string[]));
+    console.log({
+      parameters: event.query.parameters.map((p, index) => `$${index + 1} = ${p}`).join(", "),
+    });
+    console.log({ duration: event.queryDurationMillis });
+  }
+}
+
 export const kdb = new Kysely<DBWithMaterializedViews>({
   dialect: new PostgresDialect({ pool, cursor: Cursor }),
-  log: (event) => {
-    if (config.sql.logLevel.includes(event.level)) {
-      console.log(`\n====================================\n`);
-      console.log(replaceQueryPlaceholders(event.query.sql, event.query.parameters as string[]));
-      console.log({
-        parameters: event.query.parameters.map((p, index) => `$${index + 1} = ${p}`).join(", "),
-      });
-      console.log({ duration: event.queryDurationMillis });
-    }
-  },
+  log: formatLog,
 });
 
 function replaceQueryPlaceholders(query: string, values: string[]): string {
@@ -73,8 +76,16 @@ function replaceQueryPlaceholders(query: string, values: string[]): string {
 
 export function kyselyChainFn<T extends keyof DB>(
   eb,
-  fns: { fn: string; args: (ExpressionWrapper<unknown, never, any> | string | RawBuilder<unknown>)[] }[],
-  val: RawBuilder<unknown> | string | undefined = undefined
+  fns: {
+    fn: string;
+    args: (
+      | ExpressionWrapper<unknown, never, any>
+      | string
+      | RawBuilder<unknown>
+      | SelectQueryBuilder<unknown, never, any>
+    )[];
+  }[],
+  val: RawBuilder<unknown> | string | ExpressionWrapper<unknown, never, any> | undefined = undefined
 ): ExpressionWrapper<DB, T, unknown> {
   return fns.reduce((acc, { fn, args }) => {
     return eb.fn(fn, [...(acc !== undefined ? [acc] : []), ...args]);

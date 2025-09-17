@@ -5,7 +5,9 @@ import "moment/locale/fr";
 import styled from "@emotion/styled";
 import Card from "#/app/components/Card";
 
-export const StyledFormationFamilleMetierCard = styled(Card)<{ disableHover: boolean }>`
+export const StyledFormationFamilleMetierCard = styled(Card, {
+  shouldForwardProp: (prop) => !["disableHover"].includes(prop as string),
+})<{ disableHover: boolean }>`
   &.MuiButtonBase-root:hover {
     ${(props) =>
       props.disableHover

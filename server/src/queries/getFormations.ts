@@ -77,6 +77,7 @@ async function buildIsochronesQuerySQL({ timeLimit, latitude, longitude }, preco
         )
         .select("etablissementId as bucketId")
         .select("time")
+        .select("modalite")
         .orderBy("time")
         .as("buckets"),
     };
@@ -179,7 +180,7 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
 
   if (latitude === null || longitude === null) {
     return {
-      query: queryEtablissement.select(sql.val(null).as("accessTime")),
+      query: queryEtablissement.select(sql.val(null).as("accessTime")).select(sql.val(null).as("modalite")),
       order: () => sql.raw(['"etablissementId"', "id"].filter((d) => d).join(",")),
     };
   }
@@ -192,9 +193,12 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
         qb
           .leftJoin(queryIsochrones.query, (join) => join.onRef("etablissement.id", "=", "buckets.bucketId"))
           .select("buckets.time as accessTime")
+          .select("buckets.modalite as modalite")
           .orderBy("buckets.time")
       )
-      .$if(!queryIsochrones, (qb) => qb.select(sql.val(null).as("accessTime")).select(sql.val(null)))
+      .$if(!queryIsochrones, (qb) =>
+        qb.select(sql.val(null).as("accessTime")).select(sql.val(null).as("modalite")).select(sql.val(null))
+      )
       .where((eb) =>
         eb.or([eb("academie", "=", academie), ...(queryIsochrones ? [eb("buckets.time", "is not", null)] : [])])
       )
@@ -320,6 +324,7 @@ export async function getFormationsSQL(
               "etablissement.id"
             )
             .select("etablissement.accessTime as accessTime")
+            .select("etablissement.modalite as modalite")
             .select("etablissement.statut as statut")
             .select("etablissement.statutDetail as statutDetail")
             .select("etablissement.distance as distance")
