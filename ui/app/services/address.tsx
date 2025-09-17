@@ -44,7 +44,7 @@ export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX
     ),
   },
   {
-    text: "Le Guilvinec",
+    text: "Guilvinec",
     address: "33 Rue de la Marine 29730 Guilvinec",
     icon: () => (
       <StyledSvgIcon>

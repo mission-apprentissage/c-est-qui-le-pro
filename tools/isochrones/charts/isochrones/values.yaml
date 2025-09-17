@@ -1,7 +1,7 @@
 
 
 global:
-  suspend: true
+  suspend: false
 service:
   image:
     repository: yse0gvzk.c1.gra9.container-registry.ovh.net/private/cqlp-isochrones
