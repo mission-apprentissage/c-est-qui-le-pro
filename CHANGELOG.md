@@ -1,3 +1,10 @@
+# [1.46.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.45.0...v1.46.0) (2025-09-17)
+
+
+### Features
+
+* transports scolaires ([#75](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/75)) ([a5f881f](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/a5f881f7b8cd87dcf1a4874420e1390183f1e5b3))
+
 # [1.45.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.44.0...v1.45.0) (2025-09-16)
 
 
