@@ -11,6 +11,8 @@ callouts:
     color: france
   note:
     color: tilleulverveine
+  secondary:
+    color: green
 
 aux_links:
   Page beta.gouv:
