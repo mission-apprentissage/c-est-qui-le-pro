@@ -29,4 +29,4 @@ Le premier nous permet principalement de récupérer les formations en voie scol
 
 Cette liste de formations est ensuite recoupée avec différents jeux de données, listés ci-dessous, permettant d'associer à chaque formations des informations précieuses sur son contenu, ses conditions d'accès ou le devenir des élèves.
 
-Certains jeux de données font l'objet de traitements spécifiques, listés dans : [⚙️ Traitements des données]({{ site.baseurl }}{% link partners-documentation/processing.md %}).
+Certains jeux de données font l'objet de traitements spécifiques, listés dans : [⚙️ Traitements des données]({{ site.baseurl }}{% link partners-documentation/processing/index.md %}).
