@@ -6,5 +6,3 @@ nav_order: 3.1.04
 ---
 
 # Référentiels du Réseau des Carif-Oref
-
-🚧 Bientôt disponible

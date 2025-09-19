@@ -6,5 +6,3 @@ nav_order: 3.1.01
 ---
 
 # Fichiers en open data de l’Onisep
-
-🚧 Bientôt disponible
