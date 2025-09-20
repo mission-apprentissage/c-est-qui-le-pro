@@ -134,6 +134,11 @@ def extract_zip_with_subfolder(zip_path: Path, temp_dir: Path) -> bool:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_dir)
         
+        agency_file = extract_dir / "agency.txt"
+        if agency_file.exists():
+            print("    ✓ Fichiers trouvés à la racine dans le zip, tâche ignorée.")
+            return True
+
         # Trouver le premier sous-dossier
         subdirs = [d for d in extract_dir.iterdir() if d.is_dir()]
         
@@ -289,12 +294,13 @@ def run_gtfsclean(zip_path: Path, temp_dir: Path) -> bool:
         print(f"    ⚠️  Erreur inattendue avec gtfsclean: {e}")
         return False
 
-def download_and_clean(url: str, filename: str, output_dir: Path) -> bool:
+def download_and_clean(url: str, filename: str, output_dir: Path, local_file: bool) -> bool:
     """
     Args:
         url: URL du fichier à télécharger
         filename: Nom du fichier de destination
         output_dir: Répertoire où sauvegarder le fichier final
+        local_file: Indique que l'url représente un fichier local
     """
     print(f"\n{'='*80}")
     print(f"📦 TRAITEMENT DE: {filename}")
@@ -313,8 +319,11 @@ def download_and_clean(url: str, filename: str, output_dir: Path) -> bool:
         try:
             # Étape 1: Téléchargement
             print(f"\n🔽 ÉTAPE 1: Téléchargement")
-            if not download_file_with_retry(url, temp_zip_path):
-                return False
+            if local_file:
+                shutil.copy(url, temp_zip_path)
+            else:
+                if not download_file_with_retry(url, temp_zip_path):
+                    return False
             
             # Étape 2: Correction du sous-dossier si nécessaire
             print(f"\n📂 ÉTAPE 2: Correction du sous-dossier")
@@ -387,6 +396,7 @@ def main():
         epilog="""
 Exemples d'utilisation:
   %(prog)s --url "https://example.com/gtfs.zip" --output "my-gtfs.zip"
+  %(prog)s --url "/data/gtfs.zip" --local-file --output "my-gtfs.zip"
   %(prog)s --url "https://example.com/gtfs.zip" --output "my-gtfs.zip" --output-dir "/path/to/save"
   %(prog)s --url "https://example.com/gtfs.zip" --output "my-gtfs.zip" --temp-base "/tmp/gtfs-work"
         """
@@ -400,7 +410,8 @@ Exemples d'utilisation:
                        help='Répertoire de sortie (défaut: répertoire courant)')
     parser.add_argument('--temp-base', '-t', type=str, default=None,
                        help='Répertoire de base pour les dossiers temporaires (défaut: système)')
-    
+    parser.add_argument('--local-file', action='store_true',
+                       help='Indique que le GTFS est un fichier local')
     # TODO: gérer la transformation des codes 712 (bus scolaire)
     #--keep-only-sco-and-transform
     
@@ -436,7 +447,8 @@ Exemples d'utilisation:
     success = download_and_clean(
         url=args.url,
         filename=args.output,
-        output_dir=output_dir
+        output_dir=output_dir,
+        local_file=args.local_file
     )
     
     if success:

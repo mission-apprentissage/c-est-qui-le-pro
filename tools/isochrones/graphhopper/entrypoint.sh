@@ -18,7 +18,7 @@ else
     cd $gtfs_path
 
     # On ignore les erreurs dans ce scripts qui peuvent être du à un GTFS indisponible
-    python ${script_path}/gtfs_liste.py --config-path ${script_path}/config.yml --modalite $GTFS_MODALITE --output-dir ${gtfs_path} --csv ${data_path}/transports.csv 2>&1 || true
+    python -u ${script_path}/gtfs_liste.py --config-path ${script_path}/config.yml --modalite $GTFS_MODALITE --output-dir ${gtfs_path} --local-dir ${data_path} --csv ${data_path}/transports.csv 2>&1 || true
     cp "${script_path}/config.yml" $base_path
 fi
 

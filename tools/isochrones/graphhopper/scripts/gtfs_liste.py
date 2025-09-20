@@ -65,7 +65,7 @@ def get_processor_path():
     raise FileNotFoundError("gtfs.py non trouvé. Assurez-vous qu'il soit dans le même répertoire.")
 
 
-def run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, processor_args=None):
+def run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, local_file, processor_args=None):
     """
     Execute gtfs.py
     
@@ -74,6 +74,7 @@ def run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, processor_a
         filename: Nom du fichier de sortie
         output_dir: Répertoire de sortie
         only_sco_in_mixte: indique que l'on ne veut garder que le scolaire d'un fichier mixte
+        local_file: indique que le GTFS est un fichier local
         processor_args: Arguments supplémentaires pour le processeur
     
     Returns:
@@ -94,6 +95,9 @@ def run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, processor_a
         
         if only_sco_in_mixte:
             cmd.append('--keep-only-sco-and-transform')
+            
+        if local_file:
+            cmd.append('--local-file')
         
         # Ajouter les arguments supplémentaires
         if processor_args:
@@ -178,23 +182,27 @@ def call_api_transport_data_gouv(data_id, gtfs_id):
             return (None, [])
         
         dates_range = []
-        if gtfs['metadata']['networks_start_end_dates']:
-            for network in gtfs['metadata']['networks']:
-                try:
-                    date_range = gtfs['metadata']['networks_start_end_dates'][network]
-                    dates_range.append((date_range['start_date'], date_range['end_date']))
-                except Exception as e:
-                    print(f"    ✗ Impossible de récupérer le range de date : {e}")
-        elif gtfs['metadata']['start_date'] and gtfs['metadata']['end_date']:
-            dates_range.append((gtfs['metadata']['start_date'], gtfs['metadata']['end_date']))
-        else:
+        try:
+            if gtfs['metadata']['networks_start_end_dates']:
+                for network in gtfs['metadata']['networks']:
+                    try:
+                        date_range = gtfs['metadata']['networks_start_end_dates'][network]
+                        dates_range.append((date_range['start_date'], date_range['end_date']))
+                    except Exception as e:
+                        print(f"    ✗ Impossible de récupérer le range de date : {e}")
+            elif gtfs['metadata']['start_date'] and gtfs['metadata']['end_date']:
+                dates_range.append((gtfs['metadata']['start_date'], gtfs['metadata']['end_date']))
+            else:
+                print(f"    ✗ Impossible de récupérer le range de date : {e}")
+        except Exception as e:
             print(f"    ✗ Impossible de récupérer le range de date : {e}")
+
         return (gtfs['original_url'], dates_range)
     except Exception as e:
         print(f"    ✗ Une erreur est survenue : {e}")
         return (None, [])
     
-def get_gtfs_list(csv_file, modalite, only_display_range):
+def get_gtfs_list(csv_file, modalite, only_display_range, local_dir):
     """
     Créer la liste de téléchargements des GTFS à partir d'un CSV
     
@@ -212,15 +220,26 @@ def get_gtfs_list(csv_file, modalite, only_display_range):
         reader = csv.DictReader(f)
         for row in reader:
             lines.append(row) 
+            
+    
     
     download_list = []
     for i, line in enumerate(lines, 1):
         url = None
         dates_range = None
+        local_file = False
         if modalite == 'transport' and (line['Type'] == 'Transport' or line['Type'] == 'Mixte'):
-            (url, dates_range) = call_api_transport_data_gouv(line['ID Transport Data'], line['ID GTFS'])
+            if not line['ID GTFS']:
+                local_file = True
+                (url, dates_range) = (str(local_dir / line['Nom GTFS']), [])
+            else:
+                (url, dates_range) = call_api_transport_data_gouv(line['ID Transport Data'], line['ID GTFS'])
         elif modalite == 'scolaire' and (line['Type'] == 'Scolaire' ):  # or line['Type'] == 'Mixte'
-            (url, dates_range) = call_api_transport_data_gouv(line['ID Transport Data'], line['ID GTFS'])
+            if not line['ID GTFS']:
+                local_file = True
+                (url, dates_range) = (str(local_dir / line['Nom GTFS']), [])
+            else:
+                (url, dates_range) = call_api_transport_data_gouv(line['ID Transport Data'], line['ID GTFS'])
         else:
             continue
         
@@ -235,7 +254,7 @@ def get_gtfs_list(csv_file, modalite, only_display_range):
             success += 1
 
         download_list.append(
-            (i, url, str(i) + ".zip", dates_range, modalite == 'scolaire' and line['Type'] == 'Mixte')
+            (i, url, str(i) + ".zip", dates_range, modalite == 'scolaire' and line['Type'] == 'Mixte', local_file)
         )       
         print(f"    Date de disponibilités des données pour: {i}/{line['Nom']}/{line['ID Transport Data']}/{line['ID GTFS']} : ")
         if not dates_range:
@@ -248,7 +267,7 @@ def get_gtfs_list(csv_file, modalite, only_display_range):
 
 def process_downloads(downloads, output_dir, processor_args=None):
     """
-    Traite une liste de téléchargements Gde TFS
+    Traite une liste de téléchargements de GTFS
     
     Args:
         downloads: Liste des téléchargements à traiter
@@ -267,10 +286,10 @@ def process_downloads(downloads, output_dir, processor_args=None):
     print(f"\n📋 {total_count} fichiers GTFS à traiter")
     
     # Traiter chaque téléchargement
-    for i, (id, url, filename, dates_range, only_sco_in_mixte) in enumerate(downloads, 1):
+    for i, (id, url, filename, dates_range, only_sco_in_mixte, local_file) in enumerate(downloads, 1):
         print(f"\n🔄 [{i}/{total_count}] Traitement: {filename}")
         
-        if run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, processor_args):
+        if run_gtfs_processor(url, filename, output_dir, only_sco_in_mixte, local_file, processor_args):
             success_count += 1
             gtfs_list.append(filename)
             print(f"    ✅ SUCCÈS: {id}/{filename}")
@@ -434,7 +453,8 @@ def main():
                        help='Fichier CSV contenant la liste des GTFS')
     parser.add_argument('--config-path', '-g', type=str, default='config.yml',
                        help='Fichier de sortie de configuration de graphhopper')
-    
+    parser.add_argument('--local-dir', '-l', type=str, default='.',
+                       help='Répertoire contenant les fichiers GTFS locaux (défaut: répertoire courant)')
     parser.add_argument('--output-dir', '-o', type=str, default='.',
                        help='Répertoire de sortie pour les fichiers GTFS (défaut: répertoire courant)')
     parser.add_argument('--temp-base', '-t', type=str, default=None,
@@ -456,7 +476,8 @@ def main():
         sys.exit(1)
     
     # Obtenir la liste des GTFS à partir du CSV
-    (all_downloads, list_sucess, list_failed, list_warning) = get_gtfs_list(args.csv, args.modalite, args.only_display_range)
+    local_dir = Path(args.local_dir).resolve()
+    (all_downloads, list_sucess, list_failed, list_warning) = get_gtfs_list(args.csv, args.modalite, args.only_display_range, local_dir)
     total_list = list_sucess + len(list_failed) + len(list_warning)
     
     downloads = all_downloads

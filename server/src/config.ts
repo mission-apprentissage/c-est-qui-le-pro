@@ -37,9 +37,9 @@ const config = {
     },
   },
   affelnet: {
-    voeuxAnneeRentree: "2024",
+    voeuxAnneeRentree: "2025",
     files: {
-      voeux: path.join(dataDir, "affelnet", "voeux_2024_diffusable.csv"),
+      voeux: path.join(dataDir, "affelnet", "voeux_2025_diffusable.csv"),
     },
   },
   bcn: {
