@@ -10,5 +10,3 @@ nav_order: 3.2
 
 - TOC
 {:toc}
-
-🚧 Bientôt disponible
