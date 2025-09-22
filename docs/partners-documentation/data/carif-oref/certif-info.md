@@ -13,11 +13,14 @@ nav_order: 3.1.04.1
 
 Certif Info est un référentiel national de certifications, co-produit par le Réseau des Carif-Oref et l'Onisep. 
 
-[Source open data](https://www.data.gouv.fr/fr/datasets/referentiel-national-des-certifications/)
-
 ### Périmètre
 
 Certif-Info recense l’ensemble des titres et diplômes à finalité professionnelle  délivrés au nom de l’État, les certificats de Qualification Professionnelle élaborés dans le cadre des branches professionnelles, les habilitations, les titres et diplômes élaborés par des organismes de formation publics ou privés accessibles en formation initiale et/ou professionnelle continue.
+
+## Périodicité de mise à jour
+
+- Les données actualisées sont mises à disposition chaque mois par le RCO sur un espace dédié (bucket)
+- Les données sont mises à jour dans notre base automatiquement chaque semaine dans le cadre d'un import global
 
 ### Format des données
 
@@ -26,6 +29,11 @@ Les données sont disponibles au format CSV depuis [ce lien](https://tabular-api
 ### Entité responsable
 
 Réseau des Carif-Oref
+
+## Source
+
+- [Source open data](https://www.data.gouv.fr/fr/datasets/referentiel-national-des-certifications/) (attention, nous utilisons les fichiers déposés sur le bucket dédié)
+
 
 ### Utilisation
 

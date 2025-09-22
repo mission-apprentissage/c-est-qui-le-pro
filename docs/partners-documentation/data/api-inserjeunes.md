@@ -30,7 +30,8 @@ L'API couvre les données relatives à l'apprentissage et au scolaire, du niveau
 
 ## Périodicité de mise à jour
 
-Les données sont mises à jour plusieurs fois par an, au fil des diffusions des deux producteurs (2 fois par an pour le SIES et 3 fois par an pour la DEPP).
+- Les données sont mises à jour plusieurs fois par an, au fil des diffusions des deux producteurs (2 fois par an pour le SIES et 3 fois par an pour la DEPP).
+- Les données sont mises à jour dans notre base automatiquement chaque semaine dans le cadre d'un import global
 
 ## Format des données
 
@@ -39,6 +40,10 @@ Les données sont disponibles au format JSON.
 ## Entité responsable
 
 Equipe Exposition InserJeunes
+
+## Source
+
+- [Accès à l'API](https://exposition.inserjeunes.beta.gouv.fr/api/doc/)
 
 ## Utilisation
 

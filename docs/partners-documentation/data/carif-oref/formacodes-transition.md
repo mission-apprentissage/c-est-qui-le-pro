@@ -13,8 +13,6 @@ nav_order: 3.1.04.2
 
 La délégation générale à l’Emploi et la Formation professionnelle (*DGEFP*) du ministère du Travail, de la Santé, des Solidarités et des Familles a missionné le Réseau des Carif-Oref (*RCO*) afin d’identifier les formations et les certifications en lien avec la transition écologique via le Formacode®, outil d’indexation et de référence pour tous les acteurs de la formation professionnelle.
 
-[Source](https://www.data.gouv.fr/fr/datasets/une-liste-evolutive-des-formacodes-lies-a-la-transition-ecologique/)
-
 ![Schéma de présentation](formacode-graph.png)
 
 Détail sur l’étape 4
@@ -30,6 +28,11 @@ Une fois la codification faite pour toutes les certifications, un ratio a été 
 
 Ensemble des certifications disposant de formacodes.
 
+## Périodicité de mise à jour
+
+- Fréquence de mise à jour par le producteur inconnue
+- Les données sont mises à jour dans notre base automatiquement chaque semaine dans le cadre d'un import global
+
 ## Format des données
 
 Les données sont disponibles au format XSLX
@@ -37,6 +40,10 @@ Les données sont disponibles au format XSLX
 ## Entité responsable
 
 Réseau des Carif-Oref
+
+## Source
+
+- [Accéder à la page du fichier sur data.gouv](https://www.data.gouv.fr/fr/datasets/une-liste-evolutive-des-formacodes-lies-a-la-transition-ecologique/)
 
 ## Utilisation
 
