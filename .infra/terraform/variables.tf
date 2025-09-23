@@ -1,15 +1,3 @@
-
-locals {
-  kubeconfig_content = base64decode(var.kubeconfig)
-  kubeconfig_yaml    = yamldecode(local.kubeconfig_content)
-}
-
-variable "kubeconfig" {
-  description = "Base64 encoded kubeconfig"
-  type        = string
-  sensitive   = true
-}
-
 variable "cluster_name" {
   description = "Cluster name"
   type        = string
@@ -87,3 +75,29 @@ variable "issuers" {
   ]
 }
 
+variable "github_client_id" {
+  description = "GitHub OAuth App Client ID"
+  type        = string
+}
+
+variable "github_client_secret" {
+  description = "GitHub OAuth App Client Secret"
+  type        = string
+  sensitive   = true
+}
+
+variable "github_org" {
+  description = "GitHub organization name"
+  type        = string
+}
+
+variable "dex_domain" {
+  description = "Domain for Dex (e.g., dex.example.com)"
+  type        = string
+}
+
+variable "admin_users" {
+  description = "List of GitHub usernames to grant cluster-admin access"
+  type        = list(string)
+  default     = []
+}

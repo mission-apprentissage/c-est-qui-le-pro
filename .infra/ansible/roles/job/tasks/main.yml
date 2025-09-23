@@ -11,7 +11,6 @@
     - name: Create detached job
       no_log: false
       kubernetes.core.k8s:
-        kubeconfig: "{{ temp_kubeconfig.path }}"
         definition:
           apiVersion: batch/v1
           kind: Job

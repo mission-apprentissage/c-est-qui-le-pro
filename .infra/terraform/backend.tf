@@ -1,5 +1,6 @@
 terraform {
   backend "s3" {
+    region = "gra"
     endpoints = {
       s3 = "https://s3.gra.perf.cloud.ovh.net/"
     }
