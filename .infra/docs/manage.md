@@ -101,7 +101,7 @@ app_namespace=<nom du namespace>
 
 Editer le vault pour créer les env-vars liés à ce nouvel environnement (cf: [Vault](./vault.md))
 
-#### Accès au cluster
+## Accès au cluster
 
 Pour pouvoir accèder au cluster, déployer l'application ou exécuter des jobs, une authentification est nécessaire.
 
