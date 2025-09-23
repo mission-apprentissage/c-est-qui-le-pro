@@ -15,5 +15,5 @@ ansible-galaxy collection install community.general
 ansible-galaxy collection install community.docker
 ansible-galaxy collection install kubernetes.core
 
-ansible-playbook -i "${ENV_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" --vault-password-file="${VAULT_PASSWORD_FILE}" --limit "cluster" "${ANSIBLE_DIR}/setup.yml" "$@"
+ansible-playbook -i "${ENV_DIR}/env.ini" --extra-vars "@${VAULT_FILE}" -e "vault_dir='${VAULT_DIR}'" --vault-password-file="${VAULT_PASSWORD_FILE}" --limit "cluster" "${ANSIBLE_DIR}/setup.yml" "$@"
 

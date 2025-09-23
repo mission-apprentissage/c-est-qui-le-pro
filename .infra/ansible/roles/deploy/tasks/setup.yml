@@ -30,20 +30,6 @@
         name: env_vars
       no_log: true
 
-    - name: Create temporary kubeconfig
-      tempfile:
-        state: file
-        suffix: .kubeconfig
-      register: temp_kubeconfig
-      no_log: true
-
-    - name: Decode kubeconfig
-      copy:
-        content: "{{ setup.KUBECONFIG | b64decode }}"
-        dest: "{{ temp_kubeconfig.path }}"
-        mode: '0600'
-      no_log: true
-
     - name: Register cleanup items
       set_fact:
-        cleanup_files: "{{ cleanup_files | default([]) + [infra_dir + '/.env.yaml', temp_kubeconfig.path] }}"
+        cleanup_files: "{{ cleanup_files | default([]) + [infra_dir + '/.env.yaml'] }}"

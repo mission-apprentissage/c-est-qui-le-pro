@@ -31,7 +31,7 @@ Utiliser la Github action `deploy` sur la branche/tag à déployer puis renseign
 
 #### Prérequis
 
-Voir Prérequis dans (Gestion de l'infrastructure)[./manage.md]
+Voir Prérequis et Accès au cluster dans (Gestion de l'infrastructure)[./manage.md]
 
 #### Construire l'image Docker
 

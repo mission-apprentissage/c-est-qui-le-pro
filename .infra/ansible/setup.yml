@@ -3,5 +3,7 @@
 - hosts: all
   roles:
     - setup
+  vars_files:
+    - "{{vault_dir}}/habilitations.yml"
   vars:
     slack_notification: true
