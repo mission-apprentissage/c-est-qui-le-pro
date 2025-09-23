@@ -1,9 +1,6 @@
 ---
 - name: Cleaning your application images and deployment
   block:
-    - name: Setup environment
-      include_tasks: setup.yml
-
     - name: Remove application from  Kubernetes
       include_tasks: remove_app.yml
 
