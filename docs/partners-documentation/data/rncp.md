@@ -2,7 +2,7 @@
 title: RNCP 
 parent: 🧩 Jeux de données manipulés
 layout: default
-nav_order: 3.1.07
+nav_order: 3.1.08
 ---
 
 # Répertoire national des certifications
@@ -16,6 +16,11 @@ Les certifications enregistrées au **RNCP**, le Répertoire national des certif
 Les certifications enregistrées au **RS**  correspondent à des compétences complémentaires : habilitations sécurité, certification professionnalisante, compétences transversales.
 
 France compétences a la responsabilité confiée par le législateur d’enregistrer, de mettre à jour et en lisibilité les certifications inscrites au Répertoire national des certifications professionnelles (**RNCP**) et au Répertoire spécifique (**RS**) des certifications et des habilitations.
+
+## Périodicité de mise à jour
+
+- Mise à jour des données quotidienne par le producteur
+- Les données sont mises à jour ponctuellement, dans le cadre du recalcul des recommandations
 
 ## Format des données
 

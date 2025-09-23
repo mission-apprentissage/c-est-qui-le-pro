@@ -2,7 +2,7 @@
 title: Transports en commun
 parent: 🧩 Jeux de données manipulés
 layout: default
-nav_order: 3.1.10
+nav_order: 3.1.11
 ---
 
 # Transports en commun
@@ -21,7 +21,8 @@ Régions de France métropolitaine
 
 ## Périodicité de mise à jour
 
-Potentiellement plusieurs fois par mois
+- Mise à jour plusieurs fois par mois par les différents producteurs
+- Import des données dans le cadre des calculs d'isochrones (manuel, environ 1 fois par mois)
 
 ## Format des données
 
@@ -31,7 +32,7 @@ Les données sont disponibles au format GTFS.
 
 L’ensemble des données utilisées sont déposées sur la plateforme transport.data.gouv.
 
-## Liste exhaustive des données de transports en commun utilisées
+## Source / Liste des données de transports en commun utilisées
 
 La liste exhaustive des données de transports en commun utilisées pouvant être dynamique et longue, vous pouvez la retrouver directement dans notre [csv utilisé pour l'importation](https://github.com/mission-apprentissage/c-est-qui-le-pro/blob/main/tools/isochrones/graphhopper/data/transports.csv) (Ligne ayant pour type “Transport” ou “Mixte”)
 

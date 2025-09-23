@@ -2,7 +2,7 @@
 title: Transports scolaires
 parent: 🧩 Jeux de données manipulés
 layout: default
-nav_order: 3.1.11
+nav_order: 3.1.12
 ---
 
 # Transports scolaires
@@ -19,7 +19,8 @@ Régions de France métropolitaine
 
 ## Périodicité de mise à jour
 
-Quelques fois dans l’année
+- Mise à jour plusieurs fois par an par les différents producteurs
+- Import des données dans le cadre des calculs d'isochrones (manuel, environ 1 fois par mois)
 
 ## Format des données
 
@@ -29,7 +30,7 @@ Les données sont disponibles au format GTFS.
 
 Nous utilisons uniquement les données déposées sur la plateforme transport.data.gouv.  
 
-## Liste des données utilisées
+## Source / Liste des données utilisées
 
 Vous pouvez retrouver la liste des données utilisées dans le fichier [csv utilisé pour l'importation](https://github.com/mission-apprentissage/c-est-qui-le-pro/blob/main/tools/isochrones/graphhopper/data/transports.csv) (Ligne ayant pour type “Scolaire”)
 

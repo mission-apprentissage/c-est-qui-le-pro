@@ -2,7 +2,7 @@
 title: SLA Affelnet 
 parent: 🧩 Jeux de données manipulés
 layout: default
-nav_order: 3.1.08
+nav_order: 3.1.09
 ---
 
 # SLA Affelnet
@@ -19,7 +19,8 @@ Ensemble des formations accessible sur Affelnet
 
 ## Périodicité de mise à jour
 
-Mise à disposition 1 fois par an après la saisie des voeux (fin de l’été pour les voeux 2024).
+- Mise à disposition 1 fois par an après la saisie des voeux (fin de l’été)
+- Mise à jour dans notre base lors de la réception du fichier
 
 ## Format des données
 

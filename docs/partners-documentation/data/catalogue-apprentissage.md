@@ -13,11 +13,14 @@ nav_order: 3.1.02
 
 Créé pour organiser la collecte des formations en apprentissage, le catalogue des formations en apprentissage permet de rendre plus visibles les offres auprès des jeunes et des employeurs.
 
-[Source](https://catalogue.apprentissage.education.gouv.fr/)
-
 ## Périmètre
 
 Ensemble de l’offre en apprentissage.
+
+## Périodicité de mise à jour
+
+- Les données sont mises à jour quotidiennement par le producteur
+- Les données sont mises à jour dans notre base automatiquement chaque semaine dans le cadre d'un import global
 
 ## Format des données
 
@@ -26,6 +29,10 @@ Les données sont disponibles au format CSV.
 ## Entité responsable
 
 Mission interministérielle pour l’apprentissage.
+
+## Source
+
+- [Accès à l'API](https://catalogue.apprentissage.education.gouv.fr/api/docs/)
 
 ## Utilisation
 
