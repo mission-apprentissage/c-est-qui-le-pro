@@ -97,12 +97,12 @@ l'environnement cible.
 ### Ajout d'un utilisateur
 
 Il est possible d'ajouter ou de supprimer des habilitations en éditant le
-fichier `vault/habilitations.yml`. Tous les utilistateurs présents dans ce fichier pourront accéder au vault si une clé GPG est fournie.
+fichier `vault/habilitations.yml`. Tous les utilistateurs présents dans ce fichier pourront accéder au vault si une clé GPG est fournie. Ces derniers pourront aussi accèder au cluster Kubernetes via leur login GitHub.
 
 Une habilitation doit être de la forme suivante :
 
 ```yml
-- username: <nom de l'utilisateur sur l'environnement>
+- username: <nom de l'utilisateur sur GitHub>
   name: <nom de la personne>
   gpg_key: <identifiant de la clé GPG> (optionnel)
   authorized_keys: <Liste des clés SSH> (il est possible de mettre une url github)
@@ -115,6 +115,12 @@ l'environnement.
   bash scripts/vault/renew-vault.sh
 ```
 
+Vous devez également mettre à jour le cluster :
+
+```bash
+  bash scripts/setup-cluster.sh
+```
+
 ### Suppression d'un utilisateur
 
 Pour supprimer une personne des habilitations, il faut :
@@ -125,4 +131,10 @@ Une fois ces fichiers mis à jour, vous devez renouveler le vault et lancer la c
 
 ```bash
   bash scripts/vault/renew-vault.sh
+```
+
+Vous devez également mettre à jour le cluster :
+
+```bash
+  bash scripts/setup-cluster.sh
 ```
