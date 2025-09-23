@@ -32,7 +32,7 @@ Mission interministérielle pour l’apprentissage.
 
 ## Source
 
-- [Accès à l'API](https://catalogue.apprentissage.education.gouv.fr/)
+- [Accès à l'API](https://catalogue.apprentissage.education.gouv.fr/api/docs/)
 
 ## Utilisation
 
