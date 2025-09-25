@@ -71,11 +71,17 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
                 },
                 {
                   text: "Documentation",
-                  linkProps: { href: "/documentation", target: "_blank" },
+                  linkProps: {
+                    href: `https://documentation.${process.env.NEXT_PUBLIC_DOMAIN}/`,
+                    target: "_blank",
+                  },
                 },
                 {
                   text: "Statistiques",
-                  linkProps: { href: "/stats", target: "_blank" },
+                  linkProps: {
+                    href: `https://statistiques.${process.env.NEXT_PUBLIC_DOMAIN}/`,
+                    target: "_blank",
+                  },
                 },
                 {
                   text: "Nous contacter",
