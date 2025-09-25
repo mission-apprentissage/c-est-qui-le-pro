@@ -10,10 +10,46 @@ destinations:
     url: http://loki.monitoring:3100/loki/api/v1/push
 alloy-metrics:
   enabled: false
+
 alloy-singleton:
   enabled: true
+  alloy:
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: 10m
+      limits:
+        memory: 256Mi
+        cpu: 100m
+    extraEnv:
+      - name: GOGC
+        value: "80"
+    
 alloy-logs:
   enabled: true
+  alloy:
+    resources:
+      requests:
+        memory: 150Mi
+        cpu: 25m
+      limits:
+        memory: 300Mi
+        cpu: 100m
+    
+    extraEnv:
+      - name: GOGC
+        value: "80"
+      - name: GOMEMLIMIT
+        value: "280MiB"  # 93% de la limite
+
+alloy-operator:
+  resources:
+    requests:
+      memory: 64Mi
+      cpu: 15m
+    limits:
+      memory: 200Mi
+      cpu: 100m
 
 clusterMetrics:
   enabled: false

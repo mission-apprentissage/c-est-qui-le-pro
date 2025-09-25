@@ -21,9 +21,40 @@ resource "helm_release" "prometheus" {
 
   values = [
     yamlencode({
+      prometheus = {
+        prometheusSpec = {
+          resources = {
+            requests = {
+              memory = "500Mi"
+              cpu    = "100m"
+            }
+            limits = {
+              memory = "1.5Gi"
+              cpu    = "500m"
+            }
+          }
+        }
+      }
+
       grafana = {
         replicaCount  = 1
         adminPassword = var.monitoring_admin_password
+
+        deploymentStrategy = {
+          type = "Recreate"
+        }
+
+        resources = {
+          requests = {
+            memory = "400Mi"
+            cpu    = "50m"
+          }
+          limits = {
+            memory = "800Mi"
+            cpu    = "500m"
+          }
+        }
+
         persistence = {
           enabled = true
           size    = "500Mi"
@@ -54,6 +85,46 @@ resource "helm_release" "prometheus" {
         ]
 
       }
+
+      prometheusOperator = {
+        resources = {
+          requests = {
+            memory = "50Mi"
+            cpu    = "10m"
+          }
+          limits = {
+            memory = "150Mi"
+            cpu    = "100m"
+          }
+        }
+      }
+
+      kube-state-metrics = {
+        resources = {
+          requests = {
+            memory = "30Mi"
+            cpu    = "10m"
+          }
+          limits = {
+            memory = "150Mi"
+            cpu    = "100m"
+          }
+        }
+      }
+
+      prometheus-node-exporter = {
+        resources = {
+          requests = {
+            memory = "20Mi"
+            cpu    = "10m"
+          }
+          limits = {
+            memory = "50Mi"
+            cpu    = "50m"
+          }
+        }
+      }
+
 
       # Disable control plane component monitoring for managed clusters
       kubeScheduler = {
@@ -89,6 +160,17 @@ resource "helm_release" "prometheus" {
       alertmanager = {
         alertmanagerSpec = {
           secrets = ["alertmanager-slack-oauth"]
+
+          resources = {
+            requests = {
+              memory = "50Mi"
+              cpu    = "10m"
+            }
+            limits = {
+              memory = "200Mi"
+              cpu    = "100m"
+            }
+          }
         }
 
         config = {
