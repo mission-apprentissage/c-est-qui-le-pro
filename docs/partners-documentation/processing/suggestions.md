@@ -1,6 +1,6 @@
 ---
 title: Formations similaires
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
 nav_order: 3.2.6
 ---

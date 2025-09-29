@@ -1,8 +1,8 @@
 ---
 title: Traitement des GTFS
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
-nav_order: 3.2.3
+nav_order: 3.2.2
 ---
 
 # Traitement des GTFS

@@ -1,8 +1,8 @@
 ---
 title: Calcul des isochrones pour les transports scolaires
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
-nav_order: 3.2.5
+nav_order: 3.2.4
 ---
 
 # Calcul des isochrones pour les transports scolaires

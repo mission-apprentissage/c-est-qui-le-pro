@@ -1,6 +1,6 @@
 ---
 title: OpenStreetMap
-parent: 🧩 Jeux de données manipulés
+parent: 🎨 Jeux de données manipulés
 layout: default
 nav_order: 3.1.10
 ---
@@ -26,7 +26,7 @@ Ensemble des territoires
 
 Les données sont disponibles au format PBF.
 
-### Entité responsable
+## Entité responsable
 
 [Geofabrik](https://download.geofabrik.de/)
 

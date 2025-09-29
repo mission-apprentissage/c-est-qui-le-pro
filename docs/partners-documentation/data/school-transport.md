@@ -1,6 +1,6 @@
 ---
 title: Transports scolaires
-parent: 🧩 Jeux de données manipulés
+parent: 🎨 Jeux de données manipulés
 layout: default
 nav_order: 3.1.12
 ---
@@ -38,7 +38,7 @@ Vous pouvez retrouver la liste des données utilisées dans le fichier [csv util
 
 Les données sont mobilisées pour permettre à l'utilisateur de restreindre les résultats aux formations situées dans un périmètre géographique autour d'un lieu donné et fournir des indications de durée de transport.
 
-### Limites et risques
+## Limites et risques
 
 En plus des limites des [données de transports en commun]({{ site.baseurl }}{% link partners-documentation/data/public-transport.md %}), les données de transports scolaires présentent les difficultés suivantes :
 

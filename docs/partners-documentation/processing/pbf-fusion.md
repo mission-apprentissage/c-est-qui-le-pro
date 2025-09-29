@@ -1,8 +1,8 @@
 ---
 title: Traitement des PBF (OpenstreetMap)
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
-nav_order: 3.2.2
+nav_order: 3.2.1
 ---
 
 # Traitement des PBF (OpenstreetMap)
@@ -17,7 +17,7 @@ Les fichiers PBF (OpenstreetMap) contiennent les informations cartographiques (p
 
 | Zone | Lien |
 | --- | --- |
-| France (métropolitaine) | https://download.geofabrik.de/europe/france-latest.osm.pbf |
+| France métropolitaine | https://download.geofabrik.de/europe/france-latest.osm.pbf |
 | Martinique | https://download.geofabrik.de/europe/france/martinique-latest.osm.pbf |
 | Guadeloupe |  https://download.geofabrik.de/europe/france/guadeloupe-latest.osm.pbf |
 | Mayotte | https://download.geofabrik.de/europe/france/mayotte-latest.osm.pbf |
