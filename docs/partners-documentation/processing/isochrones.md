@@ -1,8 +1,8 @@
 ---
 title: Calcul des isochrones de transports en commun
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
-nav_order: 3.2.4
+nav_order: 3.2.3
 ---
 
 # Calcul des isochrones de transports en commun

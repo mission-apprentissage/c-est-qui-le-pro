@@ -1,8 +1,8 @@
 ---
 title: Mots-clés
-parent: ⚙️ Traitements des données
+parent: 🧑‍🎨 Traitements des données
 layout: default
-nav_order: 3.2.1
+nav_order: 3.2.5
 ---
 
 # Identification de mots-clés associés aux formations
@@ -20,6 +20,8 @@ Pouvoir faire une recherche de formation à partir de mots-clés (pas forcément
 Plusieurs pistes ont été explorées (notamment en utilisant des solutions d'IA telles que Mistral ou ChatGPT).
 
 Nous avons finalement opté pour l'utlisation de keybert via le modèle NLP “distiluse-base-multilingual-cased-v1”. Il s’agit d’une solution open source.
+
+Le script permet de générer les mots-clés à partir des descriptions des fiches formations de l'Onisep.
 
 ## Script
 

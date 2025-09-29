@@ -1,6 +1,6 @@
 ---
 title: Catalogue de l’apprentissage des ministères éducatifs
-parent: 🧩 Jeux de données manipulés
+parent: 🎨 Jeux de données manipulés
 layout: default
 nav_order: 3.1.02
 ---

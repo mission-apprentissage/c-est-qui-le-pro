@@ -1,6 +1,6 @@
 ---
 title: SLA Affelnet 
-parent: 🧩 Jeux de données manipulés
+parent: 🎨 Jeux de données manipulés
 layout: default
 nav_order: 3.1.09
 ---

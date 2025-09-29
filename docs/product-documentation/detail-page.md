@@ -61,7 +61,7 @@ Pour les Bac pro en voie scolaire appartenant à des [familles de métiers](http
 
 ![Seconde commune permettant d'accéder au Bac Pro](detail-admission-family.png)
 
-### Description associées à l’admission
+### Description associée à l’admission
 
 Des indications sont fournies dans ce module sur les pré-requis et conditions d’accès de la formation.
 
@@ -98,7 +98,7 @@ Dans cette section sont apportées des indications pour aider les jeunes à en s
 
 ## Section “La poursuite d’études”
 
-### Description associées à la poursuite d’études
+### Description associée à la poursuite d’études
 
 Des indications sont ici présentées sur les études complémentaires accessibles à l’issue de la formation.
 

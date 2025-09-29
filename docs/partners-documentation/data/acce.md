@@ -1,11 +1,11 @@
 ---
-title: ACCE
-parent: 🧩 Jeux de données manipulés
+title: ACCÉ
+parent: 🎨 Jeux de données manipulés
 layout: default
 nav_order: 3.1.06
 ---
 
-# ACCE
+# ACCÉ
 {: .no_toc }
 
 - TOC
