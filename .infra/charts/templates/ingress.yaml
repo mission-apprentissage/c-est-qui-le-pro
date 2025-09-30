@@ -31,6 +31,8 @@ spec:
         {{- range .hosts }}
         - {{ . | quote }}
         - {{ printf "api.%s" . | quote }}
+        - {{ printf "documentation.%s" . | quote }}
+        - {{ printf "statistiques.%s" . | quote }}
         {{- end }}
       secretName: {{ .secretName }}
     {{- end }}
