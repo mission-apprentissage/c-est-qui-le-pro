@@ -46,7 +46,7 @@ extraEnvVars:
   - name: GRAPHHOPPER_CPU_COUNT
     value: "20"
   - name: GTFS_MODALITE
-    value: "scolaire"
+    value: "transport"
 s3:
   enabled: false
   secretName: ''
