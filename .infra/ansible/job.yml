@@ -10,5 +10,5 @@
     job_args: ""
     docker_registry: "{{ setup.DOCKER_REGISTRY}}"
     docker_registry_path: "{{ setup.DOCKER_REGISTRY_PATH | default('/') }}"
-    timeout: 21600  # 6 heures
+    timeout: 64800  # 18 heures
     slack_notification: true
