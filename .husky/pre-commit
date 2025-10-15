@@ -6,7 +6,7 @@ set -eu
 validate_commit() {
   cd .
   local sensible_files_pattern="\.(csv|xls|xls(x?)|json|env)$"
-  local exception="package.json$|tsconfig.json$|server/data/depp(.*).csv$|bcn/n_mef.csv$|server/jsconfig.json$|server/.mocharc.json$|acce_etablissements.csv$|server/tests/fixtures/files/*.json$|server/data/educationGouv/(.*).csv$|server/data/orion/(.*).csv$|server/data/rome/(.*).csv$|server/data/(.*).json$|server/data/bcn/(.*).csv$|server/public/remixicon/remixicon.*.json$|affelnet/voeux_2024_diffusable.csv$|docker-bake.json$|tools/isochrones/graphhopper/data/transports.csv$"
+  local exception="package.json$|tsconfig.json$|server/data/depp(.*).csv$|bcn/n_mef.csv$|server/jsconfig.json$|server/.mocharc.json$|acce_etablissements.csv$|server/tests/fixtures/files/*.json$|server/data/educationGouv/(.*).csv$|server/data/orion/(.*).csv$|server/data/rome/(.*).csv$|server/data/(.*).json$|server/data/bcn/(.*).csv$|server/public/remixicon/remixicon.*.json$|affelnet/voeux_2024_diffusable.csv$|docker-bake.json$|tools/isochrones/graphhopper/data/transports.csv$|server/data/affelnet/voeux_2025_diffusable.csv$"
   local files
   files=$(git diff --cached --name-only | grep -v -E "$exception" | grep -E "$sensible_files_pattern") || true
 

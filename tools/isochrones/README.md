@@ -76,15 +76,20 @@ Une fois les calculs des isochrones terminés, vous pouvez retrouver les donnée
 
 Le pod reste en `running` après les calculs pour pouvoir réupérer/transférer les isochrones.
 
+Exemple de commande de récupération des fichiers sur une machine locale:
+
+```
+kubectl cp cqlp-isochrones-0:/home/onyxia/work/isochrones MON_DOSSIER_LOCAL
+```
+
 /!\ N'oubliez pas de nettoyer les resources sur Datalab une fois terminé (suppression des pods)
 
 ### Traitement et importation des isochrones
 
-Le traitement des isochrones se fait en utilisant le cli `splitIsochrones` du backend.
+Une fois les isochrones générés et récupérés, un traitement est effectué avant leur importation :
 
-Vous pouvez utiliser une instance Postgres de Datalab pour accélérer le traitement des isochrones.
-
-L'importation des isochrones se fait en utilisant le cli `importIsochrones` du backend.
+- Le traitement des isochrones se fait en utilisant le cli `splitIsochrones` du backend. (Vous pouvez utiliser une instance Postgres de Datalab pour accélérer le traitement des isochrones.)
+- L'importation des isochrones se fait en utilisant le cli `importIsochrones` du backend.
 
 ### Commandes utiles
 

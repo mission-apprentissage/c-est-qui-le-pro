@@ -14,7 +14,7 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 3
-      activeDeadlineSeconds: 43200 # 12h
+      activeDeadlineSeconds: 64800 # 18h
       ttlSecondsAfterFinished: 604800 # Supprime le job 1 semaine après sa fin
       template:
         metadata:
