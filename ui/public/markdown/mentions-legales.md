@@ -9,7 +9,7 @@ France
 
 ## Directeur de la publication
 
-Le directeur de la publication est Madame Caroline Pascal, directrice général de la DGESCO.
+Le directeur de la publication est Madame Caroline Pascal, directrice générale de l’enseignement scolaire.
 
 ## Hébergement de la Plateforme
 
