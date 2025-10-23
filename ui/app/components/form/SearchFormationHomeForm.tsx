@@ -27,6 +27,7 @@ import {
 } from "./SearchFormationHomeForm.styled";
 import { fr } from "@codegouvfr/react-dsfr";
 import { FilterIcon } from "./SearchFormationFiltersForm.styled";
+import { ErrorBox } from "#/app/(accompagnateur)/page.styled";
 
 function SubmitButton({ isFocusMobile }: { isFocusMobile?: boolean }) {
   return (
@@ -71,22 +72,38 @@ function SearchFormationHomeFormElements({
 
   useEffect(() => {
     if (params?.address) {
-      setValue("address", params?.address);
+      setValue("address", params?.address, { shouldValidate: true });
     }
   }, [setValue, params?.address]);
 
   return (
     <>
       <FormContainer>
+        {errors?.address && isHomeSearch ? (
+          <ErrorBox isHomeSearch={isHomeSearch} isDownSm={isDownSm}>
+            <i className={fr.cx("ri-barricade-line", "fr-icon--sm")} style={{ marginRight: "0.25rem" }} />
+            {isDownSm
+              ? "Nous n’avons pas reconnu cette adresse."
+              : "Nous n’avons pas reconnu cette adresse. Sélectionnez dans la liste une adresse valide"}
+          </ErrorBox>
+        ) : (
+          ""
+        )}
+
         <SearchGridContainer
           container
           columnSpacing={!withFormation ? { xs: 0 } : { xs: 0, md: 4 }}
           rowSpacing={withFormation ? { xs: 2, md: 4 } : { xs: 0 }}
-          isBordered={isBordered}
+          isBordered={!(isDownSm && isFocus) && isBordered}
           withFormation={withFormation}
         >
           <Grid item xs={!withFormation ? 12 : 12} md={!withFormation ? 12 : 5}>
-            <FieldStack direction="row" spacing={2} isBordered={isBordered} withFormation={withFormation}>
+            <FieldStack
+              direction="row"
+              spacing={2}
+              isBordered={isBordered}
+              isRounded={isHomeSearch && !(isDownSm && isFocus)}
+            >
               <Controller
                 name="address"
                 control={control}
@@ -97,6 +114,7 @@ function SearchFormationHomeFormElements({
                       disableUnderline: true,
                     }}
                     error={errors?.address}
+                    displayError={!isHomeSearch || (isHomeSearch && isDownSm && isFocus)}
                     form={form}
                     formRef={formRef}
                     submitOnChange={!withFormation || !isDownSm}
@@ -106,6 +124,7 @@ function SearchFormationHomeFormElements({
                     noLabel={true}
                     withMapPin={isHomeSearch}
                     variant={isHomeSearch ? "home" : "search"}
+                    setValue={setValue}
                   />
                 )}
               />

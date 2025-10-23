@@ -120,7 +120,7 @@ resource "helm_release" "prometheus" {
           }
           limits = {
             memory = "50Mi"
-            cpu    = "50m"
+            cpu    = "100m"
           }
         }
       }
