@@ -11,6 +11,27 @@ nav_order: 3.2.3
 - TOC
 {:toc}
 
+## Pourquoi mettre en place ce traitement ?
+
+C'est qui le pro ? permet, à partir d'une adresse renseignée par l'utilisateur, d'afficher une liste de formations dispensées dans des établissements accesibles (marche et transports en commun ou scolaires) depuis cette adresse. Pour chaque résultat, une indication du temps de trajet est fournie.
+
+Une approche "naïve" consisterait à effectuer, lors de la saisie de l'adresse, un calcul de temps de trajet (comme lorsque vous utilisez un service comme Citymapper ou Google Maps) entre cette adresse et chaque établissement, afin de sélectionner les établissements accessibles et de pouvoir afficher les temps de trajet correspondants. Une telle opération est malheureusement très coûteuse et trop longue pour permettre une réponse en temps réel.
+
+Pour fournir une réponse plus rapide et permettre une utilisation correcte du service :
+
+- nous avons choisi de manipuler et d'afficher dans le produit des fourchettes de durées de trajet plutôt que des durées exactes. Les temps de trajets sont de "moins de 15min", "entre 15 et 30min", "entre 30 et 45min", "entre 45min et 1h", "entre 1h et 1h30" ou de "plus de 1h30".
+- nous pré-calculons un ensemble d'informations, qui sont utilisées au moment de la recherche pour accélerer le temps de réponse.
+
+En pratique :
+
+- nous calculons, environ une fois par mois, pour chaque établissement, les zones accessibles depuis cet établissement en moins de 15, 30, 45, 60 et 90 minutes (les "isochrones", voir illustration ci-dessous) et stockons ces formes géométriques en base.
+- au moment de la recherche, nous regardons si l'adresse renseignée se situe ou non dans ces zones. Les établissements dont les zones contiennent le point correspondant à l'adresse sont accessibles et renvoyés par la recherche.
+
+Ce calcul d'intersection effectué au moment de la recherche est bien plus rapide que le calcul de multiples temps de trajets de l'approche "naive" et permet de répondre à notre besoin.
+
+![Exemple d'isochrone](isochrone.png)
+*Exemple d'isochrone calculé depuis le centre-ville de Quimper*
+
 ## Données utilisées
 
 - [Fichiers PBF traités]({{ site.baseurl }}{% link partners-documentation/processing/pbf-fusion.md %})
