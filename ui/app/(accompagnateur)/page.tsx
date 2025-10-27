@@ -108,7 +108,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <Image src={"/assets/logo_avenir.svg"} width="206" height="93" alt={"Logo Avenir"} />
           </LogoStack>
           <Typography align={"center"}>
-            aident les accompagnateurs de l’orientation et les élèves de collègeà découvrir les formations
+            aident les accompagnateurs de l’orientation et les élèves de collège à découvrir les formations
             professionnelles les plus adaptées pour l’après 3ᵉ
           </Typography>
         </Container>

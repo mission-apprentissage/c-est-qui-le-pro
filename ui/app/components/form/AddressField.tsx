@@ -153,13 +153,6 @@ export default function AddressField({
     !isLoading && setOptions(optionsAddress);
   }, [isLoading, optionsAddress]);
 
-  useEffect(() => {
-    if (inputValue != value && !options?.includes(inputValue)) {
-      setValue(name, "", { shouldValidate: true });
-      setInputValue("");
-    }
-  }, [isFocus]);
-
   return (
     <div
       data-matomo-mask
