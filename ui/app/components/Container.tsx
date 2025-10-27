@@ -68,6 +68,10 @@ export const ContainerLegal = styled(StyledContainer)`
     margin-bottom: 1rem;
   }
 
+  & p:has(+ ul) {
+    margin-bottom: 0.5rem;
+  }
+
   & thead {
     background-color: rgb(246, 246, 246);
   }
@@ -79,6 +83,7 @@ export const ContainerLegal = styled(StyledContainer)`
   & table {
     border: 1px solid black;
     border-collapse: collapse;
+    margin-bottom: 1.5rem;
   }
 
   & table th,

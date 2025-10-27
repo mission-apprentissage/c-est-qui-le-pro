@@ -98,5 +98,4 @@ Cookies de mesure d'audience :
 | \_pk_ref.\*    | 6 mois       | Permet le stockage de l'url du site à partir duquel vous êtes arrivé sur notre simulateur (si la mesure d'audience est active) |
 | \_pk_ses.\*    | 30 minutes   | Permet le stockage temporaire de vos données de visite (si la mesure d'audience est active)                                    |
 
-\
 Vous pouvez vous opposer au suivi de votre navigation sur ce site web. Cela protégera votre vie privée, mais nous empêchera également d'apprendre de vos actions et de créer une meilleure expérience pour vous et les autres utilisateurs.
