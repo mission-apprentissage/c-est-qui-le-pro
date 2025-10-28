@@ -153,6 +153,14 @@ export default function AddressField({
     !isLoading && setOptions(optionsAddress);
   }, [isLoading, optionsAddress]);
 
+  useEffect(() => {
+    if (inputValue != value && !isFocus) {
+      // Skip "Autour de moi" and take first suggestion
+      setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true });
+      options.length > 1 && setInputValue(options[1]);
+    }
+  }, [isFocus]);
+
   return (
     <div
       data-matomo-mask
@@ -193,7 +201,6 @@ export default function AddressField({
         onChange={(e, v) => {
           setValue(name, v, { shouldValidate: true });
           submitOnChange && formRef.current.requestSubmit();
-          setIsFocus(false);
         }}
         onClose={() => {
           setIsFocus(false);
@@ -251,6 +258,26 @@ export default function AddressField({
         renderInput={(params) => (
           <TextField
             {...params}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                (event.target as HTMLInputElement).blur();
+
+                if (options.length <= 1 && inputValue === myPosition) {
+                  setValue(name, "", { shouldValidate: true });
+                  setIsFocus(false);
+                  return;
+                }
+
+                if (inputValue === myPosition) {
+                  setValue(name, myPosition, { shouldValidate: true });
+                } else {
+                  setValue(name, options[1], { shouldValidate: true });
+                }
+                submitOnChange && formRef.current.requestSubmit();
+                setIsFocus(false);
+              }
+            }}
             error={!!error}
             helperText={
               error && displayError ? (
@@ -258,7 +285,7 @@ export default function AddressField({
                   <i className={fr.cx("ri-barricade-line", "fr-icon--sm")} style={{ marginRight: "0.25rem" }} />
                   {isMobile
                     ? "Nous n’avons pas reconnu cette adresse."
-                    : "Nous n’avons pas reconnu cette adresse. Sélectionnez dans la liste une adresse valide"}
+                    : "Sélectionnez une adresse valide dans la liste."}
                 </>
               ) : (
                 ""
@@ -304,7 +331,9 @@ export default function AddressField({
                 <CircularProgress />
               ) : (
                 <>
-                  {value && <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>}
+                  {inputValue && (
+                    <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>
+                  )}
                 </>
               ),
               ...InputProps,

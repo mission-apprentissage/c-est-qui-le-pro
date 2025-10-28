@@ -82,9 +82,7 @@ function SearchFormationHomeFormElements({
         {errors?.address && isHomeSearch ? (
           <ErrorBox isHomeSearch={isHomeSearch} isDownSm={isDownSm}>
             <i className={fr.cx("ri-barricade-line", "fr-icon--sm")} style={{ marginRight: "0.25rem" }} />
-            {isDownSm
-              ? "Nous n’avons pas reconnu cette adresse."
-              : "Nous n’avons pas reconnu cette adresse. Sélectionnez dans la liste une adresse valide"}
+            {isDownSm ? "Nous n’avons pas reconnu cette adresse." : "Sélectionnez une adresse valide dans la liste."}
           </ErrorBox>
         ) : (
           ""
@@ -114,7 +112,7 @@ function SearchFormationHomeFormElements({
                       disableUnderline: true,
                     }}
                     error={errors?.address}
-                    displayError={!isHomeSearch || (isHomeSearch && isDownSm && isFocus)}
+                    displayError={false}
                     form={form}
                     formRef={formRef}
                     submitOnChange={!withFormation || !isDownSm}
@@ -128,12 +126,21 @@ function SearchFormationHomeFormElements({
                   />
                 )}
               />
+
               {!isDownSm && !withFormation && (
                 <DesktopSubmitBox>
                   <SubmitButton />
                 </DesktopSubmitBox>
               )}
             </FieldStack>
+            {errors?.address && !isHomeSearch ? (
+              <ErrorBox isHomeSearch={false} isDownSm={isDownSm}>
+                <i className={fr.cx("ri-barricade-line", "fr-icon--sm")} style={{ marginRight: "0.25rem" }} />
+                {"Sélectionnez une adresse valide dans la liste."}
+              </ErrorBox>
+            ) : (
+              ""
+            )}
           </Grid>
 
           {withFormation && (
