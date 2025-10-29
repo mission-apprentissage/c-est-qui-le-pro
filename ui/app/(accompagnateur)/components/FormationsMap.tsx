@@ -23,6 +23,7 @@ export default function FormationsMap({
   selected,
   onMarkerClick,
   onMarkerHomeDrag,
+  onTooltipClick,
 }: {
   latitude: number;
   longitude: number;
@@ -30,6 +31,7 @@ export default function FormationsMap({
   selected?: FormationDetail | null;
   onMarkerClick?: (etablissement: Etablissement) => void;
   onMarkerHomeDrag?: (lat: number, lng: number) => void;
+  onTooltipClick?: (etablissement: Etablissement) => void;
 }) {
   const groupRef = useRef<L.FeatureGroup>(null);
   const markerRef = useRef<L.Marker>(null);
@@ -84,6 +86,7 @@ export default function FormationsMap({
                 }}
               >
                 <EtablissementCard
+                  onClick={onTooltipClick}
                   etablissement={etablissement}
                   latitude={latitude.toString()}
                   longitude={longitude.toString()}

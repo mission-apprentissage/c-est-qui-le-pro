@@ -106,6 +106,8 @@ export type Etablissement = {
   latitude?: number;
   longitude?: number;
   accessTime?: number;
+  formationCount?: number;
+  niveauxDiplome?: string[];
   modalite?: TransportModalite;
   distance?: number;
 
@@ -135,6 +137,8 @@ export const etablissementSchema: yup.ObjectSchema<Etablissement> = yup.object()
     latitude: yup.number(),
     longitude: yup.number(),
     accessTime: yup.number(),
+    formationCount: yup.number(),
+    niveauxDiplome: yup.array().of(yup.string().required()),
     modalite: yup.string().oneOf(Object.values(TransportModalite)),
     distance: yup.number(),
     JPODates: yup

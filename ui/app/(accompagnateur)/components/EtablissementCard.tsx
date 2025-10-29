@@ -1,36 +1,66 @@
-import React from "react";
-import { Typography } from "#/app/components/MaterialUINext";
+/** @jsxImportSource @emotion/react */
+import { useMemo } from "react";
+import { Box, Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Etablissement } from "shared";
-import FormationRoute from "../details/[id]/FormationRoute";
-import Link from "#/app/components/Link";
+import { DiplomeTypeLibelle, Etablissement } from "shared";
+import TagEtablissement from "./TagEtablissement";
+import { uniq } from "lodash-es";
+import { formatAccessTime } from "#/app/utils/formation";
+import { css } from "@emotion/react";
+import { EtablissementContainerStyled } from "./EtablissementCard.styled";
 
 export default function EtablissementCard({
   etablissement,
   latitude,
   longitude,
+  onClick,
 }: {
   etablissement: Etablissement;
   latitude?: string;
   longitude?: string;
+  onClick?: (etablissement: Etablissement) => void;
 }) {
-  return (
-    <>
-      <Typography variant="h5" style={{ marginBottom: fr.spacing("3v") }}>
-        {etablissement.url ? (
-          <Link style={{ backgroundImage: "none" }} noIcon target="_blank" href={etablissement.url}>
-            {etablissement.libelle}
-            <i
-              className={"link-underline fr-icon--sm " + fr.cx("ri-external-link-fill")}
-              style={{ marginLeft: fr.spacing("3v") }}
-            />
-          </Link>
-        ) : (
-          etablissement.libelle
-        )}
-      </Typography>
+  const niveauxDiplome = useMemo(
+    () => uniq(etablissement.niveauxDiplome || []).map((n) => DiplomeTypeLibelle[n]),
+    [etablissement]
+  );
 
-      <FormationRoute etablissement={etablissement} latitude={latitude} longitude={longitude} />
-    </>
+  return (
+    <EtablissementContainerStyled onClick={() => onClick && onClick(etablissement)}>
+      <Box className="tag">
+        <TagEtablissement etablissement={etablissement} />
+      </Box>
+
+      <Typography variant="h5">{etablissement.libelle}</Typography>
+
+      <Box className="info" css={css``}>
+        <Box>
+          <Box>
+            <i className={fr.cx("ri-book-marked-line")} />
+          </Box>
+          <Box>
+            {`${etablissement.formationCount} ${niveauxDiplome
+              .slice(0, niveauxDiplome.length > 1 ? niveauxDiplome.length - 1 : 1)
+              .join(", ")}${
+              niveauxDiplome.length > 1 ? ` et ${niveauxDiplome[niveauxDiplome.length - 1]}` : ""
+            } pour cette recherche`}
+          </Box>
+        </Box>
+        <Box>
+          <Box>
+            {etablissement.accessTime ? (
+              <i className={fr.cx("fr-icon-bus-line")} />
+            ) : (
+              etablissement.distance && <i className={fr.cx("fr-icon-car-fill")} />
+            )}
+          </Box>
+          <Box>
+            {etablissement.accessTime
+              ? formatAccessTime(etablissement.accessTime, etablissement.modalite)
+              : etablissement.distance && `${Math.round(etablissement.distance / 1000)} km`}
+          </Box>
+        </Box>
+      </Box>
+    </EtablissementContainerStyled>
   );
 }

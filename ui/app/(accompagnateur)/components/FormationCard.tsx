@@ -8,11 +8,11 @@ import Card from "#/app/components/Card";
 import FormationTags from "./FormationTags";
 import { useFormationLink } from "../hooks/useFormationLink";
 import { LabelApprentissage } from "./Apprentissage";
-import { formatAccessTime, formatLibelle, formatStatut } from "#/app/utils/formation";
-import { TagDiplome, TagStatutPrive, TagStatutPublic } from "#/app/components/Tag";
-import { capitalize } from "lodash-es";
+import { formatAccessTime, formatLibelle } from "#/app/utils/formation";
+import { TagDiplome } from "#/app/components/Tag";
 import FormationsFamilleMetier from "./FormationFamilleMetier";
 import { SerializedStyles } from "@emotion/react";
+import TagEtablissement from "./TagEtablissement";
 
 export default React.memo(function FormationCard({
   latitude,
@@ -69,15 +69,7 @@ export default React.memo(function FormationCard({
           )}
           <LabelApprentissage formation={formation} />
 
-          {etablissement.statut && (
-            <Box>
-              {etablissement.statut === "public" ? (
-                <TagStatutPublic>{capitalize(formatStatut(etablissement))}</TagStatutPublic>
-              ) : (
-                <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
-              )}
-            </Box>
-          )}
+          <TagEtablissement etablissement={etablissement} />
 
           {withJPO && <TagPortesOuvertes etablissement={etablissement} />}
 

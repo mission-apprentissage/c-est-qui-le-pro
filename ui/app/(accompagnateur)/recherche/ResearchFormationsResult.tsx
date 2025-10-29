@@ -354,6 +354,14 @@ export default React.memo(function ResearchFormationsResult({
                 const formation = formations[formationIndex];
                 const formationRef = formationsRef[formationIndex];
                 setSelected(formation);
+              }}
+              onTooltipClick={(etablissement) => {
+                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
+                if (formationIndex === -1) {
+                  return;
+                }
+
+                const formationRef = formationsRef[formationIndex];
                 formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             />
