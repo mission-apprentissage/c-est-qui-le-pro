@@ -1,9 +1,11 @@
 "use client";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 import {
   LeafletHomeIcon,
   LeafletEtablissementIcon,
+  LeafletEtablissementOutsideAcademieIcon,
+  LeafletSelectedEtablissementOutsideAcademieIcon,
   LeafletSelectedEtablissementIcon,
   FitBound,
   MapClickHandler,
@@ -12,7 +14,7 @@ import { Etablissement, FormationDetail } from "shared";
 import { FeatureGroup, Marker } from "react-leaflet";
 import EtablissementCard from "./EtablissementCard";
 import DynamicPopup from "./DynamicPopup";
-import L, { LeafletMouseEvent } from "leaflet";
+import L from "leaflet";
 
 const Map = dynamic(() => import("#/app/components/Map"), { ssr: false });
 
@@ -20,6 +22,7 @@ export default function FormationsMap({
   latitude,
   longitude,
   etablissements,
+  academie,
   selected,
   onMarkerClick,
   onMarkerHomeDrag,
@@ -28,6 +31,7 @@ export default function FormationsMap({
   latitude: number;
   longitude: number;
   etablissements: any[];
+  academie?: string | null;
   selected?: FormationDetail | null;
   onMarkerClick?: (etablissement: Etablissement) => void;
   onMarkerHomeDrag?: (lat: number, lng: number) => void;
@@ -51,7 +55,7 @@ export default function FormationsMap({
   );
 
   return (
-    <Map center={[latitude, longitude]}>
+    <Map academie={academie} center={[latitude, longitude]}>
       <FeatureGroup ref={groupRef}>
         {etablissements.map((etablissement: Etablissement) => {
           const key = `marker_${etablissement.uai}`;
@@ -63,7 +67,15 @@ export default function FormationsMap({
 
           return (
             <Marker
-              icon={isSelected ? LeafletSelectedEtablissementIcon : LeafletEtablissementIcon}
+              icon={
+                etablissement.academie === academie
+                  ? isSelected
+                    ? LeafletSelectedEtablissementIcon
+                    : LeafletEtablissementIcon
+                  : isSelected
+                  ? LeafletSelectedEtablissementOutsideAcademieIcon
+                  : LeafletEtablissementOutsideAcademieIcon
+              }
               zIndexOffset={isSelected ? 10500 : 0}
               key={key}
               position={[etablissement.latitude, etablissement.longitude]}
@@ -86,10 +98,10 @@ export default function FormationsMap({
                 }}
               >
                 <EtablissementCard
-                  onClick={onTooltipClick}
                   etablissement={etablissement}
                   latitude={latitude.toString()}
                   longitude={longitude.toString()}
+                  onClick={() => onTooltipClick && onTooltipClick(etablissement)}
                 />
               </DynamicPopup>
             </Marker>

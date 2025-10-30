@@ -10,6 +10,7 @@ import { renderToString } from "react-dom/server";
 import dynamic from "next/dynamic";
 import HomeIcon from "./icon/HomeIcon";
 import EtablissementIcon from "./icon/EtablissementIcon";
+import { useGetMapStyle } from "../(accompagnateur)/hooks/useGetMapStyle";
 
 const VectorTileLayer = dynamic(() => import("react-leaflet-vector-tile-layer").then((mod) => mod), {
   ssr: false,
@@ -32,12 +33,28 @@ export const LeafletEtablissementIcon = new DivIcon({
   html: renderToString(<EtablissementIcon />),
 });
 
+export const LeafletEtablissementOutsideAcademieIcon = new DivIcon({
+  iconSize: [52, 58],
+  iconAnchor: [26, 58],
+  popupAnchor: [-3, -76],
+  className: "custom-leaflet-icon color-white",
+  html: renderToString(<EtablissementIcon fill={"#F983F1"} />),
+});
+
 export const LeafletSelectedEtablissementIcon = new DivIcon({
   iconSize: [58, 64],
   iconAnchor: [29, 64],
   popupAnchor: [-3, -76],
   className: "custom-leaflet-icon color-orange leaflet-icon-selected",
   html: renderToString(<EtablissementIcon />),
+});
+
+export const LeafletSelectedEtablissementOutsideAcademieIcon = new DivIcon({
+  iconSize: [58, 64],
+  iconAnchor: [29, 64],
+  popupAnchor: [-3, -76],
+  className: "custom-leaflet-icon color-pink leaflet-icon-selected",
+  html: renderToString(<EtablissementIcon fill={"#F983F1"} />),
 });
 
 function MapAutoresize() {
@@ -58,13 +75,14 @@ function MapAutoresize() {
   return <></>;
 }
 
-function TileLayer() {
+function TileLayer({ academie }: { academie?: string | null }) {
   const map = useMap();
+  const { data: style } = useGetMapStyle(academie);
 
-  if (!map) {
+  if (!map || !style) {
     return <></>;
   }
-  return <VectorTileLayer styleUrl="https://openmaptiles.geo.data.gouv.fr/styles/osm-bright/style.json" />;
+  return <VectorTileLayer styleUrl={style} />;
 }
 
 const RecenterAutomatically = ({ position }: { position: LatLngTuple }) => {
@@ -157,7 +175,15 @@ export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup | nu
   return null;
 }
 
-export default function Map({ center, children }: { center: LatLngTuple; children?: ReactNode }) {
+export default function Map({
+  center,
+  children,
+  academie,
+}: {
+  center: LatLngTuple;
+  children?: ReactNode;
+  academie?: string | null;
+}) {
   const [unmountMap, setUnmountMap] = useState(false);
   //to prevent map re-initialization
   useLayoutEffect(() => {
@@ -181,7 +207,7 @@ export default function Map({ center, children }: { center: LatLngTuple; childre
     >
       <PreventFocus />
       <MapAutoresize />
-      <TileLayer />
+      <TileLayer academie={academie} />
       {children}
       <RecenterAutomatically position={center} />
 

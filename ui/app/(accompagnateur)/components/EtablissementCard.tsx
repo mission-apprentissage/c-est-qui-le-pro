@@ -26,7 +26,7 @@ export default function EtablissementCard({
   );
 
   return (
-    <EtablissementContainerStyled onClick={() => onClick && onClick(etablissement)}>
+    <EtablissementContainerStyled className={onClick && "clickable"} onClick={() => onClick && onClick(etablissement)}>
       <Box className="tag">
         <TagEtablissement etablissement={etablissement} />
       </Box>
@@ -38,27 +38,27 @@ export default function EtablissementCard({
           <Box>
             <i className={fr.cx("ri-book-marked-line")} />
           </Box>
-          <Box>
-            {`${etablissement.formationCount} ${niveauxDiplome
-              .slice(0, niveauxDiplome.length > 1 ? niveauxDiplome.length - 1 : 1)
-              .join(", ")}${
+          <Typography>
+            {`${etablissement.formationCount} formation${
+              (etablissement.formationCount || 0) > 1 ? "s" : ""
+            } (${niveauxDiplome.slice(0, niveauxDiplome.length > 1 ? niveauxDiplome.length - 1 : 1).join(", ")}${
               niveauxDiplome.length > 1 ? ` et ${niveauxDiplome[niveauxDiplome.length - 1]}` : ""
-            } pour cette recherche`}
-          </Box>
+            }) pour cette recherche`}
+          </Typography>
         </Box>
         <Box>
-          <Box>
+          <Typography>
             {etablissement.accessTime ? (
               <i className={fr.cx("fr-icon-bus-line")} />
             ) : (
               etablissement.distance && <i className={fr.cx("fr-icon-car-fill")} />
             )}
-          </Box>
-          <Box>
+          </Typography>
+          <Typography>
             {etablissement.accessTime
               ? formatAccessTime(etablissement.accessTime, etablissement.modalite)
               : etablissement.distance && `${Math.round(etablissement.distance / 1000)} km`}
-          </Box>
+          </Typography>
         </Box>
       </Box>
     </EtablissementContainerStyled>
