@@ -103,6 +103,7 @@ function SearchFormationHomeFormElements({
               isRounded={isHomeSearch && !(isDownSm && isFocus)}
             >
               <Controller
+                key={`address_${params?.address}`}
                 name="address"
                 control={control}
                 render={(form) => (

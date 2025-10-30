@@ -158,14 +158,12 @@ export default function AddressField({
       // Skip "Autour de moi" and take first suggestion
       if (inputValue) {
         setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true });
-        options.length > 1 && setInputValue(options[1]);
       } else {
         setValue(name, "", { shouldValidate: true });
       }
     }
   }, [isFocus]);
 
-  console.log(inputValue, value);
   return (
     <div
       data-matomo-mask
@@ -277,7 +275,7 @@ export default function AddressField({
                 if (inputValue === myPosition) {
                   setValue(name, myPosition, { shouldValidate: true });
                 } else {
-                  setValue(name, options[1], { shouldValidate: true });
+                  setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true, shouldTouch: true });
                 }
                 submitOnChange && formRef.current.requestSubmit();
                 setIsFocus(false);
