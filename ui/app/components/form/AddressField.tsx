@@ -156,11 +156,16 @@ export default function AddressField({
   useEffect(() => {
     if (inputValue != value && !isFocus) {
       // Skip "Autour de moi" and take first suggestion
-      setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true });
-      options.length > 1 && setInputValue(options[1]);
+      if (inputValue) {
+        setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true });
+        options.length > 1 && setInputValue(options[1]);
+      } else {
+        setValue(name, "", { shouldValidate: true });
+      }
     }
   }, [isFocus]);
 
+  console.log(inputValue, value);
   return (
     <div
       data-matomo-mask
