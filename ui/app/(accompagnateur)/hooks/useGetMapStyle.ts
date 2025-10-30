@@ -4,7 +4,7 @@ import { fetchStyle } from "#/app/services/openmaptiles";
 const academieSources = {
   academies: {
     type: "vector",
-    tiles: ["http://localhost:3000/academies/tiles/{z}/{x}/{y}.pbf"],
+    tiles: [window.location.origin + "/academies/tiles/{z}/{x}/{y}.pbf"],
     minzoom: 5,
     maxzoom: 12,
   },
