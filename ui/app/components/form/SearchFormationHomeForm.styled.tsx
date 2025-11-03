@@ -47,20 +47,20 @@ export const SearchGridContainer = styled(Grid, {
 `;
 
 export const FieldStack = styled(Stack, {
-  shouldForwardProp: (prop) => !["isBordered", "withFormation"].includes(prop as string),
-})<{ isBordered?: boolean; withFormation?: boolean }>`
+  shouldForwardProp: (prop) => !["isBordered", "isRounded"].includes(prop as string),
+})<{ isBordered?: boolean; isRounded?: boolean }>`
   position: relative;
   background-color: #ffffff;
-  ${({ isBordered, withFormation }) =>
-    isBordered && withFormation
+  ${({ isBordered, isRounded }) =>
+    isBordered && !isRounded
       ? `
       border-radius: 5px; 
       border: 2px solid var(--blue-france-sun-113-625-hover);
     `
       : ""}
 
-  ${({ isBordered, withFormation }) =>
-    isBordered && !withFormation
+  ${({ isBordered, isRounded }) =>
+    isBordered && isRounded
       ? `
       border-radius: 50px; 
     `

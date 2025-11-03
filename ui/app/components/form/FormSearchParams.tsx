@@ -57,6 +57,7 @@ export function FormSearchParams<FormData extends FieldValues>({
   } = useForm<FormData>({
     defaultValues: parameters,
     resolver: yupResolver(schema),
+    shouldFocusError: false,
   });
   const { registerSetFocusSearch } = useFocusSearchContext();
 

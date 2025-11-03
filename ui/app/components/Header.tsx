@@ -9,7 +9,7 @@ export default function CustomHeader({
   title,
   tagline,
   quickAccessItems,
-  withBetaTag = true,
+  withBetaTag = false,
 }: {
   title: string;
   tagline?: string;

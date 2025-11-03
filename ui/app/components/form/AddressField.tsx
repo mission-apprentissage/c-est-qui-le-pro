@@ -1,5 +1,5 @@
 "use client";
-import React, { HTMLAttributes, useState } from "react";
+import React, { HTMLAttributes, useEffect, useState } from "react";
 import { Box, TextField, Typography } from "#/app/components/MaterialUINext";
 import Autocomplete from "@mui/material/Autocomplete";
 import { CircularProgress } from "#/app/components/MaterialUINext";
@@ -110,6 +110,7 @@ export default function AddressField({
   FieldProps,
   submitOnChange,
   error,
+  displayError,
   isMobile,
   defaultValues,
   onOpen,
@@ -117,14 +118,19 @@ export default function AddressField({
   noLabel,
   withMapPin,
   variant,
+  setValue,
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
   const [isLocationLoading, setIsLocationLoading] = useState(false);
 
-  const valueDebounce = useThrottle(value, 300);
+  const [inputValue, setInputValue] = useState(value);
 
-  const { isLoading, data: options } = useGetAddress(valueDebounce, {
+  const valueDebounce = useThrottle(inputValue, 300);
+
+  const [options, setOptions] = useState([myPosition, value]);
+
+  const { isLoading, data: optionsAddress } = useGetAddress(valueDebounce, {
     select: (data: Awaited<ReturnType<typeof fetchAddress>>) => {
       if (!data) {
         return [myPosition, ...(defaultValues ?? [])];
@@ -142,6 +148,21 @@ export default function AddressField({
       ];
     },
   });
+
+  useEffect(() => {
+    !isLoading && setOptions(optionsAddress);
+  }, [isLoading, optionsAddress]);
+
+  useEffect(() => {
+    if (inputValue != value && !isFocus) {
+      // Skip "Autour de moi" and take first suggestion
+      if (inputValue) {
+        setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true });
+      } else {
+        setValue(name, "", { shouldValidate: true });
+      }
+    }
+  }, [isFocus]);
 
   return (
     <div
@@ -167,7 +188,7 @@ export default function AddressField({
       <Autocomplete
         loading={isLoading}
         loadingText={<CircularProgress />}
-        value={value}
+        value={inputValue}
         defaultValue={value}
         open={isFocus}
         onOpen={(e) => {
@@ -178,12 +199,11 @@ export default function AddressField({
           setIsFocus(false);
         }}
         onInputChange={(e, v) => {
-          onChange(v);
+          setInputValue(v);
         }}
         onChange={(e, v) => {
-          onChange(v);
+          setValue(name, v, { shouldValidate: true });
           submitOnChange && formRef.current.requestSubmit();
-          setIsFocus(false);
         }}
         onClose={() => {
           setIsFocus(false);
@@ -241,8 +261,39 @@ export default function AddressField({
         renderInput={(params) => (
           <TextField
             {...params}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                (event.target as HTMLInputElement).blur();
+
+                if (options.length <= 1 && inputValue === myPosition) {
+                  setValue(name, "", { shouldValidate: true });
+                  setIsFocus(false);
+                  return;
+                }
+
+                if (inputValue === myPosition) {
+                  setValue(name, myPosition, { shouldValidate: true });
+                } else {
+                  setValue(name, options.length > 1 ? options[1] : "", { shouldValidate: true, shouldTouch: true });
+                }
+                submitOnChange && formRef.current.requestSubmit();
+                setIsFocus(false);
+              }
+            }}
             error={!!error}
-            helperText={error ? "Vous devez toujours choisir une localisation valide" : ""}
+            helperText={
+              error && displayError ? (
+                <>
+                  <i className={fr.cx("ri-barricade-line", "fr-icon--sm")} style={{ marginRight: "0.25rem" }} />
+                  {isMobile
+                    ? "Nous n’avons pas reconnu cette adresse."
+                    : "Sélectionnez une adresse valide dans la liste."}
+                </>
+              ) : (
+                ""
+              )
+            }
             InputLabelProps={{ shrink: true }}
             label={noLabel || (isMobile && isFocus) ? "" : "Ton adresse, ta ville"}
             placeholder={"Rechercher avec son adresse, sa ville"}
@@ -268,7 +319,12 @@ export default function AddressField({
                   ></i>
                 ) : withMapPin ? (
                   <i
-                    style={{ marginRight: "1rem", color: "var(--blue-france-sun-113-625-hover)" }}
+                    style={{
+                      marginRight: "1rem",
+                      color: error
+                        ? fr.colors.decisions.artwork.minor.redMarianne.default
+                        : "var(--blue-france-sun-113-625-hover)",
+                    }}
                     className={fr.cx("ri-map-pin-line", "fr-icon--lg")}
                   ></i>
                 ) : (
@@ -278,7 +334,9 @@ export default function AddressField({
                 <CircularProgress />
               ) : (
                 <>
-                  {value && <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>}
+                  {inputValue && (
+                    <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>
+                  )}
                 </>
               ),
               ...InputProps,

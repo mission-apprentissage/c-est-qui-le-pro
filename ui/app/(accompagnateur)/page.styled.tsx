@@ -4,6 +4,7 @@ import { Box, Grid, Typography, Stack } from "#/app/components/MaterialUINext";
 import Button from "#/app/components/Button";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
+import { fr } from "@codegouvfr/react-dsfr";
 
 export const MainContainer = styled(Box, {
   shouldForwardProp: (prop) => !["bgColor"].includes(prop as string),
@@ -18,8 +19,8 @@ export const MainContainer = styled(Box, {
   
   ${({ theme }) => theme.breakpoints.down("md")} {
     padding: 1rem;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 
 }
@@ -86,4 +87,40 @@ export const PreviewImage = styled(Image)`
   width: 100%;
   max-width: 1108px;
   height: auto;
+
+  ${({ theme }) => theme.breakpoints.down("sm")} {
+    margin-bottom: 1.5rem;
+  }
+`;
+
+export const BrMobile = styled("br")`
+  display: none;
+
+   ${({ theme }) => theme.breakpoints.down("sm")} {
+     display: block;
+  }
+}
+`;
+
+export const ErrorBox = styled(Box, {
+  shouldForwardProp: (prop) => !["isHomeSearch", "isDownSm"].includes(prop as string),
+})<{ isHomeSearch?: boolean; isDownSm?: boolean }>`
+  color: ${fr.colors.decisions.artwork.minor.redMarianne.default};
+  font-size: 0.75rem;
+  ${({ isDownSm, isHomeSearch }) =>
+    isDownSm
+      ? `
+    ${isHomeSearch ? "padding-left: 1rem;" : "padding-left: 0rem;"}
+    margin-bottom: 0.5rem;
+    text-align: center;
+  `
+      : ``}
+
+  ${({ isDownSm, isHomeSearch }) =>
+    !isDownSm
+      ? `
+    ${isHomeSearch ? "padding-left: 3rem;" : "padding-left: 0rem;"}
+    margin-bottom: 1rem;
+  `
+      : ``}
 `;

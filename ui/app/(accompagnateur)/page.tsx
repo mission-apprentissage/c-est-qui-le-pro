@@ -16,6 +16,7 @@ import {
   LogoStack,
   PreviewImageBox,
   PreviewImage,
+  BrMobile,
 } from "./page.styled";
 import { HighlightedText } from "./details/[id]/FormationSimilaire.styled";
 import Link from "../components/Link";
@@ -69,7 +70,10 @@ export default function Page({ params }: { params: { id: string } }) {
           <Grid container spacing={"3rem"}>
             <Grid item md={8} xs={12}>
               <MainTitleGrid xs={12}>
-                <MainTitle variant="h1_main">Toutes les formations Pro accessibles après le collège.</MainTitle>
+                <MainTitle variant="h1_main">
+                  Toutes les formations Pro accessibles
+                  <BrMobile /> après le collège.
+                </MainTitle>
               </MainTitleGrid>
 
               <FocusSearchProvider>
@@ -104,18 +108,42 @@ export default function Page({ params }: { params: { id: string } }) {
             <Image src={"/assets/logo_avenir.svg"} width="206" height="93" alt={"Logo Avenir"} />
           </LogoStack>
           <Typography align={"center"}>
-            aident les accompagnateurs de l’orientation et les collégiens à découvrir les formations professionnelles
-            les plus adaptées pour l’après 3ᵉ
+            aident les accompagnateurs de l’orientation et les élèves de collège à découvrir les formations
+            professionnelles les plus adaptées pour l’après 3ᵉ
           </Typography>
         </Container>
       </MainContainer>
 
-      <MainContainer bgColor="blue">
+      <MainContainer bgColor="blue" sx={{ display: { xs: "none", sm: "block" } }}>
         <Typography align={"center"} variant="h3">
           Accédez à des informations <HighlightedText>locales et récentes</HighlightedText>
         </Typography>
         <PreviewImageBox>
           <PreviewImage width={0} height={0} sizes="100vw" src={"/assets/preview.png"} alt={"Preview de CQLP"} />
+        </PreviewImageBox>
+      </MainContainer>
+
+      <MainContainer bgColor="blue" sx={{ display: { sm: "none", xs: "block" } }}>
+        <Typography align={"center"} variant="h3">
+          Accédez à des informations <HighlightedText>locales et récentes</HighlightedText>
+        </Typography>
+        <PreviewImageBox>
+          <PreviewImage width={0} height={0} sizes="100vw" src={"/assets/preview_mobile.png"} alt={"Preview de CQLP"} />
+        </PreviewImageBox>
+      </MainContainer>
+
+      <MainContainer bgColor="blue" sx={{ display: { sm: "none", xs: "block" } }}>
+        <Typography align={"center"} variant="h3">
+          Visualisez des données <HighlightedText>utiles</HighlightedText>
+        </Typography>
+        <PreviewImageBox>
+          <PreviewImage
+            width={0}
+            height={0}
+            sizes="100vw"
+            src={"/assets/preview_widget_mobile.png"}
+            alt={"Preview de CQLP"}
+          />
         </PreviewImageBox>
       </MainContainer>
     </Suspense>
