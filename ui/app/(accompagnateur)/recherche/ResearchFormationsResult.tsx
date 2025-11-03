@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { css } from "@emotion/react";
 import { useInView } from "react-intersection-observer";
 import { Typography, Grid, Grid2 } from "../../components/MaterialUINext";
@@ -8,7 +8,6 @@ import InformationCard from "#/app/components/InformationCard";
 import Loader from "#/app/components/Loader";
 import { fr } from "@codegouvfr/react-dsfr";
 import FormationCard from "../components/FormationCard";
-import ClientSideScrollRestorer from "#/app/components/ClientSideScrollRestorer";
 import dynamic from "next/dynamic";
 import { FormationDetail } from "shared";
 import { Box, Theme, useMediaQuery, useTheme } from "@mui/material";
@@ -191,7 +190,7 @@ export default React.memo(function ResearchFormationsResult({
 
   const { ref: refInView, inView } = useInView();
 
-  const { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, pagination } =
+  const { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, academie, pagination } =
     useGetFormations({
       latitude: location.latitude,
       longitude: location.longitude,
@@ -338,6 +337,7 @@ export default React.memo(function ResearchFormationsResult({
         >
           {!isDownSm && (
             <FormationsMap
+              academie={academie}
               selected={selected}
               longitude={(latLng && latLng[1]) || location.longitude}
               latitude={(latLng && latLng[0]) || location.latitude}
@@ -354,6 +354,14 @@ export default React.memo(function ResearchFormationsResult({
                 const formation = formations[formationIndex];
                 const formationRef = formationsRef[formationIndex];
                 setSelected(formation);
+              }}
+              onTooltipClick={(etablissement) => {
+                const formationIndex = formations.findIndex((f) => f.etablissement.uai === etablissement.uai);
+                if (formationIndex === -1) {
+                  return;
+                }
+
+                const formationRef = formationsRef[formationIndex];
                 formationRef?.current && formationRef?.current.scrollIntoView({ behavior: "smooth", block: "start" });
               }}
             />

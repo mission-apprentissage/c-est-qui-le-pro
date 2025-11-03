@@ -311,7 +311,14 @@ export async function getFormationsSQL(
             .selectFrom("formationEtablissement")
             .select((eb) => eb.fn("row_to_json", [sql`formation`]).as("formation"))
             .select((eb) => eb.fn("row_to_json", [sql`"formationEtablissement"`]).as("formationEtablissement"))
-            .select((eb) => eb.fn("row_to_json", [sql`etablissement`]).as("etablissement"))
+            .select((eb) =>
+              sql`${eb.fn("to_jsonb", [sql`etablissement`])} || ${eb.fn("jsonb_build_object", [
+                sql.lit("formationCount"),
+                sql<number>`COUNT(*) OVER (PARTITION BY etablissement.id)`,
+                sql.lit("niveauxDiplome"),
+                sql<string[]>`array_agg(formation."niveauDiplome") OVER (PARTITION BY etablissement.id)`,
+              ])}`.as("etablissement")
+            )
             .select("formationEtablissement.id as id")
             .$if(!!tag, (eb) => buildFilterTag(eb, tag))
             .$if(!!filtersId, (eb) =>

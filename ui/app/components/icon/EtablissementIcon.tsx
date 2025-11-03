@@ -1,4 +1,4 @@
-export default function HomeIcon() {
+export default function HomeIcon({ fill = "#FA7659" }) {
   return (
     <svg viewBox="0 0 50 58" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_585_29145)">
@@ -6,7 +6,7 @@ export default function HomeIcon() {
           d="M46.1875 23.0938C46.1875 33.2988 36.5955 44.2093 28.4398 49.9093C26.4126 51.3261 23.7489 51.3797 21.6855 50.0162C13.1059 44.3465 4 33.363 4 23.0938C4 11.444 13.444 2 25.0938 2C36.7435 2 46.1875 11.444 46.1875 23.0938Z"
           fill="currentColor"
         />
-        <circle cx="25.0938" cy="23.0938" r="16.4062" fill="#FA7659" />
+        <circle cx="25.0938" cy="23.0938" r="16.4062" fill={fill} />
         <path
           fillRule="evenodd"
           clipRule="evenodd"

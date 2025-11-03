@@ -116,5 +116,5 @@ export default function useGetFormations({
     return Object.values(etablissements);
   }, [formations]);
 
-  return { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, pagination };
+  return { isLoading, fetchNextPage, isFetching, isFetchingNextPage, formations, etablissements, academie, pagination };
 }

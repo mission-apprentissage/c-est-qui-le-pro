@@ -36,7 +36,12 @@ export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
   function createPopup(props, context) {
     // @ts-ignore
     const popup = new L.Rrose(
-      { offset: new L.Point(0, 0), closeButton: false, autoPan: false, ...props },
+      {
+        offset: new L.Point(0, 0),
+        closeButton: false,
+        autoPan: false,
+        ...props,
+      },
       context.overlayContainer
     );
     return createElementObject(popup, context);

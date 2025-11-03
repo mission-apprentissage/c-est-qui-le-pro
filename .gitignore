@@ -117,8 +117,10 @@ tmp/
 
 tools/
 
-
+# Terraform 
 *.tfvars
+.terraform/
+.terraform.lock.hcl
 
 # Mac
 .DS_Store
