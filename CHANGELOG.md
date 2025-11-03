@@ -1,3 +1,10 @@
+# [1.49.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.48.0...v1.49.0) (2025-11-03)
+
+
+### Features
+
+* tooltip etablissement et frontière académique ([#97](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/97)) ([48b0fc6](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/48b0fc6c5af50466b1690b99a8f71318c9bb8409))
+
 # [1.48.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.47.0...v1.48.0) (2025-11-03)
 
 
