@@ -26,7 +26,7 @@ export const EtablissementContainerStyled = styled(Box)`
       margin-bottom: 0.5rem;
     }
 
-    & i {
+    & div:has(i) {
       margin-right: 1rem;
     }
   }

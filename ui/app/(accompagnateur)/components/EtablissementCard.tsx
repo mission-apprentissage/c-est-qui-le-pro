@@ -47,13 +47,13 @@ export default function EtablissementCard({
           </Typography>
         </Box>
         <Box>
-          <Typography>
+          <Box>
             {etablissement.accessTime ? (
               <i className={fr.cx("fr-icon-bus-line")} />
             ) : (
               etablissement.distance && <i className={fr.cx("fr-icon-car-fill")} />
             )}
-          </Typography>
+          </Box>
           <Typography>
             {etablissement.accessTime
               ? formatAccessTime(etablissement.accessTime, etablissement.modalite)
