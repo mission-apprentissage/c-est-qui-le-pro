@@ -99,8 +99,7 @@ export default function FormationsMap({
               >
                 <EtablissementCard
                   etablissement={etablissement}
-                  latitude={latitude.toString()}
-                  longitude={longitude.toString()}
+                  academie={academie}
                   onClick={() => onTooltipClick && onTooltipClick(etablissement)}
                 />
               </DynamicPopup>

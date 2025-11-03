@@ -6,7 +6,6 @@ import { Box, Stack, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { useSearchParams } from "next/navigation";
 import { DiplomeTypeLibelle, FormationDetail, FormationTag } from "shared";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
@@ -23,6 +22,11 @@ import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
 import FormationTags from "../../components/FormationTags";
+import OutsideAcademieTooltip from "../../components/OutsideAcademieTooltip";
+import { createPortal } from "react-dom";
+import DialogOutsideAcademie from "../../components/DialogOutsideAcademie";
+import { useGetReverseLocation } from "../../hooks/useGetAddress";
+import { useQueryLocation } from "../../hooks/useQueryLocation";
 
 export const StyledButtonLink = styled(Link)`
   padding: 0.5rem;
@@ -39,9 +43,10 @@ export const StyledButtonLink = styled(Link)`
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
-  const searchParams = useSearchParams();
-  const longitude = searchParams.get("longitude");
-  const latitude = searchParams.get("latitude");
+  const userLocation = useQueryLocation();
+  const longitude = userLocation.longitude ?? formationDetail.etablissement.longitude ?? 0;
+  const latitude = userLocation.latitude ?? formationDetail.etablissement.latitude ?? 0;
+  const { data: location } = useGetReverseLocation({ latitude, longitude });
 
   const { setHeadersSize, resumeCollapse } = useFormationsDetails();
   const refHeader = React.useRef<HTMLElement>(null);
@@ -153,7 +158,19 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
           >
             <Grid container>
               <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("10v") }}>
-                <FormationRoute etablissement={etablissement} latitude={latitude} longitude={longitude} />
+                <Box style={{ display: "flex", marginBottom: fr.spacing("3v") }}>
+                  <FormationRoute
+                    etablissement={etablissement}
+                    latitude={userLocation.latitude?.toString()}
+                    longitude={userLocation.longitude?.toString()}
+                  />
+                  {location && location?.academie !== etablissement.academie && (
+                    <>
+                      <OutsideAcademieTooltip />
+                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
+                    </>
+                  )}
+                </Box>
                 <FormationDisponible formationDetail={formationDetail} />
               </Grid>
               <Grid item xs={12} md={6} sx={{ marginTop: { xs: fr.spacing("3v"), md: 0 } }}>

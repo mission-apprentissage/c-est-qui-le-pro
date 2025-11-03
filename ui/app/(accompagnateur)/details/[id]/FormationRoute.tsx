@@ -51,7 +51,7 @@ export default function FormationRoute({
 
   return (
     <>
-      <Typography variant="h5" style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}>
+      <Typography variant="h5" style={{ color: "var(--blue-france-sun-113-625)" }}>
         <StyledButtonLink noIcon noDecoration href={itineraryLink(etablissement, longitude, latitude)} target="_blank">
           {etablissement.accessTime && (
             <span style={{ marginRight: "1rem" }}>

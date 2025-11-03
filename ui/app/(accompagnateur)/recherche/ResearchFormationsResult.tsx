@@ -17,6 +17,8 @@ import { isNil } from "lodash-es";
 import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
 import { fetchReverse } from "#/app/services/address";
+import DialogOutsideAcademie from "../components/DialogOutsideAcademie";
+import { createPortal } from "react-dom";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
 });
@@ -25,16 +27,14 @@ const FormationResult = React.memo(
   ({
     formationRef,
     formationDetail,
-    latitude,
-    longitude,
+    location,
     isSelected,
     setSelected,
     index,
   }: {
     formationRef: React.RefObject<HTMLDivElement | null>;
     formationDetail: FormationDetail;
-    latitude: number;
-    longitude: number;
+    location: UserLocation;
     isSelected: boolean;
     setSelected: React.Dispatch<React.SetStateAction<FormationDetail | null>>;
     index: number;
@@ -49,10 +49,10 @@ const FormationResult = React.memo(
           <FormationCard
             selected={isSelected}
             onMouseEnter={cb}
-            latitude={latitude}
-            longitude={longitude}
+            location={location}
             formationDetail={formationDetail}
             tabIndex={index}
+            withOutsideAcademie={location.academie !== formationDetail.etablissement.academie}
           />
         </Box>
       </Grid>
@@ -114,8 +114,7 @@ const FormationResults = React.memo(
             return (
               <FormationResult
                 key={key}
-                latitude={location.latitude}
-                longitude={location.longitude}
+                location={location}
                 formationRef={formationsRef[index]}
                 setSelected={setSelected}
                 isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
@@ -142,8 +141,7 @@ const FormationResults = React.memo(
               return (
                 <FormationResult
                   key={key}
-                  latitude={location.latitude}
-                  longitude={location.longitude}
+                  location={location}
                   formationRef={formationsRef[mainIndex]}
                   setSelected={setSelected}
                   isSelected={selected ? selected.formationEtablissement.id === formationEtablissement.id : false}
@@ -370,6 +368,7 @@ export default React.memo(function ResearchFormationsResult({
       </Grid2>
       <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
+      {createPortal(<DialogOutsideAcademie academie={location.academie} />, document.body)}
     </>
   );
 });
