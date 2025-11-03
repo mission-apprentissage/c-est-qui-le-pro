@@ -8,7 +8,7 @@ import ParisIcon from "../components/icon/ParisIcon";
 import GuilvinecIcon from "../components/icon/GuilvinecIcon";
 import { StyledSvgIcon } from "../components/icon/Icon.styled";
 
-const API_BASE_URL = "https://api-adresse.data.gouv.fr";
+const API_BASE_URL = "https://data.geopf.fr";
 
 export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX.Element }[] = [
   {
@@ -111,9 +111,12 @@ export async function fetchAddress(
 
   //TODO: gestion des erreurs
   const type = address.split(" ").length > 1 ? "" : "municipality";
-  const result = await fetch(`${API_BASE_URL}/search/?q=${encodeURIComponent(address)}&type=${type}&limit=20`, {
-    signal,
-  });
+  const result = await fetch(
+    `${API_BASE_URL}/geocodage/search/?q=${encodeURIComponent(address)}&type=${type}&limit=20`,
+    {
+      signal,
+    }
+  );
   const json = await result.json();
   return json;
 }
@@ -124,7 +127,7 @@ export async function fetchReverse(
   { signal }: { signal: AbortSignal | undefined } = { signal: undefined }
 ): Promise<any> {
   //TODO: gestion des erreurs
-  const result = await fetch(`${API_BASE_URL}/reverse?lat=${latitude}&lon=${longitude}`, { signal });
+  const result = await fetch(`${API_BASE_URL}/geocodage/reverse?lat=${latitude}&lon=${longitude}`, { signal });
   const json = await result.json();
   return json;
 }
