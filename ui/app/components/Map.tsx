@@ -38,7 +38,7 @@ export const LeafletEtablissementOutsideAcademieIcon = new DivIcon({
   iconAnchor: [26, 58],
   popupAnchor: [-3, -76],
   className: "custom-leaflet-icon color-white",
-  html: renderToString(<EtablissementIcon fill={"#F983F1"} />),
+  html: renderToString(<EtablissementIcon fill={"#fcc0b4"} />),
 });
 
 export const LeafletSelectedEtablissementIcon = new DivIcon({
@@ -54,7 +54,7 @@ export const LeafletSelectedEtablissementOutsideAcademieIcon = new DivIcon({
   iconAnchor: [29, 64],
   popupAnchor: [-3, -76],
   className: "custom-leaflet-icon color-pink leaflet-icon-selected",
-  html: renderToString(<EtablissementIcon fill={"#F983F1"} />),
+  html: renderToString(<EtablissementIcon fill={"#fcc0b4"} />),
 });
 
 function MapAutoresize() {
@@ -207,7 +207,7 @@ export default function Map({
     >
       <PreventFocus />
       <MapAutoresize />
-      <TileLayer academie={academie} />
+      <TileLayer key={`map_academie_${academie}`} academie={academie} />
       {children}
       <RecenterAutomatically position={center} />
 
