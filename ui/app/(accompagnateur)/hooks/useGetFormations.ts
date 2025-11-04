@@ -16,6 +16,7 @@ export default function useGetFormations({
   uais,
   cfds,
   postcode,
+  insideAcademieForCar = false,
   minWeight = 101,
   page,
   items_par_page = 100,
@@ -30,6 +31,7 @@ export default function useGetFormations({
   uais?: string[];
   cfds?: string[];
   postcode?: string;
+  insideAcademieForCar?: boolean;
   minWeight?: number;
   page?: number;
   items_par_page?: number;
@@ -79,7 +81,7 @@ export default function useGetFormations({
           items_par_page,
           cfds,
           uais,
-          academie,
+          academie: insideAcademieForCar ? academie : null,
           minWeight,
         },
         { signal }

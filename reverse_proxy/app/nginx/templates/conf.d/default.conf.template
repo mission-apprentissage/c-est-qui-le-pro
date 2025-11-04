@@ -14,7 +14,7 @@ map $http_host $robots {
 
 map ${IS_LOCALHOST} $CSP {
     "1" "";
-    default "default-src 'self' https://img.notionusercontent.com/ https://www.notion.so/ https://plausible.io/ https://openmaptiles.github.io/ https://*.inserjeunes.beta.gouv.fr/ https://*.beta.gouv.fr/ https://*.data.gouv.fr/ https://*.lrkt-in.com/ https://*.inserjeunes.incubateur.net/ 'unsafe-inline' data: blob:;";
+    default "default-src 'self' https://img.notionusercontent.com/ https://www.notion.so/ https://plausible.io/ https://openmaptiles.github.io/ https://*.inserjeunes.beta.gouv.fr/ https://*.beta.gouv.fr/ https://data.geopf.fr/ https://*.data.gouv.fr/ https://*.lrkt-in.com/ https://*.inserjeunes.incubateur.net/ 'unsafe-inline' data: blob:;";
 }
 
 server {

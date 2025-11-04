@@ -156,8 +156,15 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
               margin-bottom: ${fr.spacing("5v")};
             `}
           >
-            <Grid container>
-              <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("10v") }}>
+            <Box sx={{ display: { sm: "flex", md: "inline-flex" }, flexDirection: "column", gap: "1rem" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: fr.spacing("10v"),
+                  gap: { sm: 0, md: "1rem" },
+                }}
+              >
                 <Box style={{ display: "flex", marginBottom: fr.spacing("3v") }}>
                   <FormationRoute
                     etablissement={etablissement}
@@ -171,9 +178,10 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                     </>
                   )}
                 </Box>
+
                 <FormationDisponible formationDetail={formationDetail} />
-              </Grid>
-              <Grid item xs={12} md={6} sx={{ marginTop: { xs: fr.spacing("3v"), md: 0 } }}>
+              </Box>
+              <Box sx={{ marginLeft: { sm: 0, md: fr.spacing("10v") } }}>
                 <Divider
                   variant="middle"
                   margin={"0"}
@@ -183,30 +191,28 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                     }
                   `}
                 />
-                <Box style={{ marginRight: "1rem" }}>
-                  <Card
-                    actionProps={modalMinistage.buttonProps}
-                    css={css`
-                      margin-bottom: ${fr.spacing("8v")};
-                      ${theme.breakpoints.down("md")} {
-                        border: 0;
-                        border-radius: 0;
-                        margin-bottom: 0;
-                        padding-left: ${fr.spacing("2v")};
-                      }
-                    `}
+                <Card
+                  actionProps={modalMinistage.buttonProps}
+                  css={css`
+                    margin-bottom: ${fr.spacing("8v")};
+                    ${theme.breakpoints.down("md")} {
+                      border: 0;
+                      border-radius: 0;
+                      margin-bottom: 0;
+                      padding-left: ${fr.spacing("2v")};
+                    }
+                  `}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
                   >
-                    <Typography
-                      variant="subtitle2"
-                      style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
-                    >
-                      <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
-                      Découvrir la formation lors d’un mini-stage ⓘ
-                    </Typography>
-                  </Card>
-                </Box>
-              </Grid>
-            </Grid>
+                    <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
+                    Découvrir la formation lors d’un mini-stage ⓘ
+                  </Typography>
+                </Card>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </BoxContainer>
