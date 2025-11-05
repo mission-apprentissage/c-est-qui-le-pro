@@ -44,7 +44,7 @@ export default styled(ButtonBase, {
         `;
       case "blue-france-hover":
         return `background-color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
-        --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};`;
+        --hover-tint: ${fr.colors.decisions.background.altOverlap.grey.default};`;
       case "black":
         return `
         color: #000000;
@@ -60,8 +60,8 @@ export default styled(ButtonBase, {
         return `
         color: ${fr.colors.decisions.background.flat.info.default};
         background-color: none;
-         --hover-tint: ${fr.colors.decisions.background.alt.grey.hover};
-         --active-tint: ${fr.colors.decisions.background.alt.grey.hover};
+         --hover-tint: ${fr.colors.decisions.background.altOverlap.grey.default};;
+         --active-tint: ${fr.colors.decisions.background.altOverlap.grey.default};;
         `;
       default:
         return "";

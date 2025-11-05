@@ -9,7 +9,6 @@ export default function OutsideAcademieTooltip() {
     <Button
       priority="tertiary no outline"
       variant="blue-france"
-      noMinHeight
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -17,13 +16,9 @@ export default function OutsideAcademieTooltip() {
         modalOutsideAcademie.open();
       }}
       css={css`
-        color: ${fr.colors.decisions.background.flat.info.default};
         cursor: help;
-
-        &:hover {
-          background-color: #f4f4f4;
-        }
-
+        border-radius: 0.688rem;
+        padding: 0.5rem;
         & i {
           margin-right: 0.25rem;
         }

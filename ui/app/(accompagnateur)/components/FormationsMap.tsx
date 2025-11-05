@@ -96,6 +96,7 @@ export default function FormationsMap({
                 bounds={{
                   y: 100,
                 }}
+                minWidth={330}
               >
                 <EtablissementCard
                   etablissement={etablissement}

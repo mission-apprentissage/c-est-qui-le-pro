@@ -65,7 +65,7 @@ export default function FormationRoute({
               {Math.round(distance / 1000)} km
             </span>
           )}
-          <i className={fr.cx("ri-arrow-right-line", "fr-icon--sm")} style={{ marginRight: fr.spacing("2v") }} />
+          <i className={fr.cx("ri-arrow-right-line", "fr-icon--sm")} />
         </StyledButtonLink>
       </Typography>
     </>

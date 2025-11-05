@@ -16,11 +16,7 @@ export const EtablissementContainerStyled = styled(Box)`
 
   & .outside-academie {
     margin-bottom: 1rem;
-  }
-
-  & .outside-academie button {
-    padding: 0;
-    margin: 0;
+    text-align: center;
   }
 
   & .info {

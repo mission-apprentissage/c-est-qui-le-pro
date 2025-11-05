@@ -156,32 +156,45 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
               margin-bottom: ${fr.spacing("5v")};
             `}
           >
-            <Box sx={{ display: { sm: "flex", md: "inline-flex" }, flexDirection: "column", gap: "1rem" }}>
+            <Box
+              sx={{
+                display: { sm: "flex", md: "flex" },
+                flexDirection: { md: "row", sm: "column" },
+                gap: "1rem",
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   marginLeft: fr.spacing("10v"),
+                  width: { sm: "100%", md: "50%" },
                   gap: { sm: 0, md: "1rem" },
                 }}
               >
-                <Box style={{ display: "flex", marginBottom: fr.spacing("3v") }}>
+                <Box style={{ marginBottom: fr.spacing("3v") }}>
+                  {location && location?.academie !== etablissement.academie && (
+                    <Box style={{ marginLeft: "-0.5rem" }}>
+                      <OutsideAcademieTooltip />
+                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
+                    </Box>
+                  )}
                   <FormationRoute
                     etablissement={etablissement}
                     latitude={userLocation.latitude?.toString()}
                     longitude={userLocation.longitude?.toString()}
                   />
-                  {location && location?.academie !== etablissement.academie && (
-                    <>
-                      <OutsideAcademieTooltip />
-                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
-                    </>
-                  )}
                 </Box>
 
                 <FormationDisponible formationDetail={formationDetail} />
               </Box>
-              <Box sx={{ marginLeft: { sm: 0, md: fr.spacing("10v") } }}>
+              <Box
+                sx={{
+                  width: { sm: "100%", md: "50%" },
+                  paddingRight: { sm: 0, md: "1rem" },
+                  marginLeft: { sm: 0, md: fr.spacing("10v") },
+                }}
+              >
                 <Divider
                   variant="middle"
                   margin={"0"}

@@ -91,8 +91,17 @@ export default React.memo(function FormationCard({
         </Typography>
 
         {withDuration && (
-          <Grid container style={{ marginTop: fr.spacing("5v") }}>
-            <Grid item xs={12} style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              flexWrap: "wrap",
+              marginTop: "0.75rem",
+            }}
+          >
+            <Box style={{ marginLeft: "-0.5rem" }}>{withOutsideAcademie && <OutsideAcademieTooltip />}</Box>
+            <Box>
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                   <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-line")} />
@@ -106,9 +115,8 @@ export default React.memo(function FormationCard({
                   </Typography>
                 )
               )}
-              {withOutsideAcademie && <OutsideAcademieTooltip />}
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         )}
       </Box>
 
