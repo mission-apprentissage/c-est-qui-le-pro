@@ -100,7 +100,11 @@ export default React.memo(function FormationCard({
               marginTop: "0.75rem",
             }}
           >
-            <Box style={{ marginLeft: "-0.5rem" }}>{withOutsideAcademie && <OutsideAcademieTooltip />}</Box>
+            {withOutsideAcademie && (
+              <Box style={{ marginLeft: "-0.5rem", marginTop: "-0.5rem" }}>
+                <OutsideAcademieTooltip />
+              </Box>
+            )}
             <Box>
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
