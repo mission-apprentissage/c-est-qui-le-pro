@@ -24,7 +24,7 @@ variable "slack_channel" {
 variable "monitoring_host" {
   type        = string
   description = "Host for grafana"
-  default     = "grafana.kub.recette.cestquilepro.inserjeunes.incubateur.net"
+  default     = "grafana.kub.futurpro.inserjeunes.incubateur.net"
 }
 
 variable "monitoring_admin_password" {

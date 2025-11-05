@@ -36,7 +36,7 @@ provider "kubernetes" {
 }
 
 provider "grafana" {
-  url  = "https://grafana.kub.cestquilepro.inserjeunes.beta.gouv.fr/"
+  url  = "https://grafana.kub.futurpro.inserjeunes.beta.gouv.fr/"
   auth = "admin:${var.monitoring_admin_password}"
 }
 

@@ -1,6 +1,6 @@
-# Conditions générales d’utilisation de la plateforme C’est qui le pro ?
+# Conditions générales d’utilisation de la plateforme Futur pro
 
-Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique de la plateforme C’est qui le pro ? et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
+Les présentes conditions générales d’utilisation (dites « CGU ») fixent le cadre juridique de la plateforme Futur pro et définissent les conditions d’accès et d’utilisation des Services par l’Utilisateur.
 
 ## Article 1 - Champ d’application
 
@@ -10,15 +10,15 @@ La Plateforme est accessible sans création de compte et est en accès libre. La
 
 ## Article 2 - Objet
 
-La Plateforme C’est qui le pro ? est une ressource de service public dont l’objectif est de permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
+La Plateforme Futur pro est une ressource de service public dont l’objectif est de permettre aux accompagnateurs de l’orientation de mieux guider les collégiens dans leurs choix d’orientation pour construire une stratégie de vœux ancrée dans une réalité terrain et offrant des perspectives favorables.
 
 Pour cela, elle vise à faciliter la découverte des formations professionnelles disponibles après le collège et accessibles depuis un lieu donné (collège, domicile d’un élève, etc.). Elle permet en outre d’apporter des éclairages sur les conditions d’accès, le contenu et le devenir des élèves au sein de ces formations.
 
-C’est qui le pro ? est construit à destination de tous les professionnels concernés par l’orientation des jeunes en sortie de collège, notamment les professeurs principaux et psychologues de l’orientation, mais aussi des parents et des jeunes eux-mêmes.
+Futur pro est construit à destination de tous les professionnels concernés par l’orientation des jeunes en sortie de collège, notamment les professeurs principaux et psychologues de l’orientation, mais aussi des parents et des jeunes eux-mêmes.
 
 ## Article 3 – Définitions
 
-“Plateforme” désigne le service public numérique C’est qui le pro ?
+“Plateforme” désigne le service public numérique Futur pro
 
 “Éditeur” désigne la DGESCO
 
@@ -34,7 +34,7 @@ La Plateforme est accessible, dans son intégralité, au grand public.
 
 ### 5.1 L’Éditeur de la Plateforme
 
-Les sources des informations diffusées sur la Plateforme sont réputées fiables mais C’est qui le pro ? ne garantit pas qu’elles soient exemptes de défauts, d’erreurs ou d’omissions.
+Les sources des informations diffusées sur la Plateforme sont réputées fiables mais Futur pro ne garantit pas qu’elles soient exemptes de défauts, d’erreurs ou d’omissions.
 
 L’Éditeur s’engage à la sécurisation de la Plateforme, notamment en prenant toutes les mesures nécessaires permettant de garantir la sécurité et la confidentialité des informations fournies.
 

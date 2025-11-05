@@ -2,17 +2,18 @@
 title: 👋 Accueil
 layout: home
 nav_order: 0
-description: "C'est qui le pro ? aide les accompagnateurs de l’orientation et les collégiens à découvrir les formations professionnelles les plus adaptées pour l’après 3ᵉ."
+description: "Futur pro aide les accompagnateurs de l’orientation et les collégiens à découvrir les formations professionnelles les plus adaptées pour l’après 3ᵉ."
 permalink: /
 ---
 
-# C'est qui le pro ?
+# Futur pro
 
 {: .highlight }
- > ℹ️ Vous êtes sur la documentation.
- > Pour accéder à l'outil, c'est par [ici](https://cestquilepro.inserjeunes.beta.gouv.fr/) !
 
-Le projet [C'est qui le pro ?](https://beta.gouv.fr/startups/cestquilepro.html) est un service numérique public développé par la mission interministérielle InserJeunes, membre du [réseau beta.gouv](https://beta.gouv.fr/).
+> ℹ️ Vous êtes sur la documentation.
+> Pour accéder à l'outil, c'est par [ici](https://futurpro.inserjeunes.beta.gouv.fr/) !
+
+Le projet [Futur pro](https://beta.gouv.fr/startups/cestquilepro.html) est un service numérique public développé par la mission interministérielle InserJeunes, membre du [réseau beta.gouv](https://beta.gouv.fr/).
 
 Son but est de permettre aux accompagnateurs, professeurs principaux et psychologues de l'éducation nationale notamment, de guider les collégiens et leurs familles dans leurs choix d’orientation vers la voie professionnelle, pour construire une stratégie de vœux ancrée dans une réalité terrain.
 

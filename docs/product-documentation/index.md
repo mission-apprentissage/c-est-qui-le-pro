@@ -6,7 +6,7 @@ nav_order: 1
 # 📚 Centre de documentation
 
 {: .note }
-> ⚠️ C'est qui le pro ? est en cours de construction.
+> ⚠️ Futur pro est en cours de construction.
 > 
 > La liste des formations renvoyées peut notamment être incomplète car :
 > 

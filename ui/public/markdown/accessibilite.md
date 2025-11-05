@@ -10,15 +10,15 @@ La mission interministérielle InserJeunes s’engage à rendre son service acc
 - [Plan 2024](https://beta.gouv.fr/accessibilite/schema-pluriannuel#plan-2024)
 - [Bilan 2023](https://beta.gouv.fr/accessibilite/schema-pluriannuel#bilan-2023)
 
-Cette déclaration d’accessibilité s’applique à **C'est qui le pro ?** ([https://cestquilepro.inserjeunes.beta.gouv.fr/](https://cestquilepro.inserjeunes.beta.gouv.fr/)).
+Cette déclaration d’accessibilité s’applique à **Futur pro** ([https://futurpro.inserjeunes.beta.gouv.fr/](https://futurpro.inserjeunes.beta.gouv.fr/)).
 
 ## **État de conformité**
 
-**C'est qui le pro ?** est **non conforme** avec le RGAA. Le site n’a encore pas été audité.
+**Futur pro** est **non conforme** avec le RGAA. Le site n’a encore pas été audité.
 
 ## **Amélioration et contact**
 
-Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de **C'est qui le pro ?** pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
+Si vous n’arrivez pas à accéder à un contenu ou à un service, vous pouvez contacter le responsable de **Futur pro** pour être orienté vers une alternative accessible ou obtenir le contenu sous une autre forme.
 
 - E-mail : [contact@inserjeunes.beta.gouv.fr](mailto:contact@inserjeunes.beta.gouv.fr)
 - Formulaire de contact : [Nous contacter](https://tally.so/r/wz0AOR)

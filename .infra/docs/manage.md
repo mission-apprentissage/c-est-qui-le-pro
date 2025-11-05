@@ -121,7 +121,7 @@ kubectl config set-cluster CQLP \
   --embed-certs=true
 
 kubectl oidc-login setup \
- --oidc-issuer-url=https://dex.cestquilepro.inserjeunes.beta.gouv.fr \
+ --oidc-issuer-url=https://dex.futurpro.inserjeunes.beta.gouv.fr \
  --oidc-client-id=kubectl \
  --oidc-client-secret=kubectl-secret
 
@@ -130,7 +130,7 @@ kubectl config set-credentials NOM_UTILISATEUR_GITHUB \
  --exec-command=kubectl \
  --exec-arg=oidc-login \
  --exec-arg=get-token \
- --exec-arg=--oidc-issuer-url=https://dex.cestquilepro.inserjeunes.beta.gouv.fr \
+ --exec-arg=--oidc-issuer-url=https://dex.futurpro.inserjeunes.beta.gouv.fr \
  --exec-arg=--oidc-client-id=kubectl \
  --exec-arg=--oidc-client-secret=kubectl-secret \
  --exec-arg=--oidc-extra-scope=profile

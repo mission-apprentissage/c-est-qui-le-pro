@@ -42,12 +42,14 @@
             username:  "{{ docker_username }}"
             password: "{{ docker_password }}"
           ingress:
-            hosts:
-              - host: "{{ dns_name }}"
+            hosts: "{{ [{'host': dns_name}] }}"
             tls:
               - secretName: app-tls
-                hosts:
-                  - "{{ dns_name }}"
+                hosts: "{{ [dns_name] + ([dns_name_alternative] if dns_name_alternative else []) }}"
+            redirect:
+              host: "{{ dns_name_alternative }}"
+              enabled: "{{ true if dns_name_alternative else false }}"
+              targetHost: "{{ dns_name }}"
 
     - name: Wait for server readiness
       kubernetes.core.k8s_info:
