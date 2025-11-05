@@ -60,7 +60,7 @@ export default function NewNameHeader() {
               cursor: pointer;
             }
           `}
-          style={{ position: "absolute", right: "1rem", top: "1rem" }}
+          style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)" }}
           onClick={() => saveDisplayConstructionHeader(false)}
         >
           <i className={fr.cx("ri-close-fill")}></i>
