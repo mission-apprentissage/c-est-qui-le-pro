@@ -14,6 +14,11 @@ export const EtablissementContainerStyled = styled(Box)`
     color: var(--blue-france-sun-113-625);
   }
 
+  & .outside-academie {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
   & .info {
     font-size: 0.875rem;
     line-height: 1.5rem;

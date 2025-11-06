@@ -6,7 +6,6 @@ import { Box, Stack, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { useSearchParams } from "next/navigation";
 import { DiplomeTypeLibelle, FormationDetail, FormationTag } from "shared";
 import Divider from "#/app/components/Divider";
 import Card from "#/app/components/Card";
@@ -23,6 +22,11 @@ import { formatLibelle, formatStatut } from "#/app/utils/formation";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
 import FormationTags from "../../components/FormationTags";
+import OutsideAcademieTooltip from "../../components/OutsideAcademieTooltip";
+import { createPortal } from "react-dom";
+import DialogOutsideAcademie from "../../components/DialogOutsideAcademie";
+import { useGetReverseLocation } from "../../hooks/useGetAddress";
+import { useQueryLocation } from "../../hooks/useQueryLocation";
 
 export const StyledButtonLink = styled(Link)`
   padding: 0.5rem;
@@ -39,9 +43,10 @@ export const StyledButtonLink = styled(Link)`
 
 const FormationHeader = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
   const theme = useTheme();
-  const searchParams = useSearchParams();
-  const longitude = searchParams.get("longitude");
-  const latitude = searchParams.get("latitude");
+  const userLocation = useQueryLocation();
+  const longitude = userLocation.longitude ?? formationDetail.etablissement.longitude ?? 0;
+  const latitude = userLocation.latitude ?? formationDetail.etablissement.latitude ?? 0;
+  const { data: location } = useGetReverseLocation({ latitude, longitude });
 
   const { setHeadersSize, resumeCollapse } = useFormationsDetails();
   const refHeader = React.useRef<HTMLElement>(null);
@@ -151,12 +156,45 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
               margin-bottom: ${fr.spacing("5v")};
             `}
           >
-            <Grid container>
-              <Grid item xs={12} md={6} style={{ paddingLeft: fr.spacing("10v") }}>
-                <FormationRoute etablissement={etablissement} latitude={latitude} longitude={longitude} />
+            <Box
+              sx={{
+                display: { sm: "flex", md: "flex" },
+                flexDirection: { md: "row", sm: "column" },
+                gap: "1rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  marginLeft: fr.spacing("10v"),
+                  width: { sm: "100%", md: "50%" },
+                  gap: { sm: 0, md: "1rem" },
+                }}
+              >
+                <Box style={{ marginBottom: fr.spacing("3v") }}>
+                  {location && location?.academie !== etablissement.academie && (
+                    <Box style={{ marginLeft: "-0.5rem" }}>
+                      <OutsideAcademieTooltip />
+                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
+                    </Box>
+                  )}
+                  <FormationRoute
+                    etablissement={etablissement}
+                    latitude={userLocation.latitude?.toString()}
+                    longitude={userLocation.longitude?.toString()}
+                  />
+                </Box>
+
                 <FormationDisponible formationDetail={formationDetail} />
-              </Grid>
-              <Grid item xs={12} md={6} sx={{ marginTop: { xs: fr.spacing("3v"), md: 0 } }}>
+              </Box>
+              <Box
+                sx={{
+                  width: { sm: "100%", md: "50%" },
+                  paddingRight: { sm: 0, md: "1rem" },
+                  marginLeft: { sm: 0, md: fr.spacing("10v") },
+                }}
+              >
                 <Divider
                   variant="middle"
                   margin={"0"}
@@ -166,30 +204,28 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                     }
                   `}
                 />
-                <Box style={{ marginRight: "1rem" }}>
-                  <Card
-                    actionProps={modalMinistage.buttonProps}
-                    css={css`
-                      margin-bottom: ${fr.spacing("8v")};
-                      ${theme.breakpoints.down("md")} {
-                        border: 0;
-                        border-radius: 0;
-                        margin-bottom: 0;
-                        padding-left: ${fr.spacing("2v")};
-                      }
-                    `}
+                <Card
+                  actionProps={modalMinistage.buttonProps}
+                  css={css`
+                    margin-bottom: ${fr.spacing("8v")};
+                    ${theme.breakpoints.down("md")} {
+                      border: 0;
+                      border-radius: 0;
+                      margin-bottom: 0;
+                      padding-left: ${fr.spacing("2v")};
+                    }
+                  `}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
                   >
-                    <Typography
-                      variant="subtitle2"
-                      style={{ fontWeight: "500", color: "var(--blue-france-sun-113-625-hover)" }}
-                    >
-                      <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
-                      Découvrir la formation lors d’un mini-stage ⓘ
-                    </Typography>
-                  </Card>
-                </Box>
-              </Grid>
-            </Grid>
+                    <i className={fr.cx("fr-icon-calendar-2-line")} style={{ marginRight: fr.spacing("2v") }} />
+                    Découvrir la formation lors d’un mini-stage ⓘ
+                  </Typography>
+                </Card>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </BoxContainer>

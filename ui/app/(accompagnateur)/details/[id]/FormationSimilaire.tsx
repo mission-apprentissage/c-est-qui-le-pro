@@ -11,7 +11,7 @@ import { Grow, Theme } from "@mui/material";
 import { useState } from "react";
 import Button from "#/app/components/Button";
 import Container from "#/app/components/Container";
-import { useGetReverseAddress } from "../../hooks/useGetAddress";
+import { useGetReverseLocation } from "../../hooks/useGetAddress";
 import React from "react";
 import {
   ArrowIcon,
@@ -21,15 +21,15 @@ import {
   StyledFormationCard,
 } from "./FormationSimilaire.styled";
 
-const FormationSimilare = React.memo(({ formationDetail }: { formationDetail: FormationDetail }) => {
+const FormationSimilaire = React.memo(({ formationDetail }: { formationDetail: FormationDetail }) => {
   const isSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
   const isMd = useMediaQuery<Theme>((theme) => theme.breakpoints.down("lg"));
   const isLg = useMediaQuery<Theme>((theme) => theme.breakpoints.down("xl"));
 
-  const location = useQueryLocation();
-  const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
-  const latitude = location.latitude ?? formationDetail.etablissement.latitude ?? 0;
-  const { data: address } = useGetReverseAddress({ latitude, longitude });
+  const userLocation = useQueryLocation();
+  const longitude = userLocation.longitude ?? formationDetail.etablissement.longitude ?? 0;
+  const latitude = userLocation.latitude ?? formationDetail.etablissement.latitude ?? 0;
+  const { data: location } = useGetReverseLocation({ latitude, longitude });
 
   const eltByLine = isSm ? 1 : isMd ? 3 : isLg ? 3 : 3;
   const lineMultiplier = isSm ? 4 : 1;
@@ -45,8 +45,8 @@ const FormationSimilare = React.memo(({ formationDetail }: { formationDetail: Fo
       return formationsSimilaire(
         {
           formationEtablissementId: formationDetail.formationEtablissement.id,
-          latitude,
-          longitude,
+          latitude: location?.latitude,
+          longitude: location?.longitude,
           academie: formationDetail.etablissement.academie,
         },
         { signal }
@@ -66,7 +66,7 @@ const FormationSimilare = React.memo(({ formationDetail }: { formationDetail: Fo
     <FormationContainer>
       <Container maxWidth={"xl"}>
         <SectionTitle variant="h3">
-          Ces formations, <HighlightedText>à côté de {address?.city}</HighlightedText>, pourraient t&apos;intéresser
+          Ces formations, <HighlightedText>à côté de {location?.city}</HighlightedText>, pourraient t&apos;intéresser
         </SectionTitle>
 
         <Grid container spacing={4}>
@@ -75,8 +75,7 @@ const FormationSimilare = React.memo(({ formationDetail }: { formationDetail: Fo
               <Grid item xs={12 / eltByLine}>
                 <StyledFormationCard
                   formationDetail={formationDetail}
-                  latitude={latitude}
-                  longitude={longitude}
+                  location={location}
                   selected={false}
                   tabIndex={index}
                   withDuration={true}
@@ -98,6 +97,6 @@ const FormationSimilare = React.memo(({ formationDetail }: { formationDetail: Fo
     </FormationContainer>
   );
 });
-FormationSimilare.displayName = "FormationSimilare";
+FormationSimilaire.displayName = "FormationSimilaire";
 
-export default FormationSimilare;
+export default FormationSimilaire;

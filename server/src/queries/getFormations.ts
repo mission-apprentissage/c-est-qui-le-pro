@@ -199,8 +199,13 @@ async function buildFiltersEtablissementSQL({ timeLimit, distance, latitude, lon
       .$if(!queryIsochrones, (qb) =>
         qb.select(sql.val(null).as("accessTime")).select(sql.val(null).as("modalite")).select(sql.val(null))
       )
-      .where((eb) =>
-        eb.or([eb("academie", "=", academie), ...(queryIsochrones ? [eb("buckets.time", "is not", null)] : [])])
+      .$if(academie, (eb) =>
+        eb.where((eb) =>
+          eb.or([
+            ...(academie ? [eb("academie", "=", academie)] : []),
+            ...(queryIsochrones ? [eb("buckets.time", "is not", null)] : []),
+          ])
+        )
       )
       .$if(distance || (timeLimit && !queryIsochrones), (qb) => qb.where("etablissement.distance", "<", distance)),
     order: (filtersId: string[] | null) =>

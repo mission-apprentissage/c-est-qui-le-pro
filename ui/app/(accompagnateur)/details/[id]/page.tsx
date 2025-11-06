@@ -9,6 +9,7 @@ import Title from "#/app/(accompagnateur)/components/Title";
 import FormationContent from "./FormationContent";
 import { FormationDetail } from "shared";
 import useGetFormations from "../../hooks/useGetFormations";
+import { useGetReverseLocation } from "../../hooks/useGetAddress";
 
 function FormationPrefetch({
   formationDetail,
@@ -45,6 +46,10 @@ function FormationResult({ id, latitude, longitude }: { id: string; latitude?: s
         { signal }
       );
     },
+  });
+  useGetReverseLocation({
+    latitude: latitude ? parseFloat(latitude) : null,
+    longitude: longitude ? parseFloat(longitude) : null,
   });
 
   if (isLoading) {

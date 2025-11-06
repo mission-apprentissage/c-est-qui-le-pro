@@ -6,10 +6,11 @@ import { fr } from "@codegouvfr/react-dsfr";
 
 export type ButtonProps = {
   rounded?: boolean | string;
-  variant?: "white" | "white-black" | "blue-france-hover" | "blue-france-alt" | "black";
+  variant?: "white" | "white-black" | "blue-france" | "blue-france-hover" | "blue-france-alt" | "black";
   smallIconOnly?: boolean;
   iconOnly?: boolean;
   iconSize?: "sm" | "md" | "lg";
+  noMinHeight?: boolean;
 } & DSFRButtonProps;
 
 function ButtonBase({ children, smallIconOnly, ...props }: ButtonProps) {
@@ -21,7 +22,7 @@ function ButtonBase({ children, smallIconOnly, ...props }: ButtonProps) {
 }
 
 export default styled(ButtonBase, {
-  shouldForwardProp: (prop) => !["iconOnly", "iconSize", "rounded", "variant"].includes(prop),
+  shouldForwardProp: (prop) => !["iconOnly", "iconSize", "rounded", "variant", "noMinHeight"].includes(prop),
 })<ButtonProps>`
   ${({ rounded }) => (rounded ? (isString(rounded) ? `border-radius: ${rounded};` : "border-radius: 16px;") : "")}
   ${({ variant }) => {
@@ -43,7 +44,7 @@ export default styled(ButtonBase, {
         `;
       case "blue-france-hover":
         return `background-color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
-        --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};`;
+        --hover-tint: ${fr.colors.decisions.background.altOverlap.grey.default};`;
       case "black":
         return `
         color: #000000;
@@ -54,6 +55,13 @@ export default styled(ButtonBase, {
         background-color: ${fr.colors.decisions.background.alt.blueFrance.default};
          --hover-tint: ${fr.colors.decisions.background.actionLow.blueFrance.default};
          --active-tint: ${fr.colors.decisions.background.actionLow.blueFrance.default};
+        `;
+      case "blue-france":
+        return `
+        color: ${fr.colors.decisions.background.flat.info.default};
+        background-color: none;
+         --hover-tint: ${fr.colors.decisions.background.altOverlap.grey.default};;
+         --active-tint: ${fr.colors.decisions.background.altOverlap.grey.default};;
         `;
       default:
         return "";
@@ -104,4 +112,14 @@ export default styled(ButtonBase, {
       }`
       : ``;
   }}
+
+  ${({ noMinHeight }) =>
+    noMinHeight
+      ? `
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    min-height: 0;`
+      : ""}
 `;

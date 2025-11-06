@@ -51,7 +51,7 @@ export default function FormationRoute({
 
   return (
     <>
-      <Typography variant="h5" style={{ color: "var(--blue-france-sun-113-625)", marginBottom: fr.spacing("3v") }}>
+      <Typography variant="h5" style={{ color: "var(--blue-france-sun-113-625)" }}>
         <StyledButtonLink noIcon noDecoration href={itineraryLink(etablissement, longitude, latitude)} target="_blank">
           {etablissement.accessTime && (
             <span style={{ marginRight: "1rem" }}>
@@ -65,7 +65,7 @@ export default function FormationRoute({
               {Math.round(distance / 1000)} km
             </span>
           )}
-          <i className={fr.cx("ri-arrow-right-line", "fr-icon--sm")} style={{ marginRight: fr.spacing("2v") }} />
+          <i className={fr.cx("ri-arrow-right-line", "fr-icon--sm")} />
         </StyledButtonLink>
       </Typography>
     </>

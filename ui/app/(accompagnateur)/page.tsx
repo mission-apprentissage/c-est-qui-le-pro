@@ -105,7 +105,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <LogoStack direction={{ xs: "column", md: "row" }} spacing={2}>
             <Image src={"/assets/logo_futurpro.svg"} width="299" height="83" alt={"Logo CQLP"} />
             <Typography>et</Typography>
-            <Image src={"/assets/logo_avenir.svg"} width="206" height="93" alt={"Logo Avenir"} />
+            <Image src={"/assets/logo_avenir.svg"} width="299" height="96" alt={"Logo Avenir"} />
           </LogoStack>
           <Typography align={"center"}>
             aident les accompagnateurs de l’orientation et les élèves de collège à découvrir les formations

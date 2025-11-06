@@ -3,7 +3,7 @@ type Region = {
   code_region_academique: string;
   nom: string;
   departements: { code: string; nom: string; academie: string | null }[];
-  academies: { code: string; nom: string }[];
+  academies: { code: string; prefix: string; nom: string }[];
 };
 
 export const REGIONS: Region[] = [
@@ -22,12 +22,12 @@ export const REGIONS: Region[] = [
       { code: "978", nom: "Saint-Martin", academie: "78" },
     ],
     academies: [
-      { code: "40", nom: "Nouvelle-Calédonie" },
-      { code: "42", nom: "Wallis et Futuna" },
-      { code: "44", nom: "Saint-Pierre-et-Miquelon" },
-      { code: "41", nom: "Polynésie Française" },
-      { code: "77", nom: "Saint-Barthélemy" },
-      { code: "78", nom: "Saint-Martin" },
+      { code: "40", prefix: "de ", nom: "Nouvelle-Calédonie" },
+      { code: "42", prefix: "de ", nom: "Wallis et Futuna" },
+      { code: "44", prefix: "de ", nom: "Saint-Pierre-et-Miquelon" },
+      { code: "41", prefix: "de ", nom: "Polynésie Française" },
+      { code: "77", prefix: "de ", nom: "Saint-Barthélemy" },
+      { code: "78", prefix: "de ", nom: "Saint-Martin" },
     ],
   },
   {
@@ -35,35 +35,35 @@ export const REGIONS: Region[] = [
     code_region_academique: "07",
     nom: "Guadeloupe",
     departements: [{ code: "971", nom: "Guadeloupe", academie: "32" }],
-    academies: [{ code: "32", nom: "Guadeloupe" }],
+    academies: [{ code: "32", prefix: "de ", nom: "Guadeloupe" }],
   },
   {
     code: "02",
     code_region_academique: "12",
     nom: "Martinique",
     departements: [{ code: "972", nom: "Martinique", academie: "31" }],
-    academies: [{ code: "31", nom: "Martinique" }],
+    academies: [{ code: "31", prefix: "de ", nom: "Martinique" }],
   },
   {
     code: "03",
     code_region_academique: "08",
     nom: "Guyane",
     departements: [{ code: "973", nom: "Guyane", academie: "33" }],
-    academies: [{ code: "33", nom: "Guyane" }],
+    academies: [{ code: "33", prefix: "de ", nom: "Guyane" }],
   },
   {
     code: "04",
     code_region_academique: "11",
     nom: "La Réunion",
     departements: [{ code: "974", nom: "La Réunion", academie: "28" }],
-    academies: [{ code: "28", nom: "La Réunion" }],
+    academies: [{ code: "28", prefix: "de ", nom: "La Réunion" }],
   },
   {
     code: "06",
     code_region_academique: "13",
     nom: "Mayotte",
     departements: [{ code: "976", nom: "Mayotte", academie: "43" }],
-    academies: [{ code: "43", nom: "Mayotte" }],
+    academies: [{ code: "43", prefix: "de ", nom: "Mayotte" }],
   },
   {
     code: "11",
@@ -80,9 +80,9 @@ export const REGIONS: Region[] = [
       { code: "95", nom: "Val-d'Oise", academie: "25" },
     ],
     academies: [
-      { code: "01", nom: "Paris" },
-      { code: "24", nom: "Créteil" },
-      { code: "25", nom: "Versailles" },
+      { code: "01", prefix: "de ", nom: "Paris" },
+      { code: "24", prefix: "de ", nom: "Créteil" },
+      { code: "25", prefix: "de ", nom: "Versailles" },
     ],
   },
   {
@@ -97,7 +97,7 @@ export const REGIONS: Region[] = [
       { code: "45", nom: "Loiret", academie: "18" },
       { code: "18", nom: "Cher", academie: "18" },
     ],
-    academies: [{ code: "18", nom: "Orléans-Tours" }],
+    academies: [{ code: "18", prefix: "d'", nom: "Orléans-Tours" }],
   },
   {
     code: "27",
@@ -114,8 +114,8 @@ export const REGIONS: Region[] = [
       { code: "58", nom: "Nièvre", academie: "07" },
     ],
     academies: [
-      { code: "07", nom: "Dijon" },
-      { code: "03", nom: "Besançon" },
+      { code: "07", prefix: "de ", nom: "Dijon" },
+      { code: "03", prefix: "de ", nom: "Besançon" },
     ],
   },
   {
@@ -129,7 +129,7 @@ export const REGIONS: Region[] = [
       { code: "14", nom: "Calvados", academie: "70" },
       { code: "61", nom: "Orne", academie: "70" },
     ],
-    academies: [{ code: "70", nom: "Normandie" }],
+    academies: [{ code: "70", prefix: "de ", nom: "Normandie" }],
   },
   {
     code: "32",
@@ -143,8 +143,8 @@ export const REGIONS: Region[] = [
       { code: "62", nom: "Pas-de-Calais", academie: "09" },
     ],
     academies: [
-      { code: "20", nom: "Amiens" },
-      { code: "09", nom: "Lille" },
+      { code: "20", prefix: "d'", nom: "Amiens" },
+      { code: "09", prefix: "de ", nom: "Lille" },
     ],
   },
   {
@@ -164,9 +164,9 @@ export const REGIONS: Region[] = [
       { code: "68", nom: "Haut-Rhin", academie: "15" },
     ],
     academies: [
-      { code: "19", nom: "Reims" },
-      { code: "12", nom: "Nancy-Metz" },
-      { code: "15", nom: "Strasbourg" },
+      { code: "19", prefix: "de ", nom: "Reims" },
+      { code: "12", prefix: "de ", nom: "Nancy-Metz" },
+      { code: "15", prefix: "de ", nom: "Strasbourg" },
     ],
   },
   {
@@ -180,7 +180,7 @@ export const REGIONS: Region[] = [
       { code: "49", nom: "Maine-et-Loire", academie: "17" },
       { code: "53", nom: "Mayenne", academie: "17" },
     ],
-    academies: [{ code: "17", nom: "Nantes" }],
+    academies: [{ code: "17", prefix: "de ", nom: "Nantes" }],
   },
   {
     code: "53",
@@ -192,7 +192,7 @@ export const REGIONS: Region[] = [
       { code: "22", nom: "Côtes-d'Armor", academie: "14" },
       { code: "56", nom: "Morbihan", academie: "14" },
     ],
-    academies: [{ code: "14", nom: "Rennes" }],
+    academies: [{ code: "14", prefix: "de ", nom: "Rennes" }],
   },
   {
     code: "75",
@@ -213,9 +213,9 @@ export const REGIONS: Region[] = [
       { code: "64", nom: "Pyrénées-Atlantiques", academie: "04" },
     ],
     academies: [
-      { code: "13", nom: "Poitiers" },
-      { code: "22", nom: "Limoges" },
-      { code: "04", nom: "Bordeaux" },
+      { code: "13", prefix: "de ", nom: "Poitiers" },
+      { code: "22", prefix: "de ", nom: "Limoges" },
+      { code: "04", prefix: "de ", nom: "Bordeaux" },
     ],
   },
   {
@@ -238,8 +238,8 @@ export const REGIONS: Region[] = [
       { code: "66", nom: "Pyrénées-Orientales", academie: "11" },
     ],
     academies: [
-      { code: "16", nom: "Toulouse" },
-      { code: "11", nom: "Montpellier" },
+      { code: "16", prefix: "de ", nom: "Toulouse" },
+      { code: "11", prefix: "de ", nom: "Montpellier" },
     ],
   },
   {
@@ -261,9 +261,9 @@ export const REGIONS: Region[] = [
       { code: "69", nom: "Rhône", academie: "10" },
     ],
     academies: [
-      { code: "10", nom: "Lyon" },
-      { code: "06", nom: "Clermont-Ferrand" },
-      { code: "08", nom: "Grenoble" },
+      { code: "10", prefix: "de ", nom: "Lyon" },
+      { code: "06", prefix: "de ", nom: "Clermont-Ferrand" },
+      { code: "08", prefix: "de ", nom: "Grenoble" },
     ],
   },
   {
@@ -279,8 +279,8 @@ export const REGIONS: Region[] = [
       { code: "13", nom: "Bouches-du-Rhône", academie: "02" },
     ],
     academies: [
-      { code: "02", nom: "Aix-Marseille" },
-      { code: "23", nom: "Nice" },
+      { code: "02", prefix: "d'", nom: "Aix-Marseille" },
+      { code: "23", prefix: "de ", nom: "Nice" },
     ],
   },
   {
@@ -292,7 +292,7 @@ export const REGIONS: Region[] = [
       { code: "2A", nom: "Corse-du-Sud", academie: "27" },
       { code: "2B", nom: "Haute-Corse", academie: "27" },
     ],
-    academies: [{ code: "27", nom: "Corse" }],
+    academies: [{ code: "27", prefix: "de ", nom: "Corse" }],
   },
 ];
 
@@ -307,6 +307,18 @@ export function codePostalToDepartement(postcode: string): string {
 export function findRegionByCodePostal(postcode: string) {
   const departement = codePostalToDepartement(postcode);
   return REGIONS.find((region) => region.departements.find((d) => d.code == departement));
+}
+
+export function findAcademieByCode(code: string) {
+  for (const region of REGIONS) {
+    for (const academie of region.academies) {
+      if (academie.code === code) {
+        return academie;
+      }
+    }
+  }
+
+  return null;
 }
 
 export function findAcademieByPostcode(postcode: string): string | null {

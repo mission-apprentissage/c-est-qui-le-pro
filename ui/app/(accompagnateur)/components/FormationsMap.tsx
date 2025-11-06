@@ -18,6 +18,39 @@ import L from "leaflet";
 
 const Map = dynamic(() => import("#/app/components/Map"), { ssr: false });
 
+function scrollToTooltip(event: L.PopupEvent) {
+  const map = event.target as L.Map;
+  const container = map.getContainer();
+  const containerRect = container.getBoundingClientRect();
+  const elt = event.popup.getElement();
+
+  if (!elt) return;
+
+  const waitForContent = () => {
+    const contentElement = elt.querySelector(".etablissement-card");
+    const eltRect = elt.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (!contentElement) {
+      requestAnimationFrame(waitForContent);
+      return;
+    }
+
+    if (containerRect.y < 1) {
+      return;
+    }
+
+    if (containerRect.bottom - containerRect.y < eltRect.bottom) {
+      window.scrollTo({
+        top: Math.min(containerRect.y + scrollTop, eltRect.bottom - containerRect.bottom + containerRect.y + scrollTop),
+        behavior: "smooth",
+      });
+    }
+  };
+
+  requestAnimationFrame(waitForContent);
+}
+
 export default function FormationsMap({
   latitude,
   longitude,
@@ -96,11 +129,12 @@ export default function FormationsMap({
                 bounds={{
                   y: 100,
                 }}
+                minWidth={330}
+                onOpen={scrollToTooltip}
               >
                 <EtablissementCard
                   etablissement={etablissement}
-                  latitude={latitude.toString()}
-                  longitude={longitude.toString()}
+                  academie={academie}
                   onClick={() => onTooltipClick && onTooltipClick(etablissement)}
                 />
               </DynamicPopup>

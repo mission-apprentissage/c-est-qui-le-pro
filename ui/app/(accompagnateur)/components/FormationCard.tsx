@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/** @jsxImportSource @emotion/react */
+import React from "react";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { DiplomeTypeLibelle, FormationDetail } from "shared";
@@ -13,10 +14,11 @@ import { TagDiplome } from "#/app/components/Tag";
 import FormationsFamilleMetier from "./FormationFamilleMetier";
 import { SerializedStyles } from "@emotion/react";
 import TagEtablissement from "./TagEtablissement";
+import { UserLocation } from "#/types/userLocation";
+import OutsideAcademieTooltip from "./OutsideAcademieTooltip";
 
 export default React.memo(function FormationCard({
-  latitude,
-  longitude,
+  location,
   formationDetail,
   selected,
   onMouseEnter,
@@ -24,12 +26,12 @@ export default React.memo(function FormationCard({
   tabIndex,
   withJPO = true,
   withDuration = true,
+  withOutsideAcademie = false,
   style = undefined,
   css = undefined,
   className = undefined,
 }: {
-  latitude: number;
-  longitude: number;
+  location?: UserLocation | null;
   formationDetail: FormationDetail;
   selected: boolean;
   onMouseEnter?: Function;
@@ -37,6 +39,7 @@ export default React.memo(function FormationCard({
   tabIndex: number;
   withJPO?: boolean;
   withDuration?: boolean;
+  withOutsideAcademie?: boolean;
   style?: React.CSSProperties;
   css?: SerializedStyles;
   className?: string;
@@ -44,8 +47,8 @@ export default React.memo(function FormationCard({
   const { formationEtablissement, formation, etablissement } = formationDetail;
   const formationLink = useFormationLink({
     formationDetail: formationDetail,
-    longitude: longitude.toString(),
-    latitude: latitude.toString(),
+    longitude: location ? location.longitude.toString() : "",
+    latitude: location ? location.latitude.toString() : "",
   });
 
   return (
@@ -88,8 +91,21 @@ export default React.memo(function FormationCard({
         </Typography>
 
         {withDuration && (
-          <Grid container style={{ marginTop: fr.spacing("5v") }}>
-            <Grid item xs={10}>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "left",
+              flexWrap: "wrap",
+              marginTop: "0.75rem",
+            }}
+          >
+            {withOutsideAcademie && (
+              <Box style={{ marginLeft: "-0.5rem", marginTop: "-0.5rem" }}>
+                <OutsideAcademieTooltip />
+              </Box>
+            )}
+            <Box>
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                   <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-line")} />
@@ -103,9 +119,8 @@ export default React.memo(function FormationCard({
                   </Typography>
                 )
               )}
-            </Grid>
-            <Grid item xs={2}></Grid>
-          </Grid>
+            </Box>
+          </Box>
         )}
       </Box>
 

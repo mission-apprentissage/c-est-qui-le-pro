@@ -8,16 +8,15 @@ import { uniq } from "lodash-es";
 import { formatAccessTime } from "#/app/utils/formation";
 import { css } from "@emotion/react";
 import { EtablissementContainerStyled } from "./EtablissementCard.styled";
+import OutsideAcademieTooltip from "./OutsideAcademieTooltip";
 
 export default function EtablissementCard({
   etablissement,
-  latitude,
-  longitude,
+  academie,
   onClick,
 }: {
   etablissement: Etablissement;
-  latitude?: string;
-  longitude?: string;
+  academie?: string | null;
   onClick?: (etablissement: Etablissement) => void;
 }) {
   const niveauxDiplome = useMemo(
@@ -26,7 +25,16 @@ export default function EtablissementCard({
   );
 
   return (
-    <EtablissementContainerStyled className={onClick && "clickable"} onClick={() => onClick && onClick(etablissement)}>
+    <EtablissementContainerStyled
+      className={`etablissement-card ${onClick && "clickable"}`}
+      onClick={() => onClick && onClick(etablissement)}
+    >
+      {academie !== etablissement.academie && (
+        <Box className="outside-academie">
+          <OutsideAcademieTooltip />
+        </Box>
+      )}
+
       <Box className="tag">
         <TagEtablissement etablissement={etablissement} />
       </Box>
