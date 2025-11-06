@@ -44,6 +44,10 @@ function getDuree(data) {
   return duree;
 }
 
+function hasHebergement(ens_hebergement) {
+  return !ens_hebergement || /^sans(.*)/.test(ens_hebergement);
+}
+
 async function getBcn(cfd, duree) {
   const bcn = (await RawDataRepository.firstForType(RawDataType.BCN, { code_certification: cfd }))?.data;
   const bcnMef = (await RawDataRepository.search(RawDataType.BCN_MEF, { formation_diplome: cfd }, false)).map(
@@ -131,6 +135,7 @@ export async function streamOnisepFormations({ stats }) {
       const dataFormatted = {
         millesime: [data.millesime],
         duree: formatDuree(duree),
+        hasHebergement: hasHebergement(data.data.ens_hebergement),
       };
 
       return {

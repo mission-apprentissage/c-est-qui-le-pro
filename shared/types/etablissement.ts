@@ -113,6 +113,8 @@ export type Etablissement = {
 
   academie: string;
   region: string;
+
+  hasFormationWithHebergement?: boolean;
 };
 
 export const etablissementSchema: yup.ObjectSchema<Etablissement> = yup.object().concat(
@@ -141,6 +143,7 @@ export const etablissementSchema: yup.ObjectSchema<Etablissement> = yup.object()
     niveauxDiplome: yup.array().of(yup.string().required()),
     modalite: yup.string().oneOf(Object.values(TransportModalite)),
     distance: yup.number(),
+    hasFormationWithHebergement: yup.boolean(),
     JPODates: yup
       .array()
       .of(

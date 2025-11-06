@@ -9,6 +9,7 @@ import { formatAccessTime } from "#/app/utils/formation";
 import { css } from "@emotion/react";
 import { EtablissementContainerStyled } from "./EtablissementCard.styled";
 import OutsideAcademieTooltip from "./OutsideAcademieTooltip";
+import TagHebergement from "./TagHebergement";
 
 export default function EtablissementCard({
   etablissement,
@@ -37,6 +38,7 @@ export default function EtablissementCard({
 
       <Box className="tag">
         <TagEtablissement etablissement={etablissement} />
+        {etablissement.hasFormationWithHebergement && <TagHebergement />}
       </Box>
 
       <Typography variant="h5">{etablissement.libelle}</Typography>

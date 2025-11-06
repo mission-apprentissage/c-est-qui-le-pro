@@ -4,9 +4,12 @@ import { Box } from "#/app/components/MaterialUINext";
 
 export const EtablissementContainerStyled = styled(Box)`
   padding: 24px 24px;
+  font-family: "Marianne", arial, sans-serif;
 
   & .tag {
     margin-bottom: 1rem;
+    display: flex;
+    gap: 0.5rem;
   }
 
   & h5 {
@@ -36,7 +39,7 @@ export const EtablissementContainerStyled = styled(Box)`
     }
   }
 
-  & p {
+  & .info p {
     font-size: 0.875rem;
     line-height: 1.5rem;
     font-weight: 700;

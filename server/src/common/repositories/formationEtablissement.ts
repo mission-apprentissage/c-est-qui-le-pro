@@ -32,6 +32,7 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
         formationId: null,
         id: null,
         millesime: null,
+        hasHebergement: null,
         tags: null,
         updatedAt: null,
         state: null,
