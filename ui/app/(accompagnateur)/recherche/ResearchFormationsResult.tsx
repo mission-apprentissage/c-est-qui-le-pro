@@ -129,7 +129,7 @@ const FormationResults = React.memo(
           <Grid container spacing={2} style={{ marginTop: "2rem" }}>
             <Grid item xs={12}>
               <Typography variant="h6">
-                Un peu plus loin en voiture : {totalCar} {pluralize("formation", totalCar)}
+                Un peu plus loin dans l&apos;académie, en voiture : {totalCar} {pluralize("formation", totalCar)}
               </Typography>
             </Grid>
 

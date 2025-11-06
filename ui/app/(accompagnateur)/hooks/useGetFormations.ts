@@ -16,7 +16,7 @@ export default function useGetFormations({
   uais,
   cfds,
   postcode,
-  insideAcademieForCar = false,
+  insideAcademieForCar = true,
   minWeight = 101,
   page,
   items_par_page = 100,
