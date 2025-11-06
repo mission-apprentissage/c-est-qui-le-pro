@@ -45,7 +45,7 @@ function getDuree(data) {
 }
 
 function hasHebergement(ens_hebergement) {
-  return !ens_hebergement || /^sans(.*)/.test(ens_hebergement);
+  return ens_hebergement && !/^sans(.*)/.test(ens_hebergement);
 }
 
 async function getBcn(cfd, duree) {

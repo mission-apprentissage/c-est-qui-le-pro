@@ -123,6 +123,7 @@ export async function importEtablissements() {
           const onisepHasHebergement = await RawDataRepository.first((eb) =>
             eb.and([
               eb("type", "=", RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee),
+              eb(sql.raw(`data->'data'->>'ens_code_uai'`), "=", formated.uai),
               eb(sql.raw(`data->'data'->>'ens_hebergement'`), "not like", "sans%"),
               eb(sql.raw(`data->'data'->>'ens_hebergement'`), "!=", ""),
               eb(sql.raw(`data->'data'->>'ens_hebergement'`), "is not", null),
