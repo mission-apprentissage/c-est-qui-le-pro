@@ -9,6 +9,7 @@ import Link from "./components/Link";
 import Button from "./components/Button";
 import { JSX } from "react";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
+import NewNameHeader from "./(accompagnateur)/components/NewNameHeader";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
@@ -32,6 +33,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
           title={title}
         >
           <div>
+            <NewNameHeader />
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer
@@ -51,7 +53,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
               accessibilityLinkProps={{ href: "/accessibilite" }}
               contentDescription={
                 <>
-                  <b>C&apos;est qui le pro ?</b> est un service de la{" "}
+                  <b>Futur pro</b> est un service de la{" "}
                   <Link href="https://beta.gouv.fr/incubateurs/mission-inserjeunes.html" target="_blank">
                     Mission interministérielle InserJeunes
                   </Link>

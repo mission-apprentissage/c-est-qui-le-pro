@@ -1,0 +1,217 @@
+{{- if and .Values.ingress.redirect.enabled .Values.ingress.redirect.host .Values.ingress.redirect.targetHost -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.fullname" . }}-redirect-config
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+data:
+  default.conf: |
+    server_names_hash_bucket_size 128;
+    
+    server {
+      listen 80;
+      server_name {{ .Values.ingress.redirect.host }};
+      
+      location / {
+        return 301 https://{{ .Values.ingress.redirect.targetHost }}$request_uri;
+      }
+      
+      location /healthz {
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
+    }
+
+    server {
+      listen 80;
+      server_name api.{{ .Values.ingress.redirect.host }};
+      
+      location / {
+        return 301 https://api.{{ .Values.ingress.redirect.targetHost }}$request_uri;
+      }
+      
+      location /healthz {
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
+    }
+    
+    server {
+      listen 80;
+      server_name documentation.{{ .Values.ingress.redirect.host }};
+      
+      location / {
+        return 301 https://documentation.{{ .Values.ingress.redirect.targetHost }}$request_uri;
+      }
+      
+      location /healthz {
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
+    }
+    
+    server {
+      listen 80;
+      server_name statistiques.{{ .Values.ingress.redirect.host }};
+      
+      location / {
+        return 301 https://statistiques.{{ .Values.ingress.redirect.targetHost }}$request_uri;
+      }
+      
+      location /healthz {
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
+    }
+    
+    server {
+      listen 80 default_server;
+      server_name _;
+      
+      location / {
+        return 301 https://{{ .Values.ingress.redirect.targetHost }}$request_uri;
+      }
+      
+      location /healthz {
+        return 200 "healthy\n";
+        add_header Content-Type text/plain;
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "app.fullname" . }}-redirect
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "app.fullname" . }}-redirect
+  template:
+    metadata:
+      labels:
+        app: {{ include "app.fullname" . }}-redirect
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: config
+          mountPath: /etc/nginx/conf.d
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.ingress.redirect.host }}
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: http
+            httpHeaders:
+            - name: Host
+              value: {{ .Values.ingress.redirect.host }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "50m"
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "app.fullname" . }}-redirect-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "app.fullname" . }}-redirect-svc
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+spec:
+  selector:
+    app: {{ include "app.fullname" . }}-redirect
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "app.fullname" . }}-redirect
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    {{- if .Values.ingress.certManager.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
+    {{- end }}
+spec:
+  ingressClassName: nginx
+  {{- if .Values.ingress.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.redirect.host | quote }}
+        - {{ printf "api.%s" .Values.ingress.redirect.host | quote }}
+        - {{ printf "documentation.%s" .Values.ingress.redirect.host | quote }}
+        - {{ printf "statistiques.%s" .Values.ingress.redirect.host | quote }}
+      secretName: {{ .Values.ingress.redirect.tlsSecretName | default (printf "%s-redirect-tls" (include "app.fullname" .)) }}
+  {{- end }}
+  rules:
+  - host: {{ .Values.ingress.redirect.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "app.fullname" . }}-redirect-svc
+            port:
+              number: 80
+  - host: {{ printf "api.%s" .Values.ingress.redirect.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "app.fullname" . }}-redirect-svc
+            port:
+              number: 80
+  - host: {{ printf "documentation.%s" .Values.ingress.redirect.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "app.fullname" . }}-redirect-svc
+            port:
+              number: 80
+  - host: {{ printf "statistiques.%s" .Values.ingress.redirect.host | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "app.fullname" . }}-redirect-svc
+            port:
+              number: 80
+{{- end }}

@@ -1,8 +1,8 @@
 # Politique de confidentialité
 
-## Qui est responsable des traitements sur C’est qui le pro ?
+## Qui est responsable des traitements sur Futur pro
 
-Le responsable du traitement est le Ministère de l’Éducation nationale, de l’Enseignement supérieur et de la Recherche, en charge de la Plateforme C’est qui le pro ?, appelé dans la suite du document “la Plateforme”.
+Le responsable du traitement est le Ministère de l’Éducation nationale, de l’Enseignement supérieur et de la Recherche, en charge de la Plateforme Futur pro, appelé dans la suite du document “la Plateforme”.
 
 ## Quelles sont les données traitées ?
 
@@ -13,7 +13,7 @@ La Plateforme traite les données suivantes :
 
 ## Pourquoi ces données sont-elles traitées ?
 
-La plateforme C’est qui le pro ? traite des données à caractère personnel pour les raisons suivantes :
+La plateforme Futur pro traite des données à caractère personnel pour les raisons suivantes :
 
 - La facilitation de la découverte des formations professionnelles accessibles après le
   collège, par les accompagnateurs de l’orientation, les jeunes et leurs
