@@ -85,7 +85,6 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
             ) : (
               <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
             ))}
-          {formationEtablissement.hasHebergement && <TagHebergement />}
           {formationEtablissement.duree && <TagDuree>{`En ${formationEtablissement.duree}`}</TagDuree>}
           <LabelApprentissage formation={formation} />
           <FormationTags
@@ -181,11 +180,14 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                       {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
                     </Box>
                   )}
-                  <FormationRoute
-                    etablissement={etablissement}
-                    latitude={userLocation.latitude?.toString()}
-                    longitude={userLocation.longitude?.toString()}
-                  />
+                  <Box style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <FormationRoute
+                      etablissement={etablissement}
+                      latitude={userLocation.latitude?.toString()}
+                      longitude={userLocation.longitude?.toString()}
+                    />
+                    {formationEtablissement.hasHebergement && <TagHebergement />}
+                  </Box>
                 </Box>
 
                 <FormationDisponible formationDetail={formationDetail} />
