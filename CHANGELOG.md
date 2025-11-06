@@ -1,3 +1,10 @@
+# [1.51.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.50.0...v1.51.0) (2025-11-06)
+
+
+### Features
+
+* formations hors academies ([#99](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/99)) ([fc1c3c6](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/fc1c3c6eadf18eb474835eeb0063c7040c5fb8dc))
+
 # [1.50.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.49.0...v1.50.0) (2025-11-06)
 
 
