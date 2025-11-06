@@ -103,7 +103,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <MainContainer bgColor="white">
         <Container nopadding maxWidth={"md"}>
           <LogoStack direction={{ xs: "column", md: "row" }} spacing={2}>
-            <Image src={"/assets/logo_futurpro.svg"} width="299" height="49" alt={"Logo CQLP"} />
+            <Image src={"/assets/logo_futurpro.svg"} width="299" height="83" alt={"Logo CQLP"} />
             <Typography>et</Typography>
             <Image src={"/assets/logo_avenir.svg"} width="206" height="93" alt={"Logo Avenir"} />
           </LogoStack>
