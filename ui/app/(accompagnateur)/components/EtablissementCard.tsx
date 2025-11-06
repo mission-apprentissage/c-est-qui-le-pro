@@ -25,7 +25,10 @@ export default function EtablissementCard({
   );
 
   return (
-    <EtablissementContainerStyled className={onClick && "clickable"} onClick={() => onClick && onClick(etablissement)}>
+    <EtablissementContainerStyled
+      className={`etablissement-card ${onClick && "clickable"}`}
+      onClick={() => onClick && onClick(etablissement)}
+    >
       {academie !== etablissement.academie && (
         <Box className="outside-academie">
           <OutsideAcademieTooltip />

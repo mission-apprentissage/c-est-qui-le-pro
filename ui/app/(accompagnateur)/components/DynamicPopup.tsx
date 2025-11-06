@@ -30,6 +30,7 @@ export interface PopupProps extends PopupOptions, EventedProps {
     y?: number;
     x?: number;
   };
+  onOpen?: (event: PopupEvent) => void;
 }
 
 export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
@@ -49,9 +50,11 @@ export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
   function usePopupLifecycle(
     element: LeafletElement<LeafletPopup>,
     context: LeafletContextInterface,
-    { position }: PopupProps,
+    props: PopupProps,
     setOpen: SetOpenFunc
   ) {
+    const { position, onOpen } = props;
+
     useEffect(
       function addPopup() {
         const { instance } = element;
@@ -60,6 +63,7 @@ export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
           if (event.popup === instance) {
             instance.update();
             setOpen(true);
+            onOpen && onOpen(event);
           }
         }
 
