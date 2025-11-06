@@ -1,3 +1,10 @@
+# [1.50.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.49.0...v1.50.0) (2025-11-06)
+
+
+### Features
+
+* changement de nom de cqlp pour futur pro ([#98](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/98)) ([b0357fa](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/b0357fab8d472ae5906df58d245d452347ee6bf3))
+
 # [1.49.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.48.0...v1.49.0) (2025-11-03)
 
 
