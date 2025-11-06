@@ -27,6 +27,7 @@ import { createPortal } from "react-dom";
 import DialogOutsideAcademie from "../../components/DialogOutsideAcademie";
 import { useGetReverseLocation } from "../../hooks/useGetAddress";
 import { useQueryLocation } from "../../hooks/useQueryLocation";
+import TagHebergement from "../../components/TagHebergement";
 
 export const StyledButtonLink = styled(Link)`
   padding: 0.5rem;
@@ -84,6 +85,7 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
             ) : (
               <TagStatutPrive>{capitalize(formatStatut(etablissement))}</TagStatutPrive>
             ))}
+          {formationEtablissement.hasHebergement && <TagHebergement />}
           {formationEtablissement.duree && <TagDuree>{`En ${formationEtablissement.duree}`}</TagDuree>}
           <LabelApprentissage formation={formation} />
           <FormationTags
