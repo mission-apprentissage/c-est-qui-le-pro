@@ -29,6 +29,7 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
         hasFormation: null,
         region: null,
         type: null,
+        hasFormationWithHebergement: null,
       },
       kdb
     );

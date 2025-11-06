@@ -16,6 +16,7 @@ import { SerializedStyles } from "@emotion/react";
 import TagEtablissement from "./TagEtablissement";
 import { UserLocation } from "#/types/userLocation";
 import OutsideAcademieTooltip from "./OutsideAcademieTooltip";
+import TagHebergement from "./TagHebergement";
 
 export default React.memo(function FormationCard({
   location,
@@ -105,7 +106,14 @@ export default React.memo(function FormationCard({
                 <OutsideAcademieTooltip />
               </Box>
             )}
-            <Box>
+            <Box
+              style={{
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
+                marginTop: formationEtablissement.hasHebergement ? "-0.25rem" : 0,
+              }}
+            >
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                   <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-line")} />
@@ -119,6 +127,7 @@ export default React.memo(function FormationCard({
                   </Typography>
                 )
               )}
+              {formationEtablissement.hasHebergement && <TagHebergement />}
             </Box>
           </Box>
         )}
