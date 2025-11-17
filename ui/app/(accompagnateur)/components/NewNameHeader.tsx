@@ -3,8 +3,6 @@
 import { fr } from "@codegouvfr/react-dsfr";
 import { css } from "@emotion/react";
 import { useSessionStorage } from "usehooks-ts";
-import MailSendIcon from "#/app/components/icon/MailSendIcon";
-import Link from "#/app/components/Link";
 import { Box, Typography } from "#/app/components/MaterialUINext";
 import { useEffect, useState } from "react";
 

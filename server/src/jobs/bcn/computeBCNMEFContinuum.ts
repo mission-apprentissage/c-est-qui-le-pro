@@ -100,37 +100,45 @@ export async function computeBCNMEFContinuum() {
       type: "mef",
     }),
     transformData(async ({ data }) => {
-      // Get CFD and Mef
-      const diplomeCfdResult = await RawDataRepository.firstForType(RawDataType.BCN, {
-        code_certification: data.code_formation_diplome,
-      });
-      const diplomeCfd = diplomeCfdResult.data as RawData[RawDataType.BCN];
+      try {
+        // Get CFD and Mef
+        const diplomeCfdResult = await RawDataRepository.firstForType(RawDataType.BCN, {
+          code_certification: data.code_formation_diplome,
+        });
+        const diplomeCfd = diplomeCfdResult.data as RawData[RawDataType.BCN];
 
-      const diplomeMefRequest = await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
-        mef_stat_11: data.code_certification,
-      });
-      const diplomeMef = diplomeMefRequest ? (diplomeMefRequest.data as RawData[RawDataType.BCN_MEF]) : null;
+        const diplomeMefRequest = await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
+          mef_stat_11: data.code_certification,
+        });
+        const diplomeMef = diplomeMefRequest ? (diplomeMefRequest.data as RawData[RawDataType.BCN_MEF]) : null;
 
-      if (!diplomeMef) {
-        logger.error(`Le diplome ${data.code_certification} n'existe pas dans la table Mef`);
+        if (!diplomeMef) {
+          logger.error(`Le diplome ${data.code_certification} n'existe pas dans la table Mef`);
+          return null;
+        }
+
+        // Get old MEFs
+        const oldMefs = await Promise.all(diplomeCfd.ancien_diplome.map((oldCfd) => getMefFromCfd(oldCfd, diplomeMef)));
+
+        // Get new MEFs
+        const newMefs = await Promise.all(
+          diplomeCfd.nouveau_diplome.map((newCfd) => getMefFromCfd(newCfd, diplomeMef))
+        );
+
+        const newData = {
+          code_certification: data.code_certification,
+          date_premiere_session: diplomeCfd.date_premiere_session,
+          date_derniere_session: diplomeCfd.date_derniere_session,
+          ancien_diplome: omitNil(oldMefs).map((d) => d.mef_stat_11),
+          nouveau_diplome: omitNil(newMefs).map((d) => d.mef_stat_11),
+        };
+
+        return newData;
+      } catch (e) {
+        logger.error(e, `Impossible d'importer le code ${data.code_certification}`);
+        stats.failed++;
         return null;
       }
-
-      // Get old MEFs
-      const oldMefs = await Promise.all(diplomeCfd.ancien_diplome.map((oldCfd) => getMefFromCfd(oldCfd, diplomeMef)));
-
-      // Get new MEFs
-      const newMefs = await Promise.all(diplomeCfd.nouveau_diplome.map((newCfd) => getMefFromCfd(newCfd, diplomeMef)));
-
-      const newData = {
-        code_certification: data.code_certification,
-        date_premiere_session: diplomeCfd.date_premiere_session,
-        date_derniere_session: diplomeCfd.date_derniere_session,
-        ancien_diplome: omitNil(oldMefs).map((d) => d.mef_stat_11),
-        nouveau_diplome: omitNil(newMefs).map((d) => d.mef_stat_11),
-      };
-
-      return newData;
     }),
     filterData((v) => v),
     writeData(
