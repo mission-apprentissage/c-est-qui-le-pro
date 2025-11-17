@@ -1,79 +1,43 @@
+/** @jsxImportSource @emotion/react */
 "use client";
-
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
-import { ReactNode, RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ZoomControl, useMap, useMapEvent, useMapEvents } from "react-leaflet";
-import { DivIcon, LatLngTuple, LeafletMouseEvent } from "leaflet";
-import { renderToString } from "react-dom/server";
+import styled from "@emotion/styled";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ZoomControl, useMap, useMapEvents } from "react-leaflet";
+import { LatLngTuple, LeafletMouseEvent } from "leaflet";
 import dynamic from "next/dynamic";
-import HomeIcon from "./icon/HomeIcon";
-import EtablissementIcon from "./icon/EtablissementIcon";
 import { useGetMapStyle } from "../(accompagnateur)/hooks/useGetMapStyle";
+import MapAutoresize from "./map/MapAutoresize";
+import { fr } from "@codegouvfr/react-dsfr";
+import AttributionWithLegend from "./map/AttributionWithLegend";
 
 const VectorTileLayer = dynamic(() => import("react-leaflet-vector-tile-layer").then((mod) => mod), {
   ssr: false,
 });
 const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false });
 
-export const LeafletHomeIcon = new DivIcon({
-  iconSize: [52, 58],
-  iconAnchor: [26, 58],
-  popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon leaftlet-home-icon color-white",
-  html: renderToString(<HomeIcon />),
-});
+const MapContainerStyled = styled(MapContainer)`
+  & .leaflet-control-horizontal {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    background-color: white !important;
+  }
 
-export const LeafletEtablissementIcon = new DivIcon({
-  iconSize: [52, 58],
-  iconAnchor: [26, 58],
-  popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-white",
-  html: renderToString(<EtablissementIcon />),
-});
-
-export const LeafletEtablissementOutsideAcademieIcon = new DivIcon({
-  iconSize: [52, 58],
-  iconAnchor: [26, 58],
-  popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-white",
-  html: renderToString(<EtablissementIcon fill={"#fcc0b4"} />),
-});
-
-export const LeafletSelectedEtablissementIcon = new DivIcon({
-  iconSize: [58, 64],
-  iconAnchor: [29, 64],
-  popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-orange leaflet-icon-selected",
-  html: renderToString(<EtablissementIcon />),
-});
-
-export const LeafletSelectedEtablissementOutsideAcademieIcon = new DivIcon({
-  iconSize: [58, 64],
-  iconAnchor: [29, 64],
-  popupAnchor: [-3, -76],
-  className: "custom-leaflet-icon color-pink leaflet-icon-selected",
-  html: renderToString(<EtablissementIcon fill={"#fcc0b4"} />),
-});
-
-function MapAutoresize() {
-  const map = useMap();
-  const resizeObserver = useRef<ResizeObserver | null>(null);
-
-  useEffect(() => {
-    resizeObserver.current = new ResizeObserver(() => {
-      map.invalidateSize();
-    });
-    const container = map.getContainer();
-    resizeObserver.current.observe(container);
-
-    return () => {
-      resizeObserver && resizeObserver.current && resizeObserver.current.disconnect();
-    };
-  }, [map]);
-  return <></>;
-}
+  & .leaflet-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: ${fr.colors.decisions.background.actionHigh.blueFrance.default};
+    font-family: "Marianne", arial, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+  }
+`;
 
 function TileLayer({ academie }: { academie?: string | null }) {
   const map = useMap();
@@ -135,46 +99,6 @@ export const MapClickHandler = ({ onClick }: { onClick?: (e: LeafletMouseEvent) 
   return null;
 };
 
-export function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup | null> }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  const map = useMapEvent("layeradd", () => {
-    if (!groupRef?.current) {
-      return;
-    }
-
-    const bounds = groupRef.current.getBounds();
-    if (bounds.isValid()) {
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    }
-  });
-
-  useEffect(() => {
-    if (!groupRef?.current) {
-      return;
-    }
-
-    const bounds = groupRef.current.getBounds();
-    if (bounds.isValid()) {
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    }
-  }, [groupRef, isLoading]);
-
-  useEffect(() => {
-    if (isLoading || !groupRef?.current) {
-      return;
-    }
-
-    const bounds = groupRef.current.getBounds();
-    map.fitBounds(bounds);
-  }, [isLoading, groupRef, map]);
-  return null;
-}
-
 export default function Map({
   center,
   children,
@@ -198,12 +122,13 @@ export default function Map({
   }
 
   return (
-    <MapContainer
+    <MapContainerStyled
       zoomControl={false}
       scrollWheelZoom={true}
       style={{ height: "100%", width: "100%" }}
       center={center}
       zoom={13}
+      attributionControl={false}
     >
       <PreventFocus />
       <MapAutoresize />
@@ -212,6 +137,24 @@ export default function Map({
       <RecenterAutomatically position={center} />
 
       <ZoomControl />
-    </MapContainer>
+
+      <AttributionWithLegend>
+        <>
+          <svg width="30" height="10">
+            <line
+              x1="0"
+              y1="5"
+              x2="30"
+              y2="5"
+              stroke={"#2323ff"}
+              strokeWidth={3}
+              strokeOpacity={1}
+              strokeDasharray={"5,5"}
+            />
+          </svg>
+          <span>Limite de l’académie</span>
+        </>
+      </AttributionWithLegend>
+    </MapContainerStyled>
   );
 }

@@ -132,6 +132,8 @@ export async function importEtablissements() {
 
           if (onisepHasHebergement) {
             onisepFormated["hasFormationWithHebergement"] = true;
+          } else {
+            onisepFormated["hasFormationWithHebergement"] = false;
           }
         }
 
