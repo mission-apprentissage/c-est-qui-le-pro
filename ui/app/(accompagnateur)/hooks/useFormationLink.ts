@@ -1,3 +1,4 @@
+"use client";
 import { FormationDetail, FormationFamilleMetierDetail } from "shared";
 import { useSearchParams } from "next/navigation";
 import { FormationsSearchParams } from "../context/FormationsSearchContext";

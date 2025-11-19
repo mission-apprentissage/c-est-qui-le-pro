@@ -1,3 +1,4 @@
+"use client";
 import { SearchFormationFormData } from "#/app/components/form/SearchFormationForm";
 import { createContext, useContext, ReactNode, useRef, useCallback } from "react";
 import { UseFormSetFocus } from "react-hook-form";

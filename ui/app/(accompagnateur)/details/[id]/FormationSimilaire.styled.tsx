@@ -1,3 +1,4 @@
+"use client";
 /** @jsxImportSource @emotion/react */
 import FormationCard from "../../components/FormationCard";
 import { Box, Typography } from "#/app/components/MaterialUINext";

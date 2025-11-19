@@ -4,66 +4,52 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { css } from "@emotion/react";
 import { useSessionStorage } from "usehooks-ts";
 import { Box, Typography } from "#/app/components/MaterialUINext";
-import { useEffect, useState } from "react";
 
-export default function NewNameHeader() {
-  const [isClient, setIsClient] = useState(false);
-  const [displayConstructionHeader, saveDisplayConstructionHeader] = useSessionStorage<boolean>(
-    "displayConstructionHeader",
-    true
-  );
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
+export default function NewNameHeader({ onClose }: { onClose?: () => void }) {
   return (
-    isClient &&
-    displayConstructionHeader && (
+    <Box
+      style={{
+        backgroundColor: fr.colors.decisions.artwork.decorative.blueFrance.default,
+        position: "relative",
+      }}
+    >
       <Box
         style={{
-          backgroundColor: fr.colors.decisions.artwork.decorative.blueFrance.default,
-          position: "relative",
+          maxWidth: "78rem",
+          padding: "1.5rem",
+          paddingRight: "3rem",
+          marginLeft: "auto",
+          marginRight: "auto",
+          display: "flex",
         }}
       >
-        <Box
-          style={{
-            maxWidth: "78rem",
-            padding: "1.5rem",
-            paddingRight: "3rem",
-            marginLeft: "auto",
-            marginRight: "auto",
-            display: "flex",
-          }}
-        >
-          <Box style={{ marginRight: "1rem" }}>
-            <i
-              style={{ color: fr.colors.decisions.text.title.blueFrance.default }}
-              className={fr.cx("ri-information-line")}
-            ></i>
-          </Box>
-          <Box>
-            <Box>
-              <Typography variant="subtitle3">
-                <b>C’est qui le pro ?</b> change de nom pour devenir <b>Futur Pro</b>
-              </Typography>
-            </Box>
-          </Box>
+        <Box style={{ marginRight: "1rem" }}>
+          <i
+            style={{ color: fr.colors.decisions.text.title.blueFrance.default }}
+            className={fr.cx("ri-information-line")}
+          ></i>
         </Box>
-        <Box
-          css={css`
-            color: ${fr.colors.decisions.text.title.blueFrance.default};
-            :hover {
-              background-color: ${fr.colors.decisions.background.raised.grey.hover};
-              cursor: pointer;
-            }
-          `}
-          style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)" }}
-          onClick={() => saveDisplayConstructionHeader(false)}
-        >
-          <i className={fr.cx("ri-close-fill")}></i>
+        <Box>
+          <Box>
+            <Typography variant="subtitle3">
+              <b>C’est qui le pro ?</b> change de nom pour devenir <b>Futur Pro</b>
+            </Typography>
+          </Box>
         </Box>
       </Box>
-    )
+      <Box
+        css={css`
+          color: ${fr.colors.decisions.text.title.blueFrance.default};
+          :hover {
+            background-color: ${fr.colors.decisions.background.raised.grey.hover};
+            cursor: pointer;
+          }
+        `}
+        style={{ position: "absolute", right: "1rem", top: "50%", transform: "translateY(-50%)" }}
+        onClick={onClose}
+      >
+        <i className={fr.cx("ri-close-fill")}></i>
+      </Box>
+    </Box>
   );
 }

@@ -10,7 +10,7 @@ import { SearchFormationFormData, schema } from "./SearchFormationForm";
 import { Theme } from "@mui/material";
 import useSearchHistory from "#/app/(accompagnateur)/hooks/useSearchHistory";
 import FormationField from "./FormationField";
-import { RefObject, useEffect, useMemo, useState } from "react";
+import { RefObject, Suspense, useEffect, useMemo, useState } from "react";
 import { uniq } from "lodash-es";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
 import {
@@ -228,51 +228,53 @@ export default function SearchFormationHomeForm({
   }, [bordered, isFocus, isDownSm]);
 
   return (
-    <OverlayContainer isFocus={isFocus && isDownSm}>
-      <OverlayInner isFocus={isFocus && isDownSm}>
-        {isFocus && isDownSm && (
-          <MobileCloseButtonContainer>
-            <Button
-              iconOnly
-              size="large"
-              rounded
-              iconId="fr-icon-close-line"
-              priority="tertiary no outline"
-              title="Fermer la recherche"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsFocus(false);
-              }}
-            />
-          </MobileCloseButtonContainer>
-        )}
-        <FormSearchParams
-          onSubmit={(data) => {
-            setIsFocus(false);
-            data.address && pushHistory(data);
-          }}
-          url={url}
-          defaultValues={defaultValues}
-          schema={schema}
-          dynamicValues={["domaines", "tag", "voie", "diplome"]}
-        >
-          {({ control, errors, formRef, setValue, setFocus }) => (
-            <SearchFormationHomeFormElements
-              isHomeSearch={isHomeSearch}
-              setIsFocus={setIsFocus}
-              isFocus={isFocus}
-              isBordered={isBordered}
-              isDownSm={isDownSm}
-              withFormation={withFormation}
-              control={control}
-              errors={errors}
-              formRef={formRef}
-              setValue={setValue}
-              setFocus={setFocus}
-            />
+    <Suspense>
+      <OverlayContainer isFocus={isFocus && isDownSm}>
+        <OverlayInner isFocus={isFocus && isDownSm}>
+          {isFocus && isDownSm && (
+            <MobileCloseButtonContainer>
+              <Button
+                iconOnly
+                size="large"
+                rounded
+                iconId="fr-icon-close-line"
+                priority="tertiary no outline"
+                title="Fermer la recherche"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsFocus(false);
+                }}
+              />
+            </MobileCloseButtonContainer>
           )}
-        </FormSearchParams>
-      </OverlayInner>
-    </OverlayContainer>
+          <FormSearchParams
+            onSubmit={(data) => {
+              setIsFocus(false);
+              data.address && pushHistory(data);
+            }}
+            url={url}
+            defaultValues={defaultValues}
+            schema={schema}
+            dynamicValues={["domaines", "tag", "voie", "diplome"]}
+          >
+            {({ control, errors, formRef, setValue, setFocus }) => (
+              <SearchFormationHomeFormElements
+                isHomeSearch={isHomeSearch}
+                setIsFocus={setIsFocus}
+                isFocus={isFocus}
+                isBordered={isBordered}
+                isDownSm={isDownSm}
+                withFormation={withFormation}
+                control={control}
+                errors={errors}
+                formRef={formRef}
+                setValue={setValue}
+                setFocus={setFocus}
+              />
+            )}
+          </FormSearchParams>
+        </OverlayInner>
+      </OverlayContainer>
+    </Suspense>
   );
 }

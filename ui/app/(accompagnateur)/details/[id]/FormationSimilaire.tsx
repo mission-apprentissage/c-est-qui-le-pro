@@ -1,3 +1,4 @@
+"use client";
 /** @jsxImportSource @emotion/react */
 import { formationsSimilaire } from "#/app/queries/formationsSimilaire/query";
 import { FormationDetail } from "shared";
