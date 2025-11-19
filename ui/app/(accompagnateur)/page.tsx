@@ -1,5 +1,4 @@
-"use client";
-import React, { Suspense } from "react";
+import React from "react";
 import Image from "next/image";
 import Container from "#/app/components/Container";
 import { Grid, Typography } from "#/app/components/MaterialUINext";
@@ -10,7 +9,6 @@ import {
   MainTitle,
   MainTitleGrid,
   CitySuggestionStack,
-  AddressButton,
   ImageGrid,
   HomeImage,
   LogoStack,
@@ -20,12 +18,11 @@ import {
 } from "./page.styled";
 import { HighlightedText } from "./details/[id]/FormationSimilaire.styled";
 import Link from "../components/Link";
-import FocusSearchProvider, { useFocusSearchContext } from "./context/FocusSearchContext";
+import FocusSearchProvider from "./context/FocusSearchContext";
 import { CITIES_SUGGESTION } from "../services/address";
+import FocusAdressButton from "./components/FocusAdressButton";
 
 function CitySuggestion() {
-  const { focusField } = useFocusSearchContext();
-
   return (
     <CitySuggestionStack
       direction="row"
@@ -47,24 +44,14 @@ function CitySuggestion() {
           </Button>
         </Link>
       ))}
-      <AddressButton
-        iconOnly
-        iconSize="lg"
-        iconId="ri-arrow-right-line"
-        size="small"
-        rounded
-        variant="white"
-        priority="tertiary no outline"
-        title="Mon adresse"
-        onClick={() => focusField("address")}
-      ></AddressButton>
+      <FocusAdressButton />
     </CitySuggestionStack>
   );
 }
 
 export default function Page({ params }: { params: { id: string } }) {
   return (
-    <Suspense>
+    <>
       <MainContainer bgColor="blue">
         <Container nopadding maxWidth={"xl"}>
           <Grid container spacing={"3rem"}>
@@ -145,6 +132,6 @@ export default function Page({ params }: { params: { id: string } }) {
           />
         </PreviewImageBox>
       </MainContainer>
-    </Suspense>
+    </>
   );
 }
