@@ -9,7 +9,7 @@ import Link from "./components/Link";
 import Button from "./components/Button";
 import { JSX } from "react";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
-import NewNameHeader from "./(accompagnateur)/components/NewNameHeader";
+import NewNameHeaderClient from "./(accompagnateur)/components/NewNameHeaderClient";
 
 export default function MainLayout({ children }: { children: JSX.Element }) {
   return (
@@ -33,7 +33,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
           title={title}
         >
           <div>
-            <NewNameHeader />
+            <NewNameHeaderClient></NewNameHeaderClient>
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer
