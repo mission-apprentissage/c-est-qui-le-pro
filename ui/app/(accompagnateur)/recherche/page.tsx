@@ -60,18 +60,16 @@ export default async function Page({
       <Title pageTitle="Recherche de formations" />
       <ScrollToTop />
 
-      <RouterUpdaterProvider>
-        <FormationsSearchProvider initialParams={params}>
-          <FocusSearchProvider>
-            <HeaderContainer>
-              <SearchHeader />
-              <SearchFormationFiltersForm />
-            </HeaderContainer>
+      <FormationsSearchProvider initialParams={params}>
+        <FocusSearchProvider>
+          <HeaderContainer>
+            <SearchHeader />
+            <SearchFormationFiltersForm />
+          </HeaderContainer>
 
-            <ResearchFormationsParameter initialLocation={initialLocation} initialFormations={initialFormations} />
-          </FocusSearchProvider>
-        </FormationsSearchProvider>
-      </RouterUpdaterProvider>
+          <ResearchFormationsParameter initialLocation={initialLocation} initialFormations={initialFormations} />
+        </FocusSearchProvider>
+      </FormationsSearchProvider>
     </>
   );
 }

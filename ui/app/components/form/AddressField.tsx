@@ -128,7 +128,7 @@ export default function AddressField({
 
   const valueDebounce = useThrottle(inputValue, 300);
 
-  const [options, setOptions] = useState([myPosition, value]);
+  const [options, setOptions] = useState([myPosition, ...(value ? [value] : [])]);
 
   const { isLoading, data: optionsAddress } = useGetAddress(valueDebounce, {
     select: (data: Awaited<ReturnType<typeof fetchAddress>>) => {
