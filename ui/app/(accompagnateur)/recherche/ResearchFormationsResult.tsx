@@ -19,8 +19,11 @@ import { pluralize } from "#/app/utils/stringUtils";
 import { fetchReverse } from "#/app/services/address";
 import DialogOutsideAcademie from "../components/DialogOutsideAcademie";
 import { createPortal } from "react-dom";
+import { useIsClient } from "usehooks-ts";
+import { useRouterUpdater } from "../context/RouterUpdaterContext";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
+  loading: () => <Loader withMargin />,
 });
 
 const FormationResult = React.memo(
@@ -168,14 +171,22 @@ const FormationResults = React.memo(
 );
 FormationResults.displayName = "FormationResults";
 
+function PortalDialogOutsideAcademie({ academie }: { academie: string | null }) {
+  const isClient = useIsClient();
+
+  return isClient ? createPortal(<DialogOutsideAcademie academie={academie} />, document.body) : null;
+}
+
 export default React.memo(function ResearchFormationsResult({
   location,
   page = 1,
   isAddressFetching,
+  initialFormations,
 }: {
   location: UserLocation;
   page: number;
   isAddressFetching?: boolean;
+  initialFormations?: any;
 }) {
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
@@ -183,6 +194,7 @@ export default React.memo(function ResearchFormationsResult({
   const [latLng, setLatLng] = useState<number[] | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
+  const { isPending } = useRouterUpdater();
   const { params, updateParams } = useFormationsSearch();
   const { tag, domaines, recherche, voie, diplome, minWeight } = params ?? {};
 
@@ -200,6 +212,7 @@ export default React.memo(function ResearchFormationsResult({
       postcode: location.postcode,
       recherche,
       minWeight,
+      initialData: initialFormations,
     });
   const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
 
@@ -282,7 +295,7 @@ export default React.memo(function ResearchFormationsResult({
             }
           `}
         >
-          {(isNewAddressLoading || isFetching || isAddressFetching) && <Loader withMargin />}
+          {(isNewAddressLoading || isFetching || isAddressFetching || isPending) && <Loader withMargin />}
 
           {!formations?.length ? (
             <InformationCard>
@@ -368,7 +381,7 @@ export default React.memo(function ResearchFormationsResult({
       </Grid2>
       <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
-      {createPortal(<DialogOutsideAcademie academie={location.academie} />, document.body)}
+      <PortalDialogOutsideAcademie academie={location.academie} />
     </>
   );
 });

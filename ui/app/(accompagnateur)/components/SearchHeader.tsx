@@ -1,7 +1,6 @@
-"use client";
 import Container from "#/app/components/Container";
 import SearchFormationHomeForm from "#/app/components/form/SearchFormationHomeForm";
-import { Box, Grid } from "#/app/components/MaterialUINext";
+import { Box } from "#/app/components/MaterialUINext";
 
 export default function SearchHeader() {
   return (

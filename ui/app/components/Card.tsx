@@ -1,10 +1,10 @@
 "use client";
 import { fr } from "@codegouvfr/react-dsfr";
 import styled from "@emotion/styled";
-import Link from "next/link";
+import Link from "#/app/components/Link";
 import { Box, Container, Typography } from "./MaterialUINext";
 import { isNil } from "lodash-es";
-import { CardActionArea, CardActionAreaProps, CardProps as MUICardProps } from "@mui/material";
+import { CardProps as MUICardProps, BoxProps } from "@mui/material";
 import { JSX } from "react";
 
 export type CardProps = Omit<MUICardProps, "title"> & {
@@ -12,7 +12,7 @@ export type CardProps = Omit<MUICardProps, "title"> & {
   link?: string | null;
   linkTarget?: string;
   selected?: boolean;
-  actionProps?: CardActionAreaProps;
+  actionProps?: Omit<BoxProps, "children">;
   type?: "details" | "formation";
 };
 
@@ -28,30 +28,49 @@ function BaseCard({ title, children, className, ...props }: CardProps) {
 export function Card({ title, link, linkTarget, style, children, className, actionProps, ...props }: CardProps) {
   if (link) {
     return (
-      <CardActionArea
-        {...actionProps}
-        disableRipple
-        className={className}
-        style={style}
-        onClick={(e) => {
-          window.open(link, linkTarget);
-          props.onClick && props.onClick(e as any);
-        }}
-      >
-        <BaseCard {...props} title={title}>
-          {children}
-        </BaseCard>
-      </CardActionArea>
+      <Link href={link} target={linkTarget} noDecoration noIcon>
+        <Box
+          {...actionProps}
+          className={className}
+          style={style}
+          sx={{
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: "var(--hover)",
+            },
+            ...actionProps?.sx,
+          }}
+          onClick={(e) => {
+            props.onClick && props.onClick(e as any);
+          }}
+        >
+          <BaseCard {...props} title={title}>
+            {children}
+          </BaseCard>
+        </Box>
+      </Link>
     );
   }
 
   if (actionProps) {
     return (
-      <CardActionArea {...actionProps} style={style} className={className}>
+      <Box
+        {...actionProps}
+        style={style}
+        className={className}
+        sx={{
+          cursor: "pointer",
+          "&:hover": {
+            backgroundColor: "var(--hover)",
+          },
+          backgroundColor: "white",
+          ...actionProps?.sx,
+        }}
+      >
         <BaseCard {...props} title={title}>
           {children}
         </BaseCard>
-      </CardActionArea>
+      </Box>
     );
   }
 
@@ -116,16 +135,4 @@ export default styled(Card)<CardProps>`
   ${({ selected }) => {
     return !isNil(selected) && selected ? "background-color: var(--hover);" : "";
   }}
-
-  & > .MuiCardActionArea-focusHighlight {
-    display: none;
-  }
-
-  &.MuiButtonBase-root:hover {
-    background-color: var(--hover);
-  }
-
-  &.MuiButtonBase-root {
-    background-color: white;
-  }
 `;
