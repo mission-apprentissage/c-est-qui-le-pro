@@ -9,6 +9,7 @@ import Popper, { PopperProps } from "@mui/material/Popper";
 import { fr } from "@codegouvfr/react-dsfr";
 import Link from "../Link";
 import { useGetAddress } from "#/app/(accompagnateur)/hooks/useGetAddress";
+import { useRouterUpdater } from "#/app/(accompagnateur)/context/RouterUpdaterContext";
 
 export const myPosition = "Autour de moi";
 
@@ -128,7 +129,9 @@ export default function AddressField({
 
   const valueDebounce = useThrottle(inputValue, 300);
 
-  const [options, setOptions] = useState([myPosition, ...(value ? [value] : [])]);
+  const [options, setOptions] = useState([myPosition, ...(value ? [value] : defaultValues)]);
+
+  const { isPending } = useRouterUpdater();
 
   const { isLoading, data: optionsAddress } = useGetAddress(valueDebounce, {
     select: (data: Awaited<ReturnType<typeof fetchAddress>>) => {
@@ -330,15 +333,16 @@ export default function AddressField({
                 ) : (
                   <></>
                 ),
-              endAdornment: isLocationLoading ? (
-                <CircularProgress />
-              ) : (
-                <>
-                  {inputValue && (
-                    <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>
-                  )}
-                </>
-              ),
+              endAdornment:
+                isLocationLoading || isPending ? (
+                  <CircularProgress />
+                ) : (
+                  <>
+                    {inputValue && (
+                      <div style={{ position: "absolute", right: "10px" }}>{params.InputProps.endAdornment}</div>
+                    )}
+                  </>
+                ),
               ...InputProps,
             }}
             variant={"standard"}
