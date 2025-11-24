@@ -129,11 +129,9 @@ function SearchFormationHomeFormElements({
               />
 
               {!withFormation && (
-                <Box sx={{ display: { xs: "none", md: "block" } }}>
-                  <DesktopSubmitBox>
-                    <SubmitButton />
-                  </DesktopSubmitBox>
-                </Box>
+                <DesktopSubmitBox>
+                  <SubmitButton />
+                </DesktopSubmitBox>
               )}
             </FieldStack>
             {errors?.address && !isHomeSearch ? (
