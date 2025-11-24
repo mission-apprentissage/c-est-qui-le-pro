@@ -19,6 +19,7 @@ export async function formations(
   const json = await fetchJson(`${url}?${paramsToString(params)}`, {
     method: "GET",
     signal,
+    next: { revalidate: 3600 },
   });
 
   return await formationsPaginatedSchema.validate(json);

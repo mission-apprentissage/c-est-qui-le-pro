@@ -11,6 +11,7 @@ export async function formationRoute(
   const result = await fetch(`${url}?${paramsToString(params)}`, {
     method: "GET",
     signal,
+    next: { revalidate: 3600 },
   });
 
   if (!result.ok) {

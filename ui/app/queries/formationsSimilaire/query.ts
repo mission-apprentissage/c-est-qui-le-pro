@@ -15,6 +15,7 @@ export async function formationsSimilaire(
   const json = await fetchJson(`${url}?${paramsToString(params)}`, {
     method: "GET",
     signal,
+    next: { revalidate: 3600 },
   });
 
   return await formationsSimilaireSchema.validate(json);
