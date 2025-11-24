@@ -71,8 +71,8 @@ export default function Page({ params }: { params: { id: string } }) {
             <Grid item md={8} xs={12}>
               <MainTitleGrid xs={12}>
                 <MainTitle variant="h1_main">
-                  Toutes les formations Pro accessibles
-                  <BrMobile /> après le collège.
+                  Toutes les formations pros accessibles
+                  <BrMobile /> après la 3e.
                 </MainTitle>
               </MainTitleGrid>
 
@@ -116,7 +116,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <MainContainer bgColor="blue" sx={{ display: { xs: "none", sm: "block" } }}>
         <Typography align={"center"} variant="h3">
-          Accédez à des informations <HighlightedText>locales et récentes</HighlightedText>
+          Accéder à des informations <HighlightedText>locales et récentes</HighlightedText>
         </Typography>
         <PreviewImageBox>
           <PreviewImage width={0} height={0} sizes="100vw" src={"/assets/preview.png"} alt={"Preview de CQLP"} />
@@ -125,7 +125,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <MainContainer bgColor="blue" sx={{ display: { sm: "none", xs: "block" } }}>
         <Typography align={"center"} variant="h3">
-          Accédez à des informations <HighlightedText>locales et récentes</HighlightedText>
+          Accéder à des informations <HighlightedText>locales et récentes</HighlightedText>
         </Typography>
         <PreviewImageBox>
           <PreviewImage width={0} height={0} sizes="100vw" src={"/assets/preview_mobile.png"} alt={"Preview de CQLP"} />
@@ -134,7 +134,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <MainContainer bgColor="blue" sx={{ display: { sm: "none", xs: "block" } }}>
         <Typography align={"center"} variant="h3">
-          Visualisez des données <HighlightedText>utiles</HighlightedText>
+          Visualiser des données <HighlightedText>utiles</HighlightedText>
         </Typography>
         <PreviewImageBox>
           <PreviewImage

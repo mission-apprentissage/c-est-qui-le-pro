@@ -24,7 +24,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
               quickAccessItems={[
                 <Link key={"donner-votre-avis"} noIcon target="_blank" href="https://tally.so/r/wz0AOR">
                   <Button iconId="ri-emotion-happy-fill" priority="tertiary">
-                    Donner votre avis
+                    Donner son avis
                   </Button>
                 </Link>,
               ]}
