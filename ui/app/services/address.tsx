@@ -132,6 +132,7 @@ export async function fetchAddress(
     `${API_BASE_URL}/geocodage/search/?q=${encodeURIComponent(address)}&type=${type}&limit=20`,
     {
       signal,
+      next: { revalidate: 86400 },
     }
   );
   const json = await result.json();
@@ -144,7 +145,10 @@ export async function fetchReverse(
   { signal }: { signal: AbortSignal | undefined } = { signal: undefined }
 ): Promise<any> {
   //TODO: gestion des erreurs
-  const result = await fetch(`${API_BASE_URL}/geocodage/reverse?lat=${latitude}&lon=${longitude}`, { signal });
+  const result = await fetch(`${API_BASE_URL}/geocodage/reverse?lat=${latitude}&lon=${longitude}`, {
+    signal,
+    next: { revalidate: 86400 },
+  });
   const json = await result.json();
   return json;
 }
