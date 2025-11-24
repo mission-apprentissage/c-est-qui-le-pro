@@ -1,6 +1,6 @@
 "use client";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Grid } from "#/app/components/MaterialUINext";
+import { Box, Grid } from "#/app/components/MaterialUINext";
 import { Control, Controller, FieldErrors, UseFormSetFocus, UseFormSetValue } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
@@ -128,10 +128,12 @@ function SearchFormationHomeFormElements({
                 )}
               />
 
-              {!isDownSm && !withFormation && (
-                <DesktopSubmitBox>
-                  <SubmitButton />
-                </DesktopSubmitBox>
+              {!withFormation && (
+                <Box sx={{ display: { xs: "none", md: "block" } }}>
+                  <DesktopSubmitBox>
+                    <SubmitButton />
+                  </DesktopSubmitBox>
+                </Box>
               )}
             </FieldStack>
             {errors?.address && !isHomeSearch ? (
@@ -175,8 +177,8 @@ function SearchFormationHomeFormElements({
               </FieldStack>
             </Grid>
           )}
-          {withFormation && !isDownSm && (
-            <Grid item md={3} xs={4}>
+          {withFormation && (
+            <Grid item md={3} xs={4} sx={{ display: { xs: "none", md: "block" } }}>
               <FormationSubmitBox>
                 <SubmitButton />
               </FormationSubmitBox>
@@ -185,11 +187,13 @@ function SearchFormationHomeFormElements({
         </SearchGridContainer>
       </FormContainer>
 
-      {isFocus && isDownSm && (
-        <MobileSubmitContainer>
-          <div></div>
-          <SubmitButton isFocusMobile />
-        </MobileSubmitContainer>
+      {isFocus && (
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <MobileSubmitContainer>
+            <div></div>
+            <SubmitButton isFocusMobile />
+          </MobileSubmitContainer>
+        </Box>
       )}
     </>
   );
@@ -231,21 +235,23 @@ export default function SearchFormationHomeForm({
     <Suspense>
       <OverlayContainer isFocus={isFocus && isDownSm}>
         <OverlayInner isFocus={isFocus && isDownSm}>
-          {isFocus && isDownSm && (
-            <MobileCloseButtonContainer>
-              <Button
-                iconOnly
-                size="large"
-                rounded
-                iconId="fr-icon-close-line"
-                priority="tertiary no outline"
-                title="Fermer la recherche"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsFocus(false);
-                }}
-              />
-            </MobileCloseButtonContainer>
+          {isFocus && (
+            <Box sx={{ display: { xs: "block", md: "none" } }}>
+              <MobileCloseButtonContainer>
+                <Button
+                  iconOnly
+                  size="large"
+                  rounded
+                  iconId="fr-icon-close-line"
+                  priority="tertiary no outline"
+                  title="Fermer la recherche"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsFocus(false);
+                  }}
+                />
+              </MobileCloseButtonContainer>
+            </Box>
           )}
           <FormSearchParams
             onSubmit={(data) => {

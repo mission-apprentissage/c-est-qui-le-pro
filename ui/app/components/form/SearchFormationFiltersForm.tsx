@@ -371,44 +371,52 @@ export default function SearchFormationFiltersForm() {
     }
   }, [isFocus, isMobile]);
 
-  if (isMobile) {
-    return isFocus ? (
-      <MobileContainer>
-        <MobileHeaderContainer>
-          <MobileHeaderTitle variant="h5">Filtres</MobileHeaderTitle>
-          <Button onClick={resetMobile} className="fr-btn--close fr-btn">
-            Fermer
-          </Button>
-        </MobileHeaderContainer>
-        <CustomDivider />
-        <MobileContentContainer>
-          <SearchFormationFiltersElementsMobile control={control} isMobile={isMobile} onApply={onApply} />
-        </MobileContentContainer>
-        <CustomDivider />
-        <MobileFooter>
-          <Button priority="tertiary no outline" variant="black" onClick={() => reset()}>
-            <ClearButtonText variant="body2">Tout effacer</ClearButtonText>
-          </Button>
-          <Button rounded variant="blue-france-hover" onClick={submitMobile}>
-            Appliquer
-          </Button>
-        </MobileFooter>
-      </MobileContainer>
-    ) : (
-      <MobileFilterButtons>
-        <FilterButton
-          rounded
-          hasFilter={nbFilters > 0}
-          priority="tertiary no outline"
-          iconId="ri-equalizer-line"
-          onClick={() => setIsFocus(true)}
-        >
-          Filtres
-          {nbFilters > 0 && <FilterBadge>{nbFilters}</FilterBadge>}
-        </FilterButton>
-      </MobileFilterButtons>
-    );
-  }
+  return (
+    <>
+      {/* Mobile */}
+      <Box sx={{ display: { xs: "block", md: "none" } }}>
+        {isFocus ? (
+          <MobileContainer>
+            <MobileHeaderContainer>
+              <MobileHeaderTitle variant="h5">Filtres</MobileHeaderTitle>
+              <Button onClick={resetMobile} className="fr-btn--close fr-btn">
+                Fermer
+              </Button>
+            </MobileHeaderContainer>
+            <CustomDivider />
+            <MobileContentContainer>
+              <SearchFormationFiltersElementsMobile control={control} isMobile={true} onApply={onApply} />
+            </MobileContentContainer>
+            <CustomDivider />
+            <MobileFooter>
+              <Button priority="tertiary no outline" variant="black" onClick={() => reset()}>
+                <ClearButtonText variant="body2">Tout effacer</ClearButtonText>
+              </Button>
+              <Button rounded variant="blue-france-hover" onClick={submitMobile}>
+                Appliquer
+              </Button>
+            </MobileFooter>
+          </MobileContainer>
+        ) : (
+          <MobileFilterButtons>
+            <FilterButton
+              rounded
+              hasFilter={nbFilters > 0}
+              priority="tertiary no outline"
+              iconId="ri-equalizer-line"
+              onClick={() => setIsFocus(true)}
+            >
+              Filtres
+              {nbFilters > 0 && <FilterBadge>{nbFilters}</FilterBadge>}
+            </FilterButton>
+          </MobileFilterButtons>
+        )}
+      </Box>
 
-  return <SearchFormationFiltersElements control={control} isMobile={isMobile} onApply={onApply} />;
+      {/* Desktop */}
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
+        <SearchFormationFiltersElements control={control} isMobile={false} onApply={onApply} />
+      </Box>
+    </>
+  );
 }

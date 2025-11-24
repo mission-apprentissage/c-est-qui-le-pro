@@ -19,6 +19,12 @@ export const HighlightedText = styled.span`
 `;
 
 export const StyledFormationCard = styled(FormationCard)`
+  background-color: white;
+
+  &:hover {
+    background-color: #f7f7f7;
+  }
+
   &.MuiButtonBase-root:hover {
     background-color: white;
   }

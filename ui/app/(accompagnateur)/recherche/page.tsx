@@ -1,78 +1,77 @@
-/** @jsxImportSource @emotion/react */
-"use client";
-import ResearchFormationsResult from "./ResearchFormationsResult";
-import { Suspense, useEffect, useState } from "react";
-import FormationsSearchProvider, { useFormationsSearch } from "../context/FormationsSearchContext";
+import FormationsSearchProvider from "../context/FormationsSearchContext";
 import SearchHeader from "../components/SearchHeader";
 import Title from "../components/Title";
-import Loader from "#/app/components/Loader";
-import ErrorUserGeolocation from "../errors/ErrorUserGeolocation";
-import UserGeolocatioDenied from "../components/UserGeolocatioDenied";
-import { useRouter } from "next/navigation";
 import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
-import { useGetAddressWithCity } from "../hooks/useGetAddress";
-import { HeaderContainer, LoaderContainer, LoadingMessage } from "./page.styled";
+import { HeaderContainer } from "./page.styled";
 import FocusSearchProvider from "../context/FocusSearchContext";
+import { ResearchFormationsParameter, ScrollToTop } from "./page.client";
+import { fetchAddress, userLocationFromAddress } from "#/app/services/address";
+import { formations } from "#/app/queries/formations/query";
+import { ReadonlyURLSearchParams } from "next/navigation";
+import { searchParamsToObject } from "#/app/utils/searchParams";
+import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
+import RouterUpdaterProvider from "../context/RouterUpdaterContext";
 
-function ResearchFormationsParameter() {
-  const router = useRouter();
-  const { params, updateParams } = useFormationsSearch();
-  const [isFirstRender, setIsFirstRender] = useState(true);
-  const { address } = params ?? {};
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = searchParamsToObject(
+    new URLSearchParams(
+      Object.entries(await searchParams)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => [key, Array.isArray(value) ? value.join("|") : String(value)])
+    ) as any as ReadonlyURLSearchParams,
+    { address: null, tag: null, domaines: null },
+    schemaFormation
+  );
+  const { address, tag, domaines, recherche, voie, diplome, minWeight } = params ?? {};
 
-  useEffect(() => {
-    setIsFirstRender(false);
-  }, []);
+  // Server-side data fetching
+  let initialLocation =
+    address && address !== "Autour de moi"
+      ? userLocationFromAddress(await fetchAddress(address, { signal: undefined }))
+      : null;
 
-  useEffect(() => {
-    if (!address) {
-      router.push(`/`);
-    }
-  }, [address]);
-
-  const { data, isLoading, isFetching, error } = useGetAddressWithCity(address);
-
-  if (!params || !params.address) {
-    return null;
-  }
-
-  if (error && error instanceof ErrorUserGeolocation) {
-    return <UserGeolocatioDenied />;
-  }
-
-  if (isLoading) {
-    return (
-      <LoaderContainer>
-        <Loader withMargin />
-        <LoadingMessage variant="h6">Nous recherchons toutes les formations autour de toi...</LoadingMessage>
-      </LoaderContainer>
-    );
-  }
-
-  return <>{data && <ResearchFormationsResult location={data} page={1} isAddressFetching={isFetching} />}</>;
-}
-
-export default function Page() {
-  useEffect(() => {
-    // Force scroll to top
-    window.scrollTo(0, 0);
-  }, []);
+  let initialFormations = initialLocation
+    ? await formations(
+        {
+          latitude: initialLocation.latitude,
+          longitude: initialLocation.longitude,
+          distance: 0,
+          timeLimit: 5400,
+          tag,
+          voie,
+          diplome,
+          domaines,
+          recherche: recherche || null,
+          page: 1,
+          items_par_page: 100,
+          academie: initialLocation.academie,
+          minWeight: minWeight ?? 101,
+        },
+        { signal: undefined }
+      )
+    : null;
 
   return (
     <>
       <Title pageTitle="Recherche de formations" />
-      <Suspense>
-        <FormationsSearchProvider>
+      <ScrollToTop />
+
+      <RouterUpdaterProvider>
+        <FormationsSearchProvider initialParams={params}>
           <FocusSearchProvider>
             <HeaderContainer>
               <SearchHeader />
               <SearchFormationFiltersForm />
             </HeaderContainer>
 
-            <ResearchFormationsParameter />
+            <ResearchFormationsParameter initialLocation={initialLocation} initialFormations={initialFormations} />
           </FocusSearchProvider>
         </FormationsSearchProvider>
-      </Suspense>
+      </RouterUpdaterProvider>
     </>
   );
 }

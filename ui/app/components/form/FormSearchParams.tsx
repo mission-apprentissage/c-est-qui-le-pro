@@ -7,6 +7,7 @@ import { FieldValues } from "react-hook-form";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { JSX, RefObject, Suspense, useEffect, useRef } from "react";
 import { useFocusSearchContext } from "#/app/(accompagnateur)/context/FocusSearchContext";
+import { useRouterUpdater } from "#/app/(accompagnateur)/context/RouterUpdaterContext";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
@@ -60,6 +61,7 @@ export function FormSearchParams<FormData extends FieldValues>({
     shouldFocusError: false,
   });
   const { registerSetFocusSearch } = useFocusSearchContext();
+  const { updateRoute } = useRouterUpdater();
 
   useEffect(() => {
     registerSetFocusSearch(setFocus);
@@ -76,7 +78,7 @@ export function FormSearchParams<FormData extends FieldValues>({
     onSubmit && onSubmit(dataWithDynamic);
 
     const urlParams = paramsToString(dataWithDynamic);
-    router.push(`${url}?${urlParams}`);
+    updateRoute(`${url}?${urlParams}`);
   });
 
   return (

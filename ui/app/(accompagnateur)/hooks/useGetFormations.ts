@@ -20,6 +20,7 @@ export default function useGetFormations({
   minWeight = 101,
   page,
   items_par_page = 100,
+  initialData,
 }: {
   latitude?: number;
   longitude?: number;
@@ -35,6 +36,7 @@ export default function useGetFormations({
   minWeight?: number;
   page?: number;
   items_par_page?: number;
+  initialData?: any;
 }) {
   const [isFirstRender, setIsFirstRender] = useState(true);
   const academie = RegionsService.findAcademieByPostcode(postcode || "");
@@ -87,13 +89,19 @@ export default function useGetFormations({
         { signal }
       );
     },
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: (lastPage) => {
       return lastPage.pagination.nombre_de_page === 0 ||
         !lastPage.pagination ||
         lastPage.pagination.nombre_de_page === lastPage.pagination.page
         ? undefined
         : lastPage.pagination.page + 1;
     },
+    initialData: initialData
+      ? {
+          pages: [initialData],
+          pageParams: [1],
+        }
+      : undefined,
     useErrorBoundary: true,
   });
 
