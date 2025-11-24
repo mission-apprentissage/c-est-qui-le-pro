@@ -1,6 +1,21 @@
 import { render, screen } from "@testing-library/react";
 import { act } from "react";
+
 import Layout from "#/app/components/Layout";
+
+jest.mock("next/navigation", () => {
+  return {
+    __esModule: true,
+    usePathname: () => ({ pathname: "" }),
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn(),
+    }),
+    useSearchParams: () => ({ get: () => {} }),
+    useServerInsertedHTML: jest.fn(),
+  };
+});
 
 describe("Layout", () => {
   it("renders a layout", async () => {
