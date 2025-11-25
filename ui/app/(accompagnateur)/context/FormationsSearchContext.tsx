@@ -5,7 +5,7 @@ import { FormationDomaine, FormationTag, FormationVoie, DiplomeType } from "shar
 import { useMatomo } from "../hooks/useMatomo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
-import { omit } from "lodash-es";
+import { isEqual, omit } from "lodash-es";
 import { usePlausible } from "next-plausible";
 import { useRouterUpdater } from "./RouterUpdaterContext";
 
@@ -73,11 +73,15 @@ const FormationsSearchProvider = ({
   }, [params]);
 
   const updateParams = useCallback(
-    (params: FormationsSearchParams) => {
-      const urlSearchParams = paramsToString(params);
+    (newParams: FormationsSearchParams) => {
+      if (isEqual(params, newParams)) {
+        return;
+      }
+
+      const urlSearchParams = paramsToString(newParams);
       updateRoute(`?${urlSearchParams}`);
     },
-    [router]
+    [router, params]
   );
 
   return (

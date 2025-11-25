@@ -334,7 +334,7 @@ export default function AddressField({
                   <></>
                 ),
               endAdornment:
-                isLocationLoading || isPending ? (
+                isLocationLoading || (isPending && variant === "home") ? (
                   <CircularProgress />
                 ) : (
                   <>
