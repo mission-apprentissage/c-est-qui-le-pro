@@ -70,10 +70,7 @@ export default function Page({ params }: { params: { id: string } }) {
           <Grid container spacing={"3rem"}>
             <Grid item md={8} xs={12}>
               <MainTitleGrid xs={12}>
-                <MainTitle variant="h1_main">
-                  Toutes les formations pros accessibles
-                  <BrMobile /> après la 3e.
-                </MainTitle>
+                <MainTitle variant="h1_main">Toutes les formations pros accessibles après la 3e</MainTitle>
               </MainTitleGrid>
 
               <FocusSearchProvider>
