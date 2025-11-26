@@ -53,7 +53,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
               accessibilityLinkProps={{ href: "/accessibilite" }}
               contentDescription={
                 <>
-                  <b>Futur pro</b> est un service de la{" "}
+                  <b>Futur Pro</b> est un service de la{" "}
                   <Link href="https://beta.gouv.fr/incubateurs/mission-inserjeunes.html" target="_blank">
                     Mission interministérielle InserJeunes
                   </Link>

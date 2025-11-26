@@ -15,7 +15,7 @@ nav_order: 2.3
 
 ## Introduction
 
-**La construction de “Futur pro” est guidée par les besoins des utilisateurs** : psychologues de l’éducation nationale, professeurs principaux de collège et évidemment les jeunes et leurs familles.
+**La construction de “Futur Pro” est guidée par les besoins des utilisateurs** : psychologues de l’éducation nationale, professeurs principaux de collège et évidemment les jeunes et leurs familles.
 
 Pour nous assurer d’apporter un service pertinent à ces utilisateurs, en utilisant de manière efficace les ressources humaines et financières mises à disposition de l’équipe, **notre démarche est guidée par l’impact**.
 

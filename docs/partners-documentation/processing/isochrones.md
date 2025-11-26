@@ -13,7 +13,7 @@ nav_order: 3.2.3
 
 ## Pourquoi mettre en place ce traitement ?
 
-Futur pro permet, à partir d'une adresse renseignée par l'utilisateur, d'afficher une liste de formations dispensées dans des établissements accesibles (marche et transports en commun ou scolaires) depuis cette adresse. Pour chaque résultat, une indication du temps de trajet est fournie.
+Futur Pro permet, à partir d'une adresse renseignée par l'utilisateur, d'afficher une liste de formations dispensées dans des établissements accesibles (marche et transports en commun ou scolaires) depuis cette adresse. Pour chaque résultat, une indication du temps de trajet est fournie.
 
 Une approche "naïve" consisterait à effectuer, lors de la saisie de l'adresse, un calcul de temps de trajet (comme lorsque vous utilisez un service comme Citymapper ou Google Maps) entre cette adresse et chaque établissement, afin de sélectionner les établissements accessibles et de pouvoir afficher les temps de trajet correspondants. Une telle opération est malheureusement très coûteuse et trop longue pour permettre une réponse en temps réel.
 

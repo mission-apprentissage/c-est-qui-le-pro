@@ -47,7 +47,7 @@ export const MainTitleGrid = styled(Grid)`
 
 export const MainTitle = styled(Typography)`
   color: var(--blue-france-sun-113-625-hover);
-  font-size: 3.75rem;
+  font-size: 3.9rem;
 `;
 
 export const CitySuggestionStack = styled(Stack)`

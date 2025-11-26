@@ -413,5 +413,5 @@
 
 ### Features
 
-* Futur pro ([8ae0ae5](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/8ae0ae5428e78a14c009e04b47568bc32dd0ea76))
-* Futur pro ([#1](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/1)) ([d4e5d39](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/d4e5d390e3ad060311bbafeaeade71b336efa5f7))
+* Futur Pro ([8ae0ae5](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/8ae0ae5428e78a14c009e04b47568bc32dd0ea76))
+* Futur Pro ([#1](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/1)) ([d4e5d39](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/d4e5d390e3ad060311bbafeaeade71b336efa5f7))
