@@ -1,6 +1,6 @@
-# Futur pro
+# Futur Pro
 
-Dépôt de [Futur pro](https://github.com/mission-apprentissage/c-est-qui-le-pro).
+Dépôt de [Futur Pro](https://github.com/mission-apprentissage/c-est-qui-le-pro).
 
 ## Développement
 

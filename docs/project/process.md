@@ -13,7 +13,7 @@ nav_order: 2.2
 
 ## Qui sommes nous ?
 
-“Futur pro” est un service construit par la Mission interministérielle InserJeunes, dont les travaux sont commandités par le Ministère de l’Éducation nationale, le Ministère de l’Enseignement supérieur et de la Recherche et le Ministère du Travail et de l'Emploi.
+“Futur Pro” est un service construit par la Mission interministérielle InserJeunes, dont les travaux sont commandités par le Ministère de l’Éducation nationale, le Ministère de l’Enseignement supérieur et de la Recherche et le Ministère du Travail et de l'Emploi.
 
 La Mission interministérielle InserJeunes fait partie de la **communauté [beta.gouv](https://beta.gouv.fr/)** (Direction interministérielle du Numérique) dont la mission est d’**aider les administrations publiques à construire des services numériques utiles, simples, faciles à utiliser et qui répondent aux besoins des citoyens**.
 
@@ -27,7 +27,7 @@ Les principes de la communauté sont :
 
 ## Un produit numérique en construction
 
-“Futur pro” est un outil **en construction.**
+“Futur Pro” est un outil **en construction.**
 
 ### ... issu d’une investigation
 

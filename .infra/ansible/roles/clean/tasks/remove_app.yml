@@ -3,6 +3,12 @@
   when:
     delete_namespace
   block:
+    - name: Check if Helm release exists
+      ansible.builtin.command:
+        cmd: helm status {{ app_name }} --namespace {{ app_namespace }}
+      register: helm_status
+      failed_when: false
+      changed_when: false
     - name: Uninstall the application
       kubernetes.core.helm:
         name: "{{ app_name }}"
@@ -10,6 +16,7 @@
         state: absent
         wait: "{{ helm_wait }}"
         wait_timeout: "{{ helm_timeout }}"
+      when: helm_status.rc == 0
     - name: Delete namespace
       kubernetes.core.k8s:
         name: "{{ app_namespace }}"

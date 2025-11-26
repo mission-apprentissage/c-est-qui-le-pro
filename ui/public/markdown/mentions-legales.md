@@ -1,8 +1,8 @@
-# Mentions légales de Futur pro
+# Mentions légales de Futur Pro
 
 ## Editeur de la Plateforme
 
-La Plateforme Futur pro est éditée par La Direction générale de l'enseignement scolaire (DGESCO) située :
+La Plateforme Futur Pro est éditée par La Direction générale de l'enseignement scolaire (DGESCO) située :
 107 rue de Grenelle
 75007 Paris
 France
