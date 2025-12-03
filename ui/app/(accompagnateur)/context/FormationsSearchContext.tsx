@@ -21,11 +21,11 @@ export type FormationsSearchParams = {
 
 const FormationsSearchContext = createContext<{
   params?: FormationsSearchParams | null;
-  updateParams: (params: FormationsSearchParams) => void;
+  updateParams: (params: FormationsSearchParams, keepOld: boolean) => void;
   getUrlParams: () => string;
 }>({
   params: null,
-  updateParams: (params: FormationsSearchParams) => {},
+  updateParams: (params: FormationsSearchParams, keepOld: boolean) => {},
   getUrlParams: () => "",
 });
 
@@ -73,12 +73,13 @@ const FormationsSearchProvider = ({
   }, [params]);
 
   const updateParams = useCallback(
-    (newParams: FormationsSearchParams) => {
-      if (isEqual(params, newParams)) {
+    (newParams: FormationsSearchParams, keepOld: boolean = false) => {
+      const newParamsFinal = keepOld ? { ...params, ...newParams } : newParams;
+      if (isEqual(params, newParamsFinal)) {
         return;
       }
 
-      const urlSearchParams = paramsToString(newParams);
+      const urlSearchParams = paramsToString(newParamsFinal);
       updateRoute(`?${urlSearchParams}`);
     },
     [router, params]

@@ -233,7 +233,8 @@ export default React.memo(function ResearchFormationsResult({
         const result = await fetchReverse(latLng[0], latLng[1]);
         if (result?.features?.length > 0) {
           const address = result.features[0].properties.label;
-          updateParams({ ...params, address: address });
+          updateParams({ address: address }, true);
+          setIsNewAddressLoading(false);
         } else {
           setLatLng(null);
           setIsNewAddressLoading(false);
@@ -241,7 +242,11 @@ export default React.memo(function ResearchFormationsResult({
       } catch (err) {}
       // TODO: erreur quand pas d'adresse trouvée
     })();
-  }, [params, latLng]);
+  }, [latLng]);
+
+  useEffect(() => {
+    setLatLng(null);
+  }, [params]);
 
   useEffect(() => {
     if (!isAddressFetching) {

@@ -69,10 +69,12 @@ function SearchFormationHomeFormElements({
     [history]
   );
   const formationHistory = useMemo(() => uniq(history.map(({ recherche }) => recherche).filter((f) => f)), [history]);
+  const [adressKey, setAddressKey] = useState("");
 
   useEffect(() => {
     if (params?.address) {
       setValue("address", params?.address, { shouldValidate: true });
+      setAddressKey(params?.address);
     }
   }, [setValue, params?.address]);
 
@@ -103,7 +105,7 @@ function SearchFormationHomeFormElements({
               isRounded={isHomeSearch && !(isDownSm && isFocus)}
             >
               <Controller
-                key={`address_${params?.address}`}
+                key={`address_${adressKey}`}
                 name="address"
                 control={control}
                 render={(form) => (
