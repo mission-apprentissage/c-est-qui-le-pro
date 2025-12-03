@@ -21,11 +21,11 @@ export type FormationsSearchParams = {
 
 const FormationsSearchContext = createContext<{
   params?: FormationsSearchParams | null;
-  updateParams: (params: FormationsSearchParams, keepOld: boolean) => void;
+  updateParams: (params: FormationsSearchParams, keepOld?: boolean) => void;
   getUrlParams: () => string;
 }>({
   params: null,
-  updateParams: (params: FormationsSearchParams, keepOld: boolean) => {},
+  updateParams: (params: FormationsSearchParams, keepOld?: boolean) => {},
   getUrlParams: () => "",
 });
 
