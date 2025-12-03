@@ -227,6 +227,7 @@ export default React.memo(function ResearchFormationsResult({
       return;
     }
 
+    resultRef.current?.scrollIntoView();
     setIsNewAddressLoading(true);
     (async () => {
       try {
