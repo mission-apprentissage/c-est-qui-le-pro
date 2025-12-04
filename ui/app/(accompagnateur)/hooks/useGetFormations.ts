@@ -33,7 +33,7 @@ export default function useGetFormations({
   cfds?: string[];
   postcode?: string;
   insideAcademieForCar?: boolean;
-  minWeight?: number;
+  minWeight?: number | null;
   page?: number;
   items_par_page?: number;
   initialData?: any;
@@ -84,7 +84,7 @@ export default function useGetFormations({
           cfds,
           uais,
           academie: insideAcademieForCar ? academie : null,
-          minWeight,
+          minWeight: minWeight || undefined,
         },
         { signal }
       );

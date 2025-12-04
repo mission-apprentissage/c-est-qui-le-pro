@@ -23,7 +23,7 @@ export function searchParamsToObject<FormData extends FieldValues>(
   searchParams: ReadonlyURLSearchParams,
   defaultValues: Nullable<FormData>,
   schema: yup.ObjectSchema<FormData>
-) {
+): FormData {
   const parameters: any = {};
   for (const [key, fieldSchema] of Object.entries(schema.fields)) {
     if (fieldSchema.type === "array") {

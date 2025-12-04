@@ -1,6 +1,5 @@
 import FormationsSearchProvider from "../context/FormationsSearchContext";
 import SearchHeader from "../components/SearchHeader";
-import Title from "../components/Title";
 import SearchFormationFiltersForm from "#/app/components/form/SearchFormationFiltersForm";
 import { HeaderContainer } from "./page.styled";
 import FocusSearchProvider from "../context/FocusSearchContext";
@@ -10,13 +9,41 @@ import { formations } from "#/app/queries/formations/query";
 import { ReadonlyURLSearchParams } from "next/navigation";
 import { searchParamsToObject } from "#/app/utils/searchParams";
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
-import RouterUpdaterProvider from "../context/RouterUpdaterContext";
+import { Metadata } from "next";
+import { getFiltersString } from "#/app/utils/metadata";
 
-export default async function Page({
-  searchParams,
-}: {
+type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+};
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = searchParamsToObject(
+    new URLSearchParams(
+      Object.entries(await searchParams)
+        .filter(([_, value]) => value !== undefined)
+        .map(([key, value]) => [key, Array.isArray(value) ? value.join("|") : String(value)])
+    ) as any as ReadonlyURLSearchParams,
+    { address: null, tag: null, domaines: null },
+    schemaFormation
+  );
+  const { address, tag, domaines, recherche, voie, diplome } = params ?? {};
+  const initialLocation =
+    address && address !== "Autour de moi"
+      ? userLocationFromAddress(await fetchAddress(address, { signal: undefined }))
+      : null;
+  const addressString = address === "Autour de moi" ? "Autour de moi" : initialLocation?.city;
+  const filtersString = getFiltersString({ tag, domaines, voie, diplome, recherche });
+
+  return {
+    title: `Les formations pro accessibles depuis ${addressString}${filtersString ? ` - ${filtersString}` : ""}`,
+    description:
+      `Retrouvez l’ensemble des formations pro post-3e, accessibles depuis ${addressString}.` + filtersString
+        ? ` Les formations présentées correspondent aux filtres suivants : ${filtersString}`
+        : "",
+  };
+}
+
+export default async function Page({ searchParams }: Props) {
   const params = searchParamsToObject(
     new URLSearchParams(
       Object.entries(await searchParams)
@@ -57,7 +84,6 @@ export default async function Page({
 
   return (
     <>
-      <Title pageTitle="Recherche de formations" />
       <ScrollToTop />
 
       <FormationsSearchProvider initialParams={params}>

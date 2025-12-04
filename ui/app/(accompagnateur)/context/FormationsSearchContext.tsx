@@ -15,8 +15,8 @@ export type FormationsSearchParams = {
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
-  recherche?: string;
-  minWeight?: number;
+  recherche?: string | null;
+  minWeight?: number | null;
 };
 
 const FormationsSearchContext = createContext<{
@@ -34,7 +34,7 @@ const FormationsSearchProvider = ({
   initialParams,
 }: {
   children: React.ReactNode;
-  initialParams?: { [key: string]: string | string[] | undefined };
+  initialParams?: FormationsSearchParams;
 }) => {
   const plausible = usePlausible();
   const { push } = useMatomo();

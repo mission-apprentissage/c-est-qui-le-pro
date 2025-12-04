@@ -74,11 +74,9 @@ const FormationFamilleMetierBlock = React.memo(function FormationFamilleMetierBl
         <>
           <FormationTitle variant={"body1"}>{formatLibelle(formation.libelle)}</FormationTitle>
           <ActionContainer>
-            <Link href={formationSearchLink} target="_blank" noDecoration noIcon>
-              <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
-                Rechercher la formation
-              </Button>
-            </Link>
+            <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
+              Rechercher la formation
+            </Button>
           </ActionContainer>
         </>
       )}

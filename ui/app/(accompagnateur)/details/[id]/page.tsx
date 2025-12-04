@@ -1,87 +1,83 @@
-/** @jsxImportSource @emotion/react */
-"use client";
-import { JSX, Suspense } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { formation } from "#/app/queries/formation/query";
-import Loader from "#/app/components/Loader";
-import { notFound } from "next/navigation";
-import Title from "#/app/(accompagnateur)/components/Title";
-import FormationContent from "./FormationContent";
-import { FormationDetail } from "shared";
-import useGetFormations from "../../hooks/useGetFormations";
-import { useGetReverseLocation } from "../../hooks/useGetAddress";
+import { formations } from "#/app/queries/formations/query";
+import { FormationResult } from "./page.client";
+import { Metadata } from "next";
 
-function FormationPrefetch({
-  formationDetail,
-  children,
-}: {
-  formationDetail: FormationDetail;
-  children: JSX.Element | JSX.Element[];
-}) {
-  const { isLoading: isLoadingFormationAutreVoie } = useGetFormations({
-    cfds: [formationDetail.formation.cfd],
-    uais: [formationDetail.etablissement.uai],
-  });
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ latitude?: string; longitude?: string }>;
+};
 
-  if (isLoadingFormationAutreVoie) {
-    return <Loader withMargin />;
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const { latitude, longitude } = await searchParams;
+
+  try {
+    const formationDetail = await formation(
+      {
+        id,
+        latitude: latitude ? parseFloat(latitude) : undefined,
+        longitude: longitude ? parseFloat(longitude) : undefined,
+      },
+      { signal: undefined }
+    );
+    const voie = formationDetail.formation.voie === "apprentissage" ? "Apprentissage" : "Voie scolaire";
+    return {
+      title: `${formationDetail.formation.libelle} - ${formationDetail.etablissement.libelle} - ${voie}`,
+      description:
+        `Retrouvez des informations détaillées sur la formation ${formationDetail.formation.libelle} dispensée ` +
+        `dans l’établissement ${formationDetail.etablissement.libelle} en ${voie} : contenu de la formation, conditions d’accès, devenir des élèves à l’issue de la formation et formations similaires.`,
+    };
+  } catch {
+    return {
+      title: "Détails de la formation",
+      description: `Retrouvez des informations détaillées sur la formation  : contenu de la formation, conditions d’accès, devenir des élèves à l’issue de la formation et formations similaires.`,
+    };
   }
-
-  return children;
 }
 
-function FormationResult({ id, latitude, longitude }: { id: string; latitude?: string; longitude?: string }) {
-  const { isLoading, isError, data } = useQuery({
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    retry: 0,
-    queryKey: ["formation", id, latitude, longitude],
-    queryFn: ({ signal }) => {
-      return formation(
+export default async function Page({ params, searchParams }: Props) {
+  const { id } = await params;
+  const { latitude, longitude } = await searchParams;
+
+  let initialFormationDetail = null;
+  let initialFormationsAutreVoie = null;
+
+  try {
+    initialFormationDetail = await formation(
+      {
+        id,
+        latitude: latitude ? parseFloat(latitude) : undefined,
+        longitude: longitude ? parseFloat(longitude) : undefined,
+      },
+      { signal: undefined }
+    );
+
+    if (initialFormationDetail) {
+      initialFormationsAutreVoie = await formations(
         {
-          id: id,
-          latitude: latitude ? parseFloat(latitude) : undefined,
-          longitude: longitude ? parseFloat(longitude) : undefined,
+          cfds: [initialFormationDetail.formation.cfd],
+          uais: [initialFormationDetail.etablissement.uai],
+          page: 1,
+
+          items_par_page: 100,
         },
-        { signal }
+        { signal: undefined }
       );
-    },
-  });
-  useGetReverseLocation({
-    latitude: latitude ? parseFloat(latitude) : null,
-    longitude: longitude ? parseFloat(longitude) : null,
-  });
-
-  if (isLoading) {
-    return <Loader withMargin />;
+    }
+  } catch (e) {
+    // Laisse le client gérer l'erreur via notFound()
   }
 
-  if (isError || !data) {
-    return notFound();
-  }
-
-  return (
-    <FormationPrefetch formationDetail={data}>
-      <Title
-        pageTitle={`Détails de la formation ${data.formation.libelle} dans l'établissement ${data.etablissement.libelle}`}
-      />
-      <FormationContent formationDetail={data} />
-    </FormationPrefetch>
-  );
-}
-
-export default function Page({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { latitude?: string; longitude?: string };
-}) {
   return (
     <>
-      <Suspense>
-        <FormationResult id={params.id} latitude={searchParams.latitude} longitude={searchParams.longitude} />
-      </Suspense>
+      <FormationResult
+        id={id}
+        latitude={latitude}
+        longitude={longitude}
+        initialFormationDetail={initialFormationDetail}
+        initialFormationsAutreVoie={initialFormationsAutreVoie}
+      />
     </>
   );
 }

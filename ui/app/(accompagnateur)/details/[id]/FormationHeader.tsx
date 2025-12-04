@@ -23,11 +23,11 @@ import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
 import FormationTags from "../../components/FormationTags";
 import OutsideAcademieTooltip from "../../components/OutsideAcademieTooltip";
-import { createPortal } from "react-dom";
 import DialogOutsideAcademie from "../../components/DialogOutsideAcademie";
 import { useGetReverseLocation } from "../../hooks/useGetAddress";
 import { useQueryLocation } from "../../hooks/useQueryLocation";
 import TagHebergement from "../../components/TagHebergement";
+import { PortalClient } from "#/app/components/Modal";
 
 export const StyledButtonLink = styled(Link)`
   padding: 0.5rem;
@@ -177,7 +177,7 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                   {location && location?.academie !== etablissement.academie && (
                     <Box style={{ marginLeft: "-0.5rem" }}>
                       <OutsideAcademieTooltip />
-                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
+                      <PortalClient component={<DialogOutsideAcademie academie={location?.academie} />} />
                     </Box>
                   )}
                   <Box style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>

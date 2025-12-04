@@ -27,9 +27,8 @@ import {
 } from "./FormationBlockAccesEmploi.styled";
 import { css } from "@emotion/react";
 import { getColorAtPosition } from "#/app/utils/color";
-import { createPortal } from "react-dom";
-import { BlueLink, FlexCenterColumnBox } from "#/app/(accompagnateur)/components/InserJeunes.styled";
 import { WidgetFooter } from "#/app/(accompagnateur)/components/WidgetInserJeunes";
+import { PortalClient } from "#/app/components/Modal";
 
 export function FormationSalaire({ formation }: { formation: Formation }) {
   if (
@@ -98,7 +97,7 @@ export function FormationSalaire({ formation }: { formation: Formation }) {
           </Button>
         </FlexRightBlueBox>
       </MarginBottomNegative>
-      {createPortal(<DialogSalaireMedian />, document.body)}
+      <PortalClient component={<DialogSalaireMedian />} />
     </>
   );
 }
@@ -153,7 +152,7 @@ export function FormationSalaireGlobal({ formation }: { formation: Formation }) 
           </Button>
         </FlexRightBlueBox>
       </MarginBottomNegative>
-      {createPortal(<DialogSalaireGlobal />, document.body)}
+      <PortalClient component={<DialogSalaireGlobal />} />
       <BlockDivider />
       <WidgetFooter millesime={formation.indicateurPoursuite.millesimeSalaire || ""} />
     </>

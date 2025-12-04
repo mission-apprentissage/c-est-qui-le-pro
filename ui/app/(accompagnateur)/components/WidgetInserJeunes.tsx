@@ -25,7 +25,6 @@ import {
 } from "#/app/utils/formation";
 import { BlueLink, FlexCenterColumnBox } from "./InserJeunes.styled";
 import { DialogInserjeunesEmploi, DialogInserjeunesFormation, DialogInserjeunesAutres } from "./DialogInserjeunes";
-import { createPortal } from "react-dom";
 import CustomAccordion from "#/app/components/Accordion";
 import { computeTaux, WIDGET_INSERJEUNES_TYPE, WidgetInserjeunesTypeMetrics } from "#/app/services/inserjeunes";
 import {
@@ -50,6 +49,7 @@ import {
   StyledFormationLibelle,
   StyledTitle,
 } from "./WidgetInserJeunes.styled";
+import { PortalClient } from "#/app/components/Modal";
 
 export function isSousSeuil(indicateurPoursuite: IndicateurPoursuite) {
   return isNil(indicateurPoursuite?.taux_en_formation);
@@ -362,9 +362,9 @@ export default function WidgetInserJeunes({ formationDetail }: { formationDetail
           </ContainerFormation>
         </>
       )}
-      {createPortal(<DialogInserjeunesEmploi />, document.body)}
-      {createPortal(<DialogInserjeunesFormation />, document.body)}
-      {createPortal(<DialogInserjeunesAutres />, document.body)}
+      <PortalClient component={<DialogInserjeunesEmploi />} />
+      <PortalClient component={<DialogInserjeunesFormation />} />
+      <PortalClient component={<DialogInserjeunesAutres />} />
     </>
   );
 }

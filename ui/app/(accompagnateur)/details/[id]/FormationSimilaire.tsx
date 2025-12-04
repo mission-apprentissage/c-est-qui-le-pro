@@ -46,8 +46,8 @@ const FormationSimilaire = React.memo(({ formationDetail }: { formationDetail: F
       return formationsSimilaire(
         {
           formationEtablissementId: formationDetail.formationEtablissement.id,
-          latitude: location?.latitude,
-          longitude: location?.longitude,
+          latitude: latitude,
+          longitude: longitude,
           academie: formationDetail.etablissement.academie,
         },
         { signal }

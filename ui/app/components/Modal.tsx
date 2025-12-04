@@ -7,6 +7,8 @@ import { overwriteReadonlyProp } from "tsafe/lab/overwriteReadonlyProp";
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import Button, { ButtonProps } from "@codegouvfr/react-dsfr/Button";
 import { createComponentI18nApi } from "@codegouvfr/react-dsfr/i18n";
+import { useIsClient } from "usehooks-ts";
+import { createPortal } from "react-dom";
 
 function disableScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -19,6 +21,12 @@ function disableScroll() {
 
 function enableScroll() {
   window.onscroll = function () {};
+}
+
+export function PortalClient({ component }: { component: JSX.Element }) {
+  const isClient = useIsClient();
+
+  return isClient ? createPortal(component, document.body) : null;
 }
 
 export type ModalProps = {

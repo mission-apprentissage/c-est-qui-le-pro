@@ -1,15 +1,16 @@
 "use client";
 import React from "react";
-import useResizeObserver from "@react-hook/resize-observer";
+
+// Conditionally import useResizeObserver only on client
+const useResizeObserver = typeof window !== "undefined" ? require("@react-hook/resize-observer").default : () => {};
 
 export const useSize = (target: React.RefObject<HTMLElement | null>) => {
   const [size, setSize] = React.useState<DOMRect>();
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     target.current && setSize(target.current.getBoundingClientRect());
   }, [target]);
 
-  // Where the magic happens
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  useResizeObserver(target, (entry: ResizeObserverEntry) => setSize(entry.contentRect as DOMRect));
   return size;
 };
