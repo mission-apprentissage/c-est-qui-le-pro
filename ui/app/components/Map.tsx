@@ -100,7 +100,7 @@ export const MapClickHandler = ({ onClick }: { onClick?: (e: LeafletMouseEvent) 
   return null;
 };
 
-const Map = React.memo(function Map({
+const Map = function Map({
   center,
   children,
   academie,
@@ -145,6 +145,6 @@ const Map = React.memo(function Map({
       </AttributionWithLegend>
     </MapContainerStyled>
   );
-});
+};
 
 export default Map;

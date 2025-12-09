@@ -1,36 +1,45 @@
 "use client";
 
-import { RefObject, useLayoutEffect, useRef } from "react";
-import { useMap, useMapEvent } from "react-leaflet";
+import { RefObject, useEffect, useState } from "react";
+import { useMapEvent } from "react-leaflet";
 
 export default function FitBound({ groupRef }: { groupRef: RefObject<L.FeatureGroup | null> }) {
-  const hasFittedBoundsRef = useRef(false);
-  const map = useMap();
+  const [isLoading, setIsLoading] = useState(true);
 
-  useMapEvent("layeradd", (e) => {
-    const map = e.target;
-    if (hasFittedBoundsRef.current || !groupRef?.current) {
+  const map = useMapEvent("layeradd", () => {
+    if (!groupRef?.current) {
       return;
     }
 
     const bounds = groupRef.current.getBounds();
     if (bounds.isValid()) {
-      hasFittedBoundsRef.current = true;
-      map.fitBounds(bounds);
+      if (isLoading) {
+        setIsLoading(false);
+      }
     }
   });
 
-  useLayoutEffect(() => {
-    if (hasFittedBoundsRef.current || !groupRef?.current) {
+  useEffect(() => {
+    if (!groupRef?.current) {
       return;
     }
 
     const bounds = groupRef.current.getBounds();
     if (bounds.isValid()) {
-      hasFittedBoundsRef.current = true;
-      map.fitBounds(bounds);
+      if (isLoading) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsLoading(false);
+      }
     }
-  }, [groupRef, map]);
+  }, [groupRef, isLoading]);
 
+  useEffect(() => {
+    if (isLoading || !groupRef?.current) {
+      return;
+    }
+
+    const bounds = groupRef.current.getBounds();
+    map.fitBounds(bounds);
+  }, [isLoading, groupRef, map]);
   return null;
 }
