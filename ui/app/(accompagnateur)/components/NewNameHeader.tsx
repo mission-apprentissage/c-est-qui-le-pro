@@ -2,7 +2,6 @@
 "use client";
 import { fr } from "@codegouvfr/react-dsfr";
 import { css } from "@emotion/react";
-import { useSessionStorage } from "usehooks-ts";
 import { Box, Typography } from "#/app/components/MaterialUINext";
 
 export default function NewNameHeader({ onClose }: { onClose?: () => void }) {

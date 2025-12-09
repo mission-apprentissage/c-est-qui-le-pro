@@ -20,9 +20,9 @@ const FormationDetailsContext = createContext<{
   setResumeCollapse: (v: boolean | undefined) => void;
 }>({
   headersSize: { headerHeight: 0, resumeHeight: 0 },
-  setHeadersSize: (params: DetailsHeaderSizeParams) => {},
+  setHeadersSize: (_params: DetailsHeaderSizeParams) => {},
   resumeCollapse: undefined,
-  setResumeCollapse: (v: boolean | undefined) => {},
+  setResumeCollapse: (_v: boolean | undefined) => {},
 });
 
 const FormationDetailsProvider = ({

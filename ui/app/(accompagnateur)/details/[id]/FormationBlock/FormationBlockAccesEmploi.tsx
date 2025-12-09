@@ -82,7 +82,7 @@ export default function FormationBlockAccesEmploi({
 }: {
   formationDetail: FormationDetail;
 } & React.ComponentProps<typeof Card>) {
-  const { formation, etablissement } = formationDetail;
+  const { formation } = formationDetail;
   return (
     <Card type="details" title="L'accès à l'emploi" {...cardProps}>
       <ContentContainer>

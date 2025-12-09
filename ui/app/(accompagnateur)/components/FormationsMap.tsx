@@ -114,7 +114,7 @@ export default function FormationsMap({
               position={[etablissement.latitude, etablissement.longitude]}
               bubblingMouseEvents={false}
               eventHandlers={{
-                click: (e) => {
+                click: (_e) => {
                   onMarkerClick && onMarkerClick(etablissement);
                 },
               }}

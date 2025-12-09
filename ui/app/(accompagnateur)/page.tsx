@@ -14,7 +14,6 @@ import {
   LogoStack,
   PreviewImageBox,
   PreviewImage,
-  BrMobile,
 } from "./page.styled";
 import { HighlightedText } from "./details/[id]/FormationSimilaire.styled";
 import Link from "../components/Link";
@@ -49,7 +48,7 @@ function CitySuggestion() {
   );
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+export default function Page() {
   return (
     <>
       <MainContainer bgColor="blue">

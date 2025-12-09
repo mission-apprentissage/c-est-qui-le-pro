@@ -3,7 +3,7 @@ import { schema as schemaFormation } from "#/app/components/form/SearchFormation
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { FormationDomaine, FormationTag, FormationVoie, DiplomeType } from "shared";
 import { useMatomo } from "../hooks/useMatomo";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
 import { isEqual, omit } from "lodash-es";
 import { usePlausible } from "next-plausible";
@@ -25,7 +25,7 @@ const FormationsSearchContext = createContext<{
   getUrlParams: () => string;
 }>({
   params: null,
-  updateParams: (params: FormationsSearchParams, keepOld?: boolean) => {},
+  updateParams: (_params: FormationsSearchParams, _keepOld?: boolean) => {},
   getUrlParams: () => "",
 });
 
@@ -38,7 +38,6 @@ const FormationsSearchProvider = ({
 }) => {
   const plausible = usePlausible();
   const { push } = useMatomo();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { updateRoute } = useRouterUpdater();
 
@@ -82,7 +81,7 @@ const FormationsSearchProvider = ({
       const urlSearchParams = paramsToString(newParamsFinal);
       updateRoute(`?${urlSearchParams}`);
     },
-    [router, params]
+    [updateRoute, params]
   );
 
   return (

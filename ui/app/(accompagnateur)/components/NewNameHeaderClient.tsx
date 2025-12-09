@@ -1,18 +1,13 @@
 "use client";
-import { useSessionStorage } from "usehooks-ts";
-import { useEffect, useState } from "react";
+import { useSessionStorage, useIsClient } from "usehooks-ts";
 import NewNameHeader from "./NewNameHeader";
 
 export default function NewNameHeaderClient() {
-  const [isClient, setIsClient] = useState(false);
+  const isClient = useIsClient();
   const [displayConstructionHeader, saveDisplayConstructionHeader] = useSessionStorage<boolean>(
     "displayConstructionHeader",
     true
   );
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     isClient && displayConstructionHeader && <NewNameHeader onClose={() => saveDisplayConstructionHeader(false)} />

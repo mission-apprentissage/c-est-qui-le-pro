@@ -6,7 +6,7 @@ const RouterUpdaterContext = createContext<{
   updateRoute: (url: string) => void;
   isPending: boolean;
 }>({
-  updateRoute: (url: string) => {},
+  updateRoute: (_url: string) => {},
   isPending: false,
 });
 

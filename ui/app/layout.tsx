@@ -6,7 +6,6 @@ import "./(accompagnateur)/style.scss";
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
 import Button from "./components/Button";
-import { JSX } from "react";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
 import NewNameHeaderClient from "./(accompagnateur)/components/NewNameHeaderClient";
 import { Metadata } from "next";
@@ -19,7 +18,7 @@ export const metadata: Metadata = {
   description: "Toutes les formations pro accessibles après la 3e",
 };
 
-export default function MainLayout({ children }: { children: JSX.Element }) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <RootLayout>
       <>

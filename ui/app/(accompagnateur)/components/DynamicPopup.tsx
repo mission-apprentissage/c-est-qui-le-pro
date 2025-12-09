@@ -35,7 +35,7 @@ export interface PopupProps extends PopupOptions, EventedProps {
 
 export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
   function createPopup(props, context) {
-    // @ts-ignore
+    // @ts-expect-error exception for Rrose
     const popup = new L.Rrose(
       {
         offset: new L.Point(0, 0),
@@ -98,7 +98,7 @@ export const DynamicPopup = createOverlayComponent<LeafletPopup, PopupProps>(
           context.map.removeLayer(instance);
         };
       },
-      [element, context, setOpen, position]
+      [element, context, onOpen, setOpen, position]
     );
   }
 );

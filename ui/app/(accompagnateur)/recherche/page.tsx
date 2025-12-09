@@ -56,12 +56,12 @@ export default async function Page({ searchParams }: Props) {
   const { address, tag, domaines, recherche, voie, diplome, minWeight } = params ?? {};
 
   // Server-side data fetching
-  let initialLocation =
+  const initialLocation =
     address && address !== "Autour de moi"
       ? userLocationFromAddress(await fetchAddress(address, { signal: undefined }))
       : null;
 
-  let initialFormations = initialLocation
+  const initialFormations = initialLocation
     ? await formations(
         {
           latitude: initialLocation.latitude,

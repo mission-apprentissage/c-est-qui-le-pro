@@ -6,7 +6,7 @@ import { Box, Theme } from "@mui/material";
 import { capitalize, isArray, isNil } from "lodash-es";
 import MultiSelect from "#/app/components/form/MultiSelect";
 import { FORMATION_DIPLOME, FORMATION_DOMAINE, FORMATION_TAG, FORMATION_VOIE } from "#/app/services/formation";
-import { Control, Controller, useForm } from "react-hook-form";
+import { Control, Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
 import { schema } from "./SearchFormationForm";
@@ -50,7 +50,7 @@ function FilterDomaines({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, value } }) => {
           return (
             <MultiSelect
               isMobile={isMobile}
@@ -106,7 +106,7 @@ function FilterVoie({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, value } }) => {
           const firstVoie = value?.length ? FORMATION_VOIE.find(({ voie }) => voie === value[0]) : null;
           return (
             <MultiSelect
@@ -131,7 +131,7 @@ function FilterVoie({
               onChange={onChange}
               onApply={onApply}
               value={value || []}
-              options={FORMATION_VOIE.filter(({ voie }) => voie).map(({ libelle, voie, icon, pictogramme }) => ({
+              options={FORMATION_VOIE.filter(({ voie }) => voie).map(({ libelle, voie, pictogramme }) => ({
                 option: capitalize(libelle),
                 pictogramme: pictogramme,
                 value: voie || "",
@@ -162,7 +162,7 @@ function FilterDiplome({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, value } }) => {
           const firstDiplome = value?.length ? FORMATION_DIPLOME.find(({ diplome }) => diplome === value[0]) : null;
           return (
             <MultiSelect
@@ -219,7 +219,7 @@ function FilterTag({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, value } }) => {
           return (
             <MultiSelect
               isMobile={isMobile}
@@ -244,7 +244,7 @@ function FilterTag({
               onChange={onChange}
               onApply={onApply}
               value={value || []}
-              options={FORMATION_TAG.filter(({ tag }) => tag).map(({ libelle, tag, icon, pictogramme }) => ({
+              options={FORMATION_TAG.filter(({ tag }) => tag).map(({ libelle, tag, icon }) => ({
                 option: capitalize(libelle),
                 icon: icon,
                 iconColor: fr.colors.decisions.border.plain.success.default,
@@ -318,14 +318,12 @@ export default function SearchFormationFiltersForm() {
     control,
     handleSubmit,
     reset: resetForm,
-    formState: { errors },
-    watch,
   } = useForm({
     resolver: yupResolver(schemaFilters),
     defaultValues,
   });
 
-  const values = watch();
+  const values = useWatch({ control });
 
   const nbFilters = useMemo(() => {
     return Object.values(values)

@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm, Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormSetFocus } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -40,7 +40,6 @@ export function FormSearchParams<FormData extends FieldValues>({
   children,
   onSubmit,
 }: FormSearchParamsProps<FormData>) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -51,7 +50,6 @@ export function FormSearchParams<FormData extends FieldValues>({
     control,
     register,
     setValue,
-    getValues,
     handleSubmit,
     formState: { errors },
     setFocus,

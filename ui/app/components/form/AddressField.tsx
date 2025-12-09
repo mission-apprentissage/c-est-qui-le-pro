@@ -17,7 +17,7 @@ const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComp
   props: HTMLAttributes<HTMLElement>,
   ref
 ) {
-  const { children, style, ...other } = props;
+  const { children, ...other } = props;
 
   return (
     <div className="listbox-container">
@@ -104,8 +104,7 @@ const CustomPopper = ({
 export default function AddressField({
   formRef,
   form: {
-    field: { onChange, onBlur, value, name, ref },
-    ...formProps
+    field: { value, name, ref },
   },
   InputProps,
   FieldProps,
@@ -123,13 +122,9 @@ export default function AddressField({
 }: any) {
   const [isFocus, setIsFocus] = useState(false);
 
-  const [isLocationLoading, setIsLocationLoading] = useState(false);
-
   const [inputValue, setInputValue] = useState(value);
 
   const valueDebounce = useThrottle(inputValue, 300);
-
-  const [options, setOptions] = useState([myPosition, ...(value ? [value] : defaultValues)]);
 
   const { isPending } = useRouterUpdater();
 
@@ -152,9 +147,7 @@ export default function AddressField({
     },
   });
 
-  useEffect(() => {
-    !isLoading && setOptions(optionsAddress);
-  }, [isLoading, optionsAddress]);
+  const options = !isLoading ? optionsAddress : [myPosition, ...(value ? [value] : defaultValues)];
 
   useEffect(() => {
     if (inputValue != value && !isFocus) {
@@ -194,17 +187,17 @@ export default function AddressField({
         value={inputValue}
         defaultValue={value}
         open={isFocus}
-        onOpen={(e) => {
+        onOpen={() => {
           onOpen && onOpen();
           setIsFocus(true);
         }}
-        onBlur={(e) => {
+        onBlur={() => {
           setIsFocus(false);
         }}
-        onInputChange={(e, v) => {
+        onInputChange={(_e, v) => {
           setInputValue(v);
         }}
-        onChange={(e, v) => {
+        onChange={(_e, v) => {
           setValue(name, v, { shouldValidate: true });
           submitOnChange && formRef.current.requestSubmit();
         }}
@@ -239,7 +232,7 @@ export default function AddressField({
         )}
         ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
         renderOption={(props, option) => {
-          const { key, ...rest } = props;
+          const { key: _key, ...rest } = props;
 
           return (
             <li
@@ -334,7 +327,7 @@ export default function AddressField({
                   <></>
                 ),
               endAdornment:
-                isLocationLoading || (isPending && variant === "home") ? (
+                isPending && variant === "home" ? (
                   <CircularProgress />
                 ) : (
                   <>

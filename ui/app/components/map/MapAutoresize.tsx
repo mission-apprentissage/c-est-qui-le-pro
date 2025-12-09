@@ -15,7 +15,9 @@ export default function MapAutoresize() {
     resizeObserver.current.observe(container);
 
     return () => {
-      resizeObserver && resizeObserver.current && resizeObserver.current.disconnect();
+      if (resizeObserver && resizeObserver.current) {
+        resizeObserver.current.disconnect();
+      }
     };
   }, [map]);
   return <></>;

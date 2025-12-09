@@ -65,7 +65,7 @@ export default async function Page({ params, searchParams }: Props) {
         { signal: undefined }
       );
     }
-  } catch (e) {
+  } catch (_e) {
     // Laisse le client gérer l'erreur via notFound()
   }
 

@@ -1,7 +1,7 @@
 "use client";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Box, Grid } from "#/app/components/MaterialUINext";
-import { Control, Controller, FieldErrors, UseFormSetFocus, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
 import AddressField, { myPosition } from "./AddressField";
@@ -48,7 +48,6 @@ function SearchFormationHomeFormElements({
   setIsFocus,
   isFocus,
   isHomeSearch,
-  setFocus,
 }: {
   control: Control<Nullable<SearchFormationFormData>, any>;
   errors: FieldErrors<Nullable<SearchFormationFormData>>;
@@ -60,21 +59,19 @@ function SearchFormationHomeFormElements({
   setIsFocus: (isFocus: boolean) => void;
   isFocus: boolean;
   isHomeSearch: boolean;
-  setFocus: UseFormSetFocus<SearchFormationFormData>;
 }) {
   const { params } = useFormationsSearch();
-  const { history, push: pushHistory } = useSearchHistory();
+  const { history } = useSearchHistory();
   const addressHistory = useMemo(
     () => uniq(history.map(({ address }) => address).filter((a) => a !== myPosition)),
     [history]
   );
   const formationHistory = useMemo(() => uniq(history.map(({ recherche }) => recherche).filter((f) => f)), [history]);
-  const [adressKey, setAddressKey] = useState("");
+  const addressKey = params?.address ?? "";
 
   useEffect(() => {
     if (params?.address) {
       setValue("address", params?.address, { shouldValidate: true });
-      setAddressKey(params?.address);
     }
   }, [setValue, params?.address]);
 
@@ -105,7 +102,7 @@ function SearchFormationHomeFormElements({
               isRounded={isHomeSearch && !(isDownSm && isFocus)}
             >
               <Controller
-                key={`address_${adressKey}`}
+                key={`address_${addressKey}`}
                 name="address"
                 control={control}
                 render={(form) => (
@@ -213,23 +210,19 @@ export default function SearchFormationHomeForm({
   isHomeSearch?: boolean;
 }) {
   const [isFocus, setIsFocus] = useState(false);
-  const [isBordered, setIsBordered] = useState(bordered || false);
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
-  const { history, push: pushHistory } = useSearchHistory();
+  const { push: pushHistory } = useSearchHistory();
+  const isBordered = bordered || (isFocus && isDownSm);
 
   useEffect(() => {
-    setIsBordered(bordered || (isFocus && isDownSm));
-
-    if (isDownSm) {
-      if (isFocus) {
-        if (typeof window != "undefined" && window.document) {
-          document.body.style.overflow = "hidden";
-        }
-      } else {
-        document.body.style.overflow = "unset";
+    if (isDownSm && isFocus) {
+      if (typeof window != "undefined" && window.document) {
+        document.body.style.overflow = "hidden";
       }
+    } else {
+      document.body.style.overflow = "unset";
     }
-  }, [bordered, isFocus, isDownSm]);
+  }, [isFocus, isDownSm]);
 
   return (
     <Suspense>
@@ -256,14 +249,16 @@ export default function SearchFormationHomeForm({
           <FormSearchParams
             onSubmit={(data) => {
               setIsFocus(false);
-              data.address && pushHistory(data);
+              if (data.address) {
+                pushHistory(data);
+              }
             }}
             url={url}
             defaultValues={defaultValues}
             schema={schema}
             dynamicValues={["domaines", "tag", "voie", "diplome"]}
           >
-            {({ control, errors, formRef, setValue, setFocus }) => (
+            {({ control, errors, formRef, setValue }) => (
               <SearchFormationHomeFormElements
                 isHomeSearch={isHomeSearch}
                 setIsFocus={setIsFocus}
@@ -275,7 +270,6 @@ export default function SearchFormationHomeForm({
                 errors={errors}
                 formRef={formRef}
                 setValue={setValue}
-                setFocus={setFocus}
               />
             )}
           </FormSearchParams>

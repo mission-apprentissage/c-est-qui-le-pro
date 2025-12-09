@@ -84,7 +84,7 @@ export function hasIndicateurFamilleMetier(formationDetail: FormationDetail) {
   const { formationsFamilleMetier } = formationDetail;
   const indicateursPoursuite = formatIndicateurPoursuiteAnneeCommune(formationsFamilleMetier);
 
-  return !!indicateursPoursuite.find((indicateurPoursuite, index) => {
+  return !!indicateursPoursuite.find((indicateurPoursuite) => {
     return (
       hasIndicateurEtablissement(indicateurPoursuite.indicateurPoursuite) ||
       hasIndicateurRegional(indicateurPoursuite.indicateurPoursuiteRegional) !== undefined

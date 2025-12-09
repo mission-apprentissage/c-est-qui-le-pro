@@ -13,7 +13,7 @@ export type ButtonProps = {
   noMinHeight?: boolean;
 } & DSFRButtonProps;
 
-function ButtonBase({ children, smallIconOnly, ...props }: ButtonProps) {
+function ButtonBase({ children, smallIconOnly: _smallIconOnly, ...props }: ButtonProps) {
   return (
     <Button {...props}>
       <div>{children}</div>

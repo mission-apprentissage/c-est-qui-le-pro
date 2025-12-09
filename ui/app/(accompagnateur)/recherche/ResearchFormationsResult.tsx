@@ -207,7 +207,7 @@ export default React.memo(function ResearchFormationsResult({
       minWeight,
       initialData: initialFormations,
     });
-  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
+  const formationsRef = useMemo(() => formations.map(() => React.createRef<HTMLDivElement>()), [formations]);
 
   React.useEffect(() => {
     if (inView) {
@@ -233,10 +233,10 @@ export default React.memo(function ResearchFormationsResult({
           setLatLng(null);
           setIsNewAddressLoading(false);
         }
-      } catch (err) {}
+      } catch (_err) {}
       // TODO: erreur quand pas d'adresse trouvée
     })();
-  }, [latLng]);
+  }, [latLng, updateParams]);
 
   useEffect(() => {
     setLatLng(null);
@@ -247,7 +247,7 @@ export default React.memo(function ResearchFormationsResult({
       setIsNewAddressLoading(false);
       setLatLng(null);
 
-      var eltPosition = resultRef.current?.getBoundingClientRect();
+      const eltPosition = resultRef.current?.getBoundingClientRect();
       if (eltPosition?.y !== undefined && eltPosition?.y < 0) {
         resultRef.current?.scrollIntoView();
       }
@@ -362,7 +362,6 @@ export default React.memo(function ResearchFormationsResult({
                 }
 
                 const formation = formations[formationIndex];
-                const formationRef = formationsRef[formationIndex];
                 setSelected(formation);
               }}
               onTooltipClick={(etablissement) => {

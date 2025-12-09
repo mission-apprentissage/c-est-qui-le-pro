@@ -2,6 +2,7 @@
 import React from "react";
 
 // Conditionally import useResizeObserver only on client
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const useResizeObserver = typeof window !== "undefined" ? require("@react-hook/resize-observer").default : () => {};
 
 export const useSize = (target: React.RefObject<HTMLElement | null>) => {

@@ -4,9 +4,7 @@ import { ContainerProps as MUIContainerProps } from "@mui/material/Container";
 import { Container as MUIContainer } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
 
-export interface InformationCardProps extends MUIContainerProps {}
-
-function InformationCard({ children, ...props }: InformationCardProps) {
+function InformationCard({ children, ...props }: MUIContainerProps) {
   return (
     <MUIContainer {...props}>
       <>{children}</>
@@ -14,7 +12,7 @@ function InformationCard({ children, ...props }: InformationCardProps) {
   );
 }
 
-export default styled(InformationCard)<InformationCardProps>`
+export default styled(InformationCard)<MUIContainerProps>`
   background-color: #e3e3fd;
   border: 1px solid #dddddd;
   border-radius: 10px;

@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet-defaulticon-compatibility";
 import styled from "@emotion/styled";
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { ZoomControl, useMap, useMapEvents } from "react-leaflet";
 import { LatLngTuple, LeafletMouseEvent } from "leaflet";
 import dynamic from "next/dynamic";
@@ -12,6 +12,7 @@ import { useGetMapStyle } from "../(accompagnateur)/hooks/useGetMapStyle";
 import MapAutoresize from "./map/MapAutoresize";
 import { fr } from "@codegouvfr/react-dsfr";
 import AttributionWithLegend from "./map/AttributionWithLegend";
+import React from "react";
 
 const VectorTileLayer = dynamic(() => import("react-leaflet-vector-tile-layer").then((mod) => mod), {
   ssr: false,
@@ -99,7 +100,7 @@ export const MapClickHandler = ({ onClick }: { onClick?: (e: LeafletMouseEvent) 
   return null;
 };
 
-export default function Map({
+const Map = React.memo(function Map({
   center,
   children,
   academie,
@@ -108,19 +109,6 @@ export default function Map({
   children?: ReactNode;
   academie?: string | null;
 }) {
-  const [unmountMap, setUnmountMap] = useState(false);
-  //to prevent map re-initialization
-  useLayoutEffect(() => {
-    setUnmountMap(false);
-    return () => {
-      setUnmountMap(true);
-    };
-  }, []);
-
-  if (unmountMap) {
-    return <></>;
-  }
-
   return (
     <MapContainerStyled
       zoomControl={false}
@@ -157,4 +145,6 @@ export default function Map({
       </AttributionWithLegend>
     </MapContainerStyled>
   );
-}
+});
+
+export default Map;

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
 import React, { useEffect } from "react";
-import { css, Theme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { Box, Stack, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
@@ -209,7 +209,9 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                   `}
                 />
                 <Card
-                  actionProps={modalMinistage.buttonProps}
+                  actionProps={{
+                    onClick: modalMinistage.open,
+                  }}
                   css={css`
                     margin-bottom: ${fr.spacing("8v")};
                     ${theme.breakpoints.down("md")} {

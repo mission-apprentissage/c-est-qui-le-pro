@@ -211,7 +211,7 @@ function WidgetInserJeunesTab({
   indicateurPoursuiteRegional?: IndicateurPoursuiteRegional;
 }) {
   const tabs = useMemo(() => {
-    let tabs: {
+    const tabs: {
       isDefault?: boolean;
       label: ReactNode;
       iconId?: FrIconClassName | RiIconClassName;
@@ -243,7 +243,7 @@ function WidgetInserJeunesTab({
     }
 
     return tabs;
-  }, [indicateurPoursuite, indicateurPoursuiteRegional]);
+  }, [etablissement, indicateurPoursuite, indicateurPoursuiteRegional]);
 
   if (tabs.length === 0) {
     return <NoIndicateurs />;

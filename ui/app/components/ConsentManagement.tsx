@@ -7,7 +7,7 @@ import { UseConsent } from "@codegouvfr/react-dsfr/consentManagement/useConsent"
 
 const { ConsentBannerAndConsentManagement, FooterConsentManagementItem, FooterPersonalDataPolicyItem, useConsent } =
   createConsentManagement({
-    finalityDescription: ({ lang }) => ({
+    finalityDescription: () => ({
       analytics: {
         title: "Analyse",
         description: "Nous utilisons des cookies pour mesurer l’audience de notre site et améliorer son contenu.",
@@ -17,7 +17,7 @@ const { ConsentBannerAndConsentManagement, FooterConsentManagementItem, FooterPe
       //   description: "Nous utilisons des cookies pour vous proposer des contenus adaptés à vos centres d’intérêts.",
       // },
     }),
-    consentCallback: async ({ finalityConsent, finalityConsent_prev }) => {
+    consentCallback: async ({ finalityConsent_prev }) => {
       if (finalityConsent_prev === undefined) {
         location.reload();
       }

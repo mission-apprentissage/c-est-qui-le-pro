@@ -1,5 +1,5 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import styled from "@emotion/styled";
 import FormationDescription from "#/app/(accompagnateur)/components/FormationDescription";
 import { FormationDetail } from "shared";

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ErrorFetchingJson } from "./fetch";
 import { ValidationError } from "yup";
 
-export async function tryCatch(fn: Function) {
+export async function tryCatch<T>(fn: () => Promise<T> | T) {
   try {
     return await fn();
   } catch (err) {

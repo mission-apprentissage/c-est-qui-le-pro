@@ -2,7 +2,7 @@
 import React from "react";
 import { Typography } from "#/app/components/MaterialUINext";
 import { fr } from "@codegouvfr/react-dsfr";
-import { createModal } from "@codegouvfr/react-dsfr/Modal";
+import { createModal } from "#/app/components/Modal";
 
 export const modalMinistage = createModal({
   id: "ministage-modal",
@@ -13,6 +13,7 @@ export default function DialogMinistage() {
   return (
     <>
       <modalMinistage.Component
+        topAnchor={false}
         title="Qu’est ce qu’un mini-stage ?"
         buttons={[
           {

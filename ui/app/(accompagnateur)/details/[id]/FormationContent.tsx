@@ -18,7 +18,7 @@ import FormationDetailsProvider, { useFormationsDetails } from "../../context/Fo
 import { PortalClient } from "#/app/components/Modal";
 
 const FormationContent = React.memo(function ({ formationDetail }: { formationDetail: FormationDetail }) {
-  const { formation, etablissement } = formationDetail;
+  const { formation } = formationDetail;
 
   const theme = useTheme();
 

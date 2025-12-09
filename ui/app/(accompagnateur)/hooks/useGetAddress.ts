@@ -89,7 +89,7 @@ export function useGetAddress(address: string | undefined, options = {}) {
   });
 }
 
-export function useGetAddressWithCity(address: string | undefined, options = {}) {
+export function useGetAddressWithCity(address: string | undefined) {
   return useGetAddress(address, {
     select: (addressCoordinate: Awaited<ReturnType<typeof fetchAddress>>) => {
       if (!address) {

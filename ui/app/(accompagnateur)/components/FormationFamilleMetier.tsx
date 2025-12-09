@@ -120,12 +120,10 @@ function FormationFamilleMetierBlocks({
   title,
   formationDetail,
   formations,
-  withLink = false,
 }: {
   title: string;
   formationDetail: FormationDetail;
   formations: FormationFamilleMetierDetail[];
-  withLink?: boolean;
 }) {
   const location = useQueryLocation();
   const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
@@ -204,14 +202,7 @@ export default function FormationsFamilleMetier({
   }
 
   if (block) {
-    return (
-      <FormationFamilleMetierBlocks
-        title={title}
-        formationDetail={formationDetail}
-        formations={formations}
-        withLink={withLink}
-      />
-    );
+    return <FormationFamilleMetierBlocks title={title} formationDetail={formationDetail} formations={formations} />;
   }
 
   return (

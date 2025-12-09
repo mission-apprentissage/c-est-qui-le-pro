@@ -17,15 +17,15 @@
 
 import * as L from "leaflet";
 
-// @ts-ignore
+// @ts-expect-error fix does not exist
 L.Rrose = L.Popup.extend({
   _initLayout: function () {
-    var prefix = "leaflet-rrose",
+    const prefix = "leaflet-rrose",
       container = (this._container = L.DomUtil.create(
         "div",
         prefix + " " + this.options.className + " leaflet-zoom-animated"
-      )),
-      closeButton;
+      ));
+    let closeButton;
     this.prefix = prefix;
     this.container = container;
 
@@ -94,8 +94,6 @@ L.Rrose = L.Popup.extend({
   },
 
   _createWrapper: function () {
-    var wrapper;
-
     if (this.oldPosition === this.options.position) {
       return;
     }
@@ -105,7 +103,7 @@ L.Rrose = L.Popup.extend({
 
     // Create the necessary DOM elements in the correct order. Pure 'n' and 's' conditions need only one class for styling, others need two.
     this._tipContainer = L.DomUtil.create("div", "", this.container);
-    wrapper = this._wrapper = L.DomUtil.create("div", "", this.container);
+    const wrapper = (this._wrapper = L.DomUtil.create("div", "", this.container));
 
     this._tip = L.DomUtil.create("div", "", this._tipContainer);
 
@@ -118,19 +116,19 @@ L.Rrose = L.Popup.extend({
 
   _computePosition: function () {
     // Set the pixel distances from the map edges at which popups are too close and need to be re-oriented.
-    var x_bound = this.container.offsetWidth / 2 + (this.options?.bounds?.x ?? 0),
+    const x_bound = this.container.offsetWidth / 2 + (this.options?.bounds?.x ?? 0),
       y_bound = this.container.offsetHeight + (this.options?.bounds?.y ?? 0);
     this.oldPosition = this.options.position;
 
     // Determine the alternate direction to pop up; north mimics Leaflet's default behavior, so we initialize to that.
     this.options.position = "n";
     // Then see if the point is too far north...
-    var y_diff = y_bound - this._map.latLngToContainerPoint(this._latlng).y;
+    const y_diff = y_bound - this._map.latLngToContainerPoint(this._latlng).y;
     if (y_diff > 0) {
       this.options.position = "s";
     }
     // or too far east...
-    var x_diff = this._map.latLngToContainerPoint(this._latlng).x - (this._map.getSize().x - x_bound);
+    let x_diff = this._map.latLngToContainerPoint(this._latlng).x - (this._map.getSize().x - x_bound);
     if (x_diff > 0) {
       this.options.position += "w";
     } else {
@@ -143,7 +141,7 @@ L.Rrose = L.Popup.extend({
   },
 
   _updatePosition: function () {
-    var pos = this._map.latLngToLayerPoint(this._latlng),
+    const pos = this._map.latLngToLayerPoint(this._latlng),
       is3d = L.Browser.any3d;
     this._computePosition();
     this._updateWrapper();
