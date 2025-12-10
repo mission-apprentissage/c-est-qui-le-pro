@@ -1,7 +1,7 @@
 ARG ACCOMPAGNATEUR_ENV=production
 #From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
 # Install dependencies only when needed
-FROM node:22-alpine3.20 AS deps
+FROM node:22-alpine3.22 AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache pango-dev g++ make jpeg-dev giflib-dev librsvg-dev
@@ -19,7 +19,7 @@ RUN yarn config set network-timeout 600000
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
-FROM node:22-alpine3.20 AS builder-production
+FROM node:22-alpine3.22 AS builder-production
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 #COPY --from=deps /app/shared/node_modules ./shared/node_modules
@@ -58,7 +58,7 @@ ENV BASE_PATH $BASE_PATH
 RUN yarn workspace ui build
 
 # Production image, copy all the files and run next
-FROM node:22-alpine3.20 AS runner
+FROM node:22-alpine3.22 AS runner
 WORKDIR /app
 
 ENV NODE_ENV production

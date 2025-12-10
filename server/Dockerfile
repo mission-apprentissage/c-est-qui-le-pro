@@ -1,4 +1,4 @@
-FROM node:22-alpine3.20
+FROM node:22-alpine3.22
 
 RUN apk add py-setuptools
 
