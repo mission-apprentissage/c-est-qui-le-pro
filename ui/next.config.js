@@ -24,6 +24,7 @@ const nextConfig = {
       transform: "@mui/icons-material/{{member}}",
     },
   },
+  htmlLimitedBots: /.*/,
 };
 
 module.exports = nextConfig;

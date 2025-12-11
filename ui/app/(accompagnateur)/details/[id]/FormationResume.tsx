@@ -35,7 +35,7 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
     if (!anchor) {
       return;
     }
-    push("#" + anchor, { scroll: true });
+    push("#" + anchor, { scroll: false });
   }, [anchor, push]);
 
   return (
