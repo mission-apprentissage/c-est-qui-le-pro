@@ -44,7 +44,7 @@ export default styled(ButtonBase, {
         `;
       case "blue-france-hover":
         return `background-color: ${fr.colors.decisions.background.actionHigh.blueFrance.hover};
-        --hover-tint: ${fr.colors.decisions.background.altOverlap.grey.default};`;
+        --hover-tint: ${fr.colors.decisions.border.active.blueFrance.default};`;
       case "black":
         return `
         color: #000000;

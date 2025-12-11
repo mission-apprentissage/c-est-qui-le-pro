@@ -1,5 +1,6 @@
 import { formation } from "#/app/queries/formation/query";
 import { formations } from "#/app/queries/formations/query";
+import { capitalize } from "lodash-es";
 import { FormationResult } from "./page.client";
 import { Metadata } from "next";
 
@@ -21,9 +22,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       },
       { signal: undefined }
     );
-    const voie = formationDetail.formation.voie === "apprentissage" ? "apprentissage" : "voie scolaire";
+    const voie = formationDetail.formation.voie === "apprentissage" ? "alternance" : "voie scolaire";
     return {
-      title: `${formationDetail.formation.libelle} - ${formationDetail.etablissement.libelle} - ${voie}`,
+      title: `${formationDetail.formation.libelle} - ${formationDetail.etablissement.libelle} - ${capitalize(voie)}`,
       description:
         `Retrouvez des informations détaillées sur la formation ${formationDetail.formation.libelle} dispensée ` +
         `dans l’établissement "${formationDetail.etablissement.libelle}" en ${voie} : contenu de la formation, conditions d’accès, devenir des élèves à l’issue de la formation et formations similaires.`,

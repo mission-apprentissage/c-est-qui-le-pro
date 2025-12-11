@@ -36,7 +36,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
   return {
     title: `Les formations pro accessibles depuis ${addressString}${filtersString ? ` - ${filtersString}` : ""}`,
-    description: `Retrouvez l’ensemble des formations pro post-3e, accessibles depuis ${addressString}.${
+    description: `Retrouvez l’ensemble des formations pro post-3e accessibles depuis ${addressString}.${
       filtersString ? ` Les formations présentées correspondent aux filtres suivants : ${filtersString}` : ""
     }`,
   };
