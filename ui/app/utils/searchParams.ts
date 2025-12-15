@@ -4,7 +4,7 @@ import yup from "yup";
 import { mapValues, isNil, omitBy, isArray } from "lodash-es";
 import { Nullable } from "./types";
 
-export function paramsToString(params: Object): string {
+export function paramsToString(params: object): string {
   const removeEmpty = (v: any | any[]) => {
     return isArray(v) ? v.length === 0 : isNil(v);
   };
@@ -23,15 +23,13 @@ export function searchParamsToObject<FormData extends FieldValues>(
   searchParams: ReadonlyURLSearchParams,
   defaultValues: Nullable<FormData>,
   schema: yup.ObjectSchema<FormData>
-) {
+): FormData {
   const parameters: any = {};
   for (const [key, fieldSchema] of Object.entries(schema.fields)) {
     if (fieldSchema.type === "array") {
       const arrayField = searchParams.getAll(key).filter((elt) => !!elt) ?? null;
       if (arrayField) {
         parameters[key] = arrayField.length === 1 ? arrayField[0].split("|") : arrayField;
-      } else {
-        defaultValues[key];
       }
       continue;
     }

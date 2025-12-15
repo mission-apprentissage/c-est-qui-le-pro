@@ -142,7 +142,7 @@ function TagAdmission({
 
 export function FormationBlockAdmissionScolaire({ indicateurEntree }: { indicateurEntree: IndicateurEntree }) {
   const theme = useTheme();
-  let { premiersVoeux, voeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
+  const { premiersVoeux, voeux, capacite, effectifs, tauxPression, rentreeScolaire } = indicateurEntree;
   const admissionLevel =
     tauxPression === undefined
       ? "unknow"

@@ -8,6 +8,9 @@ import { Plausible } from "./Plausible";
 import { Matomo } from "../(accompagnateur)/components/Matomo";
 import { JSX, Suspense } from "react";
 
+// Enable cache by default
+export const fetchCache = "default-cache";
+
 export default function RootLayout({ title, children }: { title?: string; children: JSX.Element }) {
   const lang = "fr";
   return (

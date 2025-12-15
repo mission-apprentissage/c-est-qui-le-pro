@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
 import React, { useEffect } from "react";
-import { css, Theme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { Box, Stack, useTheme } from "@mui/material";
 import styled from "@emotion/styled";
 import { Typography, Grid, BoxContainer } from "#/app/components/MaterialUINext";
@@ -23,10 +23,11 @@ import { useFormationsDetails } from "../../context/FormationDetailsContext";
 import { capitalize } from "lodash-es";
 import FormationTags from "../../components/FormationTags";
 import OutsideAcademieTooltip from "../../components/OutsideAcademieTooltip";
-import { createPortal } from "react-dom";
 import DialogOutsideAcademie from "../../components/DialogOutsideAcademie";
 import { useGetReverseLocation } from "../../hooks/useGetAddress";
 import { useQueryLocation } from "../../hooks/useQueryLocation";
+import TagHebergement from "../../components/TagHebergement";
+import { PortalClient } from "#/app/components/Modal";
 
 export const StyledButtonLink = styled(Link)`
   padding: 0.5rem;
@@ -176,14 +177,17 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                   {location && location?.academie !== etablissement.academie && (
                     <Box style={{ marginLeft: "-0.5rem" }}>
                       <OutsideAcademieTooltip />
-                      {createPortal(<DialogOutsideAcademie academie={location?.academie} />, document.body)}
+                      <PortalClient component={<DialogOutsideAcademie academie={location?.academie} />} />
                     </Box>
                   )}
-                  <FormationRoute
-                    etablissement={etablissement}
-                    latitude={userLocation.latitude?.toString()}
-                    longitude={userLocation.longitude?.toString()}
-                  />
+                  <Box style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <FormationRoute
+                      etablissement={etablissement}
+                      latitude={userLocation.latitude?.toString()}
+                      longitude={userLocation.longitude?.toString()}
+                    />
+                    {formationEtablissement.hasHebergement && <TagHebergement />}
+                  </Box>
                 </Box>
 
                 <FormationDisponible formationDetail={formationDetail} />
@@ -205,7 +209,9 @@ const FormationHeader = React.memo(function ({ formationDetail }: { formationDet
                   `}
                 />
                 <Card
-                  actionProps={modalMinistage.buttonProps}
+                  actionProps={{
+                    onClick: modalMinistage.open,
+                  }}
                   css={css`
                     margin-bottom: ${fr.spacing("8v")};
                     ${theme.breakpoints.down("md")} {

@@ -1,7 +1,7 @@
 "use client";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Grid } from "#/app/components/MaterialUINext";
-import { Control, Controller, FieldErrors, UseFormSetFocus, UseFormSetValue } from "react-hook-form";
+import { Box, Grid } from "#/app/components/MaterialUINext";
+import { Control, Controller, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { Nullable } from "#/app/utils/types";
 import { FormSearchParams } from "./FormSearchParams";
 import AddressField, { myPosition } from "./AddressField";
@@ -10,7 +10,7 @@ import { SearchFormationFormData, schema } from "./SearchFormationForm";
 import { Theme } from "@mui/material";
 import useSearchHistory from "#/app/(accompagnateur)/hooks/useSearchHistory";
 import FormationField from "./FormationField";
-import { RefObject, useEffect, useMemo, useState } from "react";
+import { RefObject, Suspense, useEffect, useMemo, useState } from "react";
 import { uniq } from "lodash-es";
 import { useFormationsSearch } from "#/app/(accompagnateur)/context/FormationsSearchContext";
 import {
@@ -48,7 +48,6 @@ function SearchFormationHomeFormElements({
   setIsFocus,
   isFocus,
   isHomeSearch,
-  setFocus,
 }: {
   control: Control<Nullable<SearchFormationFormData>, any>;
   errors: FieldErrors<Nullable<SearchFormationFormData>>;
@@ -60,15 +59,15 @@ function SearchFormationHomeFormElements({
   setIsFocus: (isFocus: boolean) => void;
   isFocus: boolean;
   isHomeSearch: boolean;
-  setFocus: UseFormSetFocus<SearchFormationFormData>;
 }) {
   const { params } = useFormationsSearch();
-  const { history, push: pushHistory } = useSearchHistory();
+  const { history } = useSearchHistory();
   const addressHistory = useMemo(
     () => uniq(history.map(({ address }) => address).filter((a) => a !== myPosition)),
     [history]
   );
   const formationHistory = useMemo(() => uniq(history.map(({ recherche }) => recherche).filter((f) => f)), [history]);
+  const addressKey = params?.address ?? "";
 
   useEffect(() => {
     if (params?.address) {
@@ -103,7 +102,7 @@ function SearchFormationHomeFormElements({
               isRounded={isHomeSearch && !(isDownSm && isFocus)}
             >
               <Controller
-                key={`address_${params?.address}`}
+                key={`address_${addressKey}`}
                 name="address"
                 control={control}
                 render={(form) => (
@@ -128,7 +127,7 @@ function SearchFormationHomeFormElements({
                 )}
               />
 
-              {!isDownSm && !withFormation && (
+              {!withFormation && (
                 <DesktopSubmitBox>
                   <SubmitButton />
                 </DesktopSubmitBox>
@@ -175,8 +174,8 @@ function SearchFormationHomeFormElements({
               </FieldStack>
             </Grid>
           )}
-          {withFormation && !isDownSm && (
-            <Grid item md={3} xs={4}>
+          {withFormation && (
+            <Grid item md={3} xs={4} sx={{ display: { xs: "none", md: "block" } }}>
               <FormationSubmitBox>
                 <SubmitButton />
               </FormationSubmitBox>
@@ -185,11 +184,13 @@ function SearchFormationHomeFormElements({
         </SearchGridContainer>
       </FormContainer>
 
-      {isFocus && isDownSm && (
-        <MobileSubmitContainer>
-          <div></div>
-          <SubmitButton isFocusMobile />
-        </MobileSubmitContainer>
+      {isFocus && (
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <MobileSubmitContainer>
+            <div></div>
+            <SubmitButton isFocusMobile />
+          </MobileSubmitContainer>
+        </Box>
       )}
     </>
   );
@@ -209,70 +210,71 @@ export default function SearchFormationHomeForm({
   isHomeSearch?: boolean;
 }) {
   const [isFocus, setIsFocus] = useState(false);
-  const [isBordered, setIsBordered] = useState(bordered || false);
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
-  const { history, push: pushHistory } = useSearchHistory();
+  const { push: pushHistory } = useSearchHistory();
+  const isBordered = bordered || (isFocus && isDownSm);
 
   useEffect(() => {
-    setIsBordered(bordered || (isFocus && isDownSm));
-
-    if (isDownSm) {
-      if (isFocus) {
-        if (typeof window != "undefined" && window.document) {
-          document.body.style.overflow = "hidden";
-        }
-      } else {
-        document.body.style.overflow = "unset";
+    if (isDownSm && isFocus) {
+      if (typeof window != "undefined" && window.document) {
+        document.body.style.overflow = "hidden";
       }
+    } else {
+      document.body.style.overflow = "unset";
     }
-  }, [bordered, isFocus, isDownSm]);
+  }, [isFocus, isDownSm]);
 
   return (
-    <OverlayContainer isFocus={isFocus && isDownSm}>
-      <OverlayInner isFocus={isFocus && isDownSm}>
-        {isFocus && isDownSm && (
-          <MobileCloseButtonContainer>
-            <Button
-              iconOnly
-              size="large"
-              rounded
-              iconId="fr-icon-close-line"
-              priority="tertiary no outline"
-              title="Fermer la recherche"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsFocus(false);
-              }}
-            />
-          </MobileCloseButtonContainer>
-        )}
-        <FormSearchParams
-          onSubmit={(data) => {
-            setIsFocus(false);
-            data.address && pushHistory(data);
-          }}
-          url={url}
-          defaultValues={defaultValues}
-          schema={schema}
-          dynamicValues={["domaines", "tag", "voie", "diplome"]}
-        >
-          {({ control, errors, formRef, setValue, setFocus }) => (
-            <SearchFormationHomeFormElements
-              isHomeSearch={isHomeSearch}
-              setIsFocus={setIsFocus}
-              isFocus={isFocus}
-              isBordered={isBordered}
-              isDownSm={isDownSm}
-              withFormation={withFormation}
-              control={control}
-              errors={errors}
-              formRef={formRef}
-              setValue={setValue}
-              setFocus={setFocus}
-            />
+    <Suspense>
+      <OverlayContainer isFocus={isFocus && isDownSm}>
+        <OverlayInner isFocus={isFocus && isDownSm}>
+          {isFocus && (
+            <Box sx={{ display: { xs: "block", md: "none" } }}>
+              <MobileCloseButtonContainer>
+                <Button
+                  iconOnly
+                  size="large"
+                  rounded
+                  iconId="fr-icon-close-line"
+                  priority="tertiary no outline"
+                  title="Fermer la recherche"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsFocus(false);
+                  }}
+                />
+              </MobileCloseButtonContainer>
+            </Box>
           )}
-        </FormSearchParams>
-      </OverlayInner>
-    </OverlayContainer>
+          <FormSearchParams
+            onSubmit={(data) => {
+              setIsFocus(false);
+              if (data.address) {
+                pushHistory(data);
+              }
+            }}
+            url={url}
+            defaultValues={defaultValues}
+            schema={schema}
+            dynamicValues={["domaines", "tag", "voie", "diplome"]}
+          >
+            {({ control, errors, formRef, setValue }) => (
+              <SearchFormationHomeFormElements
+                isHomeSearch={isHomeSearch}
+                setIsFocus={setIsFocus}
+                isFocus={isFocus}
+                isBordered={isBordered}
+                isDownSm={isDownSm}
+                withFormation={withFormation}
+                control={control}
+                errors={errors}
+                formRef={formRef}
+                setValue={setValue}
+              />
+            )}
+          </FormSearchParams>
+        </OverlayInner>
+      </OverlayContainer>
+    </Suspense>
   );
 }

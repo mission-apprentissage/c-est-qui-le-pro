@@ -1,20 +1,20 @@
 "use client";
 import React, { useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
-import {
-  LeafletHomeIcon,
-  LeafletEtablissementIcon,
-  LeafletEtablissementOutsideAcademieIcon,
-  LeafletSelectedEtablissementOutsideAcademieIcon,
-  LeafletSelectedEtablissementIcon,
-  FitBound,
-  MapClickHandler,
-} from "#/app/components/Map";
+import { MapClickHandler } from "#/app/components/Map";
 import { Etablissement, FormationDetail } from "shared";
 import { FeatureGroup, Marker } from "react-leaflet";
 import EtablissementCard from "./EtablissementCard";
 import DynamicPopup from "./DynamicPopup";
 import L from "leaflet";
+import {
+  LeafletEtablissementIcon,
+  LeafletEtablissementOutsideAcademieIcon,
+  LeafletHomeIcon,
+  LeafletSelectedEtablissementIcon,
+  LeafletSelectedEtablissementOutsideAcademieIcon,
+} from "#/app/components/map/Icon";
+import FitBound from "#/app/components/map/FitBound";
 
 const Map = dynamic(() => import("#/app/components/Map"), { ssr: false });
 
@@ -114,7 +114,7 @@ export default function FormationsMap({
               position={[etablissement.latitude, etablissement.longitude]}
               bubblingMouseEvents={false}
               eventHandlers={{
-                click: (e) => {
+                click: (_e) => {
                   onMarkerClick && onMarkerClick(etablissement);
                 },
               }}

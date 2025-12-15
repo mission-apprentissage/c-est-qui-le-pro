@@ -10,7 +10,7 @@ export interface ContainerProps extends MUIContainerProps {
   noShadow?: boolean;
 }
 
-function Container({ children, variant, nopadding, noShadow, ...props }: ContainerProps) {
+function Container({ children, variant, noShadow, nopadding: _nopadding, ...props }: ContainerProps) {
   const className = [
     props.className || "",
     ...(variant === "subContent" ? [fr.cx("fr-card"), !noShadow ? fr.cx("fr-card--shadow") : ""] : []),
@@ -28,7 +28,7 @@ const StyledContainer = styled(Container)<ContainerProps>`
   padding-left: ${({ nopadding }) => (nopadding ? "0" : fr.spacing("5w"))};
   padding-right: ${({ nopadding }) => (nopadding ? "0" : fr.spacing("5w"))};
 
-  ${({ theme, nopadding }) => {
+  ${({ theme }) => {
     if (!theme?.breakpoints) {
       return ``;
     }

@@ -1,7 +1,6 @@
-import { SerializedStyles } from "@emotion/react";
 import { styled } from "@mui/material";
 
-function UnionIcon({ css, className }: { css?: SerializedStyles; className?: string | undefined }) {
+function UnionIcon({ className }: { className?: string | undefined }) {
   return (
     <svg
       className={className}

@@ -74,11 +74,9 @@ const FormationFamilleMetierBlock = React.memo(function FormationFamilleMetierBl
         <>
           <FormationTitle variant={"body1"}>{formatLibelle(formation.libelle)}</FormationTitle>
           <ActionContainer>
-            <Link href={formationSearchLink} target="_blank" noDecoration noIcon>
-              <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
-                Rechercher la formation
-              </Button>
-            </Link>
+            <Button variant="blue-france-alt" rounded size="small" iconId="ri-search-line" iconPosition="right">
+              Rechercher la formation
+            </Button>
           </ActionContainer>
         </>
       )}
@@ -122,12 +120,10 @@ function FormationFamilleMetierBlocks({
   title,
   formationDetail,
   formations,
-  withLink = false,
 }: {
   title: string;
   formationDetail: FormationDetail;
   formations: FormationFamilleMetierDetail[];
-  withLink?: boolean;
 }) {
   const location = useQueryLocation();
   const longitude = location.longitude ?? formationDetail.etablissement.longitude ?? 0;
@@ -206,14 +202,7 @@ export default function FormationsFamilleMetier({
   }
 
   if (block) {
-    return (
-      <FormationFamilleMetierBlocks
-        title={title}
-        formationDetail={formationDetail}
-        formations={formations}
-        withLink={withLink}
-      />
-    );
+    return <FormationFamilleMetierBlocks title={title} formationDetail={formationDetail} formations={formations} />;
   }
 
   return (

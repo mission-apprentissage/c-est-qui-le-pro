@@ -39,6 +39,7 @@ export interface Etablissement {
   coordinate: string | null;
   createdAt: Generated<Timestamp>;
   hasFormation: boolean | null;
+  hasFormationWithHebergement: Generated<boolean>;
   id: Generated<string>;
   JPODetails: string | null;
   libelle: string | null;
@@ -125,6 +126,7 @@ export interface FormationEtablissement {
   duree: string | null;
   etablissementId: string;
   formationId: string;
+  hasHebergement: Generated<boolean>;
   id: Generated<string>;
   millesime: string[] | null;
   state: Generated<FormationEtablissementState>;

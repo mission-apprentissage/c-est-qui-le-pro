@@ -5,8 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 export default function TimeField({
   form: {
-    field: { onChange, onBlur, value, name, ref, ...rest },
-    ...formProps
+    field: { onChange, value },
   },
   error,
 }: any) {

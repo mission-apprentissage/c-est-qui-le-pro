@@ -21,7 +21,7 @@
     "coverage": "nyc --temp-dir .coverage/.nyc_output --report-dir .coverage --reporter=lcov --reporter=html yarn test",
     "lint": "eslint src/ tests/",
     "kysely": "kysely",
-    "kysely-schema": "kysely-codegen --out-file=./src/common/db/schema.ts --dialect postgres"
+    "kysely-schema": "kysely-codegen --out-file=./src/common/db/schema.ts --dialect postgres --include-pattern='public.*'"
   },
   "dependencies": {
     "@hapi/boom": "10.0.1",
@@ -80,7 +80,7 @@
     "xlsx": "0.18.5"
   },
   "engines": {
-    "node": ">=18.20.2"
+    "node": ">=22.21.1"
   },
   "prettier": {
     "printWidth": 120,

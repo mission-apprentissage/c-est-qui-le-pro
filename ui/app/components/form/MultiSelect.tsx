@@ -83,7 +83,7 @@ function Option({
       key={option}
       checked={checked}
       hasPictogramme={!!Pictogramme}
-      onClick={(e) => {
+      onClick={() => {
         onChange(!checked);
       }}
       isMobile={isMobile}
@@ -170,21 +170,9 @@ function MultiSelectContainer({
   );
 }
 
-function MultiSelectContainerMobile({
-  apply: originalApply,
-  options,
-  onChangeOption,
-  name,
-  value,
-  description,
-}: MultiSelectContainerProps) {
+function MultiSelectContainerMobile({ options, onChangeOption, name, value, description }: MultiSelectContainerProps) {
   const [maxVisible, setMaxVisible] = useState(7);
-  const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
-  const apply = () => {
-    setIsOpen(false);
-    originalApply();
-  };
 
   return (
     <Box ref={ref}>

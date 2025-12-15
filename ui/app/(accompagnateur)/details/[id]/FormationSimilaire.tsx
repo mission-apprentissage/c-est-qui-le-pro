@@ -1,3 +1,4 @@
+"use client";
 /** @jsxImportSource @emotion/react */
 import { formationsSimilaire } from "#/app/queries/formationsSimilaire/query";
 import { FormationDetail } from "shared";
@@ -45,8 +46,8 @@ const FormationSimilaire = React.memo(({ formationDetail }: { formationDetail: F
       return formationsSimilaire(
         {
           formationEtablissementId: formationDetail.formationEtablissement.id,
-          latitude: location?.latitude,
-          longitude: location?.longitude,
+          latitude: latitude,
+          longitude: longitude,
           academie: formationDetail.etablissement.academie,
         },
         { signal }

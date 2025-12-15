@@ -10,7 +10,7 @@ const ListboxComponent = React.forwardRef<HTMLUListElement>(function ListboxComp
   props: HTMLAttributes<HTMLElement>,
   ref
 ) {
-  const { children, style, ...other } = props;
+  const { children, ...other } = props;
 
   return (
     <div className="listbox-container">
@@ -93,8 +93,7 @@ const CustomPopper = ({ isMobile, isFocus, ...props }: PopperProps & { isFocus: 
 export default function FormationField({
   formRef,
   form: {
-    field: { onChange, onBlur, value, name, ref, ...rest },
-    ...formProps
+    field: { onChange, value },
   },
   InputProps,
   error,
@@ -123,14 +122,14 @@ export default function FormationField({
         value={value || ""}
         defaultValue={value}
         open={isFocus}
-        onOpen={(e) => {
+        onOpen={() => {
           onOpen && onOpen();
           setIsFocus(true);
         }}
-        onBlur={(e) => {
+        onBlur={() => {
           setIsFocus(false);
         }}
-        onInputChange={(e, v) => {
+        onInputChange={(_e, v) => {
           onChange(v);
         }}
         onChange={(e, v) => {
@@ -143,7 +142,7 @@ export default function FormationField({
           setIsFocus(false);
         }}
         getOptionLabel={(option) => option.toString()}
-        filterOptions={(options, params) => {
+        filterOptions={(options) => {
           return [...(value ? [value] : []), ...options];
         }}
         freeSolo
@@ -165,7 +164,7 @@ export default function FormationField({
         PopperComponent={(props) => <CustomPopper isFocus={isFocus} isMobile={isMobile} {...props} />}
         ListboxComponent={ListboxComponent as React.ComponentType<React.HTMLAttributes<HTMLElement>>}
         renderOption={(props, option) => {
-          const { key, ...rest } = props;
+          const { key: _key, ...rest } = props;
 
           return (
             <li key={option} {...rest}>

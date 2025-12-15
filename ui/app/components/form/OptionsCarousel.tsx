@@ -172,7 +172,10 @@ export default function OptionsCarousel<T>({
                   if (leftSide < 50) {
                     scrollList(scrollLeft + leftSide - 50);
                   }
-                  onClick && onClick(option.value);
+
+                  if (onClick) {
+                    onClick(option.value);
+                  }
                 }}
               >
                 {option.option}

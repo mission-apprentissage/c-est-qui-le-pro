@@ -1,15 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { fr } from "@codegouvfr/react-dsfr";
-import { css, SerializedStyles } from "@emotion/react";
+import { css } from "@emotion/react";
 import Divider, { DividerProps } from "@mui/material/Divider";
 import { useTheme } from "@mui/material/styles";
 
-export default function CustomDivider({
-  margin,
-  className,
-  css: cssParent,
-  ...props
-}: DividerProps & { css?: SerializedStyles; margin?: string }) {
+export default function CustomDivider({ margin, className, ...props }: DividerProps & { margin?: string }) {
   const theme = useTheme();
   return (
     <Divider

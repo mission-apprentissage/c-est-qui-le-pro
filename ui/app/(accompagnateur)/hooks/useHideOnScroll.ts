@@ -15,8 +15,10 @@ export const useHideOnScroll = (ref: React.RefObject<HTMLElement | null>, offset
     const marginSize = parseFloat(headerStyle.marginTop);
 
     if (boundingBox.y - offset <= marginSize) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHide(true);
     } else if (boundingBox.y - offset > marginSize + 1) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHide(false);
     }
   }, [ref, scrollPosition, offset]);

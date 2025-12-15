@@ -7,6 +7,8 @@ import { overwriteReadonlyProp } from "tsafe/lab/overwriteReadonlyProp";
 import { fr, FrIconClassName, RiIconClassName } from "@codegouvfr/react-dsfr";
 import Button, { ButtonProps } from "@codegouvfr/react-dsfr/Button";
 import { createComponentI18nApi } from "@codegouvfr/react-dsfr/i18n";
+import { useIsClient } from "usehooks-ts";
+import { createPortal } from "react-dom";
 
 function disableScroll() {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -21,6 +23,17 @@ function enableScroll() {
   window.onscroll = function () {};
 }
 
+export function PortalClient({ component }: { component: JSX.Element }) {
+  const isClient = useIsClient();
+
+  return isClient ? createPortal(component, document.body) : null;
+}
+
+export type ModalActionAreaButtonProps = ButtonProps & {
+  /** Default: true */
+  doClosesModal?: boolean;
+};
+
 export type ModalProps = {
   className?: string;
   /** Default: "medium" */
@@ -31,19 +44,10 @@ export type ModalProps = {
   concealingBackdrop?: boolean;
   topAnchor?: boolean;
   iconId?: FrIconClassName | RiIconClassName;
-  buttons?:
-    | [ModalProps.ActionAreaButtonProps, ...ModalProps.ActionAreaButtonProps[]]
-    | ModalProps.ActionAreaButtonProps;
+  buttons?: [ModalActionAreaButtonProps, ...ModalActionAreaButtonProps[]] | ModalActionAreaButtonProps;
   style?: CSSProperties;
   close?: () => void;
 };
-
-export namespace ModalProps {
-  export type ActionAreaButtonProps = ButtonProps & {
-    /** Default: true */
-    doClosesModal?: boolean;
-  };
-}
 
 const Modal = memo(
   forwardRef<HTMLDialogElement, ModalProps & { id: string }>((props, ref) => {
@@ -59,10 +63,10 @@ const Modal = memo(
       size = "medium",
       style,
       close,
-      ...rest
+      ..._rest
     } = props;
 
-    assert<Equals<keyof typeof rest, never>>();
+    assert<Equals<keyof typeof _rest, never>>();
 
     const buttons =
       buttons_props === undefined ? undefined : buttons_props instanceof Array ? buttons_props : [buttons_props];

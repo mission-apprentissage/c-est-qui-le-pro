@@ -18,9 +18,11 @@ import { UserLocation } from "#/types/userLocation";
 import { pluralize } from "#/app/utils/stringUtils";
 import { fetchReverse } from "#/app/services/address";
 import DialogOutsideAcademie from "../components/DialogOutsideAcademie";
-import { createPortal } from "react-dom";
+import { useRouterUpdater } from "../context/RouterUpdaterContext";
+import { PortalClient } from "#/app/components/Modal";
 const FormationsMap = dynamic(() => import("#/app/(accompagnateur)/components/FormationsMap"), {
   ssr: false,
+  loading: () => <Loader withMargin />,
 });
 
 const FormationResult = React.memo(
@@ -172,10 +174,12 @@ export default React.memo(function ResearchFormationsResult({
   location,
   page = 1,
   isAddressFetching,
+  initialFormations,
 }: {
   location: UserLocation;
   page: number;
   isAddressFetching?: boolean;
+  initialFormations?: any;
 }) {
   const theme = useTheme();
   const isDownSm = useMediaQuery<Theme>((theme) => theme.breakpoints.down("md"));
@@ -183,6 +187,7 @@ export default React.memo(function ResearchFormationsResult({
   const [latLng, setLatLng] = useState<number[] | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
   const [isNewAddressLoading, setIsNewAddressLoading] = useState(false);
+  const { isPending } = useRouterUpdater();
   const { params, updateParams } = useFormationsSearch();
   const { tag, domaines, recherche, voie, diplome, minWeight } = params ?? {};
 
@@ -200,8 +205,9 @@ export default React.memo(function ResearchFormationsResult({
       postcode: location.postcode,
       recherche,
       minWeight,
+      initialData: initialFormations,
     });
-  const formationsRef = useMemo(() => formations.map((data) => React.createRef<HTMLDivElement>()), [formations]);
+  const formationsRef = useMemo(() => formations.map(() => React.createRef<HTMLDivElement>()), [formations]);
 
   React.useEffect(() => {
     if (inView) {
@@ -214,28 +220,34 @@ export default React.memo(function ResearchFormationsResult({
       return;
     }
 
+    resultRef.current?.scrollIntoView();
     setIsNewAddressLoading(true);
     (async () => {
       try {
         const result = await fetchReverse(latLng[0], latLng[1]);
         if (result?.features?.length > 0) {
           const address = result.features[0].properties.label;
-          updateParams({ ...params, address: address });
+          updateParams({ address: address }, true);
+          setIsNewAddressLoading(false);
         } else {
           setLatLng(null);
           setIsNewAddressLoading(false);
         }
-      } catch (err) {}
+      } catch (_err) {}
       // TODO: erreur quand pas d'adresse trouvée
     })();
-  }, [params, latLng]);
+  }, [latLng, updateParams]);
+
+  useEffect(() => {
+    setLatLng(null);
+  }, [params]);
 
   useEffect(() => {
     if (!isAddressFetching) {
       setIsNewAddressLoading(false);
       setLatLng(null);
 
-      var eltPosition = resultRef.current?.getBoundingClientRect();
+      const eltPosition = resultRef.current?.getBoundingClientRect();
       if (eltPosition?.y !== undefined && eltPosition?.y < 0) {
         resultRef.current?.scrollIntoView();
       }
@@ -282,7 +294,7 @@ export default React.memo(function ResearchFormationsResult({
             }
           `}
         >
-          {(isNewAddressLoading || isFetching || isAddressFetching) && <Loader withMargin />}
+          {(isNewAddressLoading || isFetching || isAddressFetching || isPending) && <Loader withMargin />}
 
           {!formations?.length ? (
             <InformationCard>
@@ -350,7 +362,6 @@ export default React.memo(function ResearchFormationsResult({
                 }
 
                 const formation = formations[formationIndex];
-                const formationRef = formationsRef[formationIndex];
                 setSelected(formation);
               }}
               onTooltipClick={(etablissement) => {
@@ -368,7 +379,7 @@ export default React.memo(function ResearchFormationsResult({
       </Grid2>
       <div ref={refInView}></div>
       {isFetchingNextPage && <Loader style={{ marginTop: fr.spacing("5v") }} />}
-      {createPortal(<DialogOutsideAcademie academie={location.academie} />, document.body)}
+      <PortalClient component={<DialogOutsideAcademie academie={academie} />} />
     </>
   );
 });

@@ -14,7 +14,7 @@ export function cacheWithObjectArgument<CachedFunction extends (...args: any) =>
       }
     }
 
-    let argumentsPrimitive = JSON.stringify(Array.from(args));
+    const argumentsPrimitive = JSON.stringify(Array.from(args));
     return cacheReact<(argumentsPrimitive: string) => R>((argumentsPrimitive: string) => {
       return fn(...JSON.parse(argumentsPrimitive));
     })(argumentsPrimitive);

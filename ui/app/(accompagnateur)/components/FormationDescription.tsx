@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import HtmlReactParser from "html-react-parser";
 import TruncateMarkup from "react-truncate-markup";
-import { fr } from "@codegouvfr/react-dsfr";
 
 export default function FormationDescription({
   description,

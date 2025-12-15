@@ -1,6 +1,7 @@
+"use client";
 /** @jsxImportSource @emotion/react */
 import React from "react";
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { fr } from "@codegouvfr/react-dsfr";
 import { DiplomeTypeLibelle, FormationDetail } from "shared";
 import "moment/locale/fr";
@@ -12,10 +13,10 @@ import { LabelApprentissage } from "./Apprentissage";
 import { formatAccessTime, formatLibelle } from "#/app/utils/formation";
 import { TagDiplome } from "#/app/components/Tag";
 import FormationsFamilleMetier from "./FormationFamilleMetier";
-import { SerializedStyles } from "@emotion/react";
 import TagEtablissement from "./TagEtablissement";
 import { UserLocation } from "#/types/userLocation";
 import OutsideAcademieTooltip from "./OutsideAcademieTooltip";
+import TagHebergement from "./TagHebergement";
 
 export default React.memo(function FormationCard({
   location,
@@ -28,20 +29,18 @@ export default React.memo(function FormationCard({
   withDuration = true,
   withOutsideAcademie = false,
   style = undefined,
-  css = undefined,
   className = undefined,
 }: {
   location?: UserLocation | null;
   formationDetail: FormationDetail;
   selected: boolean;
-  onMouseEnter?: Function;
-  onMouseLeave?: Function;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   tabIndex: number;
   withJPO?: boolean;
   withDuration?: boolean;
   withOutsideAcademie?: boolean;
   style?: React.CSSProperties;
-  css?: SerializedStyles;
   className?: string;
 }) {
   const { formationEtablissement, formation, etablissement } = formationDetail;
@@ -55,8 +54,8 @@ export default React.memo(function FormationCard({
     <Card
       selected={selected}
       actionProps={{
-        onMouseEnter: () => onMouseEnter && onMouseEnter(),
-        onMouseLeave: () => onMouseLeave && onMouseLeave(),
+        onMouseEnter: (e) => onMouseEnter && onMouseEnter(e),
+        onMouseLeave: (e) => onMouseLeave && onMouseLeave(e),
       }}
       link={formationLink}
       linkTarget="_blank"
@@ -105,7 +104,14 @@ export default React.memo(function FormationCard({
                 <OutsideAcademieTooltip />
               </Box>
             )}
-            <Box>
+            <Box
+              style={{
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
+                marginTop: formationEtablissement.hasHebergement ? "-0.25rem" : 0,
+              }}
+            >
               {etablissement.accessTime ? (
                 <Typography variant="subtitle4" color={"var(--blue-france-sun-113-625)"}>
                   <i style={{ marginRight: fr.spacing("2v") }} className={fr.cx("fr-icon-bus-line")} />
@@ -119,6 +125,7 @@ export default React.memo(function FormationCard({
                   </Typography>
                 )
               )}
+              {formationEtablissement.hasHebergement && <TagHebergement />}
             </Box>
           </Box>
         )}

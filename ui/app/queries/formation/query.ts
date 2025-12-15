@@ -13,6 +13,7 @@ export async function formation(
   const result = await fetch(`${url}/${params.id}?${paramsToString(omit(params, ["id"]))}`, {
     method: "GET",
     signal,
+    next: { revalidate: 3600 },
   });
 
   if (!result.ok) {

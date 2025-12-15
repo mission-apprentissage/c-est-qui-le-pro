@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm, Control, FieldErrors, UseFormRegister, UseFormSetValue, UseFormSetFocus } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -7,6 +7,7 @@ import { FieldValues } from "react-hook-form";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { JSX, RefObject, Suspense, useEffect, useRef } from "react";
 import { useFocusSearchContext } from "#/app/(accompagnateur)/context/FocusSearchContext";
+import { useRouterUpdater } from "#/app/(accompagnateur)/context/RouterUpdaterContext";
 
 type FormSearchParamsProps<FormData extends FieldValues> = {
   url: string;
@@ -39,7 +40,6 @@ export function FormSearchParams<FormData extends FieldValues>({
   children,
   onSubmit,
 }: FormSearchParamsProps<FormData>) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -50,7 +50,6 @@ export function FormSearchParams<FormData extends FieldValues>({
     control,
     register,
     setValue,
-    getValues,
     handleSubmit,
     formState: { errors },
     setFocus,
@@ -60,6 +59,7 @@ export function FormSearchParams<FormData extends FieldValues>({
     shouldFocusError: false,
   });
   const { registerSetFocusSearch } = useFocusSearchContext();
+  const { updateRoute } = useRouterUpdater();
 
   useEffect(() => {
     registerSetFocusSearch(setFocus);
@@ -76,7 +76,7 @@ export function FormSearchParams<FormData extends FieldValues>({
     onSubmit && onSubmit(dataWithDynamic);
 
     const urlParams = paramsToString(dataWithDynamic);
-    router.push(`${url}?${urlParams}`);
+    updateRoute(`${url}?${urlParams}`);
   });
 
   return (

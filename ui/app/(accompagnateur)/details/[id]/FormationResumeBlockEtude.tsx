@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import { Formation, FormationDetail, FormationEtablissement } from "shared";
+import { FormationDetail, FormationEtablissement } from "shared";
 import Tag from "#/app/components/Tag";
 import { isNil } from "lodash-es";
 import { FormationResumeBlock, FormationResumeBlockProps } from "./FormationResume";

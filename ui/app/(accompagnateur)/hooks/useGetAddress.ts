@@ -84,13 +84,18 @@ export function useGetAddress(address: string | undefined, options = {}) {
     cacheTime: Infinity,
     staleTime: Infinity,
     keepPreviousData: true,
+    enabled: !!address,
     ...options,
   });
 }
 
-export function useGetAddressWithCity(address: string | undefined, options = {}) {
+export function useGetAddressWithCity(address: string | undefined) {
   return useGetAddress(address, {
     select: (addressCoordinate: Awaited<ReturnType<typeof fetchAddress>>) => {
+      if (!address) {
+        return null;
+      }
+
       if (!addressCoordinate?.features) {
         // TODO: manage address fetch error
         throw new ErrorAddressInvalid();

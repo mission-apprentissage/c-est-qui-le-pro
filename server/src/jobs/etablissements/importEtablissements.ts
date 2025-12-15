@@ -118,6 +118,23 @@ export async function importEtablissements() {
               onisepFormation.data as RawData[RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee];
             onisepFormated["url"] = onisepFormationData.data.ens_site_web;
           }
+
+          // A au moins une formation avec un hébergement/internat
+          const onisepHasHebergement = await RawDataRepository.first((eb) =>
+            eb.and([
+              eb("type", "=", RawDataType.ONISEP_ideoActionsFormationInitialeUniversLycee),
+              eb(sql.raw(`data->'data'->>'ens_code_uai'`), "=", formated.uai),
+              eb(sql.raw(`data->'data'->>'ens_hebergement'`), "not like", "sans%"),
+              eb(sql.raw(`data->'data'->>'ens_hebergement'`), "!=", ""),
+              eb(sql.raw(`data->'data'->>'ens_hebergement'`), "is not", null),
+            ])
+          );
+
+          if (onisepHasHebergement) {
+            onisepFormated["hasFormationWithHebergement"] = true;
+          } else {
+            onisepFormated["hasFormationWithHebergement"] = false;
+          }
         }
 
         return {

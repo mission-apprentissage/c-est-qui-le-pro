@@ -1,6 +1,6 @@
 const esModules = ["@codegouvfr*"].join("|");
 
-export default {
+const config = {
   setupFilesAfterEnv: ["<rootDir>/.jest/setup-jest.js"],
 
   collectCoverage: true,
@@ -71,3 +71,5 @@ export default {
     "^.+\\.module\\.(css|sass|scss)$",
   ],
 };
+
+export default config;

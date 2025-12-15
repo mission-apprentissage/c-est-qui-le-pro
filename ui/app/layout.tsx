@@ -3,19 +3,25 @@ import Layout from "./components/Layout";
 import Header from "#/app/components/Header";
 import { title, tagline } from "./(accompagnateur)/constants/constants";
 import "./(accompagnateur)/style.scss";
-import Title from "./(accompagnateur)/components/Title";
 import { Footer } from "@codegouvfr/react-dsfr/Footer";
 import Link from "./components/Link";
 import Button from "./components/Button";
-import { JSX } from "react";
 import { ConsentBannerAndConsentManagement } from "./components/ConsentManagement";
-import NewNameHeader from "./(accompagnateur)/components/NewNameHeader";
+import NewNameHeaderClient from "./(accompagnateur)/components/NewNameHeaderClient";
+import { Metadata } from "next";
 
-export default function MainLayout({ children }: { children: JSX.Element }) {
+export const metadata: Metadata = {
+  title: {
+    default: title,
+    template: `${title} - %s`,
+  },
+  description: "Toutes les formations pro accessibles après la 3e",
+};
+
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <RootLayout>
       <>
-        <Title />
         <Layout
           header={
             <Header
@@ -33,7 +39,7 @@ export default function MainLayout({ children }: { children: JSX.Element }) {
           title={title}
         >
           <div>
-            <NewNameHeader />
+            <NewNameHeaderClient></NewNameHeaderClient>
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer

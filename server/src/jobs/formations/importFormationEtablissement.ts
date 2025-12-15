@@ -146,7 +146,7 @@ export async function importFormationEtablissement() {
     )
   );
 
-  //stats.deleted = await FormationEtablissementRepository.removeStale();
+  stats.deleted = await FormationEtablissementRepository.removeStale();
 
   return stats;
 }

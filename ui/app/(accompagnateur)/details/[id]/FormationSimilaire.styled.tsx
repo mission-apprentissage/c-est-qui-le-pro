@@ -1,3 +1,4 @@
+"use client";
 /** @jsxImportSource @emotion/react */
 import FormationCard from "../../components/FormationCard";
 import { Box, Typography } from "#/app/components/MaterialUINext";
@@ -18,6 +19,12 @@ export const HighlightedText = styled.span`
 `;
 
 export const StyledFormationCard = styled(FormationCard)`
+  background-color: white;
+
+  &:hover {
+    background-color: #f7f7f7;
+  }
+
   &.MuiButtonBase-root:hover {
     background-color: white;
   }

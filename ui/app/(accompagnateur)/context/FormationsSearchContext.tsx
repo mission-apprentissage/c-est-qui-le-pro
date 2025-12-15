@@ -1,11 +1,13 @@
+"use client";
 import { schema as schemaFormation } from "#/app/components/form/SearchFormationForm";
 import { paramsToString, searchParamsToObject } from "#/app/utils/searchParams";
 import { FormationDomaine, FormationTag, FormationVoie, DiplomeType } from "shared";
 import { useMatomo } from "../hooks/useMatomo";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { createContext, useContext, useCallback, useEffect } from "react";
-import { omit } from "lodash-es";
+import { isEqual, omit } from "lodash-es";
 import { usePlausible } from "next-plausible";
+import { useRouterUpdater } from "./RouterUpdaterContext";
 
 export type FormationsSearchParams = {
   address: string;
@@ -13,26 +15,36 @@ export type FormationsSearchParams = {
   domaines?: FormationDomaine[];
   voie?: FormationVoie[];
   diplome?: (keyof typeof DiplomeType)[];
-  recherche?: string;
-  minWeight?: number;
+  recherche?: string | null;
+  minWeight?: number | null;
 };
 
 const FormationsSearchContext = createContext<{
   params?: FormationsSearchParams | null;
-  updateParams: (params: FormationsSearchParams) => void;
+  updateParams: (params: FormationsSearchParams, keepOld?: boolean) => void;
   getUrlParams: () => string;
 }>({
   params: null,
-  updateParams: (params: FormationsSearchParams) => {},
+  updateParams: (_params: FormationsSearchParams, _keepOld?: boolean) => {},
   getUrlParams: () => "",
 });
 
-const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) => {
+const FormationsSearchProvider = ({
+  children,
+  initialParams,
+}: {
+  children: React.ReactNode;
+  initialParams?: FormationsSearchParams;
+}) => {
   const plausible = usePlausible();
   const { push } = useMatomo();
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const params = searchParamsToObject(searchParams, { address: null, tag: null, domaines: null }, schemaFormation);
+  const { updateRoute } = useRouterUpdater();
+
+  // Use initialParams from server if available (for SSR), otherwise use client searchParams
+  const params = initialParams
+    ? initialParams
+    : searchParamsToObject(searchParams, { address: null, tag: null, domaines: null }, schemaFormation);
 
   useEffect(() => {
     Object.entries(omit(params, ["address"])).forEach(([key, value]) => {
@@ -60,11 +72,16 @@ const FormationsSearchProvider = ({ children }: { children: React.ReactNode }) =
   }, [params]);
 
   const updateParams = useCallback(
-    (params: FormationsSearchParams) => {
-      const urlSearchParams = paramsToString(params);
-      router.push(`?${urlSearchParams}`, { scroll: false });
+    (newParams: FormationsSearchParams, keepOld: boolean = false) => {
+      const newParamsFinal = keepOld ? { ...params, ...newParams } : newParams;
+      if (isEqual(params, newParamsFinal)) {
+        return;
+      }
+
+      const urlSearchParams = paramsToString(newParamsFinal);
+      updateRoute(`?${urlSearchParams}`);
     },
-    [router]
+    [updateRoute, params]
   );
 
   return (

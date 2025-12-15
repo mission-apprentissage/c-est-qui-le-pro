@@ -65,6 +65,12 @@ export default function FormationRoute({
               {Math.round(distance / 1000)} km
             </span>
           )}
+          {!etablissement.accessTime && distance === null && (
+            <span style={{ marginRight: "1rem" }}>
+              <i className={fr.cx("fr-icon-bus-line")} style={{ marginRight: fr.spacing("1w") }} />
+              Voir l’itinéraire
+            </span>
+          )}
           <i className={fr.cx("ri-arrow-right-line", "fr-icon--sm")} />
         </StyledButtonLink>
       </Typography>

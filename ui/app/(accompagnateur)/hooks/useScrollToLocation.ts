@@ -1,21 +1,25 @@
-import { useParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function useScrollToLocation() {
-  const params = useParams();
-  const getHash = useCallback(() => (typeof window !== "undefined" ? window.location.hash : undefined), []);
-  useEffect(() => {
-    const hash = getHash();
-    if (hash) {
-      const id = hash.replace("#", "");
-      const element = document.getElementById(id);
+  const lastHash = useRef("");
 
-      if (element) {
-        // Little hack to scroll after text truncation
-        setTimeout(() => {
-          element.scrollIntoView({ block: "start" });
-        }, 0);
+  useEffect(() => {
+    const checkHash = () => {
+      const hash = window.location.hash;
+      if (hash && hash !== lastHash.current) {
+        lastHash.current = hash;
+        const element = document.getElementById(hash.slice(1));
+        if (element) {
+          // Delay to ensure DOM is ready (e.g., after text truncation)
+          setTimeout(() => {
+            element.scrollIntoView({ block: "start" });
+          }, 0);
+        }
       }
-    }
-  }, [params, getHash]);
+    };
+
+    checkHash();
+    const interval = setInterval(checkHash, 100);
+    return () => clearInterval(interval);
+  }, []);
 }

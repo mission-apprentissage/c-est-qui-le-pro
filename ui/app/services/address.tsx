@@ -7,8 +7,25 @@ import LimogesIcon from "../components/icon/LimogesIcon";
 import ParisIcon from "../components/icon/ParisIcon";
 import GuilvinecIcon from "../components/icon/GuilvinecIcon";
 import { StyledSvgIcon } from "../components/icon/Icon.styled";
+import { UserLocation } from "#/types/userLocation";
+import { RegionsService } from "shared";
 
 const API_BASE_URL = "https://data.geopf.fr";
+
+export type AddressFeature = {
+  properties: {
+    city: string;
+    postcode: string;
+    [key: string]: any;
+  };
+  geometry: {
+    coordinates: [number, number];
+  };
+};
+
+export type AddressResponse = {
+  features: AddressFeature[];
+};
 
 export const CITIES_SUGGESTION: { text: string; address: string; icon: () => JSX.Element }[] = [
   {
@@ -115,6 +132,7 @@ export async function fetchAddress(
     `${API_BASE_URL}/geocodage/search/?q=${encodeURIComponent(address)}&type=${type}&limit=20`,
     {
       signal,
+      next: { revalidate: 86400 },
     }
   );
   const json = await result.json();
@@ -127,7 +145,32 @@ export async function fetchReverse(
   { signal }: { signal: AbortSignal | undefined } = { signal: undefined }
 ): Promise<any> {
   //TODO: gestion des erreurs
-  const result = await fetch(`${API_BASE_URL}/geocodage/reverse?lat=${latitude}&lon=${longitude}`, { signal });
+  const result = await fetch(`${API_BASE_URL}/geocodage/reverse?lat=${latitude}&lon=${longitude}`, {
+    signal,
+    next: { revalidate: 86400 },
+  });
   const json = await result.json();
   return json;
+}
+
+export function userLocationFromAddress(addressResponse: AddressResponse | null): UserLocation | null {
+  if (!addressResponse || !addressResponse.features || addressResponse.features.length === 0) {
+    return null;
+  }
+
+  const feature = addressResponse.features[0];
+  const [longitude, latitude] = feature.geometry.coordinates;
+  const address = addressResponse.features[0].properties;
+
+  const academie = RegionsService.findAcademieByPostcode(address.postcode || "");
+
+  return {
+    address,
+    coordinate: [longitude, latitude],
+    longitude: longitude,
+    latitude: latitude,
+    city: address.city,
+    postcode: address.postcode,
+    academie,
+  };
 }

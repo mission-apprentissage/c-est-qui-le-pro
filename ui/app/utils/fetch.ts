@@ -29,7 +29,7 @@ export async function fetchJson(url: string, options?: RequestInit | undefined) 
     let jsonError = null;
     try {
       jsonError = await res.json();
-    } catch (err) {
+    } catch (_err) {
       throw new ErrorFetchingJson(await res.text(), res.status);
     }
     throw new ErrorFetchingJson(jsonError, res.status);

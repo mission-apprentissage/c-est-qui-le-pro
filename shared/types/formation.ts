@@ -158,6 +158,7 @@ type FormationPoursuite = {
 export type FormationEtablissement = {
   id: string;
   duree?: string;
+  hasHebergement?: boolean;
   tags?: FormationTag[] | null;
   indicateurEntree?: IndicateurEntree;
   indicateurPoursuite?: IndicateurPoursuite;
@@ -217,6 +218,7 @@ const formationEtablissementSchema = yup.object().concat(
   yup.object().shape({
     id: yup.string().required(),
     duree: yup.string(),
+    hasHebergement: yup.boolean(),
     tags: yup
       .array(yup.string().oneOf(Object.values(FormationTag)).required())
       .nullable()

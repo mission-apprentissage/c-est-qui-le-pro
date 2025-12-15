@@ -10,7 +10,6 @@ import { useTheme } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
 import { isNil } from "lodash-es";
 import React from "react";
-import Divider from "#/app/components/Divider";
 import { useScrollspy } from "../../hooks/useScrollSpy";
 import { useSize } from "../../hooks/useSize";
 import { useFormationsDetails } from "../../context/FormationDetailsContext";
@@ -37,6 +36,12 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
       return;
     }
     push("#" + anchor, { scroll: false });
+
+    // Force scroll here to prevent same hash click
+    const element = document.getElementById(anchor);
+    if (element) {
+      element.scrollIntoView({ block: "start" });
+    }
   }, [anchor, push]);
 
   return (

@@ -5,7 +5,7 @@ const transformArray = (value: string, originalValue: string) => {
   return originalValue ? originalValue.split(/[\s,|]+/) : [];
 };
 
-const getSchema = object({
+const _getSchema = object({
   longitude: number().min(-180).max(180),
   latitude: number().min(-90).max(90),
   distance: number(),
@@ -40,4 +40,4 @@ const getSchema = object({
   page: number().required().default(0).min(0).integer(),
   items_par_page: number().required().default(10).positive().integer(),
 });
-export type FormationsRequestSchema = InferType<typeof getSchema>;
+export type FormationsRequestSchema = InferType<typeof _getSchema>;
