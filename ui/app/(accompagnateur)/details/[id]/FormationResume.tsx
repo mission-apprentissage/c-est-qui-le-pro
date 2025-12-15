@@ -36,6 +36,12 @@ export function FormationResumeBlock({ title, icon, children, anchor, hideTag, i
       return;
     }
     push("#" + anchor, { scroll: false });
+
+    // Force scroll here to prevent same hash click
+    const element = document.getElementById(anchor);
+    if (element) {
+      element.scrollIntoView({ block: "start" });
+    }
   }, [anchor, push]);
 
   return (
