@@ -69,13 +69,16 @@ export async function createSearchIndex() {
                   etablissementId: data.formationEtablissement.etablissementId,
                   familleMetierId: formation.familleMetierId,
                 },
-                false
+                { returnStream: false }
               )
             )
               .filter((f) => f.formation.id !== formation.id && f.formation.isAnneeCommune !== formation.isAnneeCommune)
               .map(async (f) => ({
                 ...f,
-                keywords: await FormationKeywordRepository.find({ formationId: f.formation.id }, false),
+                keywords: await FormationKeywordRepository.find(
+                  { formationId: f.formation.id },
+                  { returnStream: false }
+                ),
               }))
           )
         : null;
@@ -84,7 +87,7 @@ export async function createSearchIndex() {
         formationEtablissement: data.formationEtablissement,
         formation,
         formationsFamilleMetier,
-        keywords: await FormationKeywordRepository.find({ formationId: formation.id }, false),
+        keywords: await FormationKeywordRepository.find({ formationId: formation.id }, { returnStream: false }),
       };
     }),
     writeData(async ({ formationEtablissement, formationsFamilleMetier, keywords }) => {
@@ -124,7 +127,9 @@ export async function createSearchIndexReverse() {
 
       await oleoduc(
         Readable.from(data.formationIds),
-        transformData(async (id) => FormationEtablissementRepository.find({ formationId: id }, false)),
+        transformData(async (id) =>
+          FormationEtablissementRepository.find({ formationId: id }, { returnStream: false })
+        ),
         // Accumulate all formation in the same group
         accumulateData(
           (acc, value) => {
@@ -165,7 +170,7 @@ export async function createSearchIndexReverse() {
                       etablissementId: formationEtablissement.etablissementId,
                       familleMetierId: formation.familleMetierId,
                     },
-                    false
+                    { returnStream: false }
                   )
                 )
                   .filter(

@@ -76,6 +76,50 @@ export default () => {
   );
 
   router.get(
+    "/api/formationsCount",
+    tryCatch(async (req, res) => {
+      const count = await FormationEtablissement.count();
+      addJsonHeaders(res);
+      res.send(count);
+    })
+  );
+
+  router.get(
+    "/api/formationsUrl",
+    tryCatch(async (req, res) => {
+      const { page, limit } = await validate(
+        { ...req.query, ...req.params },
+        {
+          page: Joi.number().default(0),
+          limit: Joi.number().default(5000),
+        }
+      );
+
+      const results = await FormationEtablissement.find(
+        {},
+        {
+          returnStream: false,
+          limit,
+          page,
+          orderBy: { column: "id", order: "asc" },
+        }
+      );
+
+      addJsonHeaders(res);
+      res.send(
+        results.map((fe) => {
+          return {
+            url: `/details/${fe.formation.cfd}-${fe.formation.codeDispositif || ""}-${fe.etablissement.uai}-${
+              fe.formation.voie
+            }`,
+            updatedAt: fe.formationEtablissement.updatedAt,
+          };
+        })
+      );
+    })
+  );
+
+  router.get(
     "/api/formations",
     tryCatch(async (req, res) => {
       const {

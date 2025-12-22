@@ -5,7 +5,7 @@ import FormationRepository from "./formation";
 import EtablissementRepository from "./etablissement";
 import { Readable } from "stream";
 import { compose, transformData } from "oleoduc";
-import { DeleteResult, sql, UpdateResult } from "kysely";
+import { AnyColumn, DeleteResult, sql, UpdateResult } from "kysely";
 import { merge } from "lodash-es";
 import IndicateurPoursuiteRepository from "./indicateurPoursuite.js";
 import { getDiplomeType } from "shared";
@@ -210,15 +210,37 @@ export class FormationEtablissementRepository extends SqlRepository<DB, "formati
     where: Partial<
       WhereObject<DB, "formationEtablissement"> | WhereObject<DB, "formation"> | WhereObject<DB, "etablissement">
     > | null,
-    returnStream = true
+    {
+      returnStream = true,
+      limit = null,
+      page = null,
+      orderBy = null,
+    }: {
+      returnStream?: boolean;
+      limit?: number;
+      page?: number;
+      orderBy?: { column: AnyColumn<DB, "formationEtablissement">; order: "asc" | "desc" };
+    } = {}
   ) {
-    const query = this.kdb
+    let query = this.kdb
       .selectFrom(this.tableName)
       .select((eb) => this.getKeyAlias(eb))
       .select((eb) => EtablissementRepository.getKeyAlias(eb))
       .select((eb) => FormationRepository.getKeyAlias(eb))
       .innerJoin("etablissement", "etablissement.id", "etablissementId")
       .innerJoin("formation", "formation.id", "formationId");
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    if (page && limit) {
+      query = query.offset((page - 1) * limit);
+    }
+
+    if (orderBy) {
+      query = query.orderBy(`${this.tableName}.${orderBy.column as string}`, orderBy.order);
+    }
 
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
     const result = compose(
