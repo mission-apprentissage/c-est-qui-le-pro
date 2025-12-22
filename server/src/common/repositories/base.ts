@@ -53,8 +53,40 @@ export class SqlRepository<DB, F extends keyof DB> extends Repository {
     return queryCond.returningAll().execute();
   }
 
-  async find(where: Partial<WhereObject<DB, F>>, returnStream = true) {
-    const query = this.kdb.selectFrom(this.tableName).selectAll();
+  async count(where?: Partial<WhereObject<DB, F>>): Promise<number> {
+    const query = this.kdb.selectFrom(this.tableName).select((eb) => eb.fn.countAll<number>().as("count"));
+    const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
+    const result = (await queryCond.executeTakeFirst()) as { count: number } | undefined;
+    return result?.count ?? 0;
+  }
+
+  async find(
+    where: Partial<WhereObject<DB, F>>,
+    {
+      returnStream = true,
+      limit = null,
+      page = null,
+      orderBy = null,
+    }: {
+      returnStream?: boolean;
+      limit?: number;
+      page?: number;
+      orderBy?: { column: AnyColumn<DB, F>; order: "asc" | "desc" };
+    } = {}
+  ) {
+    let query = this.kdb.selectFrom(this.tableName).selectAll();
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    if (page && limit) {
+      query = query.offset((page - 1) * limit);
+    }
+
+    if (orderBy) {
+      query = query.orderBy(orderBy.column, orderBy.order);
+    }
+
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 
     if (!returnStream) {

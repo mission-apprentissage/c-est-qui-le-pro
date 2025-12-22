@@ -1,7 +1,7 @@
 import { SqlRepository, WhereObject } from "./base.js";
 import { kdb as defaultKdb } from "../db/db.js";
 import { DB } from "../db/schema.js";
-import { SelectQueryBuilder, sql } from "kysely";
+import { AnyColumn, SelectQueryBuilder, sql } from "kysely";
 import { Readable } from "stream";
 import { compose } from "oleoduc";
 
@@ -59,8 +59,34 @@ export class EtablissementRepository extends SqlRepository<DB, "etablissement"> 
     };
   }
 
-  async find(where: Partial<WhereObject<DB, "etablissement">>, returnStream = true) {
-    const query = this.kdb.selectFrom(this.tableName).$call(this._base()).selectAll();
+  async find(
+    where: Partial<WhereObject<DB, "etablissement">>,
+    {
+      returnStream = true,
+      limit = null,
+      page = null,
+      orderBy = null,
+    }: {
+      returnStream?: boolean;
+      limit?: number;
+      page?: number;
+      orderBy?: { column: AnyColumn<DB, "etablissement">; order: "asc" | "desc" };
+    } = {}
+  ) {
+    let query = this.kdb.selectFrom(this.tableName).$call(this._base()).selectAll();
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    if (page && limit) {
+      query = query.offset((page - 1) * limit);
+    }
+
+    if (orderBy) {
+      query = query.orderBy(orderBy.column, orderBy.order);
+    }
+
     const queryCond = where ? query.where((eb) => eb.and(where as any)) : query;
 
     if (!returnStream) {

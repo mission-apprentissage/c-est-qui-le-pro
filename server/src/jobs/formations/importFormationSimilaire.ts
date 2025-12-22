@@ -21,11 +21,13 @@ async function importFormationSimilaireSecondeCommune() {
           isAnneeCommune: false,
           familleMetierId: data.familleMetierId,
         },
-        false
+        { returnStream: false }
       );
       const formationSimilaire = [];
       for (const formation of formations) {
-        const formations = (await FormationSimilaireRepository.find({ formationId: formation.id }, false)).map((f) => ({
+        const formations = (
+          await FormationSimilaireRepository.find({ formationId: formation.id }, { returnStream: false })
+        ).map((f) => ({
           id: f.formationRelatedId,
           similarityOrder: f.similarityOrder,
         }));
@@ -82,11 +84,11 @@ export async function importFormationSimilaire() {
         {
           cfd: data[0],
         },
-        false
+        { returnStream: false }
       );
       const formationSimilaire = [];
       for (const cfd of data[1]) {
-        const formations = (await FormationRepository.find({ cfd: cfd }, false)).map((f) => f.id);
+        const formations = (await FormationRepository.find({ cfd: cfd }, { returnStream: false })).map((f) => f.id);
         formationSimilaire.push(...formations);
       }
 

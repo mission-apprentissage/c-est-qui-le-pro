@@ -54,7 +54,7 @@ async function importKeywordFile() {
           {
             cfd: data["Cfd"],
           },
-          false
+          { returnStream: false }
         ),
         keywords: data.data
           .map((k) => ({

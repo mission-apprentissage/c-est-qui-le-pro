@@ -108,7 +108,7 @@ async function importRome() {
         {
           cfd: data.data.data["Code scolarité"],
         },
-        false
+        { returnStream: false }
       );
       return formations.map((formation) => ({ certifInfo: data.data.data, formation }));
     }),
