@@ -1,3 +1,10 @@
+# [1.52.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.51.0...v1.52.0) (2025-12-22)
+
+
+### Features
+
+* sitemap ([#106](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/106)) ([4e0fb3d](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/4e0fb3d6745a9581d8c370df165754e7b715dda2))
+
 # [1.51.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.50.0...v1.51.0) (2025-11-06)
 
 
