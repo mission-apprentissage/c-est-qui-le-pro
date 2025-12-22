@@ -36,10 +36,15 @@ const staticUrls: MetadataRoute.Sitemap = [
 ];
 
 export async function generateSitemaps() {
-  const totalFormations = await formationsCount();
-  const sitemapCount = Math.ceil(totalFormations / URLS_PER_SITEMAP);
+  try {
+    const totalFormations = await formationsCount();
+    const sitemapCount = Math.ceil(totalFormations / URLS_PER_SITEMAP);
 
-  return Array.from({ length: sitemapCount }, (_, i) => ({ id: i }));
+    return Array.from({ length: sitemapCount }, (_, i) => ({ id: i }));
+  } catch (err) {
+    console.log("Error generating sitemap", err);
+    return [];
+  }
 }
 
 export default async function sitemap({ id: idPromise }: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
