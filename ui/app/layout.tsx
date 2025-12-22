@@ -39,7 +39,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           title={title}
         >
           <div>
-            <NewNameHeaderClient></NewNameHeaderClient>
             {children}
             <ConsentBannerAndConsentManagement />
             <Footer
