@@ -35,7 +35,7 @@ services:
       - accompagnateur_typesense_data:/data:z
 
   postgres:
-    image: postgis/postgis:16-3.4
+    image: postgis/postgis:18-3.6-alpine
     command:
       - "postgres"
       - "-c"
