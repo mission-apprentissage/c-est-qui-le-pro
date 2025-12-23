@@ -39,6 +39,9 @@ env:
     CATALOGUE_APPRENTISSAGE_PASSWORD: "{{ env_config.CATALOGUE_APPRENTISSAGE_PASSWORD }}"
     ONISEP_USERNAME: "{{ env_config.ONISEP_USERNAME }}"
     ONISEP_PASSWORD: "{{ env_config.ONISEP_PASSWORD }}"
+    BCN_LOGIN: "{{ env_config.BCN_LOGIN }}"
+    BCN_PASSWORD: "{{ env_config.BCN_PASSWORD }}"
+    BCN_OMOGEN_KEY: "{{ env_config.BCN_OMOGEN_KEY }}"
   typesense:
     TYPESENSE_API_KEY: "{{ env_config.TYPESENSE_API_KEY }}"
   metabase:

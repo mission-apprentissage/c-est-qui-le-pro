@@ -13,3 +13,6 @@ process.env.FRANCE_TRAVAIL_API_CLIENT_SECRET = "secret";
 process.env.ACCOMPAGNATEUR_POSTGRES_URI = "";
 process.env.ONISEP_USERNAME = "username";
 process.env.ONISEP_PASSWORD = "password";
+process.env.BCN_LOGIN = "login";
+process.env.BCN_PASSWORD = "password";
+process.env.BCN_OMOGEN_KEY = "key";

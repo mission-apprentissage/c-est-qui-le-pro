@@ -20,7 +20,7 @@ La table **N_MEF** permet de décrire les années dans un dispositif de formatio
 
 ## Format des données
 
-Les données sont disponibles au format CSV.
+Les données sont disponibles au format CSV et JSON.
 
 ## Entité responsable
 

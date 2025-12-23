@@ -20,7 +20,7 @@ La table **N_FORMATION_DIPLOME** liste les diplômes préparés dans les établi
 
 ## Format des données
 
-Les données sont disponibles au format CSV.
+Les données sont disponibles au format CSV et JSON.
 
 ## Entité responsable
 

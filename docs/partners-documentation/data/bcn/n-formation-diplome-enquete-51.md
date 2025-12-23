@@ -20,7 +20,7 @@ La table **N_FORMATION_DIPLOME_ENQUETE_51** complète la table N_FORMATION_DIPLO
 
 ## Format des données
 
-Les données sont disponibles au format CSV.
+Les données sont disponibles au format CSV et JSON.
 
 ## Entité responsable
 

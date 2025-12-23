@@ -1,25 +1,29 @@
-import { oleoduc, writeData, transformData, filterData } from "oleoduc";
+import { oleoduc, writeData, transformData, filterData, flattenArray } from "oleoduc";
 import { getLoggerWithContext } from "#src/common/logger.js";
-import config from "#src/config.js";
-import { familleMetierFromCsv, lienMefFamilleMetierFromCsv } from "#src/services/bcn";
+import { getFamilleMetier, getLienFamilleMetier } from "#src/services/bcn/bcn.js";
 import FamilleMetierRepository from "#src/common/repositories/familleMetier";
 import FormationRepository from "#src/common/repositories/formation.js";
 import RawDataRepository, { RawData, RawDataType } from "#src/common/repositories/rawData.js";
+import { BCNApi } from "#src/services/bcn/BCNApi.js";
+import * as Query from "#src/queries/isAnneeCommune";
+import { Readable } from "stream";
 
 const logger = getLoggerWithContext("import");
 
-async function importFamillesMetiersListe(familleMetierFilePath) {
+async function importFamillesMetiersListe() {
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
+  const bcnApi = new BCNApi();
+
   await oleoduc(
-    familleMetierFromCsv(familleMetierFilePath),
+    Readable.from(await getFamilleMetier(bcnApi)),
     writeData(
       async (data) => {
         stats.total++;
 
         const formatted = {
-          code: data["FAMILLE_METIER"],
-          libelle: data["LIBELLE_EDITION"],
+          code: data.code,
+          libelle: data.libelle,
         };
 
         try {
@@ -39,7 +43,7 @@ async function importFamillesMetiersListe(familleMetierFilePath) {
   return stats;
 }
 
-async function importLienMef(lienMefFamilleMetierFilePath) {
+async function importLienMef() {
   const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
   await FormationRepository.updateBy({
@@ -47,32 +51,46 @@ async function importLienMef(lienMefFamilleMetierFilePath) {
     isAnneeCommune: null,
   });
 
+  const bcnApi = new BCNApi();
+
   await oleoduc(
-    lienMefFamilleMetierFromCsv(lienMefFamilleMetierFilePath),
+    await getLienFamilleMetier(bcnApi),
     transformData(async (data) => {
-      const mefData = (
-        await RawDataRepository.firstForType(RawDataType.BCN_MEF, {
-          mef: data["MEF"],
+      const mefsData = await RawDataRepository.search(
+        RawDataType.BCN_MEF,
+        {
+          formation_diplome: data.code_formation_diplome,
+        },
+        false
+      );
+
+      const isAnneeCommune = await Query.isAnneeCommune(data.code_formation_diplome);
+
+      return mefsData
+        .map((mef) => {
+          return {
+            mef: mef?.data as RawData[RawDataType.BCN_MEF],
+            isAnneeCommune,
+            data,
+          };
         })
-      )?.data as RawData[RawDataType.BCN_MEF];
-
-      if (!mefData) {
-        return null;
-      }
-
-      const formation = await FormationRepository.first({ mef11: mefData.mef_stat_11 });
+        .filter((d) => d.mef);
+    }),
+    flattenArray(),
+    transformData(async ({ mef, isAnneeCommune, data }) => {
+      const formation = await FormationRepository.first({ mef11: mef.mef_stat_11 });
       if (!formation) {
         return null;
       }
 
-      const familleMetier = await FamilleMetierRepository.first({ code: data["FAMILLE_METIER"] });
+      const familleMetier = await FamilleMetierRepository.first({ code: data.code });
       if (!familleMetier) {
-        logger.error(`La famille de métiers ${data["FAMILLE_METIER"]} n'existe pas.`);
+        logger.error(`La famille de métiers ${data.code} n'existe pas.`);
         stats.failed++;
         return null;
       }
 
-      return { formation, familleMetier, isAnneeCommune: data["tag"] === "2NDE PRO COMMUNE" };
+      return { formation, familleMetier, isAnneeCommune };
     }),
     filterData((d) => d),
     writeData(
@@ -101,15 +119,10 @@ async function importLienMef(lienMefFamilleMetierFilePath) {
   return stats;
 }
 
-export async function importFamillesMetiers(
-  options = { familleMetierFilePath: null, lienMefFamilleMetierFilePath: null }
-) {
+export async function importFamillesMetiers() {
   logger.info(`Importation des familles de métiers`);
 
-  const familleMetierFilePath = options.familleMetierFilePath || config.bcn.files.familleMetier;
-  const lienMefFamilleMetierFilePath = options.lienMefFamilleMetierFilePath || config.bcn.files.lienMefFamilleMetier;
-
-  const statsFamilleMetier = await importFamillesMetiersListe(familleMetierFilePath);
-  const statsLienMef = await importLienMef(lienMefFamilleMetierFilePath);
+  const statsFamilleMetier = await importFamillesMetiersListe();
+  const statsLienMef = await importLienMef();
   return { statsFamilleMetier, statsLienMef };
 }
