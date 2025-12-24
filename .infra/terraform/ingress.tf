@@ -41,16 +41,33 @@ resource "helm_release" "ingress-nginx" {
           "use-proxy-protocol"           = "true"
           "real-ip-header"               = "proxy_protocol"
           "proxy-protocol"               = "true"
-          "rate-limit-rps"               = "13"
 
           "global-allowed-response-headers" = "X-Frame-Options,X-Content-Type-Options,X-XSS-Protection,Referrer-Policy,Strict-Transport-Security,Content-Security-Policy,X-Robots-Tag,X-Environment"
 
           "http-snippet" = <<-EOF
             # Zone de mémoire pour rate limiting
-            limit_req_zone $binary_remote_addr zone=flood:10m rate=800r/m;
+            limit_req_zone $limit_key_standard zone=flood:10m rate=800r/m;
+            limit_req_zone $limit_key_whitelist zone=flood_whitelist:10m rate=1600r/m;
             limit_req_log_level error;
 
-             # IP Blacklist
+            # IPs Whitelist
+            geo $remote_addr $is_whitelisted {
+              default 0;
+              93.19.210.4 1;
+              193.51.147.134 1;
+            }
+
+            map $is_whitelisted $limit_key_standard {
+              0 $binary_remote_addr;
+              1 "";
+            }
+
+            map $is_whitelisted $limit_key_whitelist {
+              0 "";
+              1 $binary_remote_addr;
+            }
+
+            # IP Blacklist
             geo $remote_addr $blocked_ip {
               default 0;
               include /etc/nginx/blocked-ips/blocked-ips.conf;
@@ -60,6 +77,7 @@ resource "helm_release" "ingress-nginx" {
           "server-snippet" = <<-EOF
             # Appliquer le rate limiting
             limit_req zone=flood burst=100 nodelay;
+            limit_req zone=flood_whitelist burst=200 nodelay;
 
             # Ip Blacklist
             if ($blocked_ip) {
