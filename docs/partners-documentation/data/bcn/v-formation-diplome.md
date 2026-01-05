@@ -20,7 +20,7 @@ La table **V_FORMATION_DIPLOME** rassemble les codifications des diplômes susce
 
 ## Format des données
 
-Les données sont disponibles au format CSV.
+Les données sont disponibles au format CSV et JSON.
 
 ## Entité responsable
 
