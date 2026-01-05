@@ -1,3 +1,10 @@
+# [1.53.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.52.0...v1.53.0) (2026-01-05)
+
+
+### Features
+
+* api BCN et famille de métiers BCN ([#107](https://github.com/mission-apprentissage/c-est-qui-le-pro/issues/107)) ([62d7bca](https://github.com/mission-apprentissage/c-est-qui-le-pro/commit/62d7bca04c0ea84ddb32351606bac7607805aead))
+
 # [1.52.0](https://github.com/mission-apprentissage/c-est-qui-le-pro/compare/v1.51.0...v1.52.0) (2025-12-22)
 
 
