@@ -105,6 +105,7 @@ async function importIndicateurs() {
           region: data.region.code,
           type: data?.donnee_source?.type,
           libelle: data.libelle,
+          // TODO: expliquer nommage indiquateur
           part_en_emploi_6_mois: data.taux_en_emploi_6_mois,
           taux_en_emploi_6_mois: computeTauxEnEmploi(data),
           taux_en_formation: data.taux_en_formation,
