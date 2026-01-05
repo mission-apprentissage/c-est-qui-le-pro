@@ -121,7 +121,7 @@ Dans le cas d'un bac pro de famille de métiers, présenter la seconde commune p
 #### Données manipulées
 {: .no_toc }
 
-- Les données de la [table des familles de métiers de la BCN]({{ site.baseurl }}{% link partners-documentation/data/bcn/n-lien-mef-famille-metier.md %}) sont recoupées avec le catalogue principal
+- Les données de la [table des familles de métiers de la BCN]({{ site.baseurl }}{% link partners-documentation/data/bcn/n-lien-formation-groupe.md %}) sont recoupées avec le catalogue principal
 
 
 ### Description associée à l’admission
