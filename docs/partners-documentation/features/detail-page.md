@@ -105,7 +105,7 @@ Présenter les bacs pro disponibles à l'issue d'une seconde commune.
 #### Données manipulées
 {: .no_toc }
 
-- Les données de la [table des familles de métiers de la BCN]({{ site.baseurl }}{% link partners-documentation/data/bcn/n-lien-mef-famille-metier.md %}) sont recoupées avec le catalogue principal
+- Les données de la [table des familles de métiers de la BCN]({{ site.baseurl }}{% link partners-documentation/data/bcn/n-lien-formation-groupe.md %}) sont recoupées avec le catalogue principal
 
 ## Section "L'admission"
 
