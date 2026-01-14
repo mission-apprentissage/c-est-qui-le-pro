@@ -11,7 +11,7 @@ nav_order: 2.3
 - TOC
 {:toc}
 
-*Dernière mise à jour de la page : Janvier 2025*
+*Dernière mise à jour de la page : Janvier 2026*
 
 ## Introduction
 
@@ -20,8 +20,6 @@ nav_order: 2.3
 Pour nous assurer d’apporter un service pertinent à ces utilisateurs, en utilisant de manière efficace les ressources humaines et financières mises à disposition de l’équipe, **notre démarche est guidée par l’impact**.
 
 Cette page présente un ensemble d’indicateurs nous permettant de mesurer régulièrement notre impact pour orienter notre stratégie et nos travaux.
-
-L’outil étant en phase de construction et d’expérimentation, dans un ensemble de collèges et CIO “pilotes” en Île-de-France et en Bretagne, faute de pouvoir mesurer pour le moment un impact sur l’ensemble de notre cible et pour l’ensemble du périmètre du produit, des observations relatives à nos expérimentations seront présentées pour évaluer l’impact potentiel de la solution.
 
 ## Impact global
 
@@ -43,9 +41,14 @@ L’outil étant en phase de construction et d’expérimentation, dans un ensem
 {: .note }
 > 🧪 **Nos premières observations** : 
 >
-> - Plus de **70 accompagnateurs** et **70 élèves** ont participé à des **sessions de test de l’outil**
-> - **100% veulent avoir accès à l’outil développé et le considèrent utile pour mieux orienter**.
-> - **Le prototype a été partagé spontanément** à d’autres établissements, centre d’orientation et d’information, par des principaux,  des accompagnateurs et inspecteurs de l’éducation nationale.
+> - Lors de la phase de test :
+>   - Plus de **70 accompagnateurs** et **70 élèves** ont participé à des **sessions de test de l’outil**
+>   - **100% veulent avoir accès à l’outil développé et le considèrent utile pour mieux orienter**.
+>   - **Le prototype a été partagé spontanément** à d’autres établissements, centre d’orientation et d’information, par des principaux,  des accompagnateurs et inspecteurs de l’éducation nationale.
+> - Depuis le début de la phase de déploiement national :
+>   - **Le trafic est en croissance exponentielle** (voir "Statistiques générales", ci-dessous)
+>   - **Le trafic est de qualité**, avec 2/3 des visiteurs qui effectuent une recherche géographique et un temps moyen de visite supérieur à 5 minutes (voir "Statistiques générales", ci-dessous)
+>   - **Un intérêt fort** exprimé pour cet outil **par les DRAIO, chefs d'établissements et accompagnateurs** rencontrés, ainsi qu'accueil unanimement positif et leur soutien dans les actions de mise en avant (partage spontané, mises en relation, etc.). Une extension du périmètre de l'outil, vers les jeunes et leurs familles, est même demandée.
 > - Les principaux points forts évoqués :
 >   - **Gain de temps**
 >   - Mise en avant des **temps de trajets**
@@ -67,7 +70,7 @@ Je peux vous affirmer que nous allons l'utiliser, étant donné le temps que cel
 {: .secondary }
 > 📊 **Ce que nous souhaitons mesurer à terme  :** 
 > 
-> Les utilisateurs se rendent sur des pages de **formations ne faisant pas partie des formations les plus connues** (sur Affelnet, en voie scolaire, 17% des formations regroupent 80% des voeux)
+> Les utilisateurs se rendent sur des pages de **formations, notamment celles ne faisant pas partie des formations les plus connues** (sur Affelnet, en voie scolaire, 17% des formations regroupent 80% des voeux)
 
 {: .note }
 > 🧪 **Nos premières observations** : 
@@ -75,9 +78,11 @@ Je peux vous affirmer que nous allons l'utiliser, étant donné le temps que cel
 > - Certains testeurs ont découvert des formations ou des formations en établissement lors des sessions de test. Par exemple le “CAP agricole palefrenier soigneur”.
 > - De nombreuses formations “moins demandées” sont recherchées pendant les tests, comme le “CAP monteur en installations thermiques” ou la “2de professionnelle métiers de la réalisation d'ensembles mécaniques et industriels”
 > - Les informations concernant les temps de trajets en transports en commun, même pour des établissements relativement proches, surprennent certains accompagnateurs et leurs font revoir leurs conseils et recommandations.
+> - **65%** des visiteurs effectuent une recherche géographique
+> - Plus de **11k** pages de formations uniques ont été visitées entre Septembre et mi-Janvier
 > - Les irritants à traiter dans de prochaines versions :
->     - la **recherche** doit être plus souple et offrir davantage d’options pour filtrer
->     - il faut ajouter les données de **transports scolaires** en zones rurales
+>     - la **naviagation via la carte** doit être améliorée pour faciliter la découverte
+>     - les données de **transports scolaires** en zones rurales doivent être complétées
 >
 > *”Ce bac pro existe en France ? Je le découvre…”* ***PsyEn***
 >
@@ -122,11 +127,13 @@ Je peux vous affirmer que nous allons l'utiliser, étant donné le temps que cel
 ## Statistiques générales
 
 {: .secondary }
-> 📊 **Quelques métriques supplémentaires  :** 
+> 📊 **Quelques métriques supplémentaires (Sept. 2025 - mi-Jan. 2026) :**
 >
-> - près de **700 visiteurs uniques** (Octobre → Janvier)
-> - **3k** pages vues
-> - pour un temps de visite de plus de 5 minutes 40 (attention, certaines visites se sont faites dans le cadre de sessions de test)
-> - De nombreuses remarques, suggestions ou problèmes ont été remontées au cours des tests lancés début Septembre 2024. Suite à nos premières modifications du prototype, **depuis Novembre 2024, tous les testeurs déclarent le prototype utilisable en l’état**.
+> - plus de **16k visiteurs uniques** et une augmentation exponentielle du trafic
+> - près de **100k** pages vues
+> - temps de visite moyen de plus de **5 minutes 20 secondes**
+> - **2/3** des visiteurs effectuent une recherche géographique et environ **40%** visitent des pages de détail
 
-Pour davantage de statistiques, rendez-vous sur notre page Matomo : *bientôt disponible*.
+![Graphique des dernières visites](last-visits.png)
+
+*Trafic par mois observé sur Futur Pro (sur l'outil de suivi Matomo) - Le mois de Janvier est incomplet (observation le 14/01) et présente tout de même un record d'affluence.*
