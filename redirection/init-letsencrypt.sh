@@ -3,42 +3,12 @@
 # Configuration — modifier ces valeurs avant le premier lancement
 DOMAIN="futurpro.inserjeunes.beta.gouv.fr"
 EMAIL="contact@inserjeunes.beta.gouv.fr"
-STAGING=0 # Mettre à 1 pour tester avec le serveur staging de Let's Encrypt (pas de rate limit)
+STAGING=1 # Mettre à 1 pour tester avec le serveur staging de Let's Encrypt (pas de rate limit)
 
 if [ -z "$EMAIL" ]; then
   echo "Erreur : veuillez configurer la variable EMAIL dans ce script."
   exit 1
 fi
-
-CERT_PATH="/etc/letsencrypt/live/$DOMAIN"
-
-echo "### Création des répertoires nécessaires..."
-mkdir -p ./certbot-conf ./certbot-www
-
-echo "### Téléchargement des paramètres SSL recommandés..."
-curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > ./certbot-conf/options-ssl-nginx.conf
-curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > ./certbot-conf/ssl-dhparams.pem
-
-echo "### Création d'un certificat auto-signé temporaire pour $DOMAIN..."
-mkdir -p "./certbot-conf/live/$DOMAIN"
-docker compose run --rm --entrypoint "\
-  openssl req -x509 -nodes -newkey rsa:4096 -days 1 \
-    -keyout '$CERT_PATH/privkey.pem' \
-    -out '$CERT_PATH/fullchain.pem' \
-    -subj '/CN=localhost'" certbot
-
-echo "### Démarrage de nginx..."
-docker compose up -d nginx
-echo "### Attente du démarrage de nginx..."
-sleep 5
-
-echo "### Suppression du certificat temporaire..."
-docker compose run --rm --entrypoint "\
-  rm -rf /etc/letsencrypt/live/$DOMAIN && \
-  rm -rf /etc/letsencrypt/archive/$DOMAIN && \
-  rm -rf /etc/letsencrypt/renewal/$DOMAIN.conf" certbot
-
-echo "### Demande du certificat Let's Encrypt pour $DOMAIN..."
 
 # Utiliser le serveur staging si demandé
 STAGING_ARG=""
@@ -46,18 +16,51 @@ if [ $STAGING -eq 1 ]; then
   STAGING_ARG="--staging"
 fi
 
-docker compose run --rm --entrypoint "\
-  certbot certonly --webroot -w /var/www/certbot \
+echo "### Création des répertoires nécessaires..."
+mkdir -p ./certbot-conf ./certbot-www
+
+echo "### Démarrage de nginx en mode HTTP-only (sans SSL)..."
+# Sauvegarde de la config complète, remplacement par une config HTTP-only
+cp nginx.conf nginx.conf.full
+cat > nginx.conf << EOF
+server {
+    listen 80;
+    server_name $DOMAIN api.$DOMAIN documentation.$DOMAIN statistiques.$DOMAIN;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 200 'ok';
+    }
+}
+EOF
+
+docker compose up -d nginx
+echo "### Attente du démarrage de nginx..."
+sleep 3
+
+echo "### Demande du certificat Let's Encrypt pour $DOMAIN..."
+docker compose run --rm --entrypoint certbot certbot \
+  certonly --webroot -w /var/www/certbot \
     $STAGING_ARG \
     --email $EMAIL \
     --domain $DOMAIN \
+    --domain api.$DOMAIN \
+    --domain documentation.$DOMAIN \
+    --domain statistiques.$DOMAIN \
     --rsa-key-size 4096 \
     --agree-tos \
     --no-eff-email \
-    --force-renewal" certbot
+    --force-renewal
 
-echo "### Rechargement de nginx avec le nouveau certificat..."
-docker compose exec nginx nginx -s reload
+echo "### Restauration de la config nginx complète (HTTPS)..."
+cp nginx.conf.full nginx.conf
+rm nginx.conf.full
+
+echo "### Redémarrage de nginx avec le certificat Let's Encrypt..."
+docker compose restart nginx
 
 echo "### Démarrage de certbot pour le renouvellement automatique..."
 docker compose up -d certbot
